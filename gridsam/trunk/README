@@ -1,0 +1,108 @@
+This README describes how to use the SAGA OMII GridSAM adaptor with custom 
+security credentials. 
+
+The SAGA OMII GridSAM adaptor currently supports x509 based https connection
+authentication only. The concrete authentication information must be encoded 
+into a saga::context which needs to be associated with the session object used 
+to create the saga::job_service (and saga::job) objects.
+
+The SAGA OMII GridSAM adaptor automatically creates a default saga::context 
+object contained in each default constructed saga::session. This default 
+saga::context picks up the location of the default (temporary) OMII 
+certificates from the OMIICLIENT environment variable and has the following 
+attributes:
+
+    Type:             omii_gridsam
+    UserCert:         $OMIICLIENT/pem_format_certs/usercert.pem
+    UserKey:          $OMIICLIENT/pem_format_certs/userunencryptedkey.pem
+    CertRepository:   $OMIICLIENT/ca_certs
+
+If the environment variable OMIICLIENT is not set the adaptor will use a empty 
+string instead, which effectivly results in using the current directory as the 
+base for the file lookup.
+
+Generally, the SAGA OMII adaptor recognizes the following attributes: 
+
+    Type (must be 'omii_gridsam'), UserCert, UserKey, UserPass, and
+    CertRepository
+    
+Any non-existing or empty value for these keys will be treated as if the 
+corrsponding value shouldn't be used at all.
+
+It is recommended to remove the default generated saga::context before adding 
+a custom one. This avoids that the adaptor tries the default security context 
+first, which may have additional performance impact.
+
+Here is a simple example of how to create and associate a custom security 
+context with the saga::job_service object:
+
+#include <saga.hpp>
+
+void run_job(saga::job::description jd)
+{
+    try {
+        // create and fill the custom security context
+        std::string omii_usercert ("<your user x509 certificate file path>");
+        std::string omii_userkey ("<your user x509 certificate key path>");
+        std::string omii_userpass ("<your user password>");
+        std::string omii_certrepository ("<your user x509 certificate repository>");
+
+        saga::context ctx ("omii_gridsam");
+        ctx.set_attribute(saga::attributes::context_usercert, omii_usercert);
+        ctx.set_attribute(saga::attributes::context_userkey, omii_userkey);
+        ctx.set_attribute(saga::attributes::context_userpass, omii_userpass);
+        ctx.set_attribute(saga::attributes::context_certrepository, omii_certrepository);
+        
+        // the adaptor will add any missing information here, if appropriate
+        ctx.set_defaults();
+        
+        // create the session object to use
+        saga::session s;
+
+        // remove the default OMII GridSAM security context from the session
+        std::list<saga::context> ctxs = s.list_contexts();
+        std::list<saga::context>::iterator end = ctxs.end();
+        for (std::list<saga::context>::iterator it = ctxs.begin(); it != end; ++it)
+        {
+            if ((*it).attribute_exists(saga::attributes::context_type) && 
+                (*it).get_attribute(saga::attributes::context_type) == "omii_gridsam")
+            {
+                s.remove_context(*it);
+                break;
+            }
+        }
+
+        // associate the new security context with the session
+        s.add_context(ctx);
+        
+        // now, create the job_service as usual
+        saga::job::service js (s, "<your GridSAM endpoint here>");
+
+        // create job description
+        saga::job::description jd;
+        jd.set_attribute(saga::job::attributes::description_executable, "/bin/sleep");
+
+
+        // create and run the job
+        saga::job j = js.create_job(jd);
+        j.run();    
+         
+    }
+    catch (sgag::exception const& e) {
+        std::cerr << "Caught saga::exception: " << e.what() << std::endl;
+    }
+}
+
+If you use the saga-shell to test the adaptor you can use the following 
+command sequence:
+
+  > ./saga-shell
+  setenv CONTACT <your GridSAM endpoint here>
+  remove_proxy omii
+  add_proxy omii (you will be asked to enter the paths and password)
+  run2 /bin/date &
+
+Please run the job in background mode (&) to avoid using the interactive mode 
+(stdin, stdout and stderr are redirected), which is currently not supported by 
+the GridSAM service. 
+

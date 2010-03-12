@@ -1,0 +1,29 @@
+                    SAGA C++ (Reference) Implementation
+                       <http://saga.cct.lsu.edu/cpp>
+                   - OMII GridSAM Adaptor Installation -
+
+
+  (1) The GridSAM adaptor requires OpenSSL which should be available on any
+      system. If your OpenSSL is not installed in the default system paths
+      or if you want to use a specific version, use the following configure
+      option:
+
+        ./configure --with-openssl=DIR
+
+  (2) Calling ./configure checks for the availability of the OpenSSL libs and 
+      returns 'yes' if the GridSAM adaptor can be build:
+
+        configure: ========================================================   
+        configure: SAGA OMII ADAPTORS - Configured Adaptors                   
+        configure: ========================================================   
+        configure: 
+        configure: Job (GridSAM)         : yes                 
+        configure: 
+
+  (3) Now, type 'make' and 'make install' to build the OMII GridSAM adaptor!
+
+
+  Please help us to improve the quality of SAGA and file a bug report if you 
+  have encountered any problems with the build system. Our bug-tracking system 
+  can be found at: http://saga.cct.lsu.edu/cpp/dev/ 
+

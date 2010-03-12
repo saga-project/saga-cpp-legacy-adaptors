@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:wsa="http://www.w3.org/2005/03/addressing" 
+	xmlns:bes="http://schemas.ggf.org/bes/2005/11/bes" 
+	xmlns:jsdl="http://schemas.ggf.org/jsdl/2005/11/jsdl" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	name="BES" targetNamespace="http://schemas.ggf.org/bes/2005/11/bes">
+	<!-- ===== Types Definitions ==== -->
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://schemas.ggf.org/bes/2005/11/bes" elementFormDefault="qualified" attributeFormDefault="unqualified">
+			<xsd:import namespace="http://www.w3.org/2005/03/addressing" schemaLocation="http://www.w3.org/2005/03/addressing"/>
+			<xsd:import namespace="http://schemas.ggf.org/jsdl/2005/11/jsdl" schemaLocation="../jsdl.xsd"/>
+
+			<!-- Simple Types -->
+			<xsd:simpleType name="overall-state-enumeration">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="New"/>
+					<xsd:enumeration value="Pending"/>
+					<xsd:enumeration value="StagingIn"/>
+					<xsd:enumeration value="ExecutionPending"/>
+					<xsd:enumeration value="Running"/>
+					<xsd:enumeration value="ExecutionComplete"/>
+					<xsd:enumeration value="StagingOut"/>
+					<xsd:enumeration value="CleaningUp"/>
+					<xsd:enumeration value="Suspended"/>
+					<xsd:enumeration value="ShuttingDown"/>
+					<xsd:enumeration value="NotKnown"/>
+					<xsd:enumeration value="Other"/>
+					<xsd:enumeration value="Done"/>
+					<xsd:enumeration value="Terminated"/>
+					<xsd:enumeration value="Exception"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="data-staging-state-enumeration">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="New"/>
+					<xsd:enumeration value="Pending"/>
+					<xsd:enumeration value="StagingIn"/>
+					<xsd:enumeration value="Waiting"/>
+					<xsd:enumeration value="StagingOut"/>
+					<xsd:enumeration value="Blocked"/>
+					<xsd:enumeration value="Suspended"/>
+					<xsd:enumeration value="Done"/>
+					<xsd:enumeration value="NotKnown"/>
+					<xsd:enumeration value="Terminated"/>
+					<xsd:enumeration value="Exception"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="state-change-response-enumeration">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Succeeded"/>
+					<xsd:enumeration value="Failed"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<!-- Complex Types -->
+			<xsd:complexType name="overall-status-type">
+				<xsd:attribute name="state" type="bes:overall-state-enumeration" use="required"/>
+				<xsd:attribute name="last-state" type="bes:overall-state-enumeration" use="optional"/>
+				<xsd:attribute name="other" type="xsd:string" use="optional"/>
+			</xsd:complexType>
+			<xsd:element name="overall-status" type="bes:overall-status-type"/>
+			<xsd:complexType name="data-stage-status-type">
+				<xsd:attribute name="id" type="xsd:string" use="required"/>
+				<xsd:attribute name="state" type="bes:data-staging-state-enumeration" use="required"/>
+				<xsd:attribute name="last-state" type="bes:data-staging-state-enumeration" use="optional"/>
+			</xsd:complexType>
+			<xsd:element name="data-stage-status" type="bes:data-stage-status-type"/>
+			<xsd:complexType name="activity-status-type">
+				<xsd:sequence>
+					<xsd:element type="wsa:EndpointReferenceType" name="activity-identifier" minOccurs="1" maxOccurs="1"/>
+					<xsd:element type="bes:overall-status-type" name="overall-status" minOccurs="1" maxOccurs="1"/>
+					<xsd:element type="bes:data-stage-status-type" name="data-stage-status" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="activity-status" type="bes:activity-status-type"/>
+			<xsd:complexType name="requested-state-change-type">
+				<xsd:attribute name="from" type="bes:overall-state-enumeration" use="optional"/>
+				<xsd:attribute name="to" type="bes:overall-state-enumeration" use="required"/>
+			</xsd:complexType>
+			<xsd:element name="requested-state-change" type="bes:requested-state-change-type"/>
+			<xsd:complexType name="state-change-request-type">
+				<xsd:sequence>
+					<xsd:element type="wsa:EndpointReferenceType" name="activity-identifier" minOccurs="1" maxOccurs="1"/>
+					<xsd:element type="bes:requested-state-change-type" name="requested-state-change" minOccurs="1" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="state-change-request" type="bes:state-change-request-type"/>
+			<xsd:complexType name="state-change-response-type">
+				<xsd:sequence>
+					<xsd:element type="wsa:EndpointReferenceType" name="activity-identifier" minOccurs="1" maxOccurs="1"/>
+					<xsd:element type="xsd:string" name="description" minOccurs="0" maxOccurs="1"/>
+				</xsd:sequence>
+				<xsd:attribute name="response" type="bes:state-change-response-enumeration" use="required"/>
+			</xsd:complexType>
+			<xsd:element name="state-change-response" type="bes:state-change-response-type"/>
+			<xsd:complexType name="activity-jsdl-document-type">
+				<xsd:sequence>
+					<xsd:element type="wsa:EndpointReferenceType" name="activity-identifier" minOccurs="1" maxOccurs="1"/>
+					<xsd:element ref="jsdl:JobDefinition" minOccurs="1" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="activity-jsdl-document" type="bes:activity-jsdl-document-type"/>
+
+			<!-- Fault Types -->
+			<xsd:complexType name="NotAcceptingNewActivitiesFaultType"/>
+			<xsd:element name="NotAcceptingNewActivitiesFault" type="bes:NotAcceptingNewActivitiesFaultType"/>
+			<xsd:complexType name="BadlyFormedJSDLDocumentFaultType"/>
+			<xsd:element name="BadlyFormedJSDLDocumentFault" type="bes:BadlyFormedJSDLDocumentFaultType"/>
+			<xsd:complexType name="UnsupportedJSDLFaultType"/>
+			<xsd:element name="UnsupportedJSDLFault" type="bes:UnsupportedJSDLFaultType"/>
+			<xsd:complexType name="UnsupportedFeatureFaultType"/>
+			<xsd:element name="UnsupportedFeatureFault" type="bes:UnsupportedFeatureFaultType"/>
+			<xsd:complexType name="JobSpecificationFaultType"/>
+			<xsd:element name="JobSpecificationFault" type="bes:JobSpecificationFaultType"/>
+			<xsd:complexType name="BackendFaultType"/>
+			<xsd:element name="BackendFault" type="bes:BackendFaultType"/>
+
+			<!-- Message Helper Types -->
+			<xsd:element name="CreateActivityFromJSDL">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="jsdl:JobDefinition" minOccurs="1" maxOccurs="1"/>
+						<xsd:element name="create-suspended" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CreateActivityFromJSDLResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="activity-identifier" type="wsa:EndpointReferenceType" minOccurs="1" maxOccurs="1"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetActivityStatus">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="activity-identifier" type="wsa:EndpointReferenceType" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetActivityStatusResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="activity-status" type="bes:activity-status-type" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="RequestActivityStateChanges">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="state-change-request" type="bes:state-change-request-type" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="RequestActivityStateChangesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="state-change-response" type="bes:state-change-response-type" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="StopAcceptingNewActivities"/>
+			<xsd:element name="StopAcceptingNewActivitiesResponse"/>
+			<xsd:element name="StartAcceptingNewActivities"/>
+			<xsd:element name="StartAcceptingNewActivitiesResponse"/>
+			<xsd:element name="IsAcceptingNewActivities"/>
+			<xsd:element name="IsAcceptingNewActivitiesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="response" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetActivityJSDLDocuments">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="activity-identifier" type="wsa:EndpointReferenceType" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetActivityJSDLDocumentsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="activity-jsdl-document" type="bes:activity-jsdl-document-type" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	
+	<!-- Fault Messages -->
+	<wsdl:message name="NotAcceptingNewActivitiesFault">
+		<wsdl:part name="NotAcceptingNewActivitiesFault" element="bes:NotAcceptingNewActivitiesFault"/>
+	</wsdl:message>
+	<wsdl:message name="BadlyFormedJSDLDocumentFault">
+		<wsdl:part name="BadlyFormedJSDLDocumentFault" element="bes:BadlyFormedJSDLDocumentFault"/>
+	</wsdl:message>
+	<wsdl:message name="UnsupportedJSDLFault">
+		<wsdl:part name="UnsupportedJSDLFault" element="bes:UnsupportedJSDLFault"/>
+	</wsdl:message>
+	<wsdl:message name="UnsupportedFeatureFault">
+		<wsdl:part name="UnsupportedFeatureFault" element="bes:UnsupportedFeatureFault"/>
+	</wsdl:message>
+	<wsdl:message name="JobSpecificationFault">
+		<wsdl:part name="JobSpecificationFault" element="bes:JobSpecificationFault"/>
+	</wsdl:message>
+	<wsdl:message name="BackendFault">
+		<wsdl:part name="BackendFault" element="bes:BackendFault"/>
+	</wsdl:message>
+	<!-- BES Messages -->
+	<wsdl:message name="CreateActivityFromJSDLRequest">
+		<wsdl:part name="CreateActivityFromJSDLRequest" element="bes:CreateActivityFromJSDL"/>
+	</wsdl:message>
+	<wsdl:message name="CreateActivityFromJSDLResponse">
+		<wsdl:part name="CreateActivityFromJSDLResponse" element="bes:CreateActivityFromJSDLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GetActivityStatusRequest">
+		<wsdl:part name="GetActivityStatusRequest" element="bes:GetActivityStatus"/>
+	</wsdl:message>
+	<wsdl:message name="GetActivityStatusResponse">
+		<wsdl:part name="GetActivityStatusResponse" element="bes:GetActivityStatusResponse"/>
+	</wsdl:message>
+	<wsdl:message name="RequestActivityStateChangesRequest">
+		<wsdl:part name="RequestActivityStateChangesRequest" element="bes:RequestActivityStateChanges"/>
+	</wsdl:message>
+	<wsdl:message name="RequestActivityStateChangesResponse">
+		<wsdl:part name="RequestActivityStateChangesResponse" element="bes:RequestActivityStateChangesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="StopAcceptingNewActivitiesRequest">
+		<wsdl:part name="StopAcceptingNewActivitiesRequest" element="bes:StopAcceptingNewActivities"/>
+	</wsdl:message>
+	<wsdl:message name="StopAcceptingNewActivitiesResponse">
+		<wsdl:part name="StopAcceptingNewActivitiesResponse" element="bes:StopAcceptingNewActivitiesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="StartAcceptingNewActivitiesRequest">
+		<wsdl:part name="StartAcceptingNewActivitiesRequest" element="bes:StartAcceptingNewActivities"/>
+	</wsdl:message>
+	<wsdl:message name="StartAcceptingNewActivitiesResponse">
+		<wsdl:part name="StartAcceptingNewActivitiesResponse" element="bes:StartAcceptingNewActivitiesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IsAcceptingNewActivitiesRequest">
+		<wsdl:part name="IsAcceptingNewActivitiesRequest" element="bes:IsAcceptingNewActivities"/>
+	</wsdl:message>
+	<wsdl:message name="IsAcceptingNewActivitiesResponse">
+		<wsdl:part name="IsAcceptingNewActivitiesResponse" element="bes:IsAcceptingNewActivitiesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GetActivityJSDLDocumentsRequest">
+		<wsdl:part name="GetActivityJSDLDocumentsRequest" element="bes:GetActivityJSDLDocuments"/>
+	</wsdl:message>
+	<wsdl:message name="GetActivityJSDLDocumentsResponse">
+		<wsdl:part name="GetActivityJSDLDocumentsResponse" element="bes:GetActivityJSDLDocumentsResponse"/>
+	</wsdl:message>
+	<!-- Port Type Definitions -->
+	<wsdl:portType name="BES">
+		<!-- WS-RF specifics 
+		<wsdl:operation name="GetResourceProperty">
+			<wsdl:input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"/>
+			<wsdl:output name="GetResourcePropertyResponse" message="wsrpw:GetResourcePropertyResponse"/>
+			<wsdl:fault name="ResourceUnknownFault" message="wsrf-rw:ResourceUnknownFault"/>
+			<wsdl:fault name="InvalidResourcePropertyQNameFault" message="wsrpw:InvalidResourcePropertyQNameFault"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetMultipleResourceProperties">
+			<wsdl:input name="GetMultipleResourcePropertiesRequest" message="wsrpw:GetMultipleResourcePropertiesRequest"/>
+			<wsdl:output name="GetMultipleResourcePropertiesResponse" message="wsrpw:GetMultipleResourcePropertiesResponse"/>
+			<wsdl:fault name="ResourceUnknownFault" message="wsrf-rw:ResourceUnknownFault"/>
+			<wsdl:fault name="InvalidResourcePropertyQNameFault" message="wsrpw:InvalidResourcePropertyQNameFault"/>
+		</wsdl:operation>
+		<wsdl:operation name="QueryResourceProperties">
+			<wsdl:input name="QueryResourcePropertiesRequest" message="wsrpw:QueryResourcePropertiesRequest"/>
+			<wsdl:output name="QueryResourcePropertiesResponse" message="wsrpw:QueryResourcePropertiesResponse"/>
+			<wsdl:fault name="ResourceUnknownFault" message="wsrf-rw:ResourceUnknownFault"/>
+			<wsdl:fault name="InvalidResourcePropertyQNameFault" message="wsrpw:InvalidResourcePropertyQNameFault"/>
+			<wsdl:fault name="UnknownQueryExpressionDialectFault" message="wsrpw:UnknownQueryExpressionDialectFault"/>
+			<wsdl:fault name="InvalidQueryExpressionFault" message="wsrpw:InvalidQueryExpressionFault"/>
+			<wsdl:fault name="QueryEvaluationErrorFault" message="wsrpw:QueryEvaluationErrorFault"/>
+		</wsdl:operation> -->
+		<!-- BES Specific -->
+		<wsdl:operation name="CreateActivityFromJSDL">
+			<wsdl:input message="bes:CreateActivityFromJSDLRequest"/>
+			<wsdl:output message="bes:CreateActivityFromJSDLResponse"/>
+			<wsdl:fault name="NotAcceptingNewActivitiesFault" message="bes:NotAcceptingNewActivitiesFault"/>
+			<wsdl:fault name="BadlyFormedJSDLDocumentFault" message="bes:BadlyFormedJSDLDocumentFault"/>
+			<wsdl:fault name="UnsupportedJSDLFault" message="bes:UnsupportedJSDLFault"/>
+			<wsdl:fault name="UnsupportedFeatureFault" message="bes:UnsupportedFeatureFault"/>
+			<wsdl:fault name="JobSpecificationFault" message="bes:JobSpecificationFault"/>
+			<wsdl:fault name="BackendFault" message="bes:BackendFault"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetActivityStatus">
+			<wsdl:input message="bes:GetActivityStatusRequest"/>
+			<wsdl:output message="bes:GetActivityStatusResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="RequestActivityStateChanges">
+			<wsdl:input message="bes:RequestActivityStateChangesRequest"/>
+			<wsdl:output message="bes:RequestActivityStateChangesResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="StopAcceptingNewActivities">
+			<wsdl:input message="bes:StopAcceptingNewActivitiesRequest"/>
+			<wsdl:output message="bes:StopAcceptingNewActivitiesResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="StartAcceptingNewActivities">
+			<wsdl:input message="bes:StartAcceptingNewActivitiesRequest"/>
+			<wsdl:output message="bes:StartAcceptingNewActivitiesResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="IsAcceptingNewActivities">
+			<wsdl:input message="bes:IsAcceptingNewActivitiesRequest"/>
+			<wsdl:output message="bes:IsAcceptingNewActivitiesResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetActivityJSDLDocuments">
+			<wsdl:input message="bes:GetActivityJSDLDocumentsRequest"/>
+			<wsdl:output message="bes:GetActivityJSDLDocumentsResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<!-- binding -->
+	<wsdl:binding name="BESSOAPBinding" type="bes:BES">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="CreateActivityFromJSDL">
+			<soap:operation soapAction=""/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="NotAcceptingNewActivitiesFault">
+				<soap:fault name="NotAcceptingNewActivitiesFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="BadlyFormedJSDLDocumentFault">
+				<soap:fault name="BadlyFormedJSDLDocumentFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="UnsupportedJSDLFault">
+				<soap:fault name="UnsupportedJSDLFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="UnsupportedFeatureFault">
+				<soap:fault name="UnsupportedFeatureFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="JobSpecificationFault">
+				<soap:fault name="JobSpecificationFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="BackendFault">
+				<soap:fault name="BackendFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetActivityStatus">
+			<soap:operation soapAction=""/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="RequestActivityStateChanges">
+			<soap:operation soapAction=""/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="StopAcceptingNewActivities">
+			<soap:operation soapAction=""/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="StartAcceptingNewActivities">
+			<soap:operation soapAction=""/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="IsAcceptingNewActivities">
+			<soap:operation soapAction=""/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetActivityJSDLDocuments">
+			<soap:operation soapAction=""/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<!-- service -->
+	<wsdl:service name="BasicExecutionService">
+		<wsdl:port binding="bes:BESSOAPBinding" name="BESSOAPPort">
+			<soap:address location="http://localhost"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

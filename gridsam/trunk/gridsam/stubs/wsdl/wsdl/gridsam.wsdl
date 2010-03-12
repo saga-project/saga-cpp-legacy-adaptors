@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="gridsam" targetNamespace="http://www.icenigrid.org/service/gridsam"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+    xmlns:tns="http://www.icenigrid.org/service/gridsam"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <!-- type declaration for submission and monitoring port types -->
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://www.icenigrid.org/service/gridsam/types"
+            elementFormDefault="qualified">
+    
+            <!-- import the main schema from the xsd files -->
+            <xsd:import namespace="http://www.icenigrid.org/service/gridsam"
+                schemaLocation="../gridsam.xsd"/>
+                
+        </xsd:schema>
+    </wsdl:types>
+    <!-- messages for submission and monitoring port types -->
+    <wsdl:message name="SubmitJobRequest">
+        <wsdl:part element="tns:submitJob" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="SubmitJobResponse">
+        <wsdl:part element="tns:submitJobResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="GetJobStatusRequest">
+        <wsdl:part element="tns:getJobStatus" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="GetJobStatusResponse">
+        <wsdl:part element="tns:getJobStatusResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="TerminateJobRequest">
+        <wsdl:part element="tns:terminateJob" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="TerminateJobResponse">
+        <wsdl:part element="tns:terminateJobResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="StartJobRequest">
+        <wsdl:part element="tns:startJob" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="StartJobResponse">
+        <wsdl:part element="tns:startJobResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="JobSubmissionFaultMessage">
+        <wsdl:part element="tns:JobSubmissionFault" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="UnknownJobFaultMessage">
+        <wsdl:part element="tns:UnknownJobFault" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="JobMonitoringFaultMessage">
+        <wsdl:part element="tns:JobMonitoringFault" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="JobStartFaultMessage">
+        <wsdl:part element="tns:JobStartFault" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="JobTerminationFaultMessage">
+        <wsdl:part element="tns:JobTerminationFault" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="AuthorisationFaultMessage">
+        <wsdl:part element="tns:AuthorisationFault" name="parameters"/>
+    </wsdl:message>
+    <!-- job submission port type -->
+    <wsdl:portType name="JobSubmissionPortType">
+        <wsdl:operation name="submitJob">
+            <wsdl:input message="tns:SubmitJobRequest"/>
+            <wsdl:output message="tns:SubmitJobResponse"/>
+            <wsdl:fault message="tns:JobSubmissionFaultMessage" name="JobSubmissionFault"/>
+            <wsdl:fault message="tns:AuthorisationFaultMessage" name="AuthorisationFault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <!-- job monitoring port type -->
+    <wsdl:portType name="JobMonitoringPortType">
+        <wsdl:operation name="getJobStatus">
+            <wsdl:input message="tns:GetJobStatusRequest"/>
+            <wsdl:output message="tns:GetJobStatusResponse"/>
+            <wsdl:fault message="tns:UnknownJobFaultMessage" name="UnknownJobFault"/>
+            <wsdl:fault message="tns:JobMonitoringFaultMessage" name="JobMonitoringFault"/>
+            <wsdl:fault message="tns:AuthorisationFaultMessage" name="AuthorisationFault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <!-- job control port type -->
+    <wsdl:portType name="JobControlPortType">
+        <wsdl:operation name="terminateJob">
+            <wsdl:input message="tns:TerminateJobRequest"/>
+            <wsdl:output message="tns:TerminateJobResponse"/>
+            <wsdl:fault message="tns:UnknownJobFaultMessage" name="UnknownJobFault"/>
+            <wsdl:fault message="tns:JobTerminationFaultMessage" name="JobTerminationFault"/>
+            <wsdl:fault message="tns:AuthorisationFaultMessage" name="AuthorisationFault"/>
+        </wsdl:operation>
+        <wsdl:operation name="startJob">
+            <wsdl:input message="tns:StartJobRequest"/>
+            <wsdl:output message="tns:StartJobResponse"/>
+            <wsdl:fault message="tns:UnknownJobFaultMessage" name="UnknownJobFault"/>
+            <wsdl:fault message="tns:JobStartFaultMessage" name="JobStartFault"/>
+            <wsdl:fault message="tns:AuthorisationFaultMessage" name="AuthorisationFault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <!-- job control port type SOAP binding -->
+    <wsdl:binding name="JobControlSOAPBinding" type="tns:JobControlPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="terminateJob">
+            <soap:operation soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="UnknownJobFault">
+                <soap:fault name="UnknownJobFault" use="literal"/>
+            </wsdl:fault>
+            <wsdl:fault name="JobTerminationFault">
+                <soap:fault name="JobTerminationFault" use="literal"/>
+            </wsdl:fault>
+            <wsdl:fault name="AuthorisationFault">
+                <soap:fault name="AuthorisationFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="startJob">
+            <soap:operation soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="UnknownJobFault">
+                <soap:fault name="UnknownJobFault" use="literal"/>
+            </wsdl:fault>
+            <wsdl:fault name="JobStartFault">
+                <soap:fault name="JobStartFault" use="literal"/>
+            </wsdl:fault>
+            <wsdl:fault name="AuthorisationFault">
+                <soap:fault name="AuthorisationFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <!-- job monitoring port type SOAP binding -->
+    <wsdl:binding name="JobMonitoringSOAPBinding" type="tns:JobMonitoringPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="getJobStatus">
+            <soap:operation soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="UnknownJobFault">
+                <soap:fault name="UnknownJobFault" use="literal"/>
+            </wsdl:fault>
+            <wsdl:fault name="JobMonitoringFault">
+                <soap:fault name="JobMonitoringFault" use="literal"/>
+            </wsdl:fault>
+            <wsdl:fault name="AuthorisationFault">
+                <soap:fault name="AuthorisationFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <!-- job submission port type SOAP binding -->
+    <wsdl:binding name="JobSubmissionSOAPBinding" type="tns:JobSubmissionPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="submitJob">
+            <soap:operation soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="JobSubmissionFault">
+                <soap:fault name="JobSubmissionFault" use="literal"/>
+            </wsdl:fault>
+            <wsdl:fault name="AuthorisationFault">
+                <soap:fault name="AuthorisationFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="GridSAMService">
+        <wsdl:port binding="tns:JobMonitoringSOAPBinding" name="JobMonitoringSOAPPort">
+            <soap:address location="http://localhost/gridsam"/>
+        </wsdl:port>
+        <wsdl:port binding="tns:JobSubmissionSOAPBinding" name="JobSubmissionSOAPPort">
+            <soap:address location="http://localhost/gridsam"/>
+        </wsdl:port>
+        <wsdl:port binding="tns:JobControlSOAPBinding" name="JobControlSOAPPort">
+            <soap:address location="http://localhost/gridsam"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

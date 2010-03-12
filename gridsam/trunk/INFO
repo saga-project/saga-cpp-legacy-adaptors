@@ -1,0 +1,51 @@
+
+::SAGA DOCUMENTATION FILE::
+
+:ADAPTOR NAME:
+
+   OMII GridSAM Job Adaptor
+  
+:AUTHORS:
+
+  Copyright (c) 2007-2009 Hartmut Kaiser (hkaiser@cct.lsu.edu)
+
+:LICENSE:
+
+  Distributed under the Boost Software License, Version 1.0.
+  
+:ADAPTOR LIBRARY NAME:
+  
+  libsaga_adaptor_omii_gridsam_job.so (dylib)
+
+:IMPLEMENTS PACKAGE:
+ 
+  - saga_package_job
+
+:DESCRIPTION:
+
+  The adaptor allows (remote) job submission/control/monitoring using the OMII
+  GridSAM WebService protocol
+
+:URL SCHEMES:
+
+  - gridsam://
+
+:REQUIRES:
+
+  Since the adaptor is WebService based, it doesn't require any additional
+  external software or libraries in order to build.
+
+:CONFIGURE OPTIONS:
+
+
+:INI FILE:
+
+  saga_adaptor_omii_gridsam_job.ini 
+
+:INI OPTIONS:
+
+  none
+
+:KNOWN ISSUES:
+
+  none

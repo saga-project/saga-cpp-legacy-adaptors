@@ -1,0 +1,990 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		7B03D3AD0BE94E10005A1619 /* make_distribution_package */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7B03D3AE0BE94E36005A1619 /* Build configuration list for PBXAggregateTarget "make_distribution_package" */;
+			buildPhases = (
+				7B03D3B50BE94E4A005A1619 /* Copy Files -> lib */,
+				7B03D3B70BE94E5F005A1619 /* Copy Files -> share */,
+			);
+			dependencies = (
+				7B03D3B20BE94E37005A1619 /* PBXTargetDependency */,
+			);
+			name = make_distribution_package;
+			productName = make_distribution_package;
+		};
+		7B6DA6890B9A2DA100168752 /* ALL */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7B6DA69F0B9A2DC300168752 /* Build configuration list for PBXAggregateTarget "ALL" */;
+			buildPhases = (
+			);
+			dependencies = (
+				7BAC92AC0BC327E0008C08F9 /* PBXTargetDependency */,
+			);
+			name = ALL;
+			productName = ALL;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		7B03D4430BE95472005A1619 /* libsaga_adaptor_omii_gridsam_job.dylib in Copy Files -> lib */ = {isa = PBXBuildFile; fileRef = 7B03D4410BE9545F005A1619 /* libsaga_adaptor_omii_gridsam_job.dylib */; };
+		7B2AA7740DD76A03003A68C4 /* common_helpers.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7B2AA76C0DD76A03003A68C4 /* common_helpers.hpp */; };
+		7B2AA7750DD76A03003A68C4 /* container_device.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7B2AA76D0DD76A03003A68C4 /* container_device.hpp */; };
+		7B2AA7760DD76A03003A68C4 /* gridsam_jobcontrol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7B2AA76E0DD76A03003A68C4 /* gridsam_jobcontrol.hpp */; };
+		7B2AA7770DD76A03003A68C4 /* gridsam_jobmonitoring.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7B2AA76F0DD76A03003A68C4 /* gridsam_jobmonitoring.hpp */; };
+		7B2AA7780DD76A03003A68C4 /* gridsam_jobsubmission.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7B2AA7700DD76A03003A68C4 /* gridsam_jobsubmission.hpp */; };
+		7B2AA7790DD76A03003A68C4 /* gsoap_helper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7B2AA7710DD76A03003A68C4 /* gsoap_helper.hpp */; };
+		7B2AA77A0DD76A03003A68C4 /* omii_gridsam_context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B2AA7720DD76A03003A68C4 /* omii_gridsam_context.cpp */; };
+		7B2AA77B0DD76A03003A68C4 /* omii_gridsam_context.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7B2AA7730DD76A03003A68C4 /* omii_gridsam_context.hpp */; };
+		7B4665DF0CB16CB300581D34 /* gridsamJobSubmissionSOAPBindingProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B4665A50CB16BF300581D34 /* gridsamJobSubmissionSOAPBindingProxy.cpp */; };
+		7B4665E00CB16CB300581D34 /* besC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B4665980CB16BF300581D34 /* besC.cpp */; };
+		7B4665E10CB16CB300581D34 /* gridsamC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B46659F0CB16BF300581D34 /* gridsamC.cpp */; };
+		7B4665E20CB16CB300581D34 /* gridsamJobMonitoringSOAPBindingProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B4665A30CB16BF300581D34 /* gridsamJobMonitoringSOAPBindingProxy.cpp */; };
+		7B4665E30CB16CB300581D34 /* omii_gridsam_job_service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B4665920CB16BF300581D34 /* omii_gridsam_job_service.cpp */; };
+		7B4665E40CB16CB300581D34 /* omii_gridsam_adaptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B46658D0CB16BF300581D34 /* omii_gridsam_adaptor.cpp */; };
+		7B4665E50CB16CB300581D34 /* gridsamJobControlSOAPBindingProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B4665A10CB16BF300581D34 /* gridsamJobControlSOAPBindingProxy.cpp */; };
+		7B4665E60CB16CB300581D34 /* besBESSOAPBindingProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B4665960CB16BF300581D34 /* besBESSOAPBindingProxy.cpp */; };
+		7B4665E70CB16CB300581D34 /* stdsoap2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B4665CC0CB16BF300581D34 /* stdsoap2.cpp */; };
+		7B4665E80CB16CB300581D34 /* omii_gridsam_job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B4665900CB16BF300581D34 /* omii_gridsam_job.cpp */; };
+		7B71F6F30D5CC19E0017DA36 /* omii_gridsam_adaptor.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7B46658F0CB16BF300581D34 /* omii_gridsam_adaptor.ini */; };
+		7B88EDD70DE08550009C255B /* libsaga_engine.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B88EDC30DE084E0009C255B /* libsaga_engine.dylib */; };
+		7B88EDD80DE08550009C255B /* libsaga_package_job.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B88EDCD0DE084E0009C255B /* libsaga_package_job.dylib */; };
+		7BE694A60CD65AB70048A8CA /* e_os.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BE694A40CD65AB70048A8CA /* e_os.h */; };
+		7BE694A70CD65AB70048A8CA /* th-lock.c in Sources */ = {isa = PBXBuildFile; fileRef = 7BE694A50CD65AB70048A8CA /* th-lock.c */; };
+		7BE695030CD65C7D0048A8CA /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BE695010CD65C7D0048A8CA /* libcrypto.dylib */; };
+		7BE695040CD65C7D0048A8CA /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BE695020CD65C7D0048A8CA /* libssl.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7B03D3B10BE94E37005A1619 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF50DFA0B9A9AF90073E20C;
+			remoteInfo = libsaga_adaptor_default_job;
+		};
+		7B1BA47B0E649519007CC638 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7BDCBCFF0E0E02D300113AAE;
+			remoteInfo = libantlr;
+		};
+		7B88EDC20DE084E0009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFDDC0B9973DF00F9AF14;
+			remoteInfo = saga_engine;
+		};
+		7B88EDC40DE084E0009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFE1F0B99759300F9AF14;
+			remoteInfo = saga_package_namespace;
+		};
+		7B88EDC60DE084E0009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFDDD0B9973DF00F9AF14;
+			remoteInfo = saga_package_file;
+		};
+		7B88EDC80DE084E0009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFE590B99771C00F9AF14;
+			remoteInfo = saga_package_advert;
+		};
+		7B88EDCA0DE084E0009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B6DA62A0B9A206900168752;
+			remoteInfo = saga_package_replica;
+		};
+		7B88EDCC0DE084E0009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFE820B9977EA00F9AF14;
+			remoteInfo = saga_package_job;
+		};
+		7B88EDCE0DE084E0009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B6DA6590B9A29A100168752;
+			remoteInfo = saga_package_rpc;
+		};
+		7B88EDD00DE084E0009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B6DA67C0B9A2C8900168752;
+			remoteInfo = saga_package_stream;
+		};
+		7B88EDD20DE084E0009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B9BEA040D5A5000000DF7CB;
+			remoteInfo = saga_package_sd;
+		};
+		7BAC92AB0BC327E0008C08F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF50DFA0B9A9AF90073E20C;
+			remoteInfo = default_job_adaptor;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7B03D3B50BE94E4A005A1619 /* Copy Files -> lib */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(BUILD_DIR)/ReleasePackages/saga_default_adaptor_set/lib/";
+			dstSubfolderSpec = 0;
+			files = (
+				7B03D4430BE95472005A1619 /* libsaga_adaptor_omii_gridsam_job.dylib in Copy Files -> lib */,
+			);
+			name = "Copy Files -> lib";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B03D3B70BE94E5F005A1619 /* Copy Files -> share */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(BUILD_DIR)/ReleasePackages/saga_default_adaptor_set/share/saga";
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			name = "Copy Files -> share";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BC2ABD90BC33E1B00DEFB5C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(BUILD_DIR)/$(CONFIGURATION)/share/saga/";
+			dstSubfolderSpec = 0;
+			files = (
+				7B71F6F30D5CC19E0017DA36 /* omii_gridsam_adaptor.ini in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7B03D3AA0BE94DA5005A1619 /* README.XCode */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = README.XCode; path = ../../../../project/XCode/README.XCode; sourceTree = SOURCE_ROOT; };
+		7B03D4240BE953D1005A1619 /* installer_background.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = installer_background.tiff; sourceTree = "<group>"; };
+		7B03D4250BE953D1005A1619 /* installer_license.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = installer_license.rtf; sourceTree = "<group>"; };
+		7B03D4260BE953D1005A1619 /* postflight */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = postflight; sourceTree = "<group>"; };
+		7B03D4270BE953D1005A1619 /* postinstall */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = postinstall; sourceTree = "<group>"; };
+		7B03D4280BE953D1005A1619 /* postupgrade */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = postupgrade; sourceTree = "<group>"; };
+		7B03D4290BE953D1005A1619 /* preflight */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = preflight; sourceTree = "<group>"; };
+		7B03D42A0BE953D1005A1619 /* preinstall */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = preinstall; sourceTree = "<group>"; };
+		7B03D42B0BE953D1005A1619 /* preupgrade */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = preupgrade; sourceTree = "<group>"; };
+		7B03D42C0BE953D1005A1619 /* saga_default_adaptor_set_intro.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = saga_default_adaptor_set_intro.rtf; sourceTree = "<group>"; };
+		7B03D42D0BE953D1005A1619 /* saga_default_adaptor_set_scripts.js */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.javascript; path = saga_default_adaptor_set_scripts.js; sourceTree = "<group>"; };
+		7B03D42E0BE953D1005A1619 /* saga_default_adaptor_set.pmproj */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = saga_default_adaptor_set.pmproj; path = ../saga_osx_installer/saga_default_adaptor_set_pkg/saga_default_adaptor_set.pmproj; sourceTree = SOURCE_ROOT; };
+		7B03D4410BE9545F005A1619 /* libsaga_adaptor_omii_gridsam_job.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libsaga_adaptor_omii_gridsam_job.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B16C87B0B97B31E00BE3B73 /* Doxyfile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Doxyfile; path = ../../../docs/doxygen/Doxyfile; sourceTree = SOURCE_ROOT; };
+		7B23DF710B97AC6500054F67 /* index.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = index.html; path = ../../../docs/doxygen/html/index.html; sourceTree = SOURCE_ROOT; };
+		7B2AA76C0DD76A03003A68C4 /* common_helpers.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = common_helpers.hpp; sourceTree = "<group>"; };
+		7B2AA76D0DD76A03003A68C4 /* container_device.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = container_device.hpp; sourceTree = "<group>"; };
+		7B2AA76E0DD76A03003A68C4 /* gridsam_jobcontrol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gridsam_jobcontrol.hpp; sourceTree = "<group>"; };
+		7B2AA76F0DD76A03003A68C4 /* gridsam_jobmonitoring.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gridsam_jobmonitoring.hpp; sourceTree = "<group>"; };
+		7B2AA7700DD76A03003A68C4 /* gridsam_jobsubmission.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gridsam_jobsubmission.hpp; sourceTree = "<group>"; };
+		7B2AA7710DD76A03003A68C4 /* gsoap_helper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gsoap_helper.hpp; sourceTree = "<group>"; };
+		7B2AA7720DD76A03003A68C4 /* omii_gridsam_context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = omii_gridsam_context.cpp; sourceTree = "<group>"; };
+		7B2AA7730DD76A03003A68C4 /* omii_gridsam_context.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = omii_gridsam_context.hpp; sourceTree = "<group>"; };
+		7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = saga_engine.xcodeproj; path = ../../../../project/XCode/saga_engine.xcodeproj; sourceTree = SOURCE_ROOT; };
+		7B2E51380C7CD9250070F07B /* libboost_date_time-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_date_time-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_date_time-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E51390C7CD9250070F07B /* libboost_filesystem-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_filesystem-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_filesystem-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E513A0C7CD9250070F07B /* libboost_graph-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_graph-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_graph-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E513B0C7CD9250070F07B /* libboost_iostreams-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_iostreams-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_iostreams-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E513C0C7CD9250070F07B /* libboost_prg_exec_monitor-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_prg_exec_monitor-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_prg_exec_monitor-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E513D0C7CD9250070F07B /* libboost_program_options-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_program_options-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_program_options-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E513E0C7CD9250070F07B /* libboost_python-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_python-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_python-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E513F0C7CD9250070F07B /* libboost_regex-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_regex-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_regex-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E51400C7CD9250070F07B /* libboost_serialization-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_serialization-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_serialization-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E51410C7CD9250070F07B /* libboost_signals-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_signals-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_signals-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E51420C7CD9250070F07B /* libboost_thread-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_thread-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_thread-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E51430C7CD9250070F07B /* libboost_unit_test_framework-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_unit_test_framework-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_unit_test_framework-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E51440C7CD9250070F07B /* libboost_wave-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_wave-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_wave-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B2E51450C7CD9250070F07B /* libboost_wserialization-mt-d-1_34_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_wserialization-mt-d-1_34_1.dylib"; path = "/usr/local/lib/libboost_wserialization-mt-d-1_34_1.dylib"; sourceTree = "<absolute>"; };
+		7B46658C0CB16BF300581D34 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		7B46658D0CB16BF300581D34 /* omii_gridsam_adaptor.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = omii_gridsam_adaptor.cpp; sourceTree = "<group>"; };
+		7B46658E0CB16BF300581D34 /* omii_gridsam_adaptor.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = omii_gridsam_adaptor.hpp; sourceTree = "<group>"; };
+		7B46658F0CB16BF300581D34 /* omii_gridsam_adaptor.ini */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = omii_gridsam_adaptor.ini; sourceTree = "<group>"; };
+		7B4665900CB16BF300581D34 /* omii_gridsam_job.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = omii_gridsam_job.cpp; sourceTree = "<group>"; };
+		7B4665910CB16BF300581D34 /* omii_gridsam_job.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = omii_gridsam_job.hpp; sourceTree = "<group>"; };
+		7B4665920CB16BF300581D34 /* omii_gridsam_job_service.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = omii_gridsam_job_service.cpp; sourceTree = "<group>"; };
+		7B4665930CB16BF300581D34 /* omii_gridsam_job_service.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = omii_gridsam_job_service.hpp; sourceTree = "<group>"; };
+		7B4665960CB16BF300581D34 /* besBESSOAPBindingProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = besBESSOAPBindingProxy.cpp; sourceTree = "<group>"; };
+		7B4665970CB16BF300581D34 /* besBESSOAPBindingProxy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = besBESSOAPBindingProxy.h; sourceTree = "<group>"; };
+		7B4665980CB16BF300581D34 /* besC.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = besC.cpp; sourceTree = "<group>"; };
+		7B4665990CB16BF300581D34 /* besH.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = besH.h; sourceTree = "<group>"; };
+		7B46659A0CB16BF300581D34 /* BESSOAPBinding.nsmap */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = BESSOAPBinding.nsmap; sourceTree = "<group>"; };
+		7B46659B0CB16BF300581D34 /* besStub.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = besStub.h; sourceTree = "<group>"; };
+		7B46659C0CB16BF300581D34 /* generate.cmd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = generate.cmd; sourceTree = "<group>"; };
+		7B46659D0CB16BF300581D34 /* generate.sh */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = generate.sh; sourceTree = "<group>"; };
+		7B46659F0CB16BF300581D34 /* gridsamC.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = gridsamC.cpp; sourceTree = "<group>"; };
+		7B4665A00CB16BF300581D34 /* gridsamH.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gridsamH.h; sourceTree = "<group>"; };
+		7B4665A10CB16BF300581D34 /* gridsamJobControlSOAPBindingProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = gridsamJobControlSOAPBindingProxy.cpp; sourceTree = "<group>"; };
+		7B4665A20CB16BF300581D34 /* gridsamJobControlSOAPBindingProxy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gridsamJobControlSOAPBindingProxy.h; sourceTree = "<group>"; };
+		7B4665A30CB16BF300581D34 /* gridsamJobMonitoringSOAPBindingProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = gridsamJobMonitoringSOAPBindingProxy.cpp; sourceTree = "<group>"; };
+		7B4665A40CB16BF300581D34 /* gridsamJobMonitoringSOAPBindingProxy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gridsamJobMonitoringSOAPBindingProxy.h; sourceTree = "<group>"; };
+		7B4665A50CB16BF300581D34 /* gridsamJobSubmissionSOAPBindingProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = gridsamJobSubmissionSOAPBindingProxy.cpp; sourceTree = "<group>"; };
+		7B4665A60CB16BF300581D34 /* gridsamJobSubmissionSOAPBindingProxy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gridsamJobSubmissionSOAPBindingProxy.h; sourceTree = "<group>"; };
+		7B4665A70CB16BF300581D34 /* gridsamStub.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gridsamStub.h; sourceTree = "<group>"; };
+		7B4665A80CB16BF300581D34 /* JobControlSOAPBinding.nsmap */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = JobControlSOAPBinding.nsmap; sourceTree = "<group>"; };
+		7B4665A90CB16BF300581D34 /* JobMonitoringSOAPBinding.nsmap */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = JobMonitoringSOAPBinding.nsmap; sourceTree = "<group>"; };
+		7B4665AA0CB16BF300581D34 /* JobSubmissionSOAPBinding.nsmap */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = JobSubmissionSOAPBinding.nsmap; sourceTree = "<group>"; };
+		7B4665AD0CB16BF300581D34 /* c14n.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = c14n.h; sourceTree = "<group>"; };
+		7B4665AE0CB16BF300581D34 /* dom.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = dom.h; sourceTree = "<group>"; };
+		7B4665AF0CB16BF300581D34 /* ds.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ds.h; sourceTree = "<group>"; };
+		7B4665B00CB16BF300581D34 /* ds2.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ds2.h; sourceTree = "<group>"; };
+		7B4665B10CB16BF300581D34 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		7B4665B20CB16BF300581D34 /* soap12.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = soap12.h; sourceTree = "<group>"; };
+		7B4665B30CB16BF300581D34 /* stl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stl.h; sourceTree = "<group>"; };
+		7B4665B40CB16BF300581D34 /* stldeque.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stldeque.h; sourceTree = "<group>"; };
+		7B4665B50CB16BF300581D34 /* stllist.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stllist.h; sourceTree = "<group>"; };
+		7B4665B60CB16BF300581D34 /* stlset.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stlset.h; sourceTree = "<group>"; };
+		7B4665B70CB16BF300581D34 /* stlvector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stlvector.h; sourceTree = "<group>"; };
+		7B4665B80CB16BF300581D34 /* WS-example.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = "WS-example.c"; sourceTree = "<group>"; };
+		7B4665B90CB16BF300581D34 /* WS-example.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "WS-example.h"; sourceTree = "<group>"; };
+		7B4665BA0CB16BF300581D34 /* WS-Header.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "WS-Header.h"; sourceTree = "<group>"; };
+		7B4665BB0CB16BF300581D34 /* wsa.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wsa.h; sourceTree = "<group>"; };
+		7B4665BC0CB16BF300581D34 /* wsa3.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wsa3.h; sourceTree = "<group>"; };
+		7B4665BD0CB16BF300581D34 /* wsa4.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wsa4.h; sourceTree = "<group>"; };
+		7B4665BE0CB16BF300581D34 /* wsa5.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wsa5.h; sourceTree = "<group>"; };
+		7B4665BF0CB16BF300581D34 /* wsp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wsp.h; sourceTree = "<group>"; };
+		7B4665C00CB16BF300581D34 /* wsrp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wsrp.h; sourceTree = "<group>"; };
+		7B4665C10CB16BF300581D34 /* wsse.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wsse.h; sourceTree = "<group>"; };
+		7B4665C20CB16BF300581D34 /* wsse2.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wsse2.h; sourceTree = "<group>"; };
+		7B4665C30CB16BF300581D34 /* wsu.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wsu.h; sourceTree = "<group>"; };
+		7B4665C40CB16BF300581D34 /* xlink.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = xlink.h; sourceTree = "<group>"; };
+		7B4665C50CB16BF300581D34 /* xmime.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = xmime.h; sourceTree = "<group>"; };
+		7B4665C60CB16BF300581D34 /* xmime4.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = xmime4.h; sourceTree = "<group>"; };
+		7B4665C70CB16BF300581D34 /* xmime5.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = xmime5.h; sourceTree = "<group>"; };
+		7B4665C80CB16BF300581D34 /* xml.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = xml.h; sourceTree = "<group>"; };
+		7B4665C90CB16BF300581D34 /* xmlmime.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = xmlmime.h; sourceTree = "<group>"; };
+		7B4665CA0CB16BF300581D34 /* xmlmime5.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = xmlmime5.h; sourceTree = "<group>"; };
+		7B4665CB0CB16BF300581D34 /* xop.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = xop.h; sourceTree = "<group>"; };
+		7B4665CC0CB16BF300581D34 /* stdsoap2.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = stdsoap2.cpp; sourceTree = "<group>"; };
+		7B4665CD0CB16BF300581D34 /* stdsoap2.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stdsoap2.h; sourceTree = "<group>"; };
+		7B4665CF0CB16BF300581D34 /* gridsam.xsd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = gridsam.xsd; sourceTree = "<group>"; };
+		7B4665D00CB16BF300581D34 /* jsdl-mpi.xsd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "jsdl-mpi.xsd"; sourceTree = "<group>"; };
+		7B4665D10CB16BF300581D34 /* jsdl-myproxy.xsd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "jsdl-myproxy.xsd"; sourceTree = "<group>"; };
+		7B4665D20CB16BF300581D34 /* jsdl-posix.xsd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "jsdl-posix.xsd"; sourceTree = "<group>"; };
+		7B4665D30CB16BF300581D34 /* jsdl.xsd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = jsdl.xsd; sourceTree = "<group>"; };
+		7B4665D50CB16BF300581D34 /* basic-execution-service.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "basic-execution-service.h"; sourceTree = "<group>"; };
+		7B4665D60CB16BF300581D34 /* basic-execution-service.wsdl */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "basic-execution-service.wsdl"; sourceTree = "<group>"; };
+		7B4665D70CB16BF300581D34 /* generate_h.cmd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = generate_h.cmd; sourceTree = "<group>"; };
+		7B4665D80CB16BF300581D34 /* generate_h.sh */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = generate_h.sh; sourceTree = "<group>"; };
+		7B4665D90CB16BF300581D34 /* gridsam.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gridsam.h; sourceTree = "<group>"; };
+		7B4665DA0CB16BF300581D34 /* gridsam.wsdl */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = gridsam.wsdl; sourceTree = "<group>"; };
+		7B4665DB0CB16BF300581D34 /* typemap.dat */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = typemap.dat; sourceTree = "<group>"; };
+		7B4665DC0CB16BF300581D34 /* xmlbeans.xsdconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = xmlbeans.xsdconfig; sourceTree = "<group>"; };
+		7BE694A40CD65AB70048A8CA /* e_os.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = e_os.h; sourceTree = "<group>"; };
+		7BE694A50CD65AB70048A8CA /* th-lock.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = "th-lock.c"; sourceTree = "<group>"; };
+		7BE695010CD65C7D0048A8CA /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /usr/lib/libcrypto.dylib; sourceTree = "<absolute>"; };
+		7BE695020CD65C7D0048A8CA /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = /usr/lib/libssl.dylib; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7BF50E010B9A9AF90073E20C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B88EDD70DE08550009C255B /* libsaga_engine.dylib in Frameworks */,
+				7B88EDD80DE08550009C255B /* libsaga_package_job.dylib in Frameworks */,
+				7BE695030CD65C7D0048A8CA /* libcrypto.dylib in Frameworks */,
+				7BE695040CD65C7D0048A8CA /* libssl.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DDFF38A45A11DB9C8B /* SAGA Adaptor Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				7B03D4410BE9545F005A1619 /* libsaga_adaptor_omii_gridsam_job.dylib */,
+			);
+			name = "SAGA Adaptor Libraries";
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* saga_engine */ = {
+			isa = PBXGroup;
+			children = (
+				7B03D3AA0BE94DA5005A1619 /* README.XCode */,
+				7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */,
+				7B23DF110B978DCD00054F67 /* Source */,
+				7B23DF700B97AC3900054F67 /* Documentation */,
+				7B03D3A70BE94D80005A1619 /* Package Maker */,
+				7B2A3EE70B98BCCB00E47329 /* External Libraries */,
+				034768DDFF38A45A11DB9C8B /* SAGA Adaptor Libraries */,
+			);
+			name = saga_engine;
+			sourceTree = "<group>";
+		};
+		7B03D3A70BE94D80005A1619 /* Package Maker */ = {
+			isa = PBXGroup;
+			children = (
+				7B03D4230BE953D1005A1619 /* Install_resources */,
+				7B03D42E0BE953D1005A1619 /* saga_default_adaptor_set.pmproj */,
+			);
+			name = "Package Maker";
+			sourceTree = "<group>";
+		};
+		7B03D4230BE953D1005A1619 /* Install_resources */ = {
+			isa = PBXGroup;
+			children = (
+				7B03D4240BE953D1005A1619 /* installer_background.tiff */,
+				7B03D4250BE953D1005A1619 /* installer_license.rtf */,
+				7B03D4260BE953D1005A1619 /* postflight */,
+				7B03D4270BE953D1005A1619 /* postinstall */,
+				7B03D4280BE953D1005A1619 /* postupgrade */,
+				7B03D4290BE953D1005A1619 /* preflight */,
+				7B03D42A0BE953D1005A1619 /* preinstall */,
+				7B03D42B0BE953D1005A1619 /* preupgrade */,
+				7B03D42C0BE953D1005A1619 /* saga_default_adaptor_set_intro.rtf */,
+				7B03D42D0BE953D1005A1619 /* saga_default_adaptor_set_scripts.js */,
+			);
+			name = Install_resources;
+			path = ../saga_osx_installer/saga_default_adaptor_set_pkg/Install_resources;
+			sourceTree = SOURCE_ROOT;
+		};
+		7B23DF110B978DCD00054F67 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				7B46658A0CB16BF300581D34 /* gridsam */,
+			);
+			indentWidth = 4;
+			name = Source;
+			sourceTree = SOURCE_ROOT;
+			tabWidth = 4;
+		};
+		7B23DF700B97AC3900054F67 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				7B23DF710B97AC6500054F67 /* index.html */,
+				7B16C87B0B97B31E00BE3B73 /* Doxyfile */,
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+		7B2A3EE70B98BCCB00E47329 /* External Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				7BE695010CD65C7D0048A8CA /* libcrypto.dylib */,
+				7BE695020CD65C7D0048A8CA /* libssl.dylib */,
+				7B2E51370C7CD9250070F07B /* Boost 1.34.1 (mt-d dylib) */,
+			);
+			name = "External Libraries";
+			sourceTree = "<group>";
+		};
+		7B2E51370C7CD9250070F07B /* Boost 1.34.1 (mt-d dylib) */ = {
+			isa = PBXGroup;
+			children = (
+				7B2E51380C7CD9250070F07B /* libboost_date_time-mt-d-1_34_1.dylib */,
+				7B2E51390C7CD9250070F07B /* libboost_filesystem-mt-d-1_34_1.dylib */,
+				7B2E513A0C7CD9250070F07B /* libboost_graph-mt-d-1_34_1.dylib */,
+				7B2E513B0C7CD9250070F07B /* libboost_iostreams-mt-d-1_34_1.dylib */,
+				7B2E513C0C7CD9250070F07B /* libboost_prg_exec_monitor-mt-d-1_34_1.dylib */,
+				7B2E513D0C7CD9250070F07B /* libboost_program_options-mt-d-1_34_1.dylib */,
+				7B2E513E0C7CD9250070F07B /* libboost_python-mt-d-1_34_1.dylib */,
+				7B2E513F0C7CD9250070F07B /* libboost_regex-mt-d-1_34_1.dylib */,
+				7B2E51400C7CD9250070F07B /* libboost_serialization-mt-d-1_34_1.dylib */,
+				7B2E51410C7CD9250070F07B /* libboost_signals-mt-d-1_34_1.dylib */,
+				7B2E51420C7CD9250070F07B /* libboost_thread-mt-d-1_34_1.dylib */,
+				7B2E51430C7CD9250070F07B /* libboost_unit_test_framework-mt-d-1_34_1.dylib */,
+				7B2E51440C7CD9250070F07B /* libboost_wave-mt-d-1_34_1.dylib */,
+				7B2E51450C7CD9250070F07B /* libboost_wserialization-mt-d-1_34_1.dylib */,
+			);
+			name = "Boost 1.34.1 (mt-d dylib)";
+			sourceTree = "<group>";
+		};
+		7B46658A0CB16BF300581D34 /* gridsam */ = {
+			isa = PBXGroup;
+			children = (
+				7B2AA76C0DD76A03003A68C4 /* common_helpers.hpp */,
+				7B2AA76D0DD76A03003A68C4 /* container_device.hpp */,
+				7B2AA76E0DD76A03003A68C4 /* gridsam_jobcontrol.hpp */,
+				7B2AA76F0DD76A03003A68C4 /* gridsam_jobmonitoring.hpp */,
+				7B2AA7700DD76A03003A68C4 /* gridsam_jobsubmission.hpp */,
+				7B2AA7710DD76A03003A68C4 /* gsoap_helper.hpp */,
+				7B2AA7720DD76A03003A68C4 /* omii_gridsam_context.cpp */,
+				7B2AA7730DD76A03003A68C4 /* omii_gridsam_context.hpp */,
+				7B4665940CB16BF300581D34 /* stubs */,
+				7BE694A30CD65AB70048A8CA /* openssl */,
+				7B46658C0CB16BF300581D34 /* Makefile */,
+				7B46658D0CB16BF300581D34 /* omii_gridsam_adaptor.cpp */,
+				7B46658E0CB16BF300581D34 /* omii_gridsam_adaptor.hpp */,
+				7B46658F0CB16BF300581D34 /* omii_gridsam_adaptor.ini */,
+				7B4665900CB16BF300581D34 /* omii_gridsam_job.cpp */,
+				7B4665910CB16BF300581D34 /* omii_gridsam_job.hpp */,
+				7B4665920CB16BF300581D34 /* omii_gridsam_job_service.cpp */,
+				7B4665930CB16BF300581D34 /* omii_gridsam_job_service.hpp */,
+			);
+			name = gridsam;
+			path = ../../gridsam;
+			sourceTree = SOURCE_ROOT;
+		};
+		7B4665940CB16BF300581D34 /* stubs */ = {
+			isa = PBXGroup;
+			children = (
+				7B4665950CB16BF300581D34 /* bes */,
+				7B46659C0CB16BF300581D34 /* generate.cmd */,
+				7B46659D0CB16BF300581D34 /* generate.sh */,
+				7B46659E0CB16BF300581D34 /* gridsam */,
+				7B4665AB0CB16BF300581D34 /* gsoap-2.7.9l */,
+				7B4665CE0CB16BF300581D34 /* wsdl */,
+			);
+			path = stubs;
+			sourceTree = "<group>";
+		};
+		7B4665950CB16BF300581D34 /* bes */ = {
+			isa = PBXGroup;
+			children = (
+				7B4665960CB16BF300581D34 /* besBESSOAPBindingProxy.cpp */,
+				7B4665970CB16BF300581D34 /* besBESSOAPBindingProxy.h */,
+				7B4665980CB16BF300581D34 /* besC.cpp */,
+				7B4665990CB16BF300581D34 /* besH.h */,
+				7B46659A0CB16BF300581D34 /* BESSOAPBinding.nsmap */,
+				7B46659B0CB16BF300581D34 /* besStub.h */,
+			);
+			path = bes;
+			sourceTree = "<group>";
+		};
+		7B46659E0CB16BF300581D34 /* gridsam */ = {
+			isa = PBXGroup;
+			children = (
+				7B46659F0CB16BF300581D34 /* gridsamC.cpp */,
+				7B4665A00CB16BF300581D34 /* gridsamH.h */,
+				7B4665A10CB16BF300581D34 /* gridsamJobControlSOAPBindingProxy.cpp */,
+				7B4665A20CB16BF300581D34 /* gridsamJobControlSOAPBindingProxy.h */,
+				7B4665A30CB16BF300581D34 /* gridsamJobMonitoringSOAPBindingProxy.cpp */,
+				7B4665A40CB16BF300581D34 /* gridsamJobMonitoringSOAPBindingProxy.h */,
+				7B4665A50CB16BF300581D34 /* gridsamJobSubmissionSOAPBindingProxy.cpp */,
+				7B4665A60CB16BF300581D34 /* gridsamJobSubmissionSOAPBindingProxy.h */,
+				7B4665A70CB16BF300581D34 /* gridsamStub.h */,
+				7B4665A80CB16BF300581D34 /* JobControlSOAPBinding.nsmap */,
+				7B4665A90CB16BF300581D34 /* JobMonitoringSOAPBinding.nsmap */,
+				7B4665AA0CB16BF300581D34 /* JobSubmissionSOAPBinding.nsmap */,
+			);
+			path = gridsam;
+			sourceTree = "<group>";
+		};
+		7B4665AB0CB16BF300581D34 /* gsoap-2.7.9l */ = {
+			isa = PBXGroup;
+			children = (
+				7B4665AC0CB16BF300581D34 /* import */,
+				7B4665CC0CB16BF300581D34 /* stdsoap2.cpp */,
+				7B4665CD0CB16BF300581D34 /* stdsoap2.h */,
+			);
+			path = "gsoap-2.7.9l";
+			sourceTree = "<group>";
+		};
+		7B4665AC0CB16BF300581D34 /* import */ = {
+			isa = PBXGroup;
+			children = (
+				7B4665AD0CB16BF300581D34 /* c14n.h */,
+				7B4665AE0CB16BF300581D34 /* dom.h */,
+				7B4665AF0CB16BF300581D34 /* ds.h */,
+				7B4665B00CB16BF300581D34 /* ds2.h */,
+				7B4665B10CB16BF300581D34 /* README.txt */,
+				7B4665B20CB16BF300581D34 /* soap12.h */,
+				7B4665B30CB16BF300581D34 /* stl.h */,
+				7B4665B40CB16BF300581D34 /* stldeque.h */,
+				7B4665B50CB16BF300581D34 /* stllist.h */,
+				7B4665B60CB16BF300581D34 /* stlset.h */,
+				7B4665B70CB16BF300581D34 /* stlvector.h */,
+				7B4665B80CB16BF300581D34 /* WS-example.c */,
+				7B4665B90CB16BF300581D34 /* WS-example.h */,
+				7B4665BA0CB16BF300581D34 /* WS-Header.h */,
+				7B4665BB0CB16BF300581D34 /* wsa.h */,
+				7B4665BC0CB16BF300581D34 /* wsa3.h */,
+				7B4665BD0CB16BF300581D34 /* wsa4.h */,
+				7B4665BE0CB16BF300581D34 /* wsa5.h */,
+				7B4665BF0CB16BF300581D34 /* wsp.h */,
+				7B4665C00CB16BF300581D34 /* wsrp.h */,
+				7B4665C10CB16BF300581D34 /* wsse.h */,
+				7B4665C20CB16BF300581D34 /* wsse2.h */,
+				7B4665C30CB16BF300581D34 /* wsu.h */,
+				7B4665C40CB16BF300581D34 /* xlink.h */,
+				7B4665C50CB16BF300581D34 /* xmime.h */,
+				7B4665C60CB16BF300581D34 /* xmime4.h */,
+				7B4665C70CB16BF300581D34 /* xmime5.h */,
+				7B4665C80CB16BF300581D34 /* xml.h */,
+				7B4665C90CB16BF300581D34 /* xmlmime.h */,
+				7B4665CA0CB16BF300581D34 /* xmlmime5.h */,
+				7B4665CB0CB16BF300581D34 /* xop.h */,
+			);
+			path = import;
+			sourceTree = "<group>";
+		};
+		7B4665CE0CB16BF300581D34 /* wsdl */ = {
+			isa = PBXGroup;
+			children = (
+				7B4665CF0CB16BF300581D34 /* gridsam.xsd */,
+				7B4665D00CB16BF300581D34 /* jsdl-mpi.xsd */,
+				7B4665D10CB16BF300581D34 /* jsdl-myproxy.xsd */,
+				7B4665D20CB16BF300581D34 /* jsdl-posix.xsd */,
+				7B4665D30CB16BF300581D34 /* jsdl.xsd */,
+				7B4665D40CB16BF300581D34 /* wsdl */,
+				7B4665DC0CB16BF300581D34 /* xmlbeans.xsdconfig */,
+			);
+			path = wsdl;
+			sourceTree = "<group>";
+		};
+		7B4665D40CB16BF300581D34 /* wsdl */ = {
+			isa = PBXGroup;
+			children = (
+				7B4665D50CB16BF300581D34 /* basic-execution-service.h */,
+				7B4665D60CB16BF300581D34 /* basic-execution-service.wsdl */,
+				7B4665D70CB16BF300581D34 /* generate_h.cmd */,
+				7B4665D80CB16BF300581D34 /* generate_h.sh */,
+				7B4665D90CB16BF300581D34 /* gridsam.h */,
+				7B4665DA0CB16BF300581D34 /* gridsam.wsdl */,
+				7B4665DB0CB16BF300581D34 /* typemap.dat */,
+			);
+			path = wsdl;
+			sourceTree = "<group>";
+		};
+		7B88EDB40DE084E0009C255B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7B88EDC30DE084E0009C255B /* libsaga_engine.dylib */,
+				7B88EDC50DE084E0009C255B /* libsaga_package_namespace.dylib */,
+				7B88EDC70DE084E0009C255B /* libsaga_package_file.dylib */,
+				7B88EDC90DE084E0009C255B /* libsaga_package_advert.dylib */,
+				7B88EDCB0DE084E0009C255B /* libsaga_package_replica.dylib */,
+				7B88EDCD0DE084E0009C255B /* libsaga_package_job.dylib */,
+				7B88EDCF0DE084E0009C255B /* libsaga_package_rpc.dylib */,
+				7B88EDD10DE084E0009C255B /* libsaga_package_stream.dylib */,
+				7B88EDD30DE084E0009C255B /* libsaga_package_sd.dylib */,
+				7B1BA47C0E649519007CC638 /* liblibantlr.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7BE694A30CD65AB70048A8CA /* openssl */ = {
+			isa = PBXGroup;
+			children = (
+				7BE694A40CD65AB70048A8CA /* e_os.h */,
+				7BE694A50CD65AB70048A8CA /* th-lock.c */,
+			);
+			path = openssl;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7BF50DFB0B9A9AF90073E20C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BE694A60CD65AB70048A8CA /* e_os.h in Headers */,
+				7B2AA7740DD76A03003A68C4 /* common_helpers.hpp in Headers */,
+				7B2AA7750DD76A03003A68C4 /* container_device.hpp in Headers */,
+				7B2AA7760DD76A03003A68C4 /* gridsam_jobcontrol.hpp in Headers */,
+				7B2AA7770DD76A03003A68C4 /* gridsam_jobmonitoring.hpp in Headers */,
+				7B2AA7780DD76A03003A68C4 /* gridsam_jobsubmission.hpp in Headers */,
+				7B2AA7790DD76A03003A68C4 /* gsoap_helper.hpp in Headers */,
+				7B2AA77B0DD76A03003A68C4 /* omii_gridsam_context.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_gridsam_job */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7BF50E070B9A9AF90073E20C /* Build configuration list for PBXNativeTarget "libsaga_adaptor_gridsam_job" */;
+			buildPhases = (
+				7BF50DFB0B9A9AF90073E20C /* Headers */,
+				7BF50DFC0B9A9AF90073E20C /* Sources */,
+				7BF50E010B9A9AF90073E20C /* Frameworks */,
+				7BC2ABD90BC33E1B00DEFB5C /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libsaga_adaptor_gridsam_job;
+			productName = Untitled;
+			productReference = 7B03D4410BE9545F005A1619 /* libsaga_adaptor_omii_gridsam_job.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB916408733D950010E9CD /* Build configuration list for PBXProject "saga_omii_adaptor" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* saga_engine */;
+			productRefGroup = 034768DDFF38A45A11DB9C8B /* SAGA Adaptor Libraries */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7B88EDB40DE084E0009C255B /* Products */;
+					ProjectRef = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				7B6DA6890B9A2DA100168752 /* ALL */,
+				7B03D3AD0BE94E10005A1619 /* make_distribution_package */,
+				7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_gridsam_job */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		7B1BA47C0E649519007CC638 /* liblibantlr.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = liblibantlr.a;
+			remoteRef = 7B1BA47B0E649519007CC638 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88EDC30DE084E0009C255B /* libsaga_engine.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_engine.dylib;
+			remoteRef = 7B88EDC20DE084E0009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88EDC50DE084E0009C255B /* libsaga_package_namespace.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_namespace.dylib;
+			remoteRef = 7B88EDC40DE084E0009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88EDC70DE084E0009C255B /* libsaga_package_file.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_file.dylib;
+			remoteRef = 7B88EDC60DE084E0009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88EDC90DE084E0009C255B /* libsaga_package_advert.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_advert.dylib;
+			remoteRef = 7B88EDC80DE084E0009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88EDCB0DE084E0009C255B /* libsaga_package_replica.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_replica.dylib;
+			remoteRef = 7B88EDCA0DE084E0009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88EDCD0DE084E0009C255B /* libsaga_package_job.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_job.dylib;
+			remoteRef = 7B88EDCC0DE084E0009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88EDCF0DE084E0009C255B /* libsaga_package_rpc.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_rpc.dylib;
+			remoteRef = 7B88EDCE0DE084E0009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88EDD10DE084E0009C255B /* libsaga_package_stream.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_stream.dylib;
+			remoteRef = 7B88EDD00DE084E0009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88EDD30DE084E0009C255B /* libsaga_package_sd.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_sd.dylib;
+			remoteRef = 7B88EDD20DE084E0009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7BF50DFC0B9A9AF90073E20C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B4665DF0CB16CB300581D34 /* gridsamJobSubmissionSOAPBindingProxy.cpp in Sources */,
+				7B4665E00CB16CB300581D34 /* besC.cpp in Sources */,
+				7B4665E10CB16CB300581D34 /* gridsamC.cpp in Sources */,
+				7B4665E20CB16CB300581D34 /* gridsamJobMonitoringSOAPBindingProxy.cpp in Sources */,
+				7B4665E30CB16CB300581D34 /* omii_gridsam_job_service.cpp in Sources */,
+				7B4665E40CB16CB300581D34 /* omii_gridsam_adaptor.cpp in Sources */,
+				7B4665E50CB16CB300581D34 /* gridsamJobControlSOAPBindingProxy.cpp in Sources */,
+				7B4665E60CB16CB300581D34 /* besBESSOAPBindingProxy.cpp in Sources */,
+				7B4665E70CB16CB300581D34 /* stdsoap2.cpp in Sources */,
+				7B4665E80CB16CB300581D34 /* omii_gridsam_job.cpp in Sources */,
+				7BE694A70CD65AB70048A8CA /* th-lock.c in Sources */,
+				7B2AA77A0DD76A03003A68C4 /* omii_gridsam_context.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7B03D3B20BE94E37005A1619 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_gridsam_job */;
+			targetProxy = 7B03D3B10BE94E37005A1619 /* PBXContainerItemProxy */;
+		};
+		7BAC92AC0BC327E0008C08F9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_gridsam_job */;
+			targetProxy = 7BAC92AB0BC327E0008C08F9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB916508733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BOOST_FLAVOR = mt;
+				BOOST_LOCATION = /usr/local/;
+				BOOST_VERSION = 1_35;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)/lib/";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 05;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					"$(BOOST_LOCATION)/include/boost-$(BOOST_VERSION)",
+					"$(HEADER_SEARCH_PATHS_SAGA)",
+					"$(HEADER_SEARCH_PATHS_BOOST_FUTURES)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PLUGIN)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PROCESS)",
+				);
+				HEADER_SEARCH_PATHS_BOOST_ASIO = "\"$(PROJECT_DIR)/../../../../external/boost/asio/\"";
+				HEADER_SEARCH_PATHS_BOOST_FUTURES = "\"$(PROJECT_DIR)/../../../../external/boost/futures/\"";
+				HEADER_SEARCH_PATHS_BOOST_PLUGIN = "\"$(PROJECT_DIR)/../../../../external/boost/plugin/\"";
+				HEADER_SEARCH_PATHS_BOOST_PROCESS = "\"$(PROJECT_DIR)/../../../../external/boost/process/\"";
+				HEADER_SEARCH_PATHS_BOOST_PYTHON = "\"$(PROJECT_DIR)/../../../../external/boost/python/\"";
+				HEADER_SEARCH_PATHS_BOOST_SPIRIT = "\"$(PROJECT_DIR)/../../../../external/boost/spirit/\"";
+				HEADER_SEARCH_PATHS_BOOST_SYSTEM = "\"$(PROJECT_DIR)/../../../../external/boost/system/\"";
+				HEADER_SEARCH_PATHS_SAGA = "\"$(PROJECT_DIR)/../../../../\"";
+				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = "$(BOOST_LOCATION)/lib/";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fvisibility=default",
+					"-DSAGA_SKIP_CONFIG_HPP",
+					"-DSAGA_GCC_HAVE_VISIBILITY=1",
+					"$(OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_1)",
+				);
+				OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_1 = "-DSAGA_PREFIX=\"\\\".\\\"\"";
+				OTHER_LDFLAGS = (
+					"-lboost_thread-$(BOOST_FLAVOR)-$(BOOST_VERSION)",
+					"-lboost_serialization-$(BOOST_FLAVOR)-$(BOOST_VERSION)",
+					"-lboost_filesystem-$(BOOST_FLAVOR)-$(BOOST_VERSION)",
+					"-lboost_regex-$(BOOST_FLAVOR)-$(BOOST_VERSION)",
+					"-lboost_system-$(BOOST_FLAVOR)-$(BOOST_VERSION)",
+				);
+				SYMROOT = ../../../../build/;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		1DEB916608733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BOOST_FLAVOR = mt;
+				BOOST_LOCATION = /usr/local/;
+				BOOST_VERSION = 1_35;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)/lib/";
+				CURRENT_PROJECT_VERSION = 05;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = (
+					"$(BOOST_LOCATION)/include/boost-$(BOOST_VERSION)",
+					"$(HEADER_SEARCH_PATHS_SAGA)",
+					"$(HEADER_SEARCH_PATHS_BOOST_FUTURES)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PLUGIN)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PROCESS)",
+				);
+				HEADER_SEARCH_PATHS_BOOST_ASIO = "\"$(PROJECT_DIR)/../../../../external/boost/asio/\"";
+				HEADER_SEARCH_PATHS_BOOST_FUTURES = "\"$(PROJECT_DIR)/../../../../external/boost/futures/\"";
+				HEADER_SEARCH_PATHS_BOOST_PLUGIN = "\"$(PROJECT_DIR)/../../../../external/boost/plugin/\"";
+				HEADER_SEARCH_PATHS_BOOST_PROCESS = "\"$(PROJECT_DIR)/../../../../external/boost/process/\"";
+				HEADER_SEARCH_PATHS_BOOST_PYTHON = "\"$(PROJECT_DIR)/../../../../external/boost/python/\"";
+				HEADER_SEARCH_PATHS_BOOST_SPIRIT = "\"$(PROJECT_DIR)/../../../../external/boost/spirit/\"";
+				HEADER_SEARCH_PATHS_BOOST_SYSTEM = "\"$(PROJECT_DIR)/../../../../external/boost/system/\"";
+				HEADER_SEARCH_PATHS_SAGA = "\"$(PROJECT_DIR)/../../../../\"";
+				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = "$(BOOST_LOCATION)/lib/";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fvisibility=default",
+					"-DSAGA_SKIP_CONFIG_HPP",
+					"-DSAGA_GCC_HAVE_VISIBILITY=1",
+				);
+				OTHER_LDFLAGS = (
+					"-lboost_thread-$(BOOST_FLAVOR)-$(BOOST_VERSION)",
+					"-lboost_serialization-$(BOOST_FLAVOR)-$(BOOST_VERSION)",
+					"-lboost_filesystem-$(BOOST_FLAVOR)-$(BOOST_VERSION)",
+					"-lboost_regex-$(BOOST_FLAVOR)-$(BOOST_VERSION)",
+					"-lboost_system-$(BOOST_FLAVOR)-$(BOOST_VERSION)",
+				);
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
+				SEPARATE_STRIP = YES;
+				SYMROOT = ../../../../build/;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		7B03D3AF0BE94E36005A1619 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = make_distribution_package;
+			};
+			name = Debug;
+		};
+		7B03D3B00BE94E36005A1619 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				PRODUCT_NAME = make_distribution_package;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7B6DA6A00B9A2DC300168752 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = ALL;
+			};
+			name = Debug;
+		};
+		7B6DA6A10B9A2DC300168752 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				PRODUCT_NAME = ALL;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7BF50E080B9A9AF90073E20C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DWITH_NONAMESPACES",
+					"-DPTHREADS",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DWITH_NONAMESPACES",
+					"-DWITH_OPENSSL",
+					"-DSAGA_ADAPTOR_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+					"-DSAGA_ADAPTOR_LIB_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+				);
+				PRODUCT_NAME = saga_adaptor_omii_gridsam_job;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7BF50E090B9A9AF90073E20C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DWITH_NONAMESPACES",
+					"-DPTHREADS",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DWITH_NONAMESPACES",
+					"-DWITH_OPENSSL",
+					"-DSAGA_ADAPTOR_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+					"-DSAGA_ADAPTOR_LIB_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+				);
+				PRODUCT_NAME = saga_adaptor_omii_gridsam_job;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB916408733D950010E9CD /* Build configuration list for PBXProject "saga_omii_adaptor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916508733D950010E9CD /* Debug */,
+				1DEB916608733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B03D3AE0BE94E36005A1619 /* Build configuration list for PBXAggregateTarget "make_distribution_package" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B03D3AF0BE94E36005A1619 /* Debug */,
+				7B03D3B00BE94E36005A1619 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B6DA69F0B9A2DC300168752 /* Build configuration list for PBXAggregateTarget "ALL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B6DA6A00B9A2DC300168752 /* Debug */,
+				7B6DA6A10B9A2DC300168752 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BF50E070B9A9AF90073E20C /* Build configuration list for PBXNativeTarget "libsaga_adaptor_gridsam_job" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BF50E080B9A9AF90073E20C /* Debug */,
+				7BF50E090B9A9AF90073E20C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

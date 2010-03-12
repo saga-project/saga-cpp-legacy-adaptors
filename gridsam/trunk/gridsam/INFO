@@ -1,0 +1,46 @@
+
+::SAGA DOCUMENTATION FILE::
+
+:ADAPTOR NAME:
+
+  Default Job Adaptor
+  
+:AUTHORS:
+
+  Copyright (c) 2006-2009 Hartmut Kaiser (hkaiser@cct.lsu.edu)
+ 
+:LICENSE:
+
+  Distributed under the Boost Software License, Version 1.0.
+  
+:ADAPTOR LIBRARY NAME:
+  
+  libsaga_adaptor_omii_gridsam.so (dylib)
+
+:IMPLEMENTS PACKAGE:
+ 
+  - saga_package_job_service
+  - saga_package_job
+
+:DESCRIPTION:
+
+  The adaptor allows execution of executables using anz remote OMII Gridsam job submission service.
+
+:URL SCHEMES:
+
+  - any://, gridsam://
+
+
+:CONFIGURE OPTIONS:
+
+  none
+
+:INI OPTIONS:
+
+  none
+
+:KNOWN ISSUES:
+
+  See https://macpro01.cct.lsu.edu/trac/saga/query?status=assigned&status=new&status=reopened&component=GridSAM+Job+Adaptor&order=priority
+
+

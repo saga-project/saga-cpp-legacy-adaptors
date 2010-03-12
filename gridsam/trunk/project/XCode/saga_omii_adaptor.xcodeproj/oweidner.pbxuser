@@ -1,0 +1,139 @@
+// !$*UTF8*$!
+{
+	0867D690FE84028FC02AAC07 /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeTarget = 7B6DA6890B9A2DA100168752 /* ALL */;
+		codeSenseManager = 7B88EDB30DE084D4009C255B /* Code sense */;
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					423,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					383,
+					60,
+					20,
+					48.16259765625,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 243200969;
+			PBXWorkspaceStateSaveDate = 243200969;
+		};
+		perUserProjectItems = {
+			7BC71C070E7EF3E700F48D40 /* PBXTextBookmark */ = 7BC71C070E7EF3E700F48D40 /* PBXTextBookmark */;
+			7BC71C080E7EF3E700F48D40 /* PBXTextBookmark */ = 7BC71C080E7EF3E700F48D40 /* PBXTextBookmark */;
+			7BC71C090E7EF3E700F48D40 /* PBXTextBookmark */ = 7BC71C090E7EF3E700F48D40 /* PBXTextBookmark */;
+			7BC71C0A0E7EF3E700F48D40 /* PBXTextBookmark */ = 7BC71C0A0E7EF3E700F48D40 /* PBXTextBookmark */;
+		};
+		sourceControlManager = 7B88EDB20DE084D4009C255B /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	7B03D3AD0BE94E10005A1619 /* make_distribution_package */ = {
+		activeExec = 0;
+	};
+	7B2AA7720DD76A03003A68C4 /* omii_gridsam_context.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {635, 980}}";
+			sepNavSelRange = "{1848, 0}";
+			sepNavVisRange = "{1026, 1927}";
+		};
+	};
+	7B2AA7730DD76A03003A68C4 /* omii_gridsam_context.hpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {601, 658}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 452}";
+		};
+	};
+	7B6DA6890B9A2DA100168752 /* ALL */ = {
+		activeExec = 0;
+	};
+	7B88EDB20DE084D4009C255B /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	7B88EDB30DE084D4009C255B /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	7BC71C070E7EF3E700F48D40 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B2AA7730DD76A03003A68C4 /* omii_gridsam_context.hpp */;
+		name = "omii_gridsam_context.hpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 452;
+		vrLoc = 0;
+	};
+	7BC71C080E7EF3E700F48D40 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B2AA7720DD76A03003A68C4 /* omii_gridsam_context.cpp */;
+		name = "omii_gridsam_context.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1692;
+		vrLoc = 0;
+	};
+	7BC71C090E7EF3E700F48D40 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B2AA7730DD76A03003A68C4 /* omii_gridsam_context.hpp */;
+		name = "omii_gridsam_context.hpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 452;
+		vrLoc = 0;
+	};
+	7BC71C0A0E7EF3E700F48D40 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B2AA7720DD76A03003A68C4 /* omii_gridsam_context.cpp */;
+		name = "omii_gridsam_context.cpp: 49";
+		rLen = 0;
+		rLoc = 1848;
+		rType = 0;
+		vrLen = 1927;
+		vrLoc = 1026;
+	};
+	7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_gridsam_job */ = {
+		activeExec = 0;
+	};
+}
