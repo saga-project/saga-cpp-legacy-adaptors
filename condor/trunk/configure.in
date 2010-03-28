@@ -1,0 +1,60 @@
+# Copyright (c) 2005-2007 Andre Merzky (andre@merzky.net)
+# Copyright (c)      2008 Ole Weidner (oweidner@cct.lsu.ed)
+#
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying Afile LICENSE_1_0.txt or copy at
+#  http://www.boost.org/LICENSE_1_0.txt)
+
+# find saga.m4
+
+m4_include([saga.m4])
+m4_include([config/saga_condor.m4])
+
+AC_INIT()
+
+AX_SAGA_CONFIG()
+
+AX_SAGA_CHECK_CONDOR()
+
+BUILD_ADAPTOR_JOB=no
+
+if test "x$SAGA_HAVE_ADAPTOR_JOB-$SAGA_HAVE_CONDOR" = "xyes-yes"; then
+  BUILD_ADAPTOR_JOB="yes"
+fi
+
+AC_SUBST([BUILD_ADAPTOR_JOB])
+
+# create output files
+AC_CONFIG_FILES([config/make.cfg])
+AC_CONFIG_FILES([job/condor_job_adaptor.ini])
+
+AC_OUTPUT()
+
+OUT=config.summary
+rm -f $OUT
+TEE="tee -a"
+
+echo "                                                                 " | $TEE $OUT
+echo " ========================================================        " | $TEE $OUT
+echo " SAGA CONDOR ADAPTORS - Configuration Summary                    " | $TEE $OUT
+echo " --------------------------------------------------------        " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " Condor Found          : $SAGA_HAVE_CONDOR                       " | $TEE $OUT
+echo " Condor Version        : $CONDOR_VERSION                         " | $TEE $OUT
+echo " Condor Location       : $CONDOR_LOCATION                        " | $TEE $OUT
+echo " Condor Config         : $CONDOR_CONFIG                          " | $TEE $OUT
+echo " Condor Path           : $CONDOR_PATH                            " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " Job Adaptor           : $BUILD_ADAPTOR_JOB                      " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " --------------------------------------------------------        " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+
+
+if test "$SAGA_RECURSIVE_CONFIG" = "yes" ; then
+  cat $OUT >> $SAGA_ROOT/$OUT
+fi
+
