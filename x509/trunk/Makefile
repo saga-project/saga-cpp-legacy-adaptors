@@ -4,7 +4,7 @@
 #  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
-SAGA_SUBDIRS = context
+SAGA_SUBDIRS = context 
 
 ifdef SAGA_ROOT
   SAGA_MAKE_INCLUDE_ROOT = $(SAGA_ROOT)/make
