@@ -1,0 +1,49 @@
+
+::SAGA DOCUMENTATION FILE::
+
+:ADAPTOR NAME:
+
+  HDFS Adaptor
+  
+:AUTHORS:
+
+  Copyright (c) 2009 Chris Miceli <cmicel1@cct.lsu.edu>
+
+:LICENSE:
+
+  Distributed under the Boost Software License, Version 1.0.
+
+:ADAPTOR LIBRARY NAME:
+  
+  libsaga_adaptor_hdfs_file.so (dylib)
+
+:IMPLEMENTS PACKAGE:
+ 
+  - saga_package_file
+  - saga_package_namespace
+
+:DESCRIPTION:
+
+ The HDFS file adaptor allos file access that are stored on a 
+ Hadoop Distributed File System.
+
+:URL SCHEMES:
+
+  - hdfs://
+
+:REQUIRES:
+
+  The HDFS file adaptor requires the Java Runtime Environment (JRE) and
+  the libhdfs (http://wiki.apache.org/hadoop/LibHDFS) library that is
+  included but not built in a default HDFS installation.
+
+
+:CONFIGURE OPTIONS:
+
+  | --with-java=DIR   use java (default is YES) at DIR (optional) |\\
+  |                                                               |\\
+  | JAVA_LOCATION     JAVA installation root (JAVA_HOME)          |\\
+  
+:KNOWN ISSUES:
+
+  See https://macpro01.cct.lsu.edu/trac/saga/query?status=assigned&status=new&status=reopened&component=HDFS+Adaptor&order=priority

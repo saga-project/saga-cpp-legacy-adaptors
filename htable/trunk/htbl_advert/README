@@ -1,0 +1,1 @@
+htbl is an adaptor for the hypertable distributed table similar to bigtable.  it is completely implemented in C++ (unlike hbase). You need log4cpp for this adaptor to work.  I'd recommend this adaptor over hbase.  Just point the locations in the makefile and you should be fine.

@@ -1,0 +1,47 @@
+
+::SAGA DOCUMENTATION FILE::
+
+:ADAPTOR NAME:
+
+  KFS FileSystem Adaptor
+
+:AUTHORS:
+
+  Copyright (c) 2009 Michael Miceli(mmicel2@cct.lsu.edu)
+
+:LICENSE:
+
+  Distributed under the Boost Software License, Version 1.0.
+
+:ADAPTOR LIBRARY NAME:
+  
+  libsaga_adaptor_kfs_file.so (dylib)
+
+:IMPLEMENTS PACKAGE:
+ 
+  - saga_package_file
+  - saga_package_namespace
+
+:DESCRIPTION:
+
+  KFS is an adaptor for the distributed filesystem KFS also known as cloudstore.  Most features are there and you should be able to use this adaptor with little fear of complete failure.  You must download and build kfs to get the libraries installed.  Then point your makefile to the right locations and you should be good.  All you need is a working KFS deployment.  http://kosmosfs.sourceforge.net/ has all the information you need for that.
+
+:URL SCHEMES:
+
+  - kfs://
+
+:REQUIRES:
+
+  KFS adaptor requires kfs installed and the kfs library pointed to in the Makefile.
+
+:CONFIGURE OPTIONS:
+
+  |  nothing different or special
+
+:INI OPTIONS:
+
+  none
+
+:KNOWN ISSUES:
+
+  none

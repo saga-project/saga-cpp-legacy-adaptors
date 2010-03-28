@@ -1,0 +1,48 @@
+
+::SAGA DOCUMENTATION FILE::
+
+:ADAPTOR NAME:
+
+  HBase Advert Adaptor
+
+:AUTHORS:
+
+  Copyright (c) 2009 Michael Miceli <mmicel2@cct.lsu.edu>
+
+:LICENSE:
+
+  Distributed under the Boost Software License, Version 1.0.
+
+:ADAPTOR LIBRARY NAME:
+  
+  libsaga_adaptor_hbase_advert.so (dylib)
+
+:IMPLEMENTS PACKAGE:
+ 
+  - saga_package_advert_service
+  - saga_package_namespace
+
+:DESCRIPTION:
+
+  This is an implementation of Hbase for SAGA.  The functions work, but it isn't optimized at all to take advantage of row/column calls.  Needs thrift server running.
+  
+:URL SCHEMES:
+
+  - hbase://
+
+:REQUIRES:
+
+  Also links against thrift libraries and includes thrift header files.  Also needs Hbase cpp files: Hbase.cpp Hbase_types.cpp Hbase_constants.cpp Look at Makefile to point to right locations
+
+:CONFIGURE OPTIONS:
+
+   | Nothing special
+
+:INI OPTIONS:
+
+  none
+
+
+:KNOWN ISSUES:
+
+  Not too efficient.  Doesn't take full advantage of Hbase
