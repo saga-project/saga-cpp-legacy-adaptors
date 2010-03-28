@@ -1778,38 +1778,6 @@ echo "${ECHO_T}$TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE)" >&6; }
 
 if test "x$TMP_SAGA_INSTTYPE" == "source"; then
   ac_aux_dir=
-for ac_dir in $TMP_SAGA_LOCATION/share/saga/config/ "$srcdir"/$TMP_SAGA_LOCATION/share/saga/config/; do
-  if test -f "$ac_dir/install-sh"; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install-sh -c"
-    break
-  elif test -f "$ac_dir/install.sh"; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install.sh -c"
-    break
-  elif test -f "$ac_dir/shtool"; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/shtool install -c"
-    break
-  fi
-done
-if test -z "$ac_aux_dir"; then
-  { { echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in $TMP_SAGA_LOCATION/share/saga/config/ \"$srcdir\"/$TMP_SAGA_LOCATION/share/saga/config/" >&5
-echo "$as_me: error: cannot find install-sh or install.sh in $TMP_SAGA_LOCATION/share/saga/config/ \"$srcdir\"/$TMP_SAGA_LOCATION/share/saga/config/" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-# These three variables are undocumented and unsupported,
-# and are intended to be withdrawn in a future Autoconf release.
-# They can cause serious problems if a builder's source tree is in a directory
-# whose full name contains unusual characters.
-ac_config_guess="$SHELL $ac_aux_dir/config.guess"  # Please don't use this var.
-ac_config_sub="$SHELL $ac_aux_dir/config.sub"  # Please don't use this var.
-ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
-
-
-else
-  ac_aux_dir=
 for ac_dir in $TMP_SAGA_LOCATION/config/ "$srcdir"/$TMP_SAGA_LOCATION/config/; do
   if test -f "$ac_dir/install-sh"; then
     ac_aux_dir=$ac_dir
@@ -1828,6 +1796,38 @@ done
 if test -z "$ac_aux_dir"; then
   { { echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in $TMP_SAGA_LOCATION/config/ \"$srcdir\"/$TMP_SAGA_LOCATION/config/" >&5
 echo "$as_me: error: cannot find install-sh or install.sh in $TMP_SAGA_LOCATION/config/ \"$srcdir\"/$TMP_SAGA_LOCATION/config/" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+# These three variables are undocumented and unsupported,
+# and are intended to be withdrawn in a future Autoconf release.
+# They can cause serious problems if a builder's source tree is in a directory
+# whose full name contains unusual characters.
+ac_config_guess="$SHELL $ac_aux_dir/config.guess"  # Please don't use this var.
+ac_config_sub="$SHELL $ac_aux_dir/config.sub"  # Please don't use this var.
+ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
+
+
+else
+  ac_aux_dir=
+for ac_dir in $TMP_SAGA_LOCATION/share/saga/config/ "$srcdir"/$TMP_SAGA_LOCATION/share/saga/config/; do
+  if test -f "$ac_dir/install-sh"; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install-sh -c"
+    break
+  elif test -f "$ac_dir/install.sh"; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install.sh -c"
+    break
+  elif test -f "$ac_dir/shtool"; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/shtool install -c"
+    break
+  fi
+done
+if test -z "$ac_aux_dir"; then
+  { { echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in $TMP_SAGA_LOCATION/share/saga/config/ \"$srcdir\"/$TMP_SAGA_LOCATION/share/saga/config/" >&5
+echo "$as_me: error: cannot find install-sh or install.sh in $TMP_SAGA_LOCATION/share/saga/config/ \"$srcdir\"/$TMP_SAGA_LOCATION/share/saga/config/" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
