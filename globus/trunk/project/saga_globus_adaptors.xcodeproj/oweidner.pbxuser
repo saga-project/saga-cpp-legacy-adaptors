@@ -1,0 +1,393 @@
+// !$*UTF8*$!
+{
+	0867D690FE84028FC02AAC07 /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 7BF7D4D8110F793700A37260 /* file_test_535 */;
+		activeTarget = 7B2A409C0B996DB200E47329 /* libsaga_adaptor_globus_gridftp_file */;
+		addToTargets = (
+		);
+		codeSenseManager = 7BF7D4C8110F782900A37260 /* Code sense */;
+		executables = (
+			7BF7D4D8110F793700A37260 /* file_test_535 */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXExecutablesDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXExecutablesDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					22,
+					300,
+					514,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXExecutablesDataSource_ActiveFlagID,
+					PBXExecutablesDataSource_NameID,
+					PBXExecutablesDataSource_CommentsID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					679,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					586,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 290440459;
+			PBXWorkspaceStateSaveDate = 290440459;
+		};
+		perUserProjectItems = {
+			7B15A500114EA7C200D5787B /* PBXTextBookmark */ = 7B15A500114EA7C200D5787B /* PBXTextBookmark */;
+			7B15A501114EA7C200D5787B /* PBXTextBookmark */ = 7B15A501114EA7C200D5787B /* PBXTextBookmark */;
+			7B96C56E114FC51D002A66DE /* PBXTextBookmark */ = 7B96C56E114FC51D002A66DE /* PBXTextBookmark */;
+			7B96C57D114FD3E9002A66DE /* PBXTextBookmark */ = 7B96C57D114FD3E9002A66DE /* PBXTextBookmark */;
+			7B96C57E114FD3E9002A66DE /* PBXTextBookmark */ = 7B96C57E114FD3E9002A66DE /* PBXTextBookmark */;
+			7B96C57F114FD3E9002A66DE /* PBXTextBookmark */ = 7B96C57F114FD3E9002A66DE /* PBXTextBookmark */;
+			7B96C583115017D8002A66DE /* PBXTextBookmark */ = 7B96C583115017D8002A66DE /* PBXTextBookmark */;
+		};
+		sourceControlManager = 7BF7D4C7110F782900A37260 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	7B15A500114EA7C200D5787B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B9FB9130BB1BA5000E9EA8D /* globus_gram_job_adaptor.hpp */;
+		name = "globus_gram_job_adaptor.hpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1811;
+		vrLoc = 0;
+	};
+	7B15A501114EA7C200D5787B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B570C140BC424440080A234 /* globus_gram_job_adaptor_connector.hpp */;
+		name = "globus_gram_job_adaptor_connector.hpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2032;
+		vrLoc = 8717;
+	};
+	7B2A157E0D5A768100832C20 /* globus_gridftp_file_adaptor_file_nsentry_impl.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1103, 5460}}";
+			sepNavSelRange = "{6215, 12}";
+			sepNavVisRange = "{5868, 752}";
+		};
+	};
+	7B2A15D70D5A797B00832C20 /* globus_gridftp_file_adaptor_dir_nsentry_impl.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {993, 3600}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{4910, 2159}";
+		};
+	};
+	7B2A15D90D5A79C200832C20 /* globus_gridftp_file_adaptor_dir_nsdir_impl.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1103, 8340}}";
+			sepNavSelRange = "{1665, 0}";
+			sepNavVisRange = "{1274, 818}";
+		};
+	};
+	7B2A409C0B996DB200E47329 /* libsaga_adaptor_globus_gridftp_file */ = {
+		activeExec = 0;
+	};
+	7B330F810D2CE3CB006F7ED0 /* globus_rls_replica_adaptor_connection.hpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {720, 4140}}";
+			sepNavSelRange = "{6538, 4}";
+			sepNavVisRange = "{6400, 248}";
+		};
+	};
+	7B50CD0E0FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader */ = {
+		activeExec = 0;
+	};
+	7B570C140BC424440080A234 /* globus_gram_job_adaptor_connector.hpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {857, 4121}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{8717, 2032}";
+		};
+	};
+	7B570C150BC424440080A234 /* globus_gram_job_adaptor_connector.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {857, 11518}}";
+			sepNavSelRange = "{21505, 27}";
+			sepNavVisRange = "{20618, 2357}";
+		};
+	};
+	7B6DA6890B9A2DA100168752 /* All Adaptors */ = {
+		activeExec = 0;
+	};
+	7B7AB6600BB318F1003C4CBE /* globus_gram_job_adaptor.ini */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {804, 786}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 189}";
+		};
+	};
+	7B86DD400D60D7EF00D78FC1 /* globus_rls_replica_adaptor_logicalfile_attr_impl.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1103, 3735}}";
+			sepNavSelRange = "{9626, 12}";
+			sepNavVisRange = "{8901, 890}";
+		};
+	};
+	7B96C56E114FC51D002A66DE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B570C150BC424440080A234 /* globus_gram_job_adaptor_connector.cpp */;
+		name = "globus_gram_job_adaptor_connector.cpp: 604";
+		rLen = 27;
+		rLoc = 21505;
+		rType = 0;
+		vrLen = 2357;
+		vrLoc = 20618;
+	};
+	7B96C57D114FD3E9002A66DE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B9FB9160BB1BA5000E9EA8D /* globus_gram_job_adaptor_job.cpp */;
+		name = "globus_gram_job_adaptor_job.cpp: 49";
+		rLen = 0;
+		rLoc = 1922;
+		rType = 0;
+		vrLen = 2307;
+		vrLoc = 926;
+	};
+	7B96C57E114FD3E9002A66DE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B9FB91C0BB1BA5000E9EA8D /* globus_gram_job_adaptor_service.hpp */;
+		name = "globus_gram_job_adaptor_service.hpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2491;
+		vrLoc = 0;
+	};
+	7B96C57F114FD3E9002A66DE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B9FB91B0BB1BA5000E9EA8D /* globus_gram_job_adaptor_service.cpp */;
+		name = "globus_gram_job_adaptor_service.cpp: 57";
+		rLen = 0;
+		rLoc = 2148;
+		rType = 0;
+		vrLen = 2382;
+		vrLoc = 966;
+	};
+	7B96C583115017D8002A66DE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B9FB91B0BB1BA5000E9EA8D /* globus_gram_job_adaptor_service.cpp */;
+		name = "globus_gram_job_adaptor_service.cpp: 59";
+		rLen = 0;
+		rLoc = 2265;
+		rType = 0;
+		vrLen = 2395;
+		vrLoc = 1021;
+	};
+	7B9FB9030BB1BA2400E9EA8D /* globus_gridftp_file_adaptor_dir_impl.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1103, 3840}}";
+			sepNavSelRange = "{4484, 12}";
+			sepNavVisRange = "{4007, 870}";
+		};
+	};
+	7B9FB9050BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_file_impl.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {993, 6210}}";
+			sepNavSelRange = "{1787, 0}";
+			sepNavVisRange = "{6002, 2436}";
+		};
+	};
+	7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1103, 14670}}";
+			sepNavSelRange = "{1888, 12}";
+			sepNavVisRange = "{1479, 999}";
+		};
+	};
+	7B9FB9120BB1BA5000E9EA8D /* globus_gram_job_adaptor.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {993, 2160}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{1467, 2079}";
+		};
+	};
+	7B9FB9130BB1BA5000E9EA8D /* globus_gram_job_adaptor.hpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {857, 949}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1811}";
+		};
+	};
+	7B9FB9160BB1BA5000E9EA8D /* globus_gram_job_adaptor_job.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {857, 9139}}";
+			sepNavSelRange = "{1922, 0}";
+			sepNavVisRange = "{926, 2307}";
+		};
+	};
+	7B9FB9170BB1BA5000E9EA8D /* globus_gram_job_adaptor_job.hpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {993, 1890}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 2267}";
+		};
+	};
+	7B9FB91B0BB1BA5000E9EA8D /* globus_gram_job_adaptor_service.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {857, 4355}}";
+			sepNavSelRange = "{2265, 0}";
+			sepNavVisRange = "{1021, 2395}";
+		};
+	};
+	7B9FB91C0BB1BA5000E9EA8D /* globus_gram_job_adaptor_service.hpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {857, 962}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 2491}";
+		};
+	};
+	7BA984770BB1DF3700403F63 /* globus_gram_job_adaptor_errorhandler.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1103, 5310}}";
+			sepNavSelRange = "{10729, 12}";
+			sepNavVisRange = "{10184, 1216}";
+		};
+	};
+	7BC285510D241834002C51F7 /* globus_rls_replica_adaptor_logicaldirectory.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {993, 6510}}";
+			sepNavSelRange = "{1531, 9}";
+			sepNavVisRange = "{0, 2304}";
+		};
+	};
+	7BC285530D241834002C51F7 /* globus_rls_replica_adaptor_logicalfile_impl.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {803, 3958}}";
+			sepNavSelRange = "{2578, 0}";
+			sepNavVisRange = "{1357, 2374}";
+		};
+	};
+	7BC285560D241C55002C51F7 /* libsaga_adaptor_globus_rls_replica */ = {
+		activeExec = 0;
+	};
+	7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_globus_gram_job */ = {
+		activeExec = 0;
+	};
+	7BF7D4C7110F782900A37260 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	7BF7D4C8110F782900A37260 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	7BF7D4D2110F78F600A37260 /* test_535.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {804, 786}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 893}";
+		};
+	};
+	7BF7D4D6110F793700A37260 /* file_test_535 */ = {
+		activeExec = 0;
+		executables = (
+			7BF7D4D8110F793700A37260 /* file_test_535 */,
+		);
+	};
+	7BF7D4D8110F793700A37260 /* file_test_535 */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+			{
+				active = YES;
+				name = DYLD_LIBRARY_PATH;
+				value = "$(BOOST_LOCATION)/lib:../lib/";
+			},
+			{
+				active = YES;
+				name = SAGA_LOCATION;
+				value = ../;
+			},
+			{
+				active = YES;
+				name = SAGA_VERBOSE;
+				value = 10;
+			},
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = file_test_535;
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	7BF7D4F2110F7A2B00A37260 /* All Tests */ = {
+		activeExec = 0;
+	};
+	7BF7D4F7110F7A5600A37260 /* Everything */ = {
+		activeExec = 0;
+	};
+}

@@ -1,0 +1,32 @@
+#  Copyright (c) 2005-2007 Andre Merzky (andre@merzky.net)
+# 
+#  Distributed under the Boost Software License, Version 1.0. (See accompanying
+#  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+# vim: ft=make
+
+ifndef MAKE_CFG_GOBUS_IN
+       MAKE_CFG_GOBUS_IN=yes
+
+
+TMP_SAGA_LOCATION = @TMP_SAGA_LOCATION@
+TMP_SAGA_INSTTYPE = @TMP_SAGA_INSTTYPE@
+
+ifeq "$(TMP_SAGA_INSTTYPE)" "source"
+  SAGA_ROOT              = $(TMP_SAGA_LOCATION)
+  SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/make
+else
+  SAGA_LOCATION          = $(TMP_SAGA_LOCATION)
+  SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/share/saga/make
+endif
+
+
+SAGA_HAVE_GLOBUS           = @HAVE_GLOBUS@
+
+SAGA_BUILD_ADAPTOR_REPLICA = @BUILD_ADAPTOR_REPLICA@
+SAGA_BUILD_ADAPTOR_FILE    = @BUILD_ADAPTOR_FILE@
+SAGA_BUILD_ADAPTOR_JOB     = @BUILD_ADAPTOR_JOB@
+SAGA_BUILD_ADAPTOR_CONTEXT = @BUILD_ADAPTOR_CONTEXT@
+
+endif # guard
+

@@ -1,0 +1,104 @@
+# Copyright (c) 2005-2007 Andre Merzky (andre@merzky.net)
+# 
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying Afile LICENSE_1_0.txt or copy at 
+#  http://www.boost.org/LICENSE_1_0.txt)
+
+# find saga.m4
+
+m4_include([saga.m4])
+
+m4_include([config/saga_globus.m4])
+
+AC_INIT()
+
+AX_SAGA_CONFIG()
+AX_SAGA_GLOBUS()
+
+BUILD_ADAPTOR_REPLICA=no
+BUILD_ADAPTOR_FILE=no
+BUILD_ADAPTOR_JOB=no
+BUILD_ADAPTOR_CONTEXT=no
+
+echo "here: $SAGA_HAVE_ADAPTOR_REPLICA"
+
+if test "x$SAGA_HAVE_ADAPTOR_REPLICA" = "xyes"; then
+  BUILD_ADAPTOR_REPLICA="yes"
+fi
+if test "x$SAGA_HAVE_ADAPTOR_FILESYSTEM" = "xyes"; then
+  BUILD_ADAPTOR_FILE="yes"
+fi
+if test "x$SAGA_HAVE_ADAPTOR_JOB" = "xyes"; then
+  BUILD_ADAPTOR_JOB="yes"
+fi
+if test "x$SAGA_HAVE_ADAPTOR_REPLICA" = "xyes" || test "x$SAGA_HAVE_ADAPTOR_FILESYSTEM" = "xyes" || test "x$SAGA_HAVE_ADAPTOR_REPLICA" = "xyes"; then
+  BUILD_ADAPTOR_CONTEXT="yes"
+fi
+
+AC_SUBST([BUILD_ADAPTOR_REPLICA])
+AC_SUBST([BUILD_ADAPTOR_FILE])
+AC_SUBST([BUILD_ADAPTOR_JOB])
+AC_SUBST([BUILD_ADAPTOR_CONTEXT])
+
+if test "$GLOBUS_HAVE_RLS" != "yes" ; then
+  BUILD_ADAPTOR_REPLICA="no (RLS client libs missing)"
+fi
+
+if test "$GLOBUS_HAVE_GRIDFTP" != "yes" ; then
+  BUILD_ADAPTOR_FILE="no (GridFTP client libs missing)"
+fi
+
+if test "$GLOBUS_HAVE_GRAM" != "yes" ; then
+  BUILD_ADAPTOR_JOB="no (GRAM client libs missing)"
+fi
+
+if test "$GLOBUS_HAVE_GSI" != "yes" ; then
+  BUILD_ADAPTOR_CONTEXT="no (GSSAPI client libs missing)"
+fi
+
+
+AC_CONFIG_HEADERS([config/saga-globus-config.hpp])
+AC_CONFIG_FILES([config/make.cfg])
+AC_CONFIG_FILES([config/saga.config.globus.c.mk])
+AC_CONFIG_FILES([config/saga.config.globus_gass_copy.c.mk])
+AC_CONFIG_FILES([config/saga.config.globus_gram.c.mk])
+AC_CONFIG_FILES([config/saga.config.globus_gridftp.c.mk])
+AC_CONFIG_FILES([config/saga.config.globus_gsi.c.mk])
+AC_CONFIG_FILES([config/saga.config.globus_rls.c.mk])
+
+AC_OUTPUT()
+
+OUT=config.summary
+rm -f $OUT
+TEE="tee -a"
+
+echo "                                                                   " | $TEE $OUT
+echo " ========================================================          " | $TEE $OUT
+echo " SAGA GLOBUS ADAPTORS - Required Externals                         " | $TEE $OUT
+echo " --------------------------------------------------------          " | $TEE $OUT
+echo "                                                                   " | $TEE $OUT
+echo " Using SAGA from          : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE)" | $TEE $OUT
+echo "                                                                   " | $TEE $OUT
+echo " Globus Toolkit Found     : $HAVE_GLOBUS ($GLOBUS_VERSION)         " | $TEE $OUT
+echo " Globus Location          : $GLOBUS_LOCATION                       " | $TEE $OUT
+echo " Globus Flavor            : $GLOBUS_FLAVOR                         " | $TEE $OUT
+echo "                                                                   " | $TEE $OUT
+echo " Globus GRAM Client       : $GLOBUS_HAVE_GRAM ($GLOBUS_GRAM_CLIENT_VERSION)          " | $TEE $OUT
+echo " Globus GASS Copy Client  : $GLOBUS_HAVE_GASS_COPY ($GLOBUS_GASS_COPY_CLIENT_VERSION)" | $TEE $OUT
+echo " Globus GridFTP Client    : $GLOBUS_HAVE_GRIDFTP ($GLOBUS_GRIDFTP_CLIENT_VERSION)    " | $TEE $OUT
+echo " Globus RLS Client        : $GLOBUS_HAVE_RLS ($GLOBUS_RLS_CLIENT_VERSION)            " | $TEE $OUT
+echo " Globus GSSAPI GSI Client : $GLOBUS_HAVE_GSI ($GLOBUS_GSI_CLIENT_VERSION)            " | $TEE $OUT
+echo "                                                                   " | $TEE $OUT
+echo "                                                                   " | $TEE $OUT
+echo " Context Adaptor          : $BUILD_ADAPTOR_CONTEXT                 " | $TEE $OUT
+echo " Job     Adaptor          : $BUILD_ADAPTOR_JOB                     " | $TEE $OUT
+echo " File    Adaptor          : $BUILD_ADAPTOR_FILE                    " | $TEE $OUT
+echo " Replica Adaptor          : $BUILD_ADAPTOR_REPLICA                 " | $TEE $OUT
+echo "                                                                   " | $TEE $OUT
+echo " --------------------------------------------------------          " | $TEE $OUT
+echo "                                                                   " | $TEE $OUT
+
+if test "$SAGA_RECURSIVE_CONFIG" = "yes" ; then
+  cat $OUT >> $SAGA_ROOT/$OUT
+fi
+

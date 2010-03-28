@@ -1,0 +1,29 @@
+                    SAGA C++ (Reference) Implementation
+                       <http://saga.cct.lsu.edu/cpp>
+               - Globus Toolkit preWS Adaptors Installation -
+
+
+  (1) Make sure the you have the Globus Toolkit installed (no services need to 
+      be configured) and your globus environment varaibles are set properly:
+  
+        $GLOBUS_LOCATION (something like /usr/local/globus...)
+        $GLOBUS_FLAVOUR (something gcc32dbgpthr)
+
+  (2) Calling ./configure checks for the availability of the Globus libs and 
+      returns a list of adaptors that can be build:
+
+        configure: ========================================================   
+        configure: SAGA GLOBUS ADAPTORS - Configured Adaptors                 
+        configure: ========================================================   
+        configure: 
+        configure: File (GridFTP)           : yes             
+        configure: Job (preWS GRAM)         : yes              
+        configure: Logical File (RLS)       : yes    
+
+  (3) Now, type 'make' and 'make install' to build the Globus Toolkit adaptors!
+
+
+  Please help us to improve the quality of SAGA and file a bug report if you 
+  have encountered any problems with the build system. Our bug-tracking system 
+  can be found at: http://saga.cct.lsu.edu/cpp/dev/ 
+
