@@ -41,7 +41,7 @@ TEE="tee -a"
 
 echo "                                                                 " | $TEE $OUT
 echo " ========================================================        " | $TEE $OUT
-echo " SAGA OMII ADAPTORS - Required Externals                         " | $TEE $OUT
+echo " SAGA OMII ADAPTORS                                              " | $TEE $OUT
 echo " --------------------------------------------------------        " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " | $TEE $OUT
