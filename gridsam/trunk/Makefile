@@ -9,11 +9,11 @@ SAGA_SUBDIRS = config test
 -include config/make.cfg
 
 ifeq "x$(SAGA_BUILD_ADAPTOR_JOB)" "xyes"
-  SAGA_SUBDIRS += gridsam
+  SAGA_SUBDIRS += gridsam_job
 endif
 
 ifdef SAGA_IS_CLEANING
-  SAGA_SUBDIRS += gridsam
+  SAGA_SUBDIRS += gridsam_job
 endif
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
