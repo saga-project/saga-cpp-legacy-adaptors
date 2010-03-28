@@ -1,0 +1,58 @@
+
+PREREQUESITES
+-------------
+
+  AWS Backend
+  -----------
+
+    In order to use the aws adaptor suite, you will obviously need an AWS
+    backend.  That is any cloud provider which can be used via the AWS Command
+    Line Tools (see below).  This adaptor was tested against EC2, Nimbus and
+    Eucalyptus.
+
+
+  AWS Command Line Tools
+  ----------------------
+
+    The AWS adaptor depends on the Amazon command line tools ('Amazon EC2 API
+    Tools'), which need to be installed on the system you want to use this
+    adaptor on, i.e. on the system running your SAGA application.
+
+    You find these tools when googling for 'Amazon EC2 API Tools', or  directly
+    at http://developer.amazonwebservices.com/connect/entry.jspa?externalID=351 
+
+    It may be helpful to skim the tool documentation and prerequsites at
+    http://docs.amazonwebservices.com/AWSEC2/2009-08-15/GettingStartedGuide/
+    (for newer versions, please check
+    http://developer.amazonwebservices.com/connect/kbcategory.jspa?categoryID=87).
+    
+    Note that these tools require a functional Java installation.  We recommend
+    to install the tools into /usr/local/packages/aws .
+
+
+  SSH Adaptor and Utilities
+  -------------------------
+
+    The AWS adaptor is heavily leaning on the ssh adaptor to interact with the
+    instanciated virtual machines.  You must thus ensure that the ssh adaptor
+    suite is installed, too.  For that you will need the ssh command line tool
+    for job submission, and the fuse/sshfs tools for file access to your VM
+    instance.
+
+  
+CONFIGURATION
+-------------
+
+  ./configure --help shows you (extract)
+
+    --with-java=DIR         use java (default is YES) at DIR (optional)
+    --with-aws=DIR          use aws  (default is YES) at DIR (optional)
+
+    AWS_LOCATION            AWS installation root  (EC2_HOME)
+    JAVA_LOCATION           JAVA installation root (JAVA_HOME)
+
+  So, after installing Java and the AWS tools, either point the XXX_LOCATION
+  variables to these installations, or specify them via the --with-xxx=path
+  options.  Configure should mostly be able to pick up your java installation
+  automatically, but you may need to specify the AWS installation path.
+

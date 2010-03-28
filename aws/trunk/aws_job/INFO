@@ -1,0 +1,50 @@
+
+::SAGA DOCUMENTATION FILE::
+
+:AUTHORS:
+
+  Copyright (c) 2009 Andre Merzky <andre@merzky.net>
+
+
+:LICENSE:
+
+  Distributed under the Boost Software License, Version 1.0.
+
+
+:DESCRIPTION:
+
+ The AWS job adaptor manages jobs on virtual machine instances on Cloud backends
+ which use the Amazon web service interface (AWS).  These VM instances are
+ created on the fly, if they do not yet exist.
+
+
+:CHANGELOG:
+
+  - initial version, can handle EC2, Eucalyptus, and Nimbus
+
+
+:REQUIRES:
+
+  All AWS adaptors require the Java Runtime Environment (JRE) and the AWS
+  command line tools.  Java needs to be provided by the system.  The AWS command
+  line tools are actually included under external/ - but costom versions can be
+  used by specifying their location to configure.   
+
+
+:CONFIGURE OPTIONS:
+
+  | --with-java=DIR   use java (default is YES) at DIR (optional) |\\
+  | --with-aws=DIR    use aws (default is YES) at DIR (optional)  |\\
+  |                                                               |\\
+  | AWS_LOCATION      AWS  installation root (default: EC2_HOME)  |\\
+  | JAVA_LOCATION     JAVA installation root (default: JAVA_HOME) |\\
+  
+
+:INI OPTIONS:
+
+  At the moment, SAGA does not allow to (easily) share ini options between
+  adaptors.  Thus, all AWS ini options are actually replicated between all ini
+  adaptors - this will be fixed at some point.  Up to then, however, the ini
+  documentation of the aws context adaptor will cover the ini settings for *all*
+  aws adaotors - please see there for deails.
+

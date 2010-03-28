@@ -1,0 +1,42 @@
+
+#  Copyright (c) 2005-2008 Andre Merzky (andre@merzky.net)
+# 
+#  Distributed under the Boost Software License, Version 1.0. 
+#  (See accompanying file LICENSE or copy at 
+#  http://www.boost.org/LICENSE_1_0.txt)
+
+[saga.adaptors.aws_context]
+  name               = aws_context
+
+[saga.adaptors.aws_context.preferences]
+  # adaptor specific configuration
+  cloud_names        = ec2 eucalyptus nimbus
+  java_home          = @JAVA_LOCATION@
+  ec2_home           = @AWS_LOCATION@
+  ec2_keystore       = ${HOME}/.ec2_keys/
+
+[saga.adaptors.aws_context.preferences.ec2]
+  ec2_proxy          = /tmp/saga.aws_private_ec2.pm
+  ec2_key            = $[saga.adaptors.aws_context.preferences.ec2_keystore]/ec2-key.pem
+  ec2_cert           = $[saga.adaptors.aws_context.preferences.ec2_keystore]/ec2-cert.pem
+  ec2_url            = https://ec2.amazonaws.com/
+  ec2_keypair        = ec2-saga-keypair-ec2
+  ec2_image_id       = ami-b7b858de
+
+[saga.adaptors.aws_context.preferences.eucalyptus]
+  ec2_proxy          = /tmp/saga.aws_private_eucalyptus.pm
+  ec2_key            = $[saga.adaptors.aws_context.preferences.ec2_keystore]/eucalyptus-key.pem
+  ec2_cert           = $[saga.adaptors.aws_context.preferences.ec2_keystore]/eucalyptus-cert.pem
+  ec2_url            = http://mayhem9.cs.ucsb.edu:8773/services/Eucalyptus
+  ec2_keypair        = ec2-saga-keypair-eucalyptus
+  ec2_image_id       = emi-0D05022C
+
+[saga.adaptors.aws_context.preferences.nimbus]
+  ec2_proxy          = /tmp/saga.aws_private_nimbus.pm
+  ec2_key            = $[saga.adaptors.aws.preferences.ec2_keystore]/nimbus-key.pem
+  ec2_cert           = $[saga.adaptors.aws.preferences.ec2_keystore]/nimbus-cert.pem
+  ec2_url            = https://tp-vm1.ci.uchicago.edu:8445/wsrf/services/ElasticNimbusService
+  ec2_keypair        = ec2-saga-keypair-nimbus
+  ec2_ssh_pubkey     = ec2-saga-keypair-nimbus||ssh-dss AAAAB3NzaC1kc3MAAACBAIk50fKUNQqx877qjmmVAhhLMcAq9nVrfsJktzdw5WkO8XGSOiVY15GF1k0tT95f49YlR/0mpXkDjsRo1nrwewQhyoJFf1U39p29vURoUXf8IVZr7NT2rVfs2Vf2xV06VBUl16UsbpeneeOP2bI9Xvmo3p3AZmSK8NGfudxdptA7AAAAFQCCzPteeRS2jrDtiY/HaOdgL0Gd1wAAAIAjnCR5ZVUPB5WH8JxRoaiUMzRkFNWa0kSeN4sNXk2RlvXzRkrS0xx98oO1ERMTIs3nb1nFkvXD3mRHMDAQXdOMxoHW4lOvrWa/t1nzOyyw+a2OlUWyXGznUrAll17JvAKv001wuEG9zIwR06n8Grj9fiB1IVdY/i06gSaTCyIGJwAAAIA/8KBo1x0CdUKAcDomI1wHbRCkAXwJYBwFzcoOB8ulvKJ13KIq3jpXDVXi61XMkl6RXuPdxTMAY3bh54GWyzcGuYs7YmCUNbEDDAytPmNKGq+8INQjc77bnRl6OkC6g69Sq/W4q7ieuT0/duDGasnqyhbK45fwDFoyuBpxOebLyA== bzfmerzk@cocos
+  ec2_image_id       = hello-cloud
+

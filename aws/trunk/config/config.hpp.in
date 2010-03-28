@@ -1,0 +1,11 @@
+
+#ifndef SAGA_ADAPTOR_AWS_CONFIG_HPP
+#define SAGA_ADAPTOR_AWS_CONFIG_HPP
+
+#include <saga/saga-defs.hpp>
+
+#define SAGA_HAVE_AWS               @CPP_HAVE_AWS@
+#define SAGA_HAVE_JAVA              @CPP_HAVE_JAVA@
+
+#endif // SAGA_ADAPTOR_AWS_CONFIG_HPP
+

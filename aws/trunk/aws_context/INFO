@@ -1,0 +1,122 @@
+
+::SAGA DOCUMENTATION FILE::
+
+:AUTHORS:
+
+  Copyright (c) 2009 Andre Merzky <andre@merzky.net>
+
+
+:LICENSE:
+
+  Distributed under the Boost Software License, Version 1.0.
+
+
+:DESCRIPTION:
+
+ The AWS context adaptor manages security credentials for Cloud backends which
+ use the Amazon web service interface (AWS).  The credentials are used by the
+ other AWS-adaptors.
+
+
+:CHANGELOG:
+
+  - initial version, can handle EC2, Eucalyptus, and Nimbus
+
+
+:REQUIRES:
+
+  All AWS adaptors require the Java Runtime Environment (JRE) and the AWS
+  command line tools.  Java needs to be provided by the system.  The AWS command
+  line tools are actually included under external/ - but costom versions can be
+  used by specifying their location to configure.   
+
+
+:CONFIGURE OPTIONS:
+
+  | --with-java=DIR   use java (default is YES) at DIR (optional) |\\
+  | --with-aws=DIR    use aws (default is YES) at DIR (optional)  |\\
+  |                                                               |\\
+  | AWS_LOCATION      AWS  installation root (default: EC2_HOME)  |\\
+  | JAVA_LOCATION     JAVA installation root (default: JAVA_HOME) |\\
+  
+
+:INI OPTIONS:
+
+  At the moment, SAGA does not allow to (easily) share ini options between
+  adaptors.  Thus, all AWS ini options are actually replicated between all ini
+  adaptors - this will be fixed at some point.  Up to then, however, the ini
+  documentation of the aws context adaptor will cover the ini settings for *all*
+  aws adaotors.
+
+  The ini options for the aws adaptors allow multiple cloud environments to be
+  configured for use.  For that, each cloud env gets its own subsection
+  'saga.adaptor_suite.aws.preferences.<cloud_1>', and the list of cloud envs
+  gets enumerated in the 'cloud_names' ini option, as seen in the example below.
+  For each cloud, the ini section shluld contain the path's to that clouds key
+  and cert files, as well as a keypair name to be used internally, and the
+  instance ID to be booted by default.  Keys in the global adaptor ini section
+  serve as defaults for the settings in the cloud-specific subsections.
+
+  | cloud_names        = ec2 eucalyptus gumbocloud nimbus                                        |\\
+  | java_home          = /usr/                                                                   |\\
+  | ec2_home           = $[saga.location]/bin/aws-tools/                                         |\\
+  | ec2_scripts        = $[saga.location]/bin/aws-tools/bin/                                     |\\
+  | ec2_keystore       = ${HOME}/.ec2_keys/                                                      |\\
+  | ec2_keepalive      = true                                                                    |\\
+  |                                                                                              |\\
+  | [saga.adaptor_suite.aws.preferences.ec2]                                                     |\\
+  |   ec2_proxy          = ${HOME}/.ec2_keys/saga.aws_private_ec2.pem                            |\\
+  |   ec2_key            = $[saga.adaptor_suite.aws.preferences.ec2_keystore]/ec2-key.pem        |\\
+  |   ec2_cert           = $[saga.adaptor_suite.aws.preferences.ec2_keystore]/ec2-cert.pem       |\\
+  |   ec2_url            = https://ec2.amazonaws.com/                                            |\\
+  |   ec2_keypair_name   = ec2-saga-keypair-ec2                                                  |\\
+  |   ec2_keypair        = ec2-saga-keypair-ec2                                                  |\\
+  |   ec2_image          = ami-038a6d6a                                                          |\\
+  |   ec2_image_prep     = $[saga.adaptor_suite.aws.preferences.ec2_scripts]/saga-image-prep-ec2 |\\
+
+  * ec2_proxy
+    location to store the proxy obtained from
+    ec2-add-keypair (see ec2_keypair_name below)
+
+  ec2_key
+    used to set the env 'EC2_PRIVATE_KEY', as required by
+    the ec2 comand line tools.
+
+  ec2_cert
+    used to set the env 'EC2_CERT', as required by the ec2
+    comand line tools.
+
+  ec2_url
+    used to set the env EC2_URL, as required by the ec2
+    comand line tools.   This URL is the service endpoint of
+    the EC2 system we use.
+
+  ec2_keypair_name
+    That value is used as argument to ec2-add-keypair and
+    ec2-delete-keypair.  The resulting proxy (returned on
+    stdout) is written into the ec2_proxy specified above
+
+  ec2_keypair
+    This value is usually the same as ec2_keypair_name, BUT
+    nimbus adds some additiona semantics.  For nimbus, the
+    ec2-add-keypair accepts a name argument of the form
+    <real_name>||<public_ssh_key> where <real_name> is the
+    same as ec2_keypair_name, and <public_ssh_key> is the
+    key required to authenticate against the nimbus backend.
+
+    I probably should make this optional, and require an
+    additional 'ec2_sshpubkey' for nimbus bckends...
+
+  ec2_image
+    That should contain the image id you want to
+    instanciate.  Hmm, that is probably better names
+    'ec2_image' - will change.
+
+
+  |ec2_keepalive| determines what happens to a VM instanc e which was booted by
+  SAGA to start a job, after that job finishes.  If set to 'true', the instance
+  will be left running, otherwise it will be torn down.  Note that in the case
+  where the SAGA application finishes *before* the job, the istance will be kept
+  alive anyway.  The use should be aware of the fact that instances which are
+  kept alive will continue to consume resources, and will thus imply costs.
+

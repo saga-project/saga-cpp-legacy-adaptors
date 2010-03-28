@@ -1,0 +1,6 @@
+#!/bin/sh
+
+export SAGA_JD_EXECUTABLE="uname -a"
+
+ssh -o StrictHostKeyChecking=no -i $EC2_GSG_KEY root@$SAGA_INSTANCE_IP $SAGA_JD_EXECUTABLE
+

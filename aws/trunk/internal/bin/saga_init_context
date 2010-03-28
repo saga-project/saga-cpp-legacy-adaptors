@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# allow connections to port 22 in the 'default' instance group
+$EC2_HOME/bin/ec2-authorize default -p 22 
+
+# key location
+EC2_GSG_KEY=$HOME/.ec2/saga.gsg_private.pm
+export EC2_GSG_KEY
+
+# create an access keypair
+mkdir .ec2 || /bin/true
+$EC2_HOME/bin/ec2-add-keypair gsg-keypair > $EC2_GSG_KEY
+

@@ -1,0 +1,50 @@
+
+rm -rf .kde/ .gconf/ .bash* .wapi/ .profile 
+
+vim .tcshrc
+vim create_image
+source .tcshrc
+
+aget -y update
+
+aget -y curl wget
+aget -y g++
+aget -y libasio-dev libboost-date-time-dev libboost-dev libboost-filesystem-dev libboost-iostreams-dev libboost-program-options-dev libboost-python-dev libboost-regex-dev libboost-serialization-dev libboost-signals-dev libboost-test-dev libboost-thread-dev libboost-wave-dev 
+aget -y subversion
+aget -y tcsh
+aget -y libboost-dev libboost-python-dev libasio-dev libboost-date-time-dev libboost-filesystem-dev libboost-iostreams-dev libboost-program-options-dev libboost-regex-dev libboost-serialization-dev libboost-signals-dev libboost-test-dev libboost-thread-dev libboost-wave-dev
+aget -y libpq-dev
+aget -y libpq-dev 
+aget -y libreadline5-dev
+aget -y libsqlite3-dev
+aget -y sshfs
+aget -y sshfs openssh-server 
+aget -y subversion
+aget -y sun-java6-jre
+
+# aget -y firefox-3.1 mozilla-firefox-adblock mozilla-imagezoom flashplugin-nonfree
+# aget -y libx11-dev
+# aget -y libxmlrpc-c3-dev librpc-xml-perl 
+# aget -y squid
+# aget -y tightvncserver
+# aget -y x-dev
+# aget -y x11-dev
+# aget -y x11-utils x11-xfs-utils
+# aget -y xfonts-base
+
+aget autoremove
+
+svn co https://svn.cct.lsu.edu/repos/saga/trunk -d saga
+cd saga/
+./configure --prefix=$SAGA_LOCATION
+make install
+saga-shell 
+
+cd
+svn co https://svn.cct.lsu.edu/repos/saga-projects/applications
+cd applications/MapReduce
+make install
+
+cd
+./create_image
+

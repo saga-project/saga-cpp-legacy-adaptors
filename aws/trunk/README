@@ -1,0 +1,245 @@
+
+Some general thoughts about the AWS adaptor suite.  For more details on the
+adaptors themself, see the INFO files in the respective subdirectories.
+
+
+  Vendor lock-in:
+  
+    Clouds represent, on some level, outsourced IT infrastructure with very
+    dynamic provisioning models, high adaptivity to demands, simple procing
+    models, and specific SLAs.
+  
+    Severall application development/support mechanisms exist (SalesForce,
+    AppEngine, ...).  They often imply vendor lock-in, on different levels.
+  
+    One good approach to avoid vendor lock-in is to have a application interface
+    which is implemented by more than one provider.  Prominent example:
+    EC2/Eucalyptus.
+    
+  
+  Programming abstractions:
+    
+    Similar to what we argued about in Grids, distributed application programmers
+    should be provided with the 'right' (tm) level of abstraction for their
+    problem space.  
+  
+    Clouds seem to inherently support that (see usage mode).  However, those
+    abstractions are often bound to the specific cloud environment (queuing only
+    available in aws, no MapReduce in SalesForce etc).  Again, application is
+    bound to specific environments, by the application logic / programming
+    abstraction.
+
+
+  Interop:
+  
+    application level interoperability (which is the opposite to vendor lock-in)
+    is a hot topic, for Clouds just as much as for other technologies.  Nobody
+    wants to repeat the last-century vendor lock-in (proprietiary SQL, desktop
+    OS, ...).
+
+    Approaches:
+  
+     - platform independent programming models 
+     - standardization of interfaces (application runtime, APIs, devel tools, ...)
+  
+
+
+The EC2 / Eucalyptus experiments
+
+  - SAGA provides use case driven programming abstraction, e.g. for job
+    management.  We are able to implement that fir Grids, and for Clouds.
+
+    {
+      saga::job::service     js;
+      saga::job::description jd;
+
+      jd.set_attribute ("Executable", "/tmp/my_prog");
+
+      saga::job::job j = js.create_job (jd);
+
+      j.run ();
+
+      j.wait ();
+    }
+
+
+  - annotated for Globus
+
+    {
+      // finds a GRAM gatekeeper
+      saga::job::service     js; 
+      
+      saga::job::description jd;
+
+      jd.set_attribute ("Executable", "/tmp/my_prog");
+
+      // translate job description to RSL
+      saga::job::job j = js.create_job (jd);
+
+      // submit RSL to gatekeeper, and obtain job handle
+      j.run ();
+
+      // watch handle until job is finished
+      j.wait ();
+    }
+
+    - takes about 1 sec per job.
+    - job service creation takes zero seconds (gatekeeper is running)
+    - Queue waiting time can hurt performance
+    - application level GlideIn can help
+    - similar for condor, but that has system level GlideIn
+
+
+
+  - annotated for EC2/Eucalyptus
+
+    {
+      // create a VM instance on EC2/Eucalyptous
+      saga::job::service     js; 
+      
+      saga::job::description jd;
+
+      jd.set_attribute ("Executable", "/tmp/my_prog");
+
+      // translate job description to ssh command
+      saga::job::job j = js.create_job (jd);
+
+      // run the ssh command on the vm
+      j.run ();
+
+      // watch commanr until done
+      j.wait ();
+    }
+
+    - takes about 1 sec per job.  
+    - VM startup takes about <45 seconds (Eucalyptus) to <90 seconds (EC2)
+    - a VM can be reused for any number of jobs
+    - no Queue waiting time, app level load balancing
+    - this is effectively GlideIn on application level
+
+    - Note: switching between EC2 and Eucalyptous: based on either
+      - job service URL
+      - adaptor configuration
+      - environment variables
+
+
+  - how does that help to run MapReduce?
+
+    - see slide 14: MapReduce arch
+    - slaves are SAGA apps which get coordinated via advert service
+    
+    - Globus based mapReduce:
+      - deploy SAGA on Globus Grid
+      - deploy application binaries on Globus Grid
+      - run master, spawn slaves, profit!
+
+    - EC2/Eucalyptus based mapReduce:
+      - provision VM instance
+      - deploy SAGA on instance
+      - deploy application binaries on instance
+      - run master, spawn slaves, profit!
+
+    - similar problems, but handled on different layers.
+
+
+  - performance considerations:
+
+    - local, saga adaptore
+      - service bootstrap:   0.0 s
+      - job submission:      0.01s/job
+
+    - globus, command line
+      - service bootstrap:   0.0 s
+      - job submission:      1.5 s/job
+
+    - globus, saga adaptor
+      - service bootstrap:   0.0 s
+      - job submission:      1.1 s/job
+
+    - ec2, command line:
+      - service bootstrap:  75.0 s
+      - job submission:      2.3 s/job
+
+    - ec2, saga adaptor
+      - service bootstrap:  75.0 s
+      - job submission:      2.3 s/job
+
+    - eucalyptus, command line:
+      - service bootstrap:  45.0 s
+      - job submission:      1.3 s/job
+
+    - eucalyptus, saga adaptor
+      - service bootstrap:  45.0 s
+      - job submission:      1.3 s/job
+
+    - Note:
+      - local:      fork/exec
+      - globus:     US Central to US Central
+      - ec2:        Europe     to US Pacific
+      - eucalyptus: US Central to US Pacific
+
+    - discussion
+      - async job submission can improve throughput in all cases
+      - vm can be persistent, removing the startup time.
+
+
+  - troubles with nimbus:
+    - key setup is different (convert globus key/cert)
+    - ec2-add-keypair uses different syntax
+
+
+-------------------------------------------------------
+HOWTO create a custom VM image for EC2
+
+  - boot some existing image to start from
+  - login, and do all the changes you want to do
+  - copy (via scp) your aws keys to the machine, into /mnt/ec2_keys
+    scp -r -o StrictHostKeyChecking=no -i ~/.ec2_keys/saga.aws_private_ec2.pem ~/.ec2_keys/ root@<ip>:/mnt/ec2_keys
+  - on the VM, create a new image with
+    ec2-bundle-vol -d /mnt \          # exclude from image
+                   -k /mnt/ec2_keys/ec2-key.pem \
+                   -c /mnt/ec2_keys/ec2-cert.pem \
+                   -u 189011143168 \  # aws user id
+                   -r i386 \          # architecture
+                   -p hardy_saga      # name
+  - on the VM, upload image to the S3 bucket (gets created)
+    ec2-upload-bundle -b saga-images \                   # bucket
+                      -m /mnt/hardy_saga.manifest.xml \  # image description
+                      -a `cat /mnt/ec2_keys/ec2-access-key.txt`
+                      -s `cat /mnt/ec2_keys/ec2-access-cert.txt`
+  - register image so that it can be used in EC2 for booting a VM, with
+    ec2-register /saga-images/hardy_saga.manifest.xml
+  - make the iage publicly available
+    ec2-modify-image-attribute <image-id> -la all
+  - an image can be unregistered, with
+    ec2-deregister <image id>
+
+  - note that there is a race condition: the VM image id is configured in a
+    saga.ini file.  If that file is part of an image, it will contain the 
+    wrong image, as of time of image snapshot cration, the image ID can not yet
+    be known.
+
+
+-----------------------------------------------------------
+HOWTO log in into a ec2 instance
+
+  - public_ip = ec2-describe-instances -> grep for public IP
+  - proxy     = grep for in adaptor ini (/tmp/saga.aws_private_ec2.pem)
+  - ssh -o StrictHostKeyChecking=no -i <proxy> root@<public_ip>
+  - ssh -o StrictHostKeyChecking=no -i /tmp/saga.aws_private_ec2.pem root@ec2-174-129-153-102.compute-1.amazonaws.com
+
+
+-----------------------------------------------------------
+TODO:
+
+  - job serv ice ctor should take WS URL
+  - it should be configurable how many jobs run per VM instance, and the job
+    service should spawn new instances if needed.  That implies (a) scheduling
+    in the adaptor, and (b) better abilities to track jobs, and to reconnect to
+    running jobs - that is basically impossible  over the current route if using
+    the local adaptor for submission, via the ssh adaptor.  One could, for
+    example, store process ID in a database on the VM while starting the process
+    (or after starting the process), and update that information on each event.
+    Useful would be a wrapper for startup which maintains the database on
+    process start/stop.
+

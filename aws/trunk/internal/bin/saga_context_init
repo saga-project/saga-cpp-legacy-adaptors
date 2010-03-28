@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# allow connections to port 22 in the 'default' instance group
+auth_return=`$EC2_HOME/bin/ec2-authorize default -p 22 2>&1`
+echo $auth_return | grep -v 'has already been authorized' > /dev/null
+if test "x$?" != "x1"; then
+  if test "x$auth_return" != "x"; then
+    echo "could not enable ssh"
+    return 1
+  fi
+fi
+
+# key location
+EC2_GSG_KEY=$HOME/.ec2/saga.gsg_private.pm
+export EC2_GSG_KEY
+
+# create an access keypair.  No support for concurrent sessions at the moment.
+if ! test -f $EC2_GSG_KEY; then
+  mkdir -p $HOME/.ec2
+  $EC2_HOME/bin/ec2-delete-keypair saga-gsg-keypair | grep -ve '^KEYPAIR.*saga-gsg-keypair$'
+  $EC2_HOME/bin/ec2-add-keypair    saga-gsg-keypair > $EC2_GSG_KEY
+  chmod 0600 $EC2_GSG_KEY
+fi
+
+echo $EC2_GSG_KEY
+
+return 0
+

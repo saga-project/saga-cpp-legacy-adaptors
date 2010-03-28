@@ -1,0 +1,17 @@
+#!/bin/sh
+
+export SAGA_VERBOSE=0
+export SAGA_SSH_KEY=`ls /tmp/saga_saga-parent-id*_ssh` 
+export SAGA_SSH_PUB=`ls /tmp/saga_saga-parent-id*_ssh.pub` 
+
+echo start > /tmp/saga.log
+date       >> /tmp/saga.log
+
+while ! $SAGA_LOCATION/bin/saga-context ssh 2>&1 >> /tmp/saga.log; do
+  sleep 1
+done
+
+date >> /tmp/saga.log
+
+exit 0
+

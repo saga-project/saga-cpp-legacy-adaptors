@@ -1,0 +1,32 @@
+
+# set up tools environment
+JAVA_HOME=/usr/
+EC2_HOME=/Users/merzky/links/saga/svn/trunk/adaptors/aws/external/ec2-api-tools
+
+export JAVA_HOME
+export EC2_HOME
+
+# EC2_PRIVATE_KEY=/Users/merzky/.euca/euca2-merzky-c3cd6369-pk.pem
+# EC2_CERT=/Users/merzky/.euca/euca2-merzky-c3cd6369-cert.pem
+# EC2_URL=http://mayhem9.cs.ucsb.edu:8773/services/Eucalyptus
+
+EC2_PRIVATE_KEY=`ls /Users/merzky/.ec2/pk-*.pem 2>/dev/null | head -1  `
+EC2_CERT=`ls /Users/merzky/.ec2/cert-*.pem      2>/dev/null | head -1  `
+EC2_URL=https://ec2.amazonaws.com/
+
+export EC2_PRIVATE_KEY
+export EC2_CERT
+export EC2_URL
+
+if test "x$EC2_PRIVATE_KEY" = "x"; then
+  echo "could not find private key"
+  return 1
+fi
+
+if test "x$EC2_CERT" = "x"; then
+  echo "could not find public key/certificate"
+  return 1
+fi
+
+return 0
+

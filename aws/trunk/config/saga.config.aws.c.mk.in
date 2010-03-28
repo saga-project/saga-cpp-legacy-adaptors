@@ -1,0 +1,25 @@
+#  Copyright (c) 2005-2007 Andre Merzky (andre@merzky.net)
+# 
+#  Distributed under the Boost Software License, Version 1.0. (See accompanying
+#  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+ifndef SAGA_MK_INC_CONF_AWS
+       SAGA_MK_INC_CONF_AWS = yes
+
+############################################################
+# 
+# AWS
+#
+include @CONFDIR@/make.cfg
+
+ifeq "$(SAGA_HAVE_AWS)" "yes"
+  SAGA_HAVE_AWS_DETAIL = @HAVE_AWS_DETAIL@
+  SAGA_AWS_LOCATION    = @AWS_LOCATION@
+  SAGA_AWS_VERSION     = @AWS_VERSION@
+endif
+
+# 
+###########################################################
+
+endif # guard
+

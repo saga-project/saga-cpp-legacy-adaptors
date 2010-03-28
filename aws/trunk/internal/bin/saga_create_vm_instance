@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# this script assumes that source saga_ec2_init.csh has been run before
+
+SAGA_INSTANCE_ID=`$EC2_HOME/bin/ec2-run-instances ami-235fba4a -k saga-gsg-keypair | tail -1 | cut -f 2`
+SAGA_INSTANCE_ST=`$EC2_HOME/bin/ec2-describe-instances $SAGA_INSTANCE_ID | tail -1 | cut -f 6`
+
+while test "x$SAGA_INSTANCE_ST" = "xpending"; do
+  sleep 1
+  SAGA_INSTANCE_ST=`$EC2_HOME/bin/ec2-describe-instances $SAGA_INSTANCE_ID | tail -1 | cut -f 6`
+done
+
+if test "x$SAGA_INSTANCE_ST" != "xrunning"; then
+  echo "instance did not enter running state"
+  return 1
+fi
+
+SAGA_INSTANCE_IP=`$EC2_HOME/bin/ec2-describe-instances $SAGA_INSTANCE_ID      | tail -1 | cut -f 4`
+
+export SAGA_INSTANCE_ID
+export SAGA_INSTANCE_ST
+export SAGA_INSTANCE_IP
+
+echo $SAGA_INSTANCE_ID
+
+return 0
+
