@@ -1,0 +1,60 @@
+#!/bin/sh
+
+# Copyright (c) 2009 Chris Miceli (cmicel1@cct.lsu.edu)
+# Distributed under the Boost Software License, Version 1.0. (See accompanying 
+# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+# Header
+while getopts d arg
+do
+   case $arg in
+      d) echo "This program tests the functionality of the curl file adaptor to copy files."
+         exit 0;;
+   esac
+done
+
+# Create the temporary file
+SRC=`mktemp -t saga.adaptor.XXXXXX` || exit 1
+DST=$SRC.copied
+
+# Verify existence
+if ! test -e $SRC
+then
+   echo "Could not create temporary source file!"
+   exit 1
+fi
+
+if test -e $DST
+then
+   echo "Destination file already exists, please clean up your temporary directory."
+   exit 1
+fi
+
+# Copy the destination file
+`$SAGA_LOCATION/bin/saga-file copy ftp://localhost/$SRC ftp://localhost/$DST`
+
+# Verify existence of source
+if ! test -e $SRC
+then
+   echo "Saga could not successfully copy the file!"
+   if test -e $DST
+   then
+      # Clean up temporaries
+      rm $DST
+   fi
+   exit 1
+fi
+
+# Verify existence of copy
+if ! test -e $DST
+then
+   echo "Saga could not successfully copy the file!"
+   rm $SRC
+   exit 1
+else
+   echo "Success"
+   # Clean up temporaries
+   rm $SRC
+   rm $DST
+   exit 0;
+fi

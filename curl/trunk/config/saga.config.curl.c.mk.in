@@ -1,0 +1,29 @@
+#  Copyright (c) 2005-2007 Andre Merzky (andre@merzky.net)
+# 
+#  Distributed under the Boost Software License, Version 1.0. (See accompanying
+#  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+ifndef SAGA_MK_INC_CONF_CURL
+       SAGA_MK_INC_CONF_CURL = yes
+
+############################################################
+# 
+# CURL
+#
+include @CONFDIR@/make.cfg
+
+ifeq "$(SAGA_HAVE_CURL)" "yes"
+  SAGA_CURL_LOCATION   = @CURL_LOCATION@
+  SAGA_CURL_INC_FLAGS  = @CURL_CPPFLAGS@
+  SAGA_CURL_LIB_FLAGS  = @CURL_LDFLAGS@
+
+  SAGA_CPPINCS_SYS      += $(SAGA_CURL_INC_FLAGS)
+  SAGA_LDFLAGS_SYS      += $(SAGA_CURL_LIB_FLAGS)
+  SAGA_S_LIBS           += $(SAGA_CURL_S_LIBS)
+
+endif
+# 
+###########################################################
+
+endif # guard
+

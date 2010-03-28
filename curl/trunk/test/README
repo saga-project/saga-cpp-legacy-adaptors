@@ -1,0 +1,4 @@
+For now assumes an ftp server is set up on the local machine
+Credentials will become an issue
+
+Note, we don't have to use ftp, we can use any curl supported protocol, any ideas?

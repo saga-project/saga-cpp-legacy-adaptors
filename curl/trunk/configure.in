@@ -1,0 +1,85 @@
+# Copyright (c) 2005-2007 Andre Merzky (andre@merzky.net)
+# Copyright (c)      2008 Ole Weidner (oweidner@cct.lsu.ed)
+# 
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying Afile LICENSE_1_0.txt or copy at 
+#  http://www.boost.org/LICENSE_1_0.txt)
+
+m4_include([saga.m4])
+m4_include([config/saga_curl.m4])
+
+AC_INIT()
+
+AX_SAGA_CONFIG()
+
+if test "x$TMP_SAGA_INSTTYPE" == "source"; then
+  AC_CONFIG_AUX_DIR([$TMP_SAGA_LOCATION/share/saga/config/])
+else
+  AC_CONFIG_AUX_DIR([$TMP_SAGA_LOCATION/config/])
+fi
+
+
+AX_SAGA_CHECK_CURL()
+
+AC_CONFIG_FILES([config/saga.config.curl.c.mk])
+
+# translate defines into integers
+CPP_HAVE_CURL=0
+
+if test "$HAVE_CURL" = "yes"; then
+  CPP_HAVE_CURL=1
+fi
+
+AC_SUBST(CPP_HAVE_CURL)
+
+BUILD_ADAPTOR_CONTEXT=no
+BUILD_ADAPTOR_FILE=no
+
+if test "x$HAVE_CURL" = "xyes"; then
+
+  if test "x$SAGA_HAVE_ADAPTOR_CONTEXT" = "xyes"; then
+    BUILD_ADAPTOR_CONTEXT="yes"
+  fi
+
+  if test "$HAVE_CURL" = "yes"; then
+    if test "x$SAGA_HAVE_ADAPTOR_FILE" = "xyes"; then
+      BUILD_ADAPTOR_FILE="yes"
+    fi
+  fi
+
+fi
+
+AC_SUBST([BUILD_ADAPTOR_CONTEXT])
+AC_SUBST([BUILD_ADAPTOR_FILE])
+
+
+# create output files
+AC_CONFIG_FILES([config/make.cfg])
+AC_CONFIG_FILES([config/config.hpp])
+
+AC_OUTPUT()
+
+OUT=config.summary
+rm -f $OUT
+TEE="tee -a"
+
+echo "                                                                 " | $TEE $OUT
+echo " ========================================================        " | $TEE $OUT
+echo " SAGA CURL ADAPTORS                                              " | $TEE $OUT
+echo " --------------------------------------------------------        " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " CURL found            : $HAVE_CURL  ($CURL_LOCATION)            " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " Context Adaptor       : $BUILD_ADAPTOR_CONTEXT                  " | $TEE $OUT
+echo " File    Adaptor       : $BUILD_ADAPTOR_FILE                     " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " --------------------------------------------------------        " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+
+
+if test "$SAGA_RECURSIVE_CONFIG" = "yes" ; then
+  cat $OUT >> $SAGA_ROOT/$OUT
+fi
+

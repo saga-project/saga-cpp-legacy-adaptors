@@ -1,0 +1,23 @@
+
+The curl file adaptor uses libcurl to perform remote  file transfer copies.
+Other methods than file.copy are not implemented at the moment.
+
+The curl_context adaptor provides means to specify SSH, HTTP, HTTP_POST and
+other security credentials (Note: net yet implemented)
+
+Note to self: we will now have two ssh contexts - how can we distingush them?
+We probably should not have two in the first place, but if only one suite is
+build, the context is not available for the other...   *FIXME*
+
+Each SAGA file copy operation results in two curl file copies, to facilitate
+third party file transfer transparently.  The first operation streams the src
+file to a read callback function.  That function puts the data into a buffer.
+That buffer is read by the second operation, i.e. by that operations write
+callback function.  Independent curl handles are used for these operations.
+
+Note that at the moment, we use  curls internal callback functions to buffer the
+data in a file - the respective FILE* handles are created in the adaptor.
+
+Curl is thread save, however operations on the same curl handle are not.  The
+adaptor is thus maintaining a registry of curl handles per thread.
+
