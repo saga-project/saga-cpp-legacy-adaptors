@@ -1,0 +1,74 @@
+<!--
+  $RCSfile: grpc_function_handle_array_default_np.html,v $ $Revision: 1.2 $ $Date: 2008/02/08 05:21:46 $
+  $AIST_Release: 5.0.0 $
+  $AIST_Copyright:
+   Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+   National Institute of Advanced Industrial Science and Technology
+   Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+   
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+   $
+ -->
+
+<html>
+<head>
+<title>grpc_function_handle_array_default_np</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>grpc_function_handle_array_default_np</code> - Initializes function handle.
+<h3>SYNOPSIS</h3>
+<code>
+  grpc_error_t grpc_function_handle_array_default_np(
+                   grpc_function_handle_t *handles,
+                   size_t nhandles,
+                   char *func_name)
+
+</code>
+<h3>ARGUMENTS</h3>
+<dl>
+<dt><code>  grpc_function_handle_t *handles</code></dt>
+<dd>	The function handle to be initialized</dd>
+<dt><code>  size_t nhandles</code></dt>
+<dd>	The number of function handles to be initialized</dd>
+<dt><code>  char *func_name</code></dt>
+<dd>	The function to be executed on the remote host</dd>
+</dl>
+<h3>DESCRIPTION</h3>
+  The grpc_function_handle_default_np() function initializes the function handle.<br>
+  For the remote machine host name, the default remote host name specified in the configuration file is <br>
+used.<br>
+
+<p> This function is MT-safe. </p>
+<br>
+<h3>RETURN VALUE</h3>
+ If successful, GRPC_NO_ERROR is returned. In the case of an error, Error code is returned<br>
+<br>
+<h3>ERRORS</h3>
+<dl>
+<dt><code>  GRPC_NOT_INITIALIZED</code></dt>
+<dd>	GRPC client is not initialized yet.</dd>
+<dt><code>  GRPC_SERVER_NOT_FOUND</code></dt>
+<dd>	GRPC client cannot find any server.</dd>
+<dt><code>  GRPC_FUNCTION_NOT_FOUND</code></dt>
+<dd>	GRPC client cannot find the function on the default server.</dd>
+<dt><code>  GRPC_RPC_REFUSED</code></dt>
+<dd>    GRPC server refused the initialization.</dd>
+<dt><code>  GRPC_OTHER_ERROR_CODE</code></dt>
+<dd>	Internal error detected.</dd>
+</dl>
+<hr>
+last update : $Date: 2008/02/08 05:21:46 $
+</body>
+</html>

@@ -1,0 +1,38 @@
+<html>
+<head>
+<title>grpc_arg_stack_new</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>grpc_arg_stack_new</code> - Prepares a stack for the arguments.
+<h3>SYNOPSIS</h3>
+<code>
+  grpc_arg_stack_t *grpc_arg_stack_new(int args)
+
+</code>
+<h3>ARGUMENTS</h3>
+<dl>
+<dt><code>  int args</code></dt>
+<dd>	Number of arguments</dd>
+</dl>
+<h3>DESCRIPTION</h3>
+ The grpc_arg_stack_new() function prepares a stack for passing to grpc_call_arg_stack() and <br>
+grpc_call_arg_stack_async().<br>
+
+<p> This function is MT-safe. </p>
+<br>
+<h3>RETURN VALUE</h3>
+  If successful, the stack pointer is returned. If failed, NULL is returned.<br>
+<br>
+<h3>ERRORS</h3>
+<dl>
+<dt><code>  GRPC_NOT_INITIALIZED</code></dt>
+<dd>	The grpc_initialize() function has not been executed.</dd>
+<dt><code>  GRPC_OTHER_ERROR_CODE</code></dt>
+<dd>    Internal error detected.</dd>
+</dl>
+<hr>
+last update : $Date: 2005/07/11 07:11:24 $
+</body>
+</html>

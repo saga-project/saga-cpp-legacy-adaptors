@@ -1,0 +1,28 @@
+# $RCSfile: client.conf-sample-Condor,v $ $Revision: 1.2 $ $Date: 2006/09/13 06:28:30 $
+
+#
+# The sample client configuration file,
+# using Invoke Server Condor.
+#
+
+<CLIENT>
+#    loglevel Warning
+#    invoke_server_log invoke_server-logfile
+</CLIENT>
+
+<SERVER>
+    hostname example.org
+
+    invoke_server Condor       # Invoke Server Condor
+
+    # No any Condor specific attributes, instead.
+
+    # Invoke Server Condor creates the Condor job cluster log
+    # automatically when it invokes jobs.
+    # Log name is "ninfg-invoke-server-condor-log".
+</SERVER>
+  
+<LOCAL_LDIF>
+    filename pi.example.org.ngdef
+</LOCAL_LDIF>
+

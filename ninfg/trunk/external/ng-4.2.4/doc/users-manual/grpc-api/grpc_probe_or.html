@@ -1,0 +1,49 @@
+<html>
+<head>
+<title>grpc_probe_or</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>grpc_probe_or</code> - Checks the session execution status.
+<h3>SYNOPSIS</h3>
+<code>
+  grpc_error_t grpc_probe_or(
+                   grpc_sessionid_t *sessions,
+                   size_t length,
+                   grpc_sessionid_t *id)
+
+</code>
+<h3>ARGUMENTS</h3>
+<dl>
+<dt><code>  grpc_sessionid_t *sessions</code></dt>
+<dd>	A pointer to the session IDs</dd>
+<dt><code>  size_t length</code></dt>
+<dd>	The number of session IDs stored in sessions</dd>
+<dt><code>  grpc_sessionid_t *id</code></dt>
+<dd>	Pointer to an area for returning the session ID of the session that has completed execution</dd>
+</dl>
+<h3>DESCRIPTION</h3>
+  The grpc_probe_or() function returns the execution status of the sessions specified by session IDs.<br>
+  If no sessions have been completed, the function returns an error.
+
+<p> This function is MT-safe. </p>
+<br>
+<h3>RETURN VALUE</h3>
+  If successful, GRPC_NO_ERROR is returned. In the case of an error, Error code is returned.<br>
+<br>
+<h3>ERRORS</h3>
+<dl>
+<dt><code>  GRPC_NOT_INITIALIZED</code></dt>
+<dd>	GRPC client is not initialized yet.</dd>
+<dt><code>  GRPC_INVALID_SESSION_ID</code></dt>
+<dd>    Session ID is not valid.</dd>
+<dt><code>  GRPC_OTHER_ERROR_CODE</code></dt>
+<dd>	Internal error is detected.</dd>
+<dt><code>  GRPC_NONE_COMPLETED</code></dt>
+<dd>    No sessions have been completed.</dd>
+</dl>
+<hr>
+last update : $Date: 2005/08/03 09:23:42 $
+</body>
+</html>

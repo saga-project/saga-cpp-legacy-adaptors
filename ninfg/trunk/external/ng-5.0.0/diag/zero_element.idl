@@ -1,0 +1,82 @@
+/*
+ * $RCSfile: zero_element.idl,v $ $Revision: 1.1 $ $Date: 2006/12/18 08:29:43 $
+ * $AIST_Release: 5.0.0 $
+ * $AIST_Copyright:
+ *  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+ *  National Institute of Advanced Industrial Science and Technology
+ *  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+ *  
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  $
+ */
+Module zero_element;
+
+Define zero_element_array(IN int N, OUT int *result,
+    IN char a_char[N], OUT char b_char[N],
+    IN short a_short[N], OUT short b_short[N],
+    IN int a_int[N], OUT int b_int[N],
+    IN long a_long[N], OUT long b_long[N],
+    IN float a_float[N], OUT float b_float[N],
+    IN double a_double[N], OUT double b_double[N],
+    IN scomplex a_scomplex[N], OUT scomplex b_scomplex[N],
+    IN dcomplex a_dcomplex[N], OUT dcomplex b_dcomplex[N])
+{
+    static const char fName[] = "zero_element_array";
+
+    *result = 0;	/* Failed */
+
+    if ((N == 0) &&
+	(a_char == NULL) && (b_char == NULL) &&
+	(a_short == NULL) && (b_short == NULL) &&
+	(a_int == NULL) && (b_int == NULL) &&
+	(a_long == NULL) && (b_long == NULL) &&
+	(a_float == NULL) && (b_float == NULL) &&
+	(a_double == NULL) && (b_double == NULL) &&
+	(a_scomplex == NULL) && (b_scomplex == NULL) &&
+	(a_dcomplex == NULL) && (b_dcomplex == NULL)) {
+	*result = 1;
+    } else {
+	fprintf(stderr, "%s: Argument is not valid.\n", fName);
+    }
+}
+
+Define zero_length_string(OUT int *result,
+    IN string a_string, OUT string *b_string)
+{
+    static const char fName[] = "zero_length_string";
+
+    *result = 0;	/* Failed */
+
+    if (strcmp(a_string, "") == 0) {
+	*result = 1;
+    } else {
+	fprintf(stderr, "%s: IN string is not \"\"\n", fName);
+    }
+
+    *b_string = "";
+}
+
+Define zero_element_string_array(IN int N, OUT int *result,
+    IN string a_string[N], OUT string b_string[N])
+{
+    static const char fName[] = "zero_element_string_array";
+
+    *result = 0;	/* Failed */
+
+    if ((N == 0) &&
+	(a_string == NULL) && (b_string == NULL)) {
+	*result = 1;
+    } else {
+	fprintf(stderr, "%s: Argument is not valid.\n", fName);
+    }
+}

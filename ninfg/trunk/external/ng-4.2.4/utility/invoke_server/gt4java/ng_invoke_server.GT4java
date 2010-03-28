@@ -1,0 +1,52 @@
+#! /bin/sh
+
+# $RCSfile: ng_invoke_server.GT4java,v $ $Revision: 1.3 $ $Date: 2005/11/01 08:21:13 $
+# $AIST_Release: 4.2.4 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+#
+# This script launch Invoke Server
+#
+
+#
+# set environment variables
+#
+JAVA_HOME=/path/to/jdk1.5.0_05
+COG_INSTALL_PATH=/path/to/cog-4_1_2
+NG_DIR=/path/to/ng-4.0.0
+export JAVA_HOME COG_INSTALL_PATH
+
+#
+# setup CLASSPATH
+#
+LOCALCLASSPATH=
+for targetjar in $COG_INSTALL_PATH/lib/*.jar; do
+	LOCALCLASSPATH=${targetjar}:${LOCALCLASSPATH}
+done
+for targetjar in $COG_INSTALL_PATH/lib/gt4_0_0/*.jar; do
+	LOCALCLASSPATH=${targetjar}:${LOCALCLASSPATH}
+done
+LOCALCLASSPATH=${NG_DIR}/lib/ngisgt4.jar:${LOCALCLASSPATH}
+
+#
+# launch Invoke Server
+#
+$JAVA_HOME/bin/java -classpath "$LOCALCLASSPATH" \
+-Djava.endorsed.dirs=$COG_INSTALL_PATH/lib/endorsed \
+org.apgrid.grpc.tools.invokeServer.gt4.NgInvokeServerGT4 $*

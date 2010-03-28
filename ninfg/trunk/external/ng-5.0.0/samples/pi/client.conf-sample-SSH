@@ -1,0 +1,52 @@
+# $RCSfile: client.conf-sample-SSH,v $ $Revision: 1.2 $ $Date: 2007/12/03 08:13:25 $
+
+#
+# The sample client configuration file,
+# using Invoke Server SSH.
+#
+
+<CLIENT>
+#    loglevel Warning
+#    invoke_server_log invoke_server-logfile
+</CLIENT>
+
+<SERVER>
+    hostname example.org
+
+    invoke_server SSH          # Invoke Server SSH
+    # Don't forget to use ssh-agent, ssh-add
+    # before running Ninf-G Client.
+
+#    port XXXX                  # Set port if the SSH server is not
+                                # served on default port 22.
+
+#    jobmanager jobmanager-sge  # Set jobmanager if you use
+                                # the Job submission system.
+    # jobmanager is one of
+    # jobmanager-fork (No Job submission system),
+    # jobmanager-sge, jobmanager-pbs.
+    # If you use Job submission system,
+    # Don't forget to set remote PATH for SGE or PBS.
+
+#    invoke_server_option "ssh_command /path/to/ssh"
+#    invoke_server_option "ssh_user your-name"
+#    invoke_server_option "ssh_option -any-ssh-option"
+
+    # For MPI function/object handles.
+#    invoke_server_option "ssh_MPIcommand /path/to/mpirun"
+
+#    invoke_server_option "ssh_MPImachinefileOption -c %s"
+                        # Only if GridMPI with SGE, PBS.
+
+#    invoke_server_option "ssh_MPIoption -c your-machinefile"
+                        # Only if GridMPI with no jobmanager.
+
+#    crypt false        # crypt is not work properly by certificate
+                        # problem. Only the value false works fine.
+</SERVER>
+
+<INFORMATION_SOURCE>
+    type NRF
+    tag nrf
+    source pi.example.org.nrf
+</INFORMATION_SOURCE>

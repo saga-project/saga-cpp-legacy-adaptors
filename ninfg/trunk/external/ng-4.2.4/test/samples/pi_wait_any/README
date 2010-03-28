@@ -1,0 +1,14 @@
+pi_wait_any
+===========
+
+This program is the sample of method using grpc_wait_any()
+and calculate pi with Monte Carlo method.
+
+The usage is as follows.
+
+  %./pi_wait_any_client TIMES RRPC_TIMES REMOTE_HOST1 REMOTE_HOST2 ...
+
+TIMES is number of points calculated in each RPC.
+RPC_TIMES is number of executed RPCs.
+
+This program execute RPCs in REMOTEHOST1, REMOTEHOST2,... .

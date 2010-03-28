@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>grpc_arg_stack_destruct</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>grpc_arg_stack_destruct</code> - Destructs a stack
+<h3>SYNOPSIS</h3>
+<code>
+  int grpc_arg_stack_destruct(grpc_arg_stack_t *stack)
+
+</code>
+<h3>ARGUMENTS</h3>
+<dl>
+<dt><code>  grpc_arg_stack *stack</code></dt>
+<dd>	The stack</dd>
+</dl>
+<h3>DESCRIPTION</h3>
+  The grpc_arg_stack_destruct()  function destructs a stack.<br>
+
+<p> This function is MT-safe. </p>
+<br>
+<h3>RETURN VALUE</h3>
+Returns 0 if successful. Returns -1 in the event of an error.<br>
+<br>
+<h3>ERRORS</h3>
+<dl>
+<dt><code>  GRPC_NOT_INITIALIZED</code></dt>
+<dd>	The grpc_initialize() function has not been executed.</dd>
+<dt><code>  GRPC_OTHER_ERROR_CODE</code></dt>
+<dd>    Internal error detected.</dd>
+</dl>
+<hr>
+last update : $Date: 2005/07/11 07:11:24 $
+</body>
+</html>

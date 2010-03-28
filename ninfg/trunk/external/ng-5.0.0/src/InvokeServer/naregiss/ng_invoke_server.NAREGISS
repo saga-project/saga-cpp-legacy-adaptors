@@ -1,0 +1,125 @@
+#!/bin/sh
+
+# $RCSfile: ng_invoke_server.NAREGISS.in,v $ $Revision: 1.6 $ $Date: 2008/03/28 08:47:44 $
+# $AIST_Release: 5.0.0 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+SS_PROPERTY= 
+
+if test -z "${GLOBUS_LOCATION}"; then
+    echo '${GLOBUS_LOCATION} is not set'>&2
+fi
+
+SS_PROPERTY="${SS_PROPERTY} -DGLOBUS_LOCATION=${GLOBUS_LOCATION}"
+SS_PROPERTY="${SS_PROPERTY} -Djava.endorsed.dirs=${GLOBUS_LOCATION}/endorsed"
+SS_PROPERTY="${SS_PROPERTY} -Daxis.ClientConfigFile=$GLOBUS_LOCATION/client-config.wsdd"
+
+if test -z "${NG_DIR}"; then
+    echo '$NG_DIR is not set'>&2
+fi
+
+if test -n "${X509_USER_PROXY}"; then
+    SS_PROPERTY="${SS_PROPERTY} -DX509_USER_PROXY=${X509_USER_PROXY}"
+fi
+
+if test -r "/dev/urandom then";then
+    SS_PROPERTY="${SS_PROPERTY} -Djava.security.egd=/dev/urandom"
+fi
+
+ENV_PROPERTY="-Dorg.apgrid.grpc.ngDir=${NG_DIR} -Dorg.apgrid.grpc.X509UserProxy=${X509_USER_PROXY}"
+XML_PROPERTY=-Dorg.w3c.dom.DOMImplementationSourceList=com.sun.org.apache.xerces.internal.dom.DOMImplementationSourceImpl
+FACTORY_PROPERTY=-Dorg.apgrid.grpc.tools.invokeServer.FactoryClassName=org.apgrid.grpc.tools.invokeServer.naregiSS.NaregiSSJobFactory
+
+PROPERTY="${SS_PROPERTY} ${ENV_PROPERTY} ${XML_PROPERTY} ${FACTORY_PROPERTY} ${DEFAULTLOG_PROPERTY}"
+
+MAINCLASS=org.apgrid.grpc.tools.invokeServer.InvokeServer
+
+append_classpath () {
+    if test -z "${CLASSPATH}";then
+        CLASSPATH=$1
+    else
+        CLASSPATH=${CLASSPATH}:$1
+    fi
+}
+
+trap "" INT
+trap "" TSTP
+trap "" HUP
+trap "" TERM
+
+CLASSPATH=
+append_classpath ${NG_DIR}/lib/ng_invoke_server.jar
+append_classpath ${NG_DIR}/lib/naregissIS.jar
+append_classpath 
+append_classpath ${GLOBUS_LOCATION}/lib/addressing-1.0.jar
+append_classpath ${GLOBUS_LOCATION}/lib/axis.jar
+append_classpath ${GLOBUS_LOCATION}/lib/axis-url.jar
+append_classpath ${GLOBUS_LOCATION}/lib/cog-axis.jar
+append_classpath ${GLOBUS_LOCATION}/lib/cog-jglobus.jar
+append_classpath ${GLOBUS_LOCATION}/lib/cog-url.jar
+append_classpath ${GLOBUS_LOCATION}/lib/commonj.jar
+append_classpath ${GLOBUS_LOCATION}/lib/commons-beanutils.jar
+append_classpath ${GLOBUS_LOCATION}/lib/commons-collections-3.0.jar
+append_classpath ${GLOBUS_LOCATION}/lib/commons-digester.jar
+append_classpath ${GLOBUS_LOCATION}/lib/commons-discovery.jar
+append_classpath ${GLOBUS_LOCATION}/lib/commons-logging.jar
+append_classpath ${GLOBUS_LOCATION}/lib/concurrent.jar
+append_classpath ${GLOBUS_LOCATION}/lib/cryptix32.jar
+append_classpath ${GLOBUS_LOCATION}/lib/cryptix-asn1.jar
+append_classpath ${GLOBUS_LOCATION}/lib/cryptix.jar
+append_classpath ${GLOBUS_LOCATION}/lib/globus_delegation_service.jar
+append_classpath ${GLOBUS_LOCATION}/lib/globus_delegation_stubs.jar
+append_classpath ${GLOBUS_LOCATION}/lib/globus_wsrf_mds_aggregator_stubs.jar
+append_classpath ${GLOBUS_LOCATION}/lib/globus_wsrf_rendezvous_service.jar
+append_classpath ${GLOBUS_LOCATION}/lib/globus_wsrf_rendezvous_stubs.jar
+append_classpath ${GLOBUS_LOCATION}/lib/globus_wsrf_rft_stubs.jar
+append_classpath ${GLOBUS_LOCATION}/lib/gram-client.jar
+append_classpath ${GLOBUS_LOCATION}/lib/gram-stubs.jar
+append_classpath ${GLOBUS_LOCATION}/lib/gram-utils.jar
+append_classpath ${GLOBUS_LOCATION}/lib/jaxrpc.jar
+append_classpath ${GLOBUS_LOCATION}/lib/jce-jdk13-125.jar
+append_classpath ${GLOBUS_LOCATION}/lib/jgss.jar
+append_classpath ${GLOBUS_LOCATION}/lib/log4j-1.2.8.jar
+append_classpath ${GLOBUS_LOCATION}/lib/naming-common.jar
+append_classpath ${GLOBUS_LOCATION}/lib/naming-factory.jar
+append_classpath ${GLOBUS_LOCATION}/lib/naming-java.jar
+append_classpath ${GLOBUS_LOCATION}/lib/naming-resources.jar
+append_classpath ${GLOBUS_LOCATION}/lib/opensaml.jar
+append_classpath ${GLOBUS_LOCATION}/lib/puretls.jar
+append_classpath ${GLOBUS_LOCATION}/lib/saaj.jar
+append_classpath ${GLOBUS_LOCATION}/lib/servlet.jar
+append_classpath ${GLOBUS_LOCATION}/lib/wsdl4j.jar
+append_classpath ${GLOBUS_LOCATION}/lib/wsrf_common.jar
+append_classpath ${GLOBUS_LOCATION}/lib/wsrf_core.jar
+append_classpath ${GLOBUS_LOCATION}/lib/wsrf_core_stubs.jar
+append_classpath ${GLOBUS_LOCATION}/lib/wsrf_mds_usefulrp.jar
+append_classpath ${GLOBUS_LOCATION}/lib/wsrf_mds_usefulrp_schema_stubs.jar
+append_classpath ${GLOBUS_LOCATION}/lib/wsrf_provider_jce.jar
+append_classpath ${GLOBUS_LOCATION}/lib/wsrf_tools.jar
+append_classpath ${GLOBUS_LOCATION}/lib/wss4j.jar
+append_classpath ${GLOBUS_LOCATION}/lib/xalan.jar
+append_classpath ${GLOBUS_LOCATION}/lib/xercesImpl.jar
+append_classpath ${GLOBUS_LOCATION}/lib/xml-apis.jar
+append_classpath ${GLOBUS_LOCATION}/lib/xmlsec.jar
+append_classpath ${GLOBUS_LOCATION}/lib/cog-tomcat.jar
+append_classpath ${GLOBUS_LOCATION}/lib/junit.jar
+
+export CLASSPATH
+
+ -classpath ${CLASSPATH} ${PROPERTY} ${MAINCLASS} $*

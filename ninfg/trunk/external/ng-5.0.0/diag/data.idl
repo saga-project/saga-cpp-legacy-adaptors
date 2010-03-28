@@ -1,0 +1,137 @@
+/*
+ * $RCSfile: data.idl,v $ $Revision: 1.1 $ $Date: 2006/12/18 08:29:43 $
+ * $AIST_Release: 5.0.0 $
+ * $AIST_Copyright:
+ *  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+ *  National Institute of Advanced Industrial Science and Technology
+ *  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+ *  
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  $
+ */
+Module data;
+Globals { #include "string.h" }
+
+Define char_test(IN char N, IN char in[N], OUT char out[N])
+"Char facility Test"
+{
+    int i;
+
+    for (i = 0; i < N; i++) {
+        out[i] = in[i];
+    }
+}
+
+Define short_test(IN short N, IN short in[N], OUT short out[N])
+"Short facility Test"
+{
+    int i;
+
+    for (i = 0; i < N; i++) {
+        out[i] = in[i];
+    }
+}
+
+Define int_test(IN int N, IN int in[N], OUT int out[N])
+"Int facility Test"
+{
+    int i;
+
+    for (i = 0; i < N; i++) {
+        out[i] = in[i];
+    }
+}
+
+Define long_test(IN long N, IN long in[N], OUT long out[N])
+"Long facility Test"
+{
+    int i;
+
+    for (i = 0; i < N; i++) {
+        out[i] = in[i];
+    }
+}
+
+Define float_test(IN int N, IN float scalarIn, IN float in[N], OUT float *scalarOut, OUT float out[N])
+"Float facility Test"
+{
+    int i;
+
+    *scalarOut = scalarIn;
+
+    for (i = 0; i < N; i++) {
+        out[i] = in[i];
+    }
+}
+
+Define double_test(IN int N, IN double scalarIn, IN double in[N], OUT double *scalarOut, OUT double out[N])
+"Double facility Test"
+{
+    int i;
+
+    *scalarOut = scalarIn;
+
+    for (i = 0; i < N; i++) {
+        out[i] = in[i];
+    }
+}
+
+Define scomplex_test(IN int N, IN scomplex scalarIn, IN scomplex in[N], OUT scomplex *scalarOut, OUT scomplex out[N])
+"Scomplex facility Test"
+{
+    int i;
+
+    *scalarOut = scalarIn;
+
+    for (i = 0; i < N; i++) {
+        out[i].r = in[i].r;
+        out[i].i = in[i].i;
+    }
+}
+
+Define dcomplex_test(IN int N, IN dcomplex scalarIn, IN dcomplex in[N], OUT dcomplex *scalarOut, OUT dcomplex out[N])
+"Dcomplex facility Test"
+{
+    int i;
+
+    *scalarOut = scalarIn;
+
+    for (i = 0; i < N; i++) {
+        out[i].r = in[i].r;
+        out[i].i = in[i].i;
+    }
+}
+
+Define string_test(IN string i, OUT string o[])
+"This is a test for string facility"
+{
+    *o = i;
+}
+
+Define string_array_test(IN string in[5], OUT string out[3])
+"This is a test for array of string facility"
+{
+    out[0] = "Were all tests successful?";
+    out[1] = in[2];
+    out[2] = "Good morning";
+}
+
+Define work_test(IN int N, IN int in[N], WORK int work[N], OUT int out[N])
+{
+    int i;
+
+    for (i = 0; i < N; i++) {
+        work[i] = in[i];
+    }
+    memcpy(out, work, sizeof (out[0]) * N);
+}

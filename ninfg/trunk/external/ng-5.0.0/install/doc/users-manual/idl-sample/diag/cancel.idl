@@ -1,0 +1,15 @@
+Module cancel;
+Globals { #include "grpc_executable.h" }
+Globals { #include "stdlib.h" }
+
+Define cancel()
+{
+    grpc_error_t err;
+
+    while(1) {
+	if ((grpc_is_canceled_np(&err) == 1) && (err == GRPC_NO_ERROR))
+	    break;
+
+	sleep(1);
+    }
+}

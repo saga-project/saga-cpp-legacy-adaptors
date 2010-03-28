@@ -1,0 +1,16 @@
+diff -aurN Python-2.4.2.orig/configure Python-2.4.2/configure
+--- Python-2.4.2.orig/configure	2005-08-08 06:08:42.000000000 +0900
++++ Python-2.4.2/configure	2006-01-11 18:31:05.000000000 +0900
+@@ -12637,6 +12637,12 @@
+ _ACEOF
+ 
+ 		       ;;
++      AIX/5)
++cat >>confdefs.h <<\_ACEOF
++#define HAVE_BROKEN_POSIX_SEMAPHORES 1
++_ACEOF
++
++		       ;;
+       esac
+ 
+       echo "$as_me:$LINENO: checking if PTHREAD_SCOPE_SYSTEM is supported" >&5

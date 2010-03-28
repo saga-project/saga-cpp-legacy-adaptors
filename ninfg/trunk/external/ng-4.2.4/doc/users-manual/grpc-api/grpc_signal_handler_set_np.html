@@ -1,0 +1,84 @@
+<html>
+<head>
+<title>grpc_signal_handler_set_np</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>grpc_signal_handler_set_np</code> - Set the signal handler.
+<h3>SYNOPSIS</h3>
+<code>
+  grpc_error_t grpc_signal_handler_set_np(int sig_num, void (*sig_handler)(int))
+
+</code>
+<h3>ARGUMENTS</h3>
+<dl>
+<dt><code>  int sig_num</code></dt>
+<dd>    The signal whose handler is modified.</dd>
+<dt><code>  void (*sig_handler)(int))</code></dt>
+<dd>    The address of a signal handler.</dd>
+</dl>
+
+<h3>DESCRIPTION</h3>
+
+<p>The grpc_signal_handler_set_np() function modifies signal dispositions
+for Ninf-G Client.</p>
+
+<p>Procedures for signal handling differs according to environments and a
+signal to be processed.</p>
+
+<ul>
+<li><strong>pthread flavors of GT 4.0.0 or later</strong>
+    <p>Ninf-G uses signal handling API provided by GT4, but the API does
+    not support SIGKILL, SIGSEGV, SIGABRT, SIGBUS, SIGFPE, SIGILL,
+    SIGIOT, SIGPIPE, SIGEMT, SIGSYS, SIGTRAP, SIGSTOP, SIGCONT and
+    SIGWAITING.</p>
+
+    <p>If sig_num is supported by GT's signal handling API, sig_handler is
+    called by a signal handling thread.</p>
+
+    <p>if sig_num is not supported by GT's signal handling API,
+    sig_handler is called as a signal handler registered by sigaction().</p>
+
+<li><strong>pthread flavors of earlier than GT 4.0.0</strong>
+    <p>Ninf-G has signal handling thread which supports the same signals
+    as GT4 signal handling API.</p>
+
+    <p>If sig_num is supported by a Ninf-G signal handling thread,
+    sig_handler is called by the signal handling thread.
+    Otherwise, sig_handler is called as a signal handler
+    registered by sigaction().</p>
+
+    <p>Note:  For pthread flavor on MacOS X, Ninf-G Client processes
+    SIGSTP as well.</p>
+
+<li><strong>nonthread flavors for all versions of GT.</strong>
+    <p>sig_handler is called as a signal handler registered by
+    sigaction().</p>
+</ul>
+
+<p>It is unsafe to call some system calls from the signal handler
+registered by sigaction().  A list of safe system calls is available
+on the following web page and IEEE Std 1003.1(POSIX).</p>
+
+<p><a href="http://www.opengroup.org/onlinepubs/007908799/xsh/sigaction.html">
+http://www.opengroup.org/onlinepubs/007908799/xsh/sigaction.html</a></p>
+
+<p>This function is a new function in Ninf-G version 4.0.0.</p>
+
+<p>This function is MT-safe.</p>
+
+<h3>RETURN VALUE</h3>
+<p>If successful, GRPC_NO_ERROR is returned. In the case of an error,
+Error code is returned.</p>
+<h3>ERRORS</h3>
+<dl>
+<dt><code>   GRPC_NOT_INITIALIZED</code></dt>
+<dd>    GRPC client is not initialized yet.</dd>
+<dt><code>   GRPC_OTHER_ERROR_CODE</code></dt>
+<dd>    Internal error detected. </dd>
+</dl>
+<hr>
+last update : $Date: 2006/09/29 07:31:53 $
+</body>
+</html>

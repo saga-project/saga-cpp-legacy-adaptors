@@ -1,0 +1,27 @@
+Module sample_object;
+Library "-lm";
+
+Globals { int x,y,z; }
+
+DefClass sample_object
+"This is test object"
+Required "sample.o"
+{
+    DefMethod sin(IN double d, OUT double result[])
+    " This is test ..."
+    {    
+    	double sin();
+    	*result = sin(d);
+    }
+
+    DefMethod mmul(IN long n, IN double A[n][n], 
+    	IN double B[n][n], OUT double C[n][n])
+    Calls "C" mmul(n,A,B,C);
+
+    DefMethod mmul2(IN long n, IN double A[n*n+1-1], 
+    	    IN double B[n*n+2-3+1], OUT double C[n*n])
+    Calls "C" mmul(n,A,B,C);
+
+    DefMethod FFT(IN int n,IN int m, OUT float x[n][m], float INOUT y[m][n])
+    Calls "Fortran" FFT(n,x,y);
+}

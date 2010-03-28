@@ -1,0 +1,354 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:723: checking for gpt-query
+configure:840: checking for globus-makefile-header server
+configure:868: checking for globus-makefile-header client
+configure:1444: checking for deflate in -lz
+configure:1463: cc -o conftest    conftest.c -lz   1>&5
+configure:1498: checking for large_file_option
+configure:1522: cc -o conftest    conftest.c  1>&5
+configure:1641: checking for globus_thread_t castable to long
+configure:1650: cc -c    -I/usr/local/globus//include -I/usr/local/globus//include/gcc32dbgpthr -I/usr/local/globus//include/gcc32dbgpthr/wsrf/services conftest.c 1>&5
+configure:1671: checking for globus_callback_space_register_signal_handler
+configure:1699: cc -o conftest    conftest.c  -L/usr/local/globus//lib  -L/usr/local/globus//lib -L/usr/local/globus//lib -L/sw/lib -lglobus_gram_client_gcc32dbgpthr -lglobus_gass_server_ez_gcc32dbgpthr -lglobus_gram_protocol_gcc32dbgpthr -lglobus_gass_transfer_gcc32dbgpthr -lglobus_io_gcc32dbgpthr -lglobus_xio_gcc32dbgpthr -lgssapi_error_gcc32dbgpthr -lglobus_gss_assist_gcc32dbgpthr -lglobus_gssapi_gsi_gcc32dbgpthr -lglobus_gsi_proxy_core_gcc32dbgpthr -lglobus_gsi_credential_gcc32dbgpthr -lglobus_gsi_callback_gcc32dbgpthr -lglobus_oldgaa_gcc32dbgpthr -lglobus_gsi_sysconfig_gcc32dbgpthr -lglobus_gsi_cert_utils_gcc32dbgpthr -lglobus_openssl_gcc32dbgpthr -lglobus_rsl_gcc32dbgpthr -lglobus_openssl_error_gcc32dbgpthr -lglobus_callout_gcc32dbgpthr -lglobus_proxy_ssl_gcc32dbgpthr -lglobus_common_gcc32dbgpthr -lssl_gcc32dbgpthr -lcrypto_gcc32dbgpthr -lltdl_gcc32dbgpthr -lm -lpthread 1>&5
+configure:1725: checking for sigwait bug
+configure:1782: cc -o conftest    conftest.c  1>&5
+configure: failed program was:
+#line 1730 "configure"
+#include "confdefs.h"
+
+#ifdef sun
+#define _POSIX_PTHREAD_SEMANTICS
+#endif
+#include <sys/types.h>
+#include <signal.h>
+#include <unistd.h>
+#include <sys/wait.h>
+int main(void)
+{
+    sigset_t mask;
+    int result, sigNo, status;
+    pid_t pid, wpid;
+                                            
+    pid = fork();
+    if (pid < 0) {
+        return 1;
+    }
+    if (pid == 0) {
+        result = sigemptyset(&mask);
+        if (result != 0) {
+            return 1;
+        }
+        result = sigaddset(&mask, SIGINT);
+        if (result != 0) {
+            return 1;
+        }
+        result = sigprocmask(SIG_BLOCK, &mask, NULL);
+        if (result != 0) {
+            return 1;
+        }
+        result = sigwait(&mask, &sigNo);
+        /* Continue if error occurred */
+        return 1;
+    }
+    sleep(1);
+    result = kill(pid, SIGUSR1);
+    /* Continue if error occurred */
+    sleep(1);
+    result = kill(pid, SIGKILL);
+    /* Continue if error occurred */
+    wpid = wait(&status);
+    if ((wpid > 0) &&
+        (WIFSIGNALED(status) != 0) &&
+        (WTERMSIG(status) == SIGUSR1)) {
+        return 0;
+    }
+    return 1;
+}
+configure:1805: checking for va_arg() accepts function pointer
+configure:1866: cc -o conftest    conftest.c  1>&5
+configure:1889: checking for cpp accepts idl suffix
+configure:1974: checking for Cygwin environment
+configure:1990: cc -c  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c 1>&5
+configure: In function 'main':
+configure:1986: error: '__CYGWIN32__' undeclared (first use in this function)
+configure:1986: error: (Each undeclared identifier is reported only once
+configure:1986: error: for each function it appears in.)
+configure: failed program was:
+#line 1979 "configure"
+#include "confdefs.h"
+
+int main() {
+
+#ifndef __CYGWIN__
+#define __CYGWIN__ __CYGWIN32__
+#endif
+return __CYGWIN__;
+; return 0; }
+configure:2007: checking for mingw32 environment
+configure:2019: cc -c  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c 1>&5
+configure: In function 'main':
+configure:2015: error: '__MINGW32__' undeclared (first use in this function)
+configure:2015: error: (Each undeclared identifier is reported only once
+configure:2015: error: for each function it appears in.)
+configure: failed program was:
+#line 2012 "configure"
+#include "confdefs.h"
+
+int main() {
+return __MINGW32__;
+; return 0; }
+configure:2038: checking for executable suffix
+configure:2048: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:2069: checking for object suffix
+configure:2075: cc -c  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c 1>&5
+configure:2110: checking how to run the C preprocessor
+configure:2192: checking for working alloca.h
+configure:2204: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure: In function 'main':
+configure:2200: warning: unused variable 'p'
+configure:2225: checking for alloca
+configure:2258: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure: In function 'main':
+configure:2254: warning: unused variable 'p'
+configure:2434: checking for errno.h
+configure:2444: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2471: checking for limits.h
+configure:2481: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2508: checking for stdlib.h
+configure:2518: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2545: checking for string.h
+configure:2555: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2582: checking for strings.h
+configure:2592: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2619: checking for unistd.h
+configure:2629: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2656: checking for stdarg.h
+configure:2666: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2693: checking for locale.h
+configure:2703: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2749: checking for ieeefp.h
+configure:2759: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2755:20: error: ieeefp.h: No such file or directory
+configure: failed program was:
+#line 2754 "configure"
+#include "confdefs.h"
+#include <ieeefp.h>
+configure:2786: checking for float.h
+configure:2796: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2823: checking for netdb.h
+configure:2833: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2860: checking for sys/socket.h
+configure:2870: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2897: checking for netinet/in.h
+configure:2907: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2934: checking for arpa/inet.h
+configure:2944: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:2971: checking for sys/resource.h
+configure:2981: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:3030: checking for sys/time.h
+configure:3040: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:3067: checking whether time.h and sys/time.h may both be included
+configure:3081: cc -c  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c 1>&5
+configure: In function 'main':
+configure:3077: warning: unused variable 'tp'
+configure:3107: checking for ANSI C header files
+configure:3120: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:3187: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure: In function 'main':
+configure:3182: warning: implicit declaration of function 'exit'
+configure:3182: warning: incompatible implicit declaration of built-in function 'exit'
+configure:3211: checking for mode_t
+configure:3244: checking for pid_t
+configure:3277: checking for size_t
+configure:3310: checking for uid_t in sys/types.h
+configure:3348: checking whether byte ordering is bigendian
+configure:3366: cc -c  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c 1>&5
+configure:3381: cc -c  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c 1>&5
+configure: In function 'main':
+configure:3376: error: 'not' undeclared (first use in this function)
+configure:3376: error: (Each undeclared identifier is reported only once
+configure:3376: error: for each function it appears in.)
+configure:3376: error: syntax error before 'big'
+configure: failed program was:
+#line 3370 "configure"
+#include "confdefs.h"
+#include <sys/types.h>
+#include <sys/param.h>
+int main() {
+
+#if BYTE_ORDER != BIG_ENDIAN
+ not big endian
+#endif
+; return 0; }
+configure:3446: checking for BSDgettimeofday
+configure:3474: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+Undefined symbols:
+  "_BSDgettimeofday", referenced from:
+      _main in cc8Z9VYQ.o
+ld: symbol(s) not found
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3451 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char BSDgettimeofday(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char BSDgettimeofday();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_BSDgettimeofday) || defined (__stub___BSDgettimeofday)
+choke me
+#else
+BSDgettimeofday();
+#endif
+
+; return 0; }
+configure:3495: checking for gettimeofday
+configure:3523: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:3549: checking for gettimeofday declaration
+configure:3581: checking return type of signal handlers
+configure:3603: cc -c  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c 1>&5
+configure: In function 'main':
+configure:3599: warning: unused variable 'i'
+configure:3622: checking for vfork
+configure:3650: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:3672: checking vfork/signal bug
+configure:3705: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:3684: warning: return type defaults to 'int'
+configure:3689: warning: return type defaults to 'int'
+configure: In function 'main':
+configure:3691: warning: passing argument 2 of 'signal' from incompatible pointer type
+configure:3692: warning: implicit declaration of function 'vfork'
+configure:3694: warning: implicit declaration of function 'exit'
+configure:3694: warning: incompatible implicit declaration of built-in function 'exit'
+configure:3697: warning: implicit declaration of function '_exit'
+configure:3697: warning: incompatible implicit declaration of built-in function '_exit'
+configure:3701: warning: incompatible implicit declaration of built-in function 'exit'
+configure: In function 'sigProc':
+configure:3687: warning: control reaches end of non-void function
+configure:3814: checking for connect
+configure:3842: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:3955: checking for gethostbyname
+configure:3983: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:4048: checking for main in -linet
+configure:4063: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c -linet   1>&5
+ld: library not found for -linet
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 4056 "configure"
+#include "confdefs.h"
+
+int main() {
+main()
+; return 0; }
+configure:4085: checking for net/errno.h
+configure:4095: cc -E  -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c >/dev/null 2>conftest.out
+configure:4091:23: error: net/errno.h: No such file or directory
+configure: failed program was:
+#line 4090 "configure"
+#include "confdefs.h"
+#include <net/errno.h>
+configure:4140: checking for xdr_int
+configure:4168: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:4364: checking xdr_longlong_t() in  
+configure:4373: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c   1>&5
+configure: In function 'main':
+configure:4369: warning: implicit declaration of function 'xdr_longlong_t'
+configure:4403: checking gcc has large union size bug
+configure:4429: checking has long long
+configure:4438: cc -c  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c 1>&5
+configure: In function 'main':
+configure:4434: warning: unused variable 'x'
+configure:4460: checking has long double
+configure:4469: cc -c  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__ conftest.c 1>&5
+configure: In function 'main':
+configure:4465: warning: unused variable 'x'
+configure:4490: checking size of unsigned short
+configure:4510: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:4502: warning: return type defaults to 'int'
+configure: In function 'main':
+configure:4504: warning: implicit declaration of function 'exit'
+configure:4504: warning: incompatible implicit declaration of built-in function 'exit'
+configure:4505: warning: format '%d' expects type 'int', but argument 3 has type 'long unsigned int'
+configure:4530: checking size of unsigned int
+configure:4550: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:4542: warning: return type defaults to 'int'
+configure: In function 'main':
+configure:4544: warning: implicit declaration of function 'exit'
+configure:4544: warning: incompatible implicit declaration of built-in function 'exit'
+configure:4545: warning: format '%d' expects type 'int', but argument 3 has type 'long unsigned int'
+configure:4570: checking size of unsigned long
+configure:4590: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:4582: warning: return type defaults to 'int'
+configure: In function 'main':
+configure:4584: warning: implicit declaration of function 'exit'
+configure:4584: warning: incompatible implicit declaration of built-in function 'exit'
+configure:4585: warning: format '%d' expects type 'int', but argument 3 has type 'long unsigned int'
+configure:4612: checking size of unsigned long long
+configure:4632: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:4624: warning: return type defaults to 'int'
+configure: In function 'main':
+configure:4626: warning: implicit declaration of function 'exit'
+configure:4626: warning: incompatible implicit declaration of built-in function 'exit'
+configure:4627: warning: format '%d' expects type 'int', but argument 3 has type 'long unsigned int'
+configure:4654: checking size of float
+configure:4674: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:4666: warning: return type defaults to 'int'
+configure: In function 'main':
+configure:4668: warning: implicit declaration of function 'exit'
+configure:4668: warning: incompatible implicit declaration of built-in function 'exit'
+configure:4669: warning: format '%d' expects type 'int', but argument 3 has type 'long unsigned int'
+configure:4694: checking size of double
+configure:4714: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:4706: warning: return type defaults to 'int'
+configure: In function 'main':
+configure:4708: warning: implicit declaration of function 'exit'
+configure:4708: warning: incompatible implicit declaration of built-in function 'exit'
+configure:4709: warning: format '%d' expects type 'int', but argument 3 has type 'long unsigned int'
+configure:4736: checking size of long double
+configure:4756: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:4748: warning: return type defaults to 'int'
+configure: In function 'main':
+configure:4750: warning: implicit declaration of function 'exit'
+configure:4750: warning: incompatible implicit declaration of built-in function 'exit'
+configure:4751: warning: format '%d' expects type 'int', but argument 3 has type 'long unsigned int'
+configure:4778: checking size of void *
+configure:4798: cc -o conftest  -Wall -O2   -DNG_CPU_ -DNG_OS_ -DPLAT_SCO -DNGI_ARCHITECTURE_ID=12   -D_REENTRANT   -DNG_PTHREAD -DNGI_NO_MDS2_MODULE -DNGI_NO_MDS4_MODULE  -D__USE_FIXED_PROTOTYPES__  conftest.c  1>&5
+configure:4790: warning: return type defaults to 'int'
+configure: In function 'main':
+configure:4792: warning: implicit declaration of function 'exit'
+configure:4792: warning: incompatible implicit declaration of built-in function 'exit'
+configure:4793: warning: format '%d' expects type 'int', but argument 3 has type 'long unsigned int'
+configure:4839: checking default align of char
+configure:4839: checking default align of short
+configure:4839: checking default align of int
+configure:4839: checking default align of long
+configure:4833: checking default align of long long int
+configure:4839: checking default align of float
+configure:4839: checking default align of double
+configure:4836: checking default align of long double
+configure:4992: checking 16 bit integer
+configure:4992: checking 32 bit integer
+configure:4992: checking 64 bit integer
+configure:5045: checking integer type enough to hold void pointer
+configure:5070: checking 64 bit virtual address
+configure:5112: checking has quad-precision print format
+configure:5141: checking for ranlib
+configure:5191: checking for yacc
+configure:5273: checking for rm
+configure:5315: checking for env
+configure:5367: checking for python
+configure:5410: checking for python exec
+configure:5422: checking for python version
+configure:5444: checking for JAVA_HOME
+configure:5589: checking for ANT_HOME
+configure:5640: checking for find

@@ -1,0 +1,443 @@
+<!--
+  $RCSfile: known-problems.html,v $ $Revision: 1.7 $ $Date: 2008/03/28 08:47:44 $
+  $AIST_Release: 5.0.0 $
+  $AIST_Copyright:
+   Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+   National Institute of Advanced Industrial Science and Technology
+   Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+   
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+   $
+ -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+<title>Known problems</title>
+</head>
+<body bgcolor=white>
+
+<h2><a name="known_problems">11. Known problems </a></h2>
+
+<p>This section describes known problems in
+Ninf-G Version 5.0.0.</p>
+
+<hr>
+
+<ul>
+<li><a href="#problems-GT">
+    11.1 Problems related to the Globus Toolkit</a>
+<li><a href="#problems-NAREGISS">
+    11.2 Problems related to NAREGI SS</a>
+<li><a href="#problems-environment">
+    11.3 Problems related to environments (OS, Compiler, Architecture, etc.)</a>
+<li><a href="#problems-version">
+    11.4 Problems related to version compatibility</a>
+<li><a href="#problems-other">
+    11.5 Other problems</a>
+</ul>
+
+<hr>
+
+<ul>
+<li><a href="#problems-GT">
+    11.1 Problems related to the Globus Toolkit</a>
+<ul>
+<li><a href="#problems-GT-003">
+    11.1.3 A large number of repetition of construction and destruction of
+    a handle may cause an error.</a>
+
+<li><a href="#problems-GT-002">
+    11.1.2 Invoke Server GT4py for WS GRAM does not work correctly
+    on Solaris.</a>
+
+<li><a href="#problems-GT-001">
+    11.1.1 Java WS container can not accept many simultaneous RPCs.</a>
+</ul>
+
+<li><a href="#problems-NAREGISS">
+    11.2 Problems related to NAREGI SS</a>
+<ul>
+<li><a href="#problems-NAREGISS-002">
+    11.2.2 Invoke Server NAREGISS does not notify the bulk job to be done.</a>
+
+<li><a href="#problems-NAREGISS-001">
+    11.2.1 Ninf-G Executable invoked using Invoke Server NAREGISS may not be
+    able to create temporary files.</a>
+</ul>
+
+<li><a href="#problems-environment">
+    11.3 Problems related to environments (OS, Compiler, Architecture, etc.)</a>
+<ul>
+<li><a href="#problems-environment-009">
+    11.3.9 Invoke Server SSH does not work with specific SSH.</a>
+
+<li><a href="#problems-environment-008">
+    11.3.8 grpc_get_info_np() returns incorrect CPU time.</a>
+
+<li><a href="#problems-environment-007">
+    11.3.7 Ninf-G Client does not terminate
+    if _exit() is called in a signal handler.</a>
+
+<li><a href="#problems-environment-006">
+    11.3.6 PGI compiler causes syntax-error on
+    stub file generation from IDL.</a>
+
+<li><a href="#problems-environment-005">
+    11.3.5 Invoke Server GT4py on AIX 5.2 requires patch for Python.</a>
+
+<li><a href="#problems-environment-004">
+    11.3.4 Invoke Server GT4py doesn't work
+    with /usr/bin/python on Mac OS X.</a>
+
+<li><a href="#problems-environment-003">
+    11.3.3 Assembler may detect warnings when optimization is enabled.</a>
+
+<li><a href="#problems-environment-002">
+    11.3.2 Java Client sometimes fails when running large-scale
+    applications on Windows.</a>
+
+<li><a href="#problems-environment-001">
+    11.3.1 dcomplex type is not available with gcc-2.96 on IA64 platform.</a>
+</ul>
+
+<li><a href="#problems-version">
+    11.4 Problems related to version compatibility</a>
+<!--
+<ul>
+<li><a href="#problems-version-001">
+    11.4.1 title</a>
+</ul>
+-->
+
+<li><a href="#problems-other">
+    11.5 Other problems</a>
+<!--
+<ul>
+<li><a href="#problems-other-001">
+    11.5.1 title</a>
+</ul>
+-->
+</ul>
+
+<hr>
+
+<h3><a name="problems-GT">
+11.1 Problems related to the Globus Toolkit</a></h3>
+
+<ul>
+<li><strong><a name="problems-GT-003">
+11.1.3 A large number of repetition of construction and destruction of
+a handle may cause an error.
+</a></strong>
+
+<p>If construction and destruction of a function/object handle is
+repeated many times using Invoke Server GT2c,
+an error may be occurred on Tru64 UNIX.</p>
+<p>This problem is due to the bug of the GT 4
+(<a href="http://bugzilla.globus.org/bugzilla/show_bug.cgi?id=4336">
+Bug# 4336)</a>.</p>
+
+
+<li><strong><a name="problems-GT-002">
+11.1.2 Invoke Server GT4py for WS GRAM does not work correctly on Solaris.
+</a></strong>
+
+<p>Initializing Function/Object handles using Invoke Server GT4py
+for WS GRAM does not work correctly on Solaris.</p>
+<p>This problem is due to the bug of GT 4
+(<a href="http://bugzilla.globus.org/globus/show_bug.cgi?id=4275">
+Bug# 4275</a>) and fixed after the release of GT 4.0.6.</p>
+
+
+<li><strong><a name="problems-GT-001">
+11.1.1 Java WS container can not accept many simultaneous RPCs.
+</a></strong>
+
+<p>Java WS container causes "OutOfMemoryError" and outputs the
+following message when it receives many simultaneous requests for RPC.
+</p>
+
+<pre>
+	:
+  ERROR container.ServiceThread
+  [ServiceThread-11599,run:306] Run out of heap (server level)
+  java.lang.OutOfMemoryError
+  ERROR container.ServiceThread
+  [ServiceThread-11551,doFault:701] Run out of memory (application level)
+  java.lang.OutOfMemoryError
+	:
+</pre>
+
+<p>In order to avoid this problem, increase the maximum heap size of
+  the JVM when running the container.<br>
+It is described in the documentation of 
+<a href="http://www.globus.org/toolkit/docs/4.0/common/javawscore/">
+"GT 4.0: Java WS Core"</a> ,
+<a href="http://www.globus.org/toolkit/docs/4.0/common/javawscore/admin-index.html#id2846292">
+"4.1.2. Recommended JVM settings for the Java WS Core container".</a>
+</p>
+</ul>
+
+
+<h3><a name="problems-NAREGISS">
+11.2 Problems related to NAREGI SS</a></h3>
+
+<ul>
+<li><strong><a name="problems-NAREGISS-002">
+11.2.2 Invoke Server NAREGISS does not notify the bulk job to be done.
+</a></strong>
+
+<p>When the job is invoked by the function for initializing an array of
+function/object handles(grpc_function_array_handle_np() etc.) and Invoke
+Server NAREGISS is used, Invoke Server NAREGISS does not notify this job
+to be done. Thus, Ninf-G Client keeps waiting the job to be done on
+destructing these handles.</p>
+
+<p>This problem can be avoided by specifying "job_stopTimeout" attribute
+in &lt;SERVER&gt; section of client configuration file to 0.</p>
+
+
+<li><strong><a name="problems-NAREGISS-001">
+11.2.1 Ninf-G Executable invoked using Invoke Server NAREGISS may not be
+       able to create temporary files.
+</a></strong>
+
+<p> When the job is invoked by the function for initializing an array of
+function/object handles(grpc_function_array_handle_np() etc.) and Invoke
+Server NAREGISS is used, environment variable TMPDIR in the Ninf-G
+Executable may be set to directory which does not exist. Thus, Ninf-G
+Executable may not be able to create temporary files. </p>
+      
+<p> This problem can be avoided by specifying "tmp_dir" attribute in Ninf-G
+Executable configuration file. </p>
+
+</ul>
+
+
+<h3><a name="problems-environment">
+11.3 Problems related to environments (OS, Compiler, Architecture, etc.)
+</a></h3>
+
+<ul>
+
+<li><strong><a name="problems-environment-009">
+    11.3.9 Invoke Server SSH does not work with specific SSH.</a>
+</a></strong>
+
+<p>It has been confirmed that Invoke Server SSH does not work with the following SSH.
+<ul>
+<li>SSH Version Sun_SSH_1.0, protocol versions 1.5/2.0.
+</ul>
+</p>
+<p>
+This SSH is not available in both local host and remote host.
+</p>
+
+<li><strong><a name="problems-environment-008">
+11.3.8 grpc_get_info_np() returns incorrect CPU time.
+</a></strong>
+
+<p>grpc_get_info_np() returns incorrect CPU time if Ninf-G is built with
+pthread flavor on Solaris and Linux which use not NPTL but linuxthreads.</p>
+
+<li><strong><a name="problems-environment-007">
+11.3.7 Ninf-G Client does not terminate
+if _exit() is called in a signal handler.
+</a></strong>
+
+<p>Ninf-G Client does not terminate if _exit() is called in a signal
+handler.  This problem occurs if Ninf-G Client is built with pthread
+flavor on Linux which uses not NPTL but linuxthreads.</p>
+
+<p>If the version of Linux kernel is 2.6 or later, thread library is
+usually NPTL and should not cause this problem.</p>
+
+<p>For glibc 2.3.2 or later, you can use getconf command to confirm the
+name of the thread library.</p>
+
+<pre><code>% getconf GNU_LIBPTHREAD_VERSION
+linuxthreads-0.10</code></pre>
+
+<p>Otherwise, the following command prints the name of the thread
+library.
+</p>
+
+<pre><code>% `ldd /bin/ls | grep 'libc.so' | awk '{print $3}'` |\
+egrep -i 'nptl|threads'</code></pre>
+
+
+<li><strong><a name="problems-environment-006">
+11.3.6 PGI compiler causes syntax-error on stub file generation from IDL.
+</a></strong>
+
+<p>ng_gen command generates C source files for stub programs from IDL.
+Prior to generating the C source files, the IDL file is processed
+by C pre-processor (CPP).  CPP command is detected when the Ninf-G
+is configured.</p>
+
+<p>PGI compiler may generate illegal C source files when it is used
+as CPP.  Here is an example.</p>
+
+<pre>
+Before CPP
+<code>Globals { #include &lt;stdio.h&gt; }</code>
+
+After CPP
+<code>Globals { # include &lt; stdio . h &gt; }</code>
+</pre>
+(Unexpected space characters are included before and after the
+period.)
+
+
+<p>There are 2 ways to avoid this problem.</p>
+
+<ol>
+<li>Use <code>--no-cpp</code> or <code>--with-cpp</code> option
+when executing ng_gen.
+
+<p>ng_gen has options to skip CPP or to change CPP.</p>
+
+<pre>
+<code>% ng_gen --no-cpp target.idl</code>
+</pre>
+
+<p><code>--no-cpp</code> option skips pre-processing and it is effective only
+  when the pre-processor macros are not used in the IDL file.
+
+<pre>
+<code>% ng_gen --with-cpp="gcc -xc -E" target.idl</code>
+</pre>
+
+<p><code>--with-cpp</code> option specifies CPP command.
+In this example, macros in the IDL file are expanded by GCC
+pre-processor, but pre-processing and compilation of stub
+programs are performed by PGI compiler.</p>
+
+<li>Modify the IDL file.
+
+<p>For quotation of the file name, use double-quotes ("stdio.h")
+instead of less-than and greater-than (&lt;stdio.h&gt;).</p>
+
+</ol>
+
+
+<li><strong><a name="problems-environment-005">
+11.3.5 Invoke Server GT4py on AIX 5.2 requires patch for Python.
+</a></strong>
+
+<p>On AIX 5.2, Python does not work correctly due to a bug of Python.
+Ninf-G provides a patch for this bug and it is included in
+ng-5.x.x/external/python_aix_patch directory in the Ninf-G
+package.
+See README in the directory for more details.</p>
+
+
+<li><strong><a name="problems-environment-004">
+11.3.4 Invoke Server GT4py doesn't work with /usr/bin/python on Mac OS X.
+</a></strong>
+
+<p> Invoke Server GT4py will exit immediately if /usr/bin/python is used on
+Mac OS X.  This problem can be avoided by using python 2.4.2 built from
+source bundle. </p>
+
+
+<li><strong><a name="problems-environment-003">
+11.3.3 Assembler may detect warnings when optimization is enabled.
+</a></strong>
+
+<p>Assembler may detect warnings when optimization is enabled with GCC Version
+3.2.2 or prior on Itanium2.<br>
+The warning message is as follows:
+<pre>
+    cc -Wall -O2 &lt;snip&gt; -c -o ngclSession.o ngclSession.c
+    /tmp/ccMDS56n.s: Assembler messages:
+    /tmp/ccMDS56n.s:10125: Warning: Use of 'mov' may violate WAW dependency 'GR%, %in 1 - 127' (impliedf), specific resource number is 14
+    /tmp/ccMDS56n.s:10124: Warning: This is the location of the conflicting usage
+    /tmp/ccMDS56n.s:10396: Warning: Use of 'mov' may violate WAW dependency 'GR%, %in 1 - 127' (impliedf), specific resource number is 14
+    /tmp/ccMDS56n.s:10395: Warning: This is the location of the conflicting usage
+
+    cc -Wall -O2 &lt;snip&gt; -c -o ngStream.o ngStream.c
+    /tmp/cc35sx1T.s: Assembler messages:
+    /tmp/cc35sx1T.s:2893: Warning: Use of 'mov' may violate WAW dependency 'GR%, %in 1 - 127' (impliedf), specific resource number is 14
+    /tmp/cc35sx1T.s:2892: Warning: This is the location of the conflicting usage
+</pre>
+This problem is reported to GCC bugzilla.<br>
+(http://gcc.gnu.org/bugzilla/show_bug.cgi?id=7908)<br>
+This problem has been fixed on GCC Version later than 3.2.2.</p>
+
+
+<li><strong><a name="problems-environment-002">
+11.3.2 Java Client sometimes fails when running large-scale
+applications on Windows.
+</a></strong>
+
+<p>On Windows, ServerSocket sometimes fails to accept requests
+for connection from Ninf-G Executables
+if it receives many (about 10 or more) requests at the same time.<br>
+This should be an Windows-specific problem since it does not appear on
+Linux or Solaris.<br>
+Use Linux or Solaris for large-scale applications.</p>
+
+
+<li><strong><a name="problems-environment-001">
+11.3.1 dcomplex type is not available with gcc-2.96 on IA64 platform.
+</a></strong>
+
+<p>dcomplex variables is not available if gcc-2.96 is used on IA64
+platform.<br>
+Although compilation of Ninf-G Client program will be succeed, the Ninf-G
+client program will be terminated with an error.<br>
+In order to avoid this problem, other version of gcc should be used.</p>
+
+</ul>
+
+
+<h3><a name="problems-version">
+11.4 Problems related to version compatibility</a></h3>
+
+<p>No version compatibility problem.</p>
+
+<!--
+<ul>
+<li><strong><a name="problems-version-001">
+11.4.1 title
+</a></strong>
+
+<p>comment</p>
+
+</ul>
+ -->
+
+<h3><a name="problems-other">
+11.5 Other problems</a></h3>
+
+<p>No other problem.</p>
+
+<!--
+<ul>
+
+<li><strong><a name="problems-other-001">
+11.5.1 title
+</a></strong>
+
+<p>comment</p>
+
+</ul>
+ -->
+
+<hr>
+last update : $Date: 2008/03/28 08:47:44 $
+</body>
+</html>

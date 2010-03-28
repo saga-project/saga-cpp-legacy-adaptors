@@ -1,0 +1,45 @@
+# $RCSfile: client.conf-sample-GT4py,v $ $Revision: 1.2 $ $Date: 2006/09/13 06:28:30 $
+
+#
+# The sample client configuration file,
+# using Invoke Server GT4py (WS GRAM).
+#
+
+<CLIENT>
+#    loglevel Warning
+#    invoke_server_log invoke_server-logfile
+</CLIENT>
+
+<SERVER>
+    hostname example.org
+
+    invoke_server GT4py        # Invoke Server GT4py : for WS GRAM.
+#    port XXXX                  # Set port if the WS GRAM does not
+                                # served on default port 8443.
+#    jobmanager jobmanager-sge  # Set jobmanager if you do not need
+                                # default jobmanager.
+                                # jobmanagers:
+                        # jobmanager-fork, jobmanager-pbs, jobmanager-sge,
+                        # Fork, PBS, SGE, Condor, LSF, ...
+
+#    subject "/Subject/of/User" # Set subject for user-mode WS GRAM.
+#    invoke_server_option "protocol http" # Set this if the WS container
+                                          # is served with -nosec.
+#    invoke_server_option "delegate_full_proxy true"
+                                # Set this if you use Cascading RPC.
+#    redirect_outerr false      # No stdout/stderr transfer is little faster.
+
+#    # WS GRAM RSL example.
+#    job_rslExtensions "\
+#        <example> \
+#            This is WS GRAM RSL extensions example.\
+#        </example>"
+
+    # The staging to WS GRAM requires some extra attributes.
+    # See the Ninf-G Users Manual 4.4.1.5 Using staging function.
+</SERVER>
+  
+<LOCAL_LDIF>
+    filename pi.example.org.ngdef
+</LOCAL_LDIF>
+

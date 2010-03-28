@@ -1,0 +1,6 @@
+xmlwf/xmlfile.c: In function 'processStream':
+xmlwf/xmlfile.c:149: warning: implicit declaration of function 'close'
+xmlwf/xmlfile.c:153: warning: implicit declaration of function 'read'
+/usr/bin/ld: warning -L: directory name (/sw/lib) does not exist
+bison -y -d nggenIdl.y
+conflicts:  12 shift/reduce

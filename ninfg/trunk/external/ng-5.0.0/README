@@ -1,0 +1,15 @@
+                     Ninf-G Version 5.0.0
+                (Release ID: naregi-wp2-rpc-080325)
+
+Ninf-G is a reference implementation of the GridRPC API which is used
+for the development of Grid-enabled applications using Grid Remote
+Procedure Call.
+
+Version 5.0.0 of the Ninf-G is available at
+  http://ninf.apgrid.org/packages/
+
+Instructions for installing the Ninf-G is included in the Ninf-G
+package and can be found in "doc" directory of the source tree.
+
+For any questions, comments, and bug reports, etc., please send email
+to ninf@apgrid.org .

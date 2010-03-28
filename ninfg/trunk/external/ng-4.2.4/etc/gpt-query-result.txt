@@ -1,0 +1,695 @@
+692 packages were found in /usr/local/globus/ that matched your query:
+
+packages found that matched your query 
+	gaa_core-gcc32-dev pkg version: 1.2.0
+	gaa_core-gcc32-rtl pkg version: 1.2.0
+	gaa_core-gcc32dbg-dev pkg version: 1.2.0
+	gaa_core-gcc32dbg-rtl pkg version: 1.2.0
+	gaa_debug-gcc32-dev pkg version: 1.2.0
+	gaa_debug-gcc32-rtl pkg version: 1.2.0
+	gaa_debug-gcc32dbg-dev pkg version: 1.2.0
+	gaa_debug-gcc32dbg-rtl pkg version: 1.2.0
+	gaa_gss_generic-gcc32-dev pkg version: 1.2.0
+	gaa_gss_generic-gcc32-rtl pkg version: 1.2.0
+	gaa_gss_generic-gcc32dbg-dev pkg version: 1.2.0
+	gaa_gss_generic-gcc32dbg-rtl pkg version: 1.2.0
+	gaa_plugin-gcc32-dev pkg version: 1.2.0
+	gaa_plugin-gcc32-pgm pkg version: 1.2.0
+	gaa_plugin-gcc32-rtl pkg version: 1.2.0
+	gaa_plugin-gcc32dbg-dev pkg version: 1.2.0
+	gaa_plugin-gcc32dbg-rtl pkg version: 1.2.0
+	gaa_simple-gcc32-dev pkg version: 1.3.0
+	gaa_simple-gcc32-pgm pkg version: 1.3.0
+	gaa_simple-gcc32-rtl pkg version: 1.3.0
+	gaa_simple-gcc32dbg-dev pkg version: 1.3.0
+	gaa_simple-gcc32dbg-rtl pkg version: 1.3.0
+	gaa_simple-noflavor-data pkg version: 1.3.0
+	gaa_simple_test-gcc32-pgm pkg version: 0.3.0
+	gaa_simple_test-noflavor-data pkg version: 0.3.0
+	gaa_util-gcc32-dev pkg version: 1.1.0
+	gaa_util-gcc32-rtl pkg version: 1.1.0
+	gaa_util-gcc32dbg-dev pkg version: 1.1.0
+	gaa_util-gcc32dbg-rtl pkg version: 1.1.0
+	globus_authz-gcc32-dev pkg version: 0.7.0
+	globus_authz-gcc32-rtl pkg version: 0.7.0
+	globus_authz-gcc32dbg-dev pkg version: 0.7.0
+	globus_authz-gcc32dbg-rtl pkg version: 0.7.0
+	globus_authz_callout_error-gcc32-dev pkg version: 0.4.0
+	globus_authz_callout_error-gcc32-rtl pkg version: 0.4.0
+	globus_authz_callout_error-gcc32dbg-dev pkg version: 0.4.0
+	globus_authz_callout_error-gcc32dbg-rtl pkg version: 0.4.0
+	globus_authz_gaa_callout-gcc32-dev pkg version: 0.2.0
+	globus_authz_gaa_callout-gcc32-rtl pkg version: 0.2.0
+	globus_authz_gaa_callout-gcc32dbg-dev pkg version: 0.2.0
+	globus_authz_gaa_callout-gcc32dbg-rtl pkg version: 0.2.0
+	globus_authz_null_callout-gcc32-dev pkg version: 0.1.0
+	globus_authz_null_callout-gcc32-rtl pkg version: 0.1.0
+	globus_authz_null_callout-gcc32dbg-dev pkg version: 0.1.0
+	globus_authz_null_callout-gcc32dbg-rtl pkg version: 0.1.0
+	globus_authz_test-gcc32-dev pkg version: 0.2.0
+	globus_authz_test-gcc32-pgm pkg version: 0.2.0
+	globus_authz_test-gcc32-rtl pkg version: 0.2.0
+	globus_authz_test-noflavor-data pkg version: 0.2.0
+	globus_c_delegation_client_bindings-gcc32-dev pkg version: 1.7.0
+	globus_c_delegation_client_bindings-gcc32-rtl pkg version: 1.7.0
+	globus_c_delegation_client_bindings-gcc32dbg-dev pkg version: 1.7.0
+	globus_c_delegation_client_bindings-gcc32dbg-rtl pkg version: 1.7.0
+	globus_c_delegation_client_util-gcc32-dev pkg version: 0.4.0
+	globus_c_delegation_client_util-gcc32-rtl pkg version: 0.4.0
+	globus_c_delegation_client_util-gcc32dbg-dev pkg version: 0.4.0
+	globus_c_delegation_client_util-gcc32dbg-rtl pkg version: 0.4.0
+	globus_c_gram_client_bindings-gcc32-dev pkg version: 1.6.0
+	globus_c_gram_client_bindings-gcc32-rtl pkg version: 1.6.0
+	globus_c_gram_client_bindings-gcc32dbg-dev pkg version: 1.6.0
+	globus_c_gram_client_bindings-gcc32dbg-rtl pkg version: 1.6.0
+	globus_c_rendezvous_client_bindings-gcc32-dev pkg version: 1.5.0
+	globus_c_rendezvous_client_bindings-gcc32-rtl pkg version: 1.5.0
+	globus_c_rendezvous_client_bindings-gcc32dbg-dev pkg version: 1.5.0
+	globus_c_rendezvous_client_bindings-gcc32dbg-rtl pkg version: 1.5.0
+	globus_c_rft_client_bindings-gcc32-dev pkg version: 1.5.0
+	globus_c_rft_client_bindings-gcc32-rtl pkg version: 1.5.0
+	globus_c_rft_client_bindings-gcc32dbg-dev pkg version: 1.5.0
+	globus_c_rft_client_bindings-gcc32dbg-rtl pkg version: 1.5.0
+	globus_c_ws_messaging-gcc32-dev pkg version: 2.11.0
+	globus_c_ws_messaging-gcc32-pgm pkg version: 2.11.0
+	globus_c_ws_messaging-gcc32-rtl pkg version: 2.11.0
+	globus_c_ws_messaging-gcc32dbg-dev pkg version: 2.11.0
+	globus_c_ws_messaging-gcc32dbg-rtl pkg version: 2.11.0
+	globus_c_ws_messaging_test-gcc32-pgm pkg version: 0.4.0
+	globus_c_ws_messaging_test-noflavor-data pkg version: 0.4.0
+	globus_c_ws_security-gcc32-dev pkg version: 0.3.0
+	globus_c_ws_security-gcc32-rtl pkg version: 0.3.0
+	globus_c_ws_security-gcc32dbg-dev pkg version: 0.3.0
+	globus_c_ws_security-gcc32dbg-rtl pkg version: 0.3.0
+	globus_c_wsdl_parser-gcc32-pgm pkg version: 0.13.0
+	globus_c_wsrf_cgen-gcc32-pgm pkg version: 0.31.0
+	globus_c_wsrf_cgen-noflavor-data pkg version: 0.31.0
+	globus_c_wsrf_core_bindings-gcc32-dev pkg version: 0.9.0
+	globus_c_wsrf_core_bindings-gcc32-rtl pkg version: 0.9.0
+	globus_c_wsrf_core_bindings-gcc32dbg-dev pkg version: 0.9.0
+	globus_c_wsrf_core_bindings-gcc32dbg-rtl pkg version: 0.9.0
+	globus_c_wsrf_core_performance_test-gcc32-pgm pkg version: 0.6.0
+	globus_c_wsrf_core_performance_test-noflavor-data pkg version: 0.6.0
+	globus_c_wsrf_core_test_interop_bindings-gcc32-dev pkg version: 1.6.0
+	globus_c_wsrf_core_test_interop_bindings-gcc32-rtl pkg version: 1.6.0
+	globus_c_wsrf_core_test_interop_client_test-gcc32-pgm pkg version: 0.6.0
+	globus_c_wsrf_core_test_interop_client_test-noflavor-data pkg version: 0.6.0
+	globus_c_wsrf_core_tools-gcc32-dev pkg version: 0.7.0
+	globus_c_wsrf_core_tools-gcc32-rtl pkg version: 0.7.0
+	globus_c_wsrf_core_tools-gcc32dbg-dev pkg version: 0.7.0
+	globus_c_wsrf_core_tools-gcc32dbg-rtl pkg version: 0.7.0
+	globus_c_wsrf_notification_test-gcc32-pgm pkg version: 0.8.0
+	globus_c_wsrf_notification_test-noflavor-data pkg version: 0.8.0
+	globus_c_wsrf_provider_test-gcc32-pgm pkg version: 0.4.0
+	globus_c_wsrf_provider_test-noflavor-data pkg version: 0.4.0
+	globus_c_wsrf_providers-gcc32-dev pkg version: 0.6.0
+	globus_c_wsrf_providers-gcc32-rtl pkg version: 0.6.0
+	globus_c_wsrf_providers-gcc32dbg-dev pkg version: 0.6.0
+	globus_c_wsrf_providers-gcc32dbg-rtl pkg version: 0.6.0
+	globus_c_wsrf_providers_test_service_bindings-gcc32-dev pkg version: 1.6.0
+	globus_c_wsrf_providers_test_service_bindings-gcc32-rtl pkg version: 1.6.0
+	globus_c_wsrf_providers_test_wsdl-noflavor-data pkg version: 0.1.0
+	globus_c_wsrf_rendezvous_test-gcc32-pgm pkg version: 0.5.0
+	globus_c_wsrf_rendezvous_test-noflavor-data pkg version: 0.5.0
+	globus_c_wsrf_resource-gcc32-dev pkg version: 0.6.0
+	globus_c_wsrf_resource-gcc32-rtl pkg version: 0.6.0
+	globus_c_wsrf_resource-gcc32dbg-dev pkg version: 0.6.0
+	globus_c_wsrf_resource-gcc32dbg-rtl pkg version: 0.6.0
+	globus_c_wsrf_resource_test-gcc32-pgm pkg version: 0.1.0
+	globus_c_wsrf_resource_test-noflavor-data pkg version: 0.1.0
+	globus_c_wsrf_sample_counter_bindings-gcc32-dev pkg version: 1.7.0
+	globus_c_wsrf_sample_counter_bindings-gcc32-rtl pkg version: 1.7.0
+	globus_c_wsrf_sample_counter_bindings-gcc32dbg-dev pkg version: 1.7.0
+	globus_c_wsrf_sample_counter_bindings-gcc32dbg-rtl pkg version: 1.7.0
+	globus_c_wsrf_sample_counter_client_test-gcc32-pgm pkg version: 0.4.0
+	globus_c_wsrf_sample_counter_client_test-noflavor-data pkg version: 0.4.0
+	globus_c_wsrf_sample_secure_counter_service-gcc32-dev pkg version: 1.8.0
+	globus_c_wsrf_sample_secure_counter_service-gcc32-rtl pkg version: 1.8.0
+	globus_c_wsrf_sample_secure_counter_service-gcc32dbg-dev pkg version: 1.8.0
+	globus_c_wsrf_sample_secure_counter_service-gcc32dbg-rtl pkg version: 1.8.0
+	globus_callout-gcc32-dev pkg version: 0.6.0
+	globus_callout-gcc32-rtl pkg version: 0.6.0
+	globus_callout-gcc32dbg-dev pkg version: 0.6.0
+	globus_callout-gcc32dbg-rtl pkg version: 0.6.0
+	globus_callout-gcc32dbgpthr-dev pkg version: 0.6.0
+	globus_callout-gcc32dbgpthr-rtl pkg version: 0.6.0
+	globus_callout-gcc32pthr-dev pkg version: 0.6.0
+	globus_callout-gcc32pthr-rtl pkg version: 0.6.0
+	globus_common-gcc32-dev pkg version: 7.30.4
+	globus_common-gcc32-pgm pkg version: 7.30.4
+	globus_common-gcc32-rtl pkg version: 7.30.4
+	globus_common-gcc32dbg-dev pkg version: 7.30.4
+	globus_common-gcc32dbg-rtl pkg version: 7.30.4
+	globus_common-gcc32dbgpthr-dev pkg version: 7.30.4
+	globus_common-gcc32dbgpthr-rtl pkg version: 7.30.4
+	globus_common-gcc32pthr-dev pkg version: 7.30.4
+	globus_common-gcc32pthr-rtl pkg version: 7.30.4
+	globus_common_setup-noflavor-pgm pkg version: 2.6.0
+	globus_common_test-gcc32-pgm pkg version: 2.3.0
+	globus_common_test-noflavor-data pkg version: 2.3.0
+	globus_core-gcc32dbg-dev pkg version: 4.30.0
+	globus_core-gcc32dbg-pgm pkg version: 4.30.0
+	globus_core-gcc32dbg-rtl pkg version: 4.30.0
+	globus_core-gcc32dbgpthr-dev pkg version: 4.30.0
+	globus_core-gcc32dbgpthr-pgm pkg version: 4.30.0
+	globus_core-gcc32dbgpthr-rtl pkg version: 4.30.0
+	globus_core-noflavor-data pkg version: 4.30.0
+	globus_data_conversion-gcc32-dev pkg version: 2.1.0
+	globus_data_conversion-gcc32-rtl pkg version: 2.1.0
+	globus_data_conversion-gcc32dbg-dev pkg version: 2.1.0
+	globus_data_conversion-gcc32dbg-rtl pkg version: 2.1.0
+	globus_data_conversion-gcc32dbgpthr-dev pkg version: 2.1.0
+	globus_data_conversion-gcc32dbgpthr-rtl pkg version: 2.1.0
+	globus_data_conversion-gcc32pthr-dev pkg version: 2.1.0
+	globus_data_conversion-gcc32pthr-rtl pkg version: 2.1.0
+	globus_database_common-noflavor-pgm pkg version: 0.2.0 software version: 0.1
+	globus_database_iodbc-gcc32dbgpthr-dev pkg version: 0.1.0 software version: 3.51.2
+	globus_database_iodbc-gcc32dbgpthr-rtl pkg version: 0.1.0 software version: 3.51.2
+	globus_database_iodbc-gcc32pthr-dev pkg version: 0.1.0 software version: 3.51.2
+	globus_database_iodbc-gcc32pthr-pgm pkg version: 0.1.0 software version: 3.51.2
+	globus_database_iodbc-gcc32pthr-rtl pkg version: 0.1.0 software version: 3.51.2
+	globus_database_sqlite-gcc32dbgpthr-dev pkg version: 0.2.0 software version: 3.3.17
+	globus_database_sqlite-gcc32dbgpthr-rtl pkg version: 0.2.0 software version: 3.3.17
+	globus_database_sqlite-gcc32pthr-dev pkg version: 0.2.0 software version: 3.3.17
+	globus_database_sqlite-gcc32pthr-pgm pkg version: 0.2.0 software version: 3.3.17
+	globus_database_sqlite-gcc32pthr-rtl pkg version: 0.2.0 software version: 3.3.17
+	globus_database_sqliteodbc-gcc32dbgpthr-dev pkg version: 0.2.0 software version: 0.74
+	globus_database_sqliteodbc-gcc32dbgpthr-rtl pkg version: 0.2.0 software version: 0.74
+	globus_database_sqliteodbc-gcc32pthr-dev pkg version: 0.2.0 software version: 0.74
+	globus_database_sqliteodbc-gcc32pthr-rtl pkg version: 0.2.0 software version: 0.74
+	globus_duct_common-gcc32-dev pkg version: 2.1.0
+	globus_duct_common-gcc32-rtl pkg version: 2.1.0
+	globus_duct_common-gcc32dbg-dev pkg version: 2.1.0
+	globus_duct_common-gcc32dbg-rtl pkg version: 2.1.0
+	globus_duct_common-gcc32dbgpthr-dev pkg version: 2.1.0
+	globus_duct_common-gcc32dbgpthr-rtl pkg version: 2.1.0
+	globus_duct_common-gcc32pthr-dev pkg version: 2.1.0
+	globus_duct_common-gcc32pthr-rtl pkg version: 2.1.0
+	globus_duct_control-gcc32-dev pkg version: 2.1.0
+	globus_duct_control-gcc32-rtl pkg version: 2.1.0
+	globus_duct_control-gcc32dbg-dev pkg version: 2.1.0
+	globus_duct_control-gcc32dbg-rtl pkg version: 2.1.0
+	globus_duct_control-gcc32dbgpthr-dev pkg version: 2.1.0
+	globus_duct_control-gcc32dbgpthr-rtl pkg version: 2.1.0
+	globus_duct_control-gcc32pthr-dev pkg version: 2.1.0
+	globus_duct_control-gcc32pthr-rtl pkg version: 2.1.0
+	globus_duct_runtime-gcc32-dev pkg version: 2.1.0
+	globus_duct_runtime-gcc32-rtl pkg version: 2.1.0
+	globus_duct_runtime-gcc32dbg-dev pkg version: 2.1.0
+	globus_duct_runtime-gcc32dbg-rtl pkg version: 2.1.0
+	globus_duct_runtime-gcc32dbgpthr-dev pkg version: 2.1.0
+	globus_duct_runtime-gcc32dbgpthr-rtl pkg version: 2.1.0
+	globus_duct_runtime-gcc32pthr-dev pkg version: 2.1.0
+	globus_duct_runtime-gcc32pthr-rtl pkg version: 2.1.0
+	globus_duroc_bootstrap-gcc32-dev pkg version: 2.1.0
+	globus_duroc_bootstrap-gcc32-rtl pkg version: 2.1.0
+	globus_duroc_bootstrap-gcc32dbg-dev pkg version: 2.1.0
+	globus_duroc_bootstrap-gcc32dbg-rtl pkg version: 2.1.0
+	globus_duroc_bootstrap-gcc32dbgpthr-dev pkg version: 2.1.0
+	globus_duroc_bootstrap-gcc32dbgpthr-rtl pkg version: 2.1.0
+	globus_duroc_bootstrap-gcc32pthr-dev pkg version: 2.1.0
+	globus_duroc_bootstrap-gcc32pthr-rtl pkg version: 2.1.0
+	globus_duroc_common-gcc32-dev pkg version: 2.1.0
+	globus_duroc_common-gcc32-rtl pkg version: 2.1.0
+	globus_duroc_common-gcc32dbg-dev pkg version: 2.1.0
+	globus_duroc_common-gcc32dbg-rtl pkg version: 2.1.0
+	globus_duroc_common-gcc32dbgpthr-dev pkg version: 2.1.0
+	globus_duroc_common-gcc32dbgpthr-rtl pkg version: 2.1.0
+	globus_duroc_common-gcc32pthr-dev pkg version: 2.1.0
+	globus_duroc_common-gcc32pthr-rtl pkg version: 2.1.0
+	globus_duroc_control-gcc32-dev pkg version: 2.1.0
+	globus_duroc_control-gcc32-rtl pkg version: 2.1.0
+	globus_duroc_control-gcc32dbg-dev pkg version: 2.1.0
+	globus_duroc_control-gcc32dbg-rtl pkg version: 2.1.0
+	globus_duroc_control-gcc32dbgpthr-dev pkg version: 2.1.0
+	globus_duroc_control-gcc32dbgpthr-rtl pkg version: 2.1.0
+	globus_duroc_control-gcc32pthr-dev pkg version: 2.1.0
+	globus_duroc_control-gcc32pthr-rtl pkg version: 2.1.0
+	globus_duroc_runtime-gcc32-dev pkg version: 2.1.0
+	globus_duroc_runtime-gcc32-rtl pkg version: 2.1.0
+	globus_duroc_runtime-gcc32dbg-dev pkg version: 2.1.0
+	globus_duroc_runtime-gcc32dbg-rtl pkg version: 2.1.0
+	globus_duroc_runtime-gcc32dbgpthr-dev pkg version: 2.1.0
+	globus_duroc_runtime-gcc32dbgpthr-rtl pkg version: 2.1.0
+	globus_duroc_runtime-gcc32pthr-dev pkg version: 2.1.0
+	globus_duroc_runtime-gcc32pthr-rtl pkg version: 2.1.0
+	globus_fork_starter-gcc32-pgm pkg version: 0.3.0
+	globus_ftp_client-gcc32-dev pkg version: 3.6.2
+	globus_ftp_client-gcc32-rtl pkg version: 3.6.2
+	globus_ftp_client-gcc32dbg-dev pkg version: 3.6.2
+	globus_ftp_client-gcc32dbg-rtl pkg version: 3.6.2
+	globus_ftp_client-gcc32dbgpthr-dev pkg version: 3.6.2
+	globus_ftp_client-gcc32dbgpthr-rtl pkg version: 3.6.2
+	globus_ftp_client-gcc32pthr-dev pkg version: 3.6.2
+	globus_ftp_client-gcc32pthr-rtl pkg version: 3.6.2
+	globus_ftp_client_test-gcc32-pgm pkg version: 1.9.0
+	globus_ftp_client_test-gcc32-rtl pkg version: 1.9.0
+	globus_ftp_client_test-noflavor-data pkg version: 1.9.0
+	globus_ftp_control-gcc32-dev pkg version: 2.6.1
+	globus_ftp_control-gcc32-rtl pkg version: 2.6.1
+	globus_ftp_control-gcc32dbg-dev pkg version: 2.6.1
+	globus_ftp_control-gcc32dbg-rtl pkg version: 2.6.1
+	globus_ftp_control-gcc32dbgpthr-dev pkg version: 2.6.1
+	globus_ftp_control-gcc32dbgpthr-rtl pkg version: 2.6.1
+	globus_ftp_control-gcc32pthr-dev pkg version: 2.6.1
+	globus_ftp_control-gcc32pthr-rtl pkg version: 2.6.1
+	globus_gaa_authz_callout_setup-noflavor-pgm pkg version: 0.1.0
+	globus_gass_cache-gcc32-dev pkg version: 5.3.0
+	globus_gass_cache-gcc32-rtl pkg version: 5.3.0
+	globus_gass_cache-gcc32dbg-dev pkg version: 5.3.0
+	globus_gass_cache-gcc32dbg-rtl pkg version: 5.3.0
+	globus_gass_cache-gcc32dbgpthr-dev pkg version: 5.3.0
+	globus_gass_cache-gcc32dbgpthr-rtl pkg version: 5.3.0
+	globus_gass_cache-gcc32pthr-dev pkg version: 5.3.0
+	globus_gass_cache-gcc32pthr-rtl pkg version: 5.3.0
+	globus_gass_cache_program-gcc32-pgm pkg version: 2.7.0
+	globus_gass_copy-gcc32-dev pkg version: 3.23.1
+	globus_gass_copy-gcc32-pgm pkg version: 3.23.1
+	globus_gass_copy-gcc32-rtl pkg version: 3.23.1
+	globus_gass_copy-gcc32dbg-dev pkg version: 3.23.1
+	globus_gass_copy-gcc32dbg-rtl pkg version: 3.23.1
+	globus_gass_copy-gcc32dbgpthr-dev pkg version: 3.23.1
+	globus_gass_copy-gcc32dbgpthr-rtl pkg version: 3.23.1
+	globus_gass_copy-gcc32pthr-dev pkg version: 3.23.1
+	globus_gass_copy-gcc32pthr-rtl pkg version: 3.23.1
+	globus_gass_copy_test-noflavor-data pkg version: 0.3.0
+	globus_gass_copy_test-noflavor-pgm pkg version: 0.3.0
+	globus_gass_server_ez-gcc32-dev pkg version: 2.5.0
+	globus_gass_server_ez-gcc32-pgm pkg version: 2.5.0
+	globus_gass_server_ez-gcc32-rtl pkg version: 2.5.0
+	globus_gass_server_ez-gcc32dbg-dev pkg version: 2.5.0
+	globus_gass_server_ez-gcc32dbg-rtl pkg version: 2.5.0
+	globus_gass_server_ez-gcc32dbgpthr-dev pkg version: 2.5.0
+	globus_gass_server_ez-gcc32dbgpthr-rtl pkg version: 2.5.0
+	globus_gass_server_ez-gcc32pthr-dev pkg version: 2.5.0
+	globus_gass_server_ez-gcc32pthr-rtl pkg version: 2.5.0
+	globus_gass_transfer-gcc32-dev pkg version: 2.14.0
+	globus_gass_transfer-gcc32-rtl pkg version: 2.14.0
+	globus_gass_transfer-gcc32dbg-dev pkg version: 2.14.0
+	globus_gass_transfer-gcc32dbg-rtl pkg version: 2.14.0
+	globus_gass_transfer-gcc32dbgpthr-dev pkg version: 2.14.0
+	globus_gass_transfer-gcc32dbgpthr-rtl pkg version: 2.14.0
+	globus_gass_transfer-gcc32pthr-dev pkg version: 2.14.0
+	globus_gass_transfer-gcc32pthr-rtl pkg version: 2.14.0
+	globus_gatekeeper-gcc32-pgm pkg version: 3.1.1
+	globus_gatekeeper_setup-noflavor-pgm pkg version: 2.2.0
+	globus_globusrun_ws-gcc32-pgm pkg version: 0.17.0
+	globus_gram_client-gcc32-dev pkg version: 5.6.2
+	globus_gram_client-gcc32-rtl pkg version: 5.6.2
+	globus_gram_client-gcc32dbg-dev pkg version: 5.6.2
+	globus_gram_client-gcc32dbg-rtl pkg version: 5.6.2
+	globus_gram_client-gcc32dbgpthr-dev pkg version: 5.6.2
+	globus_gram_client-gcc32dbgpthr-rtl pkg version: 5.6.2
+	globus_gram_client-gcc32pthr-dev pkg version: 5.6.2
+	globus_gram_client-gcc32pthr-rtl pkg version: 5.6.2
+	globus_gram_client_test-gcc32-pgm pkg version: 2.10.0
+	globus_gram_client_tools-gcc32-pgm pkg version: 4.7.2
+	globus_gram_client_tools_test-noflavor-data pkg version: 0.6.1
+	globus_gram_client_tools_test-noflavor-pgm pkg version: 0.6.1
+	globus_gram_job_manager-gcc32-pgm pkg version: 7.6.2
+	globus_gram_job_manager-noflavor-data pkg version: 7.6.2
+	globus_gram_job_manager-noflavor-doc pkg version: 7.6.2
+	globus_gram_job_manager_callout_error-gcc32-dev pkg version: 0.2.0
+	globus_gram_job_manager_callout_error-gcc32-rtl pkg version: 0.2.0
+	globus_gram_job_manager_callout_error-gcc32dbg-dev pkg version: 0.2.0
+	globus_gram_job_manager_callout_error-gcc32dbg-rtl pkg version: 0.2.0
+	globus_gram_job_manager_setup-noflavor-doc pkg version: 3.8.0
+	globus_gram_job_manager_setup-noflavor-pgm pkg version: 3.8.0
+	globus_gram_job_manager_setup_fork-noflavor-pgm pkg version: 2.10.0
+	globus_gram_job_manager_test-noflavor-data pkg version: 1.6.0
+	globus_gram_job_manager_test-noflavor-pgm pkg version: 1.6.0
+	globus_gram_local_proxy_tool-noflavor-data pkg version: 0.6.0
+	globus_gram_local_proxy_tool-noflavor-pgm pkg version: 0.6.0
+	globus_gram_myjob-gcc32-dev pkg version: 2.2.0
+	globus_gram_myjob-gcc32-rtl pkg version: 2.2.0
+	globus_gram_myjob-gcc32dbg-dev pkg version: 2.2.0
+	globus_gram_myjob-gcc32dbg-rtl pkg version: 2.2.0
+	globus_gram_myjob-gcc32dbgpthr-dev pkg version: 2.2.0
+	globus_gram_myjob-gcc32dbgpthr-rtl pkg version: 2.2.0
+	globus_gram_myjob-gcc32pthr-dev pkg version: 2.2.0
+	globus_gram_myjob-gcc32pthr-rtl pkg version: 2.2.0
+	globus_gram_protocol-gcc32-dev pkg version: 6.8.3
+	globus_gram_protocol-gcc32-pgm pkg version: 6.8.3
+	globus_gram_protocol-gcc32-rtl pkg version: 6.8.3
+	globus_gram_protocol-gcc32dbg-dev pkg version: 6.8.3
+	globus_gram_protocol-gcc32dbg-rtl pkg version: 6.8.3
+	globus_gram_protocol-gcc32dbgpthr-dev pkg version: 6.8.3
+	globus_gram_protocol-gcc32dbgpthr-rtl pkg version: 6.8.3
+	globus_gram_protocol-gcc32pthr-dev pkg version: 6.8.3
+	globus_gram_protocol-gcc32pthr-rtl pkg version: 6.8.3
+	globus_gram_protocol-noflavor-data pkg version: 6.8.3
+	globus_gram_protocol-noflavor-doc pkg version: 6.8.3
+	globus_gram_protocol_test-gcc32-pgm pkg version: 4.3.0
+	globus_gridftp_server-gcc32-dev pkg version: 2.7.2
+	globus_gridftp_server-gcc32-pgm pkg version: 2.7.2
+	globus_gridftp_server-gcc32-rtl pkg version: 2.7.2
+	globus_gridftp_server-gcc32dbg-dev pkg version: 2.7.2
+	globus_gridftp_server-gcc32dbg-rtl pkg version: 2.7.2
+	globus_gridftp_server_control-gcc32-dev pkg version: 0.20.0
+	globus_gridftp_server_control-gcc32-rtl pkg version: 0.20.0
+	globus_gridftp_server_control-gcc32dbg-dev pkg version: 0.20.0
+	globus_gridftp_server_control-gcc32dbg-rtl pkg version: 0.20.0
+	globus_gridmap_and_execute-gcc32-pgm_static pkg version: 0.0.0
+	globus_gridmap_and_execute_test-noflavor-data pkg version: 0.0.0
+	globus_gridmap_and_execute_test-noflavor-pgm_static pkg version: 0.0.0
+	globus_gridmap_callout_error-gcc32-dev pkg version: 0.3.0
+	globus_gridmap_callout_error-gcc32-rtl pkg version: 0.3.0
+	globus_gridmap_callout_error-gcc32dbg-dev pkg version: 0.3.0
+	globus_gridmap_callout_error-gcc32dbg-rtl pkg version: 0.3.0
+	globus_gsi_callback-gcc32-dev pkg version: 0.32.0
+	globus_gsi_callback-gcc32-rtl pkg version: 0.32.0
+	globus_gsi_callback-gcc32dbg-dev pkg version: 0.32.0
+	globus_gsi_callback-gcc32dbg-rtl pkg version: 0.32.0
+	globus_gsi_callback-gcc32dbgpthr-dev pkg version: 0.32.0
+	globus_gsi_callback-gcc32dbgpthr-rtl pkg version: 0.32.0
+	globus_gsi_callback-gcc32pthr-dev pkg version: 0.32.0
+	globus_gsi_callback-gcc32pthr-rtl pkg version: 0.32.0
+	globus_gsi_cert_utils-gcc32-dev pkg version: 2.11.1
+	globus_gsi_cert_utils-gcc32-pgm pkg version: 2.11.1
+	globus_gsi_cert_utils-gcc32-rtl pkg version: 2.11.1
+	globus_gsi_cert_utils-gcc32dbg-dev pkg version: 2.11.1
+	globus_gsi_cert_utils-gcc32dbg-rtl pkg version: 2.11.1
+	globus_gsi_cert_utils-gcc32dbgpthr-dev pkg version: 2.11.1
+	globus_gsi_cert_utils-gcc32dbgpthr-rtl pkg version: 2.11.1
+	globus_gsi_cert_utils-gcc32pthr-dev pkg version: 2.11.1
+	globus_gsi_cert_utils-gcc32pthr-rtl pkg version: 2.11.1
+	globus_gsi_credential-gcc32-dev pkg version: 1.11.0
+	globus_gsi_credential-gcc32-rtl pkg version: 1.11.0
+	globus_gsi_credential-gcc32dbg-dev pkg version: 1.11.0
+	globus_gsi_credential-gcc32dbg-rtl pkg version: 1.11.0
+	globus_gsi_credential-gcc32dbgpthr-dev pkg version: 1.11.0
+	globus_gsi_credential-gcc32dbgpthr-rtl pkg version: 1.11.0
+	globus_gsi_credential-gcc32pthr-dev pkg version: 1.11.0
+	globus_gsi_credential-gcc32pthr-rtl pkg version: 1.11.0
+	globus_gsi_openssl_error-gcc32-dev pkg version: 0.14.0
+	globus_gsi_openssl_error-gcc32-rtl pkg version: 0.14.0
+	globus_gsi_openssl_error-gcc32dbg-dev pkg version: 0.14.0
+	globus_gsi_openssl_error-gcc32dbg-rtl pkg version: 0.14.0
+	globus_gsi_openssl_error-gcc32dbgpthr-dev pkg version: 0.14.0
+	globus_gsi_openssl_error-gcc32dbgpthr-rtl pkg version: 0.14.0
+	globus_gsi_openssl_error-gcc32pthr-dev pkg version: 0.14.0
+	globus_gsi_openssl_error-gcc32pthr-rtl pkg version: 0.14.0
+	globus_gsi_proxy_core-gcc32-dev pkg version: 2.6.1
+	globus_gsi_proxy_core-gcc32-rtl pkg version: 2.6.1
+	globus_gsi_proxy_core-gcc32dbg-dev pkg version: 2.6.1
+	globus_gsi_proxy_core-gcc32dbg-rtl pkg version: 2.6.1
+	globus_gsi_proxy_core-gcc32dbgpthr-dev pkg version: 2.6.1
+	globus_gsi_proxy_core-gcc32dbgpthr-rtl pkg version: 2.6.1
+	globus_gsi_proxy_core-gcc32pthr-dev pkg version: 2.6.1
+	globus_gsi_proxy_core-gcc32pthr-rtl pkg version: 2.6.1
+	globus_gsi_proxy_ssl-gcc32-dev pkg version: 1.5.0
+	globus_gsi_proxy_ssl-gcc32-rtl pkg version: 1.5.0
+	globus_gsi_proxy_ssl-gcc32dbg-dev pkg version: 1.5.0
+	globus_gsi_proxy_ssl-gcc32dbg-rtl pkg version: 1.5.0
+	globus_gsi_proxy_ssl-gcc32dbgpthr-dev pkg version: 1.5.0
+	globus_gsi_proxy_ssl-gcc32dbgpthr-rtl pkg version: 1.5.0
+	globus_gsi_proxy_ssl-gcc32pthr-dev pkg version: 1.5.0
+	globus_gsi_proxy_ssl-gcc32pthr-rtl pkg version: 1.5.0
+	globus_gsi_sysconfig-gcc32-dev pkg version: 1.22.0
+	globus_gsi_sysconfig-gcc32-rtl pkg version: 1.22.0
+	globus_gsi_sysconfig-gcc32dbg-dev pkg version: 1.22.0
+	globus_gsi_sysconfig-gcc32dbg-rtl pkg version: 1.22.0
+	globus_gsi_sysconfig-gcc32dbgpthr-dev pkg version: 1.22.0
+	globus_gsi_sysconfig-gcc32dbgpthr-rtl pkg version: 1.22.0
+	globus_gsi_sysconfig-gcc32pthr-dev pkg version: 1.22.0
+	globus_gsi_sysconfig-gcc32pthr-rtl pkg version: 1.22.0
+	globus_gss_assist-gcc32-dev pkg version: 3.25.0
+	globus_gss_assist-gcc32-pgm pkg version: 3.25.0
+	globus_gss_assist-gcc32-rtl pkg version: 3.25.0
+	globus_gss_assist-gcc32dbg-dev pkg version: 3.25.0
+	globus_gss_assist-gcc32dbg-rtl pkg version: 3.25.0
+	globus_gss_assist-gcc32dbgpthr-dev pkg version: 3.25.0
+	globus_gss_assist-gcc32dbgpthr-rtl pkg version: 3.25.0
+	globus_gss_assist-gcc32pthr-dev pkg version: 3.25.0
+	globus_gss_assist-gcc32pthr-rtl pkg version: 3.25.0
+	globus_gssapi_gsi-gcc32-dev pkg version: 4.14.0
+	globus_gssapi_gsi-gcc32-rtl pkg version: 4.14.0
+	globus_gssapi_gsi-gcc32dbg-dev pkg version: 4.14.0
+	globus_gssapi_gsi-gcc32dbg-rtl pkg version: 4.14.0
+	globus_gssapi_gsi-gcc32dbgpthr-dev pkg version: 4.14.0
+	globus_gssapi_gsi-gcc32dbgpthr-rtl pkg version: 4.14.0
+	globus_gssapi_gsi-gcc32pthr-dev pkg version: 4.14.0
+	globus_gssapi_gsi-gcc32pthr-rtl pkg version: 4.14.0
+	globus_gssapi_gsi_test-gcc32-pgm pkg version: 0.6.0
+	globus_gssapi_gsi_test-noflavor-data pkg version: 0.6.0
+	globus_handler_debug-gcc32-dev pkg version: 0.5.0
+	globus_handler_debug-gcc32-rtl pkg version: 0.5.0
+	globus_handler_debug-gcc32dbg-dev pkg version: 0.5.0
+	globus_handler_debug-gcc32dbg-rtl pkg version: 0.5.0
+	globus_handler_ws_addressing-gcc32-dev pkg version: 0.8.0
+	globus_handler_ws_addressing-gcc32-rtl pkg version: 0.8.0
+	globus_handler_ws_addressing-gcc32dbg-dev pkg version: 0.8.0
+	globus_handler_ws_addressing-gcc32dbg-rtl pkg version: 0.8.0
+	globus_handler_ws_secure_message-gcc32-dev pkg version: 0.6.0
+	globus_handler_ws_secure_message-gcc32-rtl pkg version: 0.6.0
+	globus_handler_ws_secure_message-gcc32dbg-dev pkg version: 0.6.0
+	globus_handler_ws_secure_message-gcc32dbg-rtl pkg version: 0.6.0
+	globus_io-gcc32-dev pkg version: 6.0.3
+	globus_io-gcc32-rtl pkg version: 6.0.3
+	globus_io-gcc32dbg-dev pkg version: 6.0.3
+	globus_io-gcc32dbg-rtl pkg version: 6.0.3
+	globus_io-gcc32dbgpthr-dev pkg version: 6.0.3
+	globus_io-gcc32dbgpthr-rtl pkg version: 6.0.3
+	globus_io-gcc32pthr-dev pkg version: 6.0.3
+	globus_io-gcc32pthr-rtl pkg version: 6.0.3
+	globus_io_test-gcc32-pgm pkg version: 2.5.0
+	globus_io_test-noflavor-data pkg version: 2.5.0
+	globus_java_container_admin_tools-gcc32-pgm pkg version: 0.10.0
+	globus_java_ws_core-noflavor-pgm pkg version: 1.24.1 software version: 0.1
+	globus_java_ws_core_authz_sample-noflavor-pgm pkg version: 0.1.0 software version: 0.1
+	globus_java_ws_core_common-noflavor-pgm pkg version: 0.25.0 software version: 0.1
+	globus_java_ws_core_counter_sample-noflavor-pgm pkg version: 0.3.0 software version: 0.1
+	globus_java_ws_core_management_sample-noflavor-pgm pkg version: 0.1.0 software version: 0.1
+	globus_java_ws_core_registry-noflavor-pgm pkg version: 0.3.0 software version: 0.1
+	globus_java_ws_core_test_base-noflavor-pgm pkg version: 0.1.0 software version: 0.1
+	globus_java_ws_core_test_interop-noflavor-pgm pkg version: 0.2.0 software version: 0.1
+	globus_java_ws_core_test_unit-noflavor-pgm pkg version: 0.5.0 software version: 0.1
+	globus_java_ws_core_tools-noflavor-pgm pkg version: 0.4.0 software version: 0.1
+	globus_java_ws_core_tools_test-noflavor-pgm pkg version: 0.1.0 software version: 0.1
+	globus_java_ws_core_usage-noflavor-pgm pkg version: 0.2.0 software version: 0.1.0
+	globus_js-gcc32-dev pkg version: 1.0.1 software version: 1.60
+	globus_js-gcc32-rtl pkg version: 1.0.1 software version: 1.60
+	globus_js-gcc32dbg-dev pkg version: 1.0.1 software version: 1.60
+	globus_js-gcc32dbg-rtl pkg version: 1.0.1 software version: 1.60
+	globus_js-noflavor-data pkg version: 1.0.1 software version: 1.60
+	globus_libtool-gcc32-dev pkg version: 1.1.0 software version: 1.5.8
+	globus_libtool-gcc32-pgm pkg version: 1.1.0 software version: 1.5.8
+	globus_libtool-gcc32-rtl pkg version: 1.1.0 software version: 1.5.8
+	globus_libtool-gcc32dbg-dev pkg version: 1.1.0 software version: 1.5.8
+	globus_libtool-gcc32dbg-rtl pkg version: 1.1.0 software version: 1.5.8
+	globus_libtool-gcc32dbgpthr-dev pkg version: 1.1.0 software version: 1.5.8
+	globus_libtool-gcc32dbgpthr-rtl pkg version: 1.1.0 software version: 1.5.8
+	globus_libtool-gcc32pthr-dev pkg version: 1.1.0 software version: 1.5.8
+	globus_libtool-gcc32pthr-rtl pkg version: 1.1.0 software version: 1.5.8
+	globus_libxml2-gcc32-dev pkg version: 0.14.0
+	globus_libxml2-gcc32-rtl pkg version: 0.14.0
+	globus_libxml2-gcc32dbg-dev pkg version: 0.14.0
+	globus_libxml2-gcc32dbg-rtl pkg version: 0.14.0
+	globus_libxml2-noflavor-data pkg version: 0.14.0
+	globus_libxml2-noflavor-doc pkg version: 0.14.0
+	globus_mp-gcc32-dev pkg version: 2.1.0
+	globus_mp-gcc32-rtl pkg version: 2.1.0
+	globus_mp-gcc32dbg-dev pkg version: 2.1.0
+	globus_mp-gcc32dbg-rtl pkg version: 2.1.0
+	globus_mp-gcc32dbgpthr-dev pkg version: 2.1.0
+	globus_mp-gcc32dbgpthr-rtl pkg version: 2.1.0
+	globus_mp-gcc32pthr-dev pkg version: 2.1.0
+	globus_mp-gcc32pthr-rtl pkg version: 2.1.0
+	globus_nexus-gcc32-dev pkg version: 6.7.0
+	globus_nexus-gcc32-rtl pkg version: 6.7.0
+	globus_nexus-gcc32dbg-dev pkg version: 6.7.0
+	globus_nexus-gcc32dbg-rtl pkg version: 6.7.0
+	globus_nexus-gcc32dbgpthr-dev pkg version: 6.7.0
+	globus_nexus-gcc32dbgpthr-rtl pkg version: 6.7.0
+	globus_nexus-gcc32pthr-dev pkg version: 6.7.0
+	globus_nexus-gcc32pthr-rtl pkg version: 6.7.0
+	globus_notification_consumer-gcc32-dev pkg version: 0.4.0
+	globus_notification_consumer-gcc32-rtl pkg version: 0.4.0
+	globus_notification_consumer-gcc32dbg-dev pkg version: 0.4.0
+	globus_notification_consumer-gcc32dbg-rtl pkg version: 0.4.0
+	globus_openssl-gcc32-dev pkg version: 1.20.0 software version: 0.9.7d
+	globus_openssl-gcc32-pgm pkg version: 1.20.0 software version: 0.9.7d
+	globus_openssl-gcc32-rtl pkg version: 1.20.0 software version: 0.9.7d
+	globus_openssl-gcc32dbg-dev pkg version: 1.20.0 software version: 0.9.7d
+	globus_openssl-gcc32dbg-rtl pkg version: 1.20.0 software version: 0.9.7d
+	globus_openssl-gcc32dbgpthr-dev pkg version: 1.20.0 software version: 0.9.7d
+	globus_openssl-gcc32dbgpthr-rtl pkg version: 1.20.0 software version: 0.9.7d
+	globus_openssl-gcc32pthr-dev pkg version: 1.20.0 software version: 0.9.7d
+	globus_openssl-gcc32pthr-rtl pkg version: 1.20.0 software version: 0.9.7d
+	globus_openssl_error_test-gcc32-pgm pkg version: 0.3.0
+	globus_openssl_error_test-noflavor-data pkg version: 0.3.0
+	globus_openssl_module-gcc32-dev pkg version: 0.6.0
+	globus_openssl_module-gcc32-rtl pkg version: 0.6.0
+	globus_openssl_module-gcc32dbg-dev pkg version: 0.6.0
+	globus_openssl_module-gcc32dbg-rtl pkg version: 0.6.0
+	globus_openssl_module-gcc32dbgpthr-dev pkg version: 0.6.0
+	globus_openssl_module-gcc32dbgpthr-rtl pkg version: 0.6.0
+	globus_openssl_module-gcc32pthr-dev pkg version: 0.6.0
+	globus_openssl_module-gcc32pthr-rtl pkg version: 0.6.0
+	globus_proxy_ssl_test-gcc32-pgm pkg version: 1.1.0
+	globus_proxy_ssl_test-noflavor-data pkg version: 1.1.0
+	globus_proxy_utils-gcc32-pgm pkg version: 0.18.0
+	globus_rendezvous-gcc32-dev pkg version: 0.7.0
+	globus_rendezvous-gcc32-rtl pkg version: 0.7.0
+	globus_rendezvous-gcc32dbg-dev pkg version: 0.7.0
+	globus_rendezvous-gcc32dbg-rtl pkg version: 0.7.0
+	globus_rls_client-gcc32-dev pkg version: 4.2.0
+	globus_rls_client-gcc32-pgm pkg version: 4.2.0
+	globus_rls_client-gcc32-rtl pkg version: 4.2.0
+	globus_rls_client-gcc32dbg-dev pkg version: 4.2.0
+	globus_rls_client-gcc32dbg-rtl pkg version: 4.2.0
+	globus_rls_client-gcc32dbgpthr-dev pkg version: 4.2.0
+	globus_rls_client-gcc32dbgpthr-rtl pkg version: 4.2.0
+	globus_rls_client-gcc32pthr-dev pkg version: 4.2.0
+	globus_rls_client-gcc32pthr-rtl pkg version: 4.2.0
+	globus_rls_server-gcc32pthr-pgm pkg version: 4.6.0
+	globus_rls_server-noflavor-data pkg version: 4.6.0
+	globus_rls_server_setup-noflavor-pgm pkg version: 4.4.0
+	globus_rsl-gcc32-dev pkg version: 3.2.1
+	globus_rsl-gcc32-rtl pkg version: 3.2.1
+	globus_rsl-gcc32dbg-dev pkg version: 3.2.1
+	globus_rsl-gcc32dbg-rtl pkg version: 3.2.1
+	globus_rsl-gcc32dbgpthr-dev pkg version: 3.2.1
+	globus_rsl-gcc32dbgpthr-rtl pkg version: 3.2.1
+	globus_rsl-gcc32pthr-dev pkg version: 3.2.1
+	globus_rsl-gcc32pthr-rtl pkg version: 3.2.1
+	globus_rsl_assist-gcc32-dev pkg version: 2.1.0
+	globus_rsl_assist-gcc32-rtl pkg version: 2.1.0
+	globus_rsl_assist-gcc32dbg-dev pkg version: 2.1.0
+	globus_rsl_assist-gcc32dbg-rtl pkg version: 2.1.0
+	globus_rsl_assist-gcc32dbgpthr-dev pkg version: 2.1.0
+	globus_rsl_assist-gcc32dbgpthr-rtl pkg version: 2.1.0
+	globus_rsl_assist-gcc32pthr-dev pkg version: 2.1.0
+	globus_rsl_assist-gcc32pthr-rtl pkg version: 2.1.0
+	globus_scheduler_event_generator-gcc32-dev pkg version: 0.8.0
+	globus_scheduler_event_generator-gcc32-pgm pkg version: 0.8.0
+	globus_scheduler_event_generator-gcc32-rtl pkg version: 0.8.0
+	globus_scheduler_event_generator-gcc32dbg-dev pkg version: 0.8.0
+	globus_scheduler_event_generator-gcc32dbg-rtl pkg version: 0.8.0
+	globus_scheduler_event_generator_fork-gcc32-dev pkg version: 0.9.0
+	globus_scheduler_event_generator_fork-gcc32-rtl pkg version: 0.9.0
+	globus_scheduler_event_generator_fork-gcc32dbg-dev pkg version: 0.9.0
+	globus_scheduler_event_generator_fork-gcc32dbg-rtl pkg version: 0.9.0
+	globus_scheduler_event_generator_fork_setup-noflavor-pgm pkg version: 0.0.0
+	globus_scheduler_event_generator_fork_test-gcc32-pgm pkg version: 0.4.0
+	globus_scheduler_event_generator_fork_test-noflavor-data pkg version: 0.4.0
+	globus_scheduler_event_generator_test-gcc32-dev pkg version: 0.1.0
+	globus_scheduler_event_generator_test-gcc32-pgm pkg version: 0.1.0
+	globus_scheduler_event_generator_test-gcc32-rtl pkg version: 0.1.0
+	globus_scheduler_event_generator_test-noflavor-data pkg version: 0.1.0
+	globus_scheduler_provider_setup_fork-noflavor-pgm pkg version: 0.6.0
+	globus_simple_ca-noflavor-pgm pkg version: 0.15.0
+	globus_simple_ca_setup-noflavor-pgm pkg version: 0.29.0
+	globus_test-noflavor-pgm pkg version: 0.1.0
+	globus_test-noflavor-rtl pkg version: 0.1.0
+	globus_usage-gcc32-dev pkg version: 0.6.0
+	globus_usage-gcc32-rtl pkg version: 0.6.0
+	globus_usage-gcc32dbg-dev pkg version: 0.6.0
+	globus_usage-gcc32dbg-rtl pkg version: 0.6.0
+	globus_usage-gcc32dbgpthr-dev pkg version: 0.6.0
+	globus_usage-gcc32dbgpthr-rtl pkg version: 0.6.0
+	globus_usage-gcc32pthr-dev pkg version: 0.6.0
+	globus_usage-gcc32pthr-rtl pkg version: 0.6.0
+	globus_user_env-noflavor-data pkg version: 2.4.0
+	globus_utp-gcc32-dev pkg version: 1.3.0
+	globus_utp-gcc32-pgm pkg version: 1.3.0
+	globus_utp-gcc32-rtl pkg version: 1.3.0
+	globus_ws_core_schema-noflavor-pgm pkg version: 0.2.0 software version: 0.1
+	globus_wsrf_cas_client_java-noflavor-pgm pkg version: 0.4.0 software version: 0.1.0
+	globus_wsrf_cas_common-noflavor-pgm pkg version: 0.2.0 software version: 0.1.0
+	globus_wsrf_cas_service_java-noflavor-pgm pkg version: 0.10.0 software version: 0.1.0
+	globus_wsrf_cas_service_unit_test-noflavor-pgm pkg version: 0.1.0 software version: 0.1.0
+	globus_wsrf_cas_utils_java-noflavor-pgm pkg version: 0.1.0 software version: 0.1.0
+	globus_wsrf_delegation_client_java-noflavor-pgm pkg version: 0.1.0 software version: 0.1.0
+	globus_wsrf_delegation_common-noflavor-pgm pkg version: 0.1.0 software version: 0.1.0
+	globus_wsrf_delegation_service_java-noflavor-pgm pkg version: 0.3.0 software version: 0.1.0
+	globus_wsrf_delegation_service_java_test-noflavor-pgm pkg version: 0.1.0 software version: 0.1.0
+	globus_wsrf_delegation_stubs_java-noflavor-pgm pkg version: 0.1.0 software version: 0.1.0
+	globus_wsrf_gram_client_java-noflavor-pgm pkg version: 0.27.0
+	globus_wsrf_gram_common_java-noflavor-pgm pkg version: 0.10.0 software version: 0.10.0
+	globus_wsrf_gram_common_schema-gcc32-pgm pkg version: 0.11.0 software version: 0.10.0
+	globus_wsrf_gram_job_monitoring_common_java-noflavor-pgm pkg version: 0.6.0 software version: 0.2.0
+	globus_wsrf_gram_scheduler_test-noflavor-data pkg version: 0.22.0 software version: 0.1.0
+	globus_wsrf_gram_scheduler_test-noflavor-pgm pkg version: 0.22.0 software version: 0.1.0
+	globus_wsrf_gram_service_java-noflavor-pgm pkg version: 1.20.1
+	globus_wsrf_gram_service_java_setup_common-noflavor-pgm pkg version: 0.14.0
+	globus_wsrf_gram_service_java_setup_fork-noflavor-pgm pkg version: 0.1.0
+	globus_wsrf_gram_service_java_setup_multi-noflavor-pgm pkg version: 0.0.0
+	globus_wsrf_gram_service_java_test_throughput-noflavor-pgm pkg version: 0.4.0 software version: 0.4.0
+	globus_wsrf_gram_service_java_test_unit-noflavor-pgm pkg version: 0.6.0 software version: 0.2.0
+	globus_wsrf_gram_service_java_usage-noflavor-pgm pkg version: 0.2.0 software version: 0.2.0
+	globus_wsrf_gram_utils_java-noflavor-pgm pkg version: 1.2.1
+	globus_wsrf_mds_aggregator-noflavor-pgm pkg version: 0.52.0 software version: 0.1
+	globus_wsrf_mds_aggregator_schema-noflavor-pgm pkg version: 0.3.0 software version: 0.1
+	globus_wsrf_mds_aggregator_test-noflavor-pgm pkg version: 0.26.0 software version: 0.1
+	globus_wsrf_mds_hawkeye-noflavor-pgm pkg version: 0.7.0 software version: 0.1
+	globus_wsrf_mds_index-noflavor-pgm pkg version: 0.31.0 software version: 0.1
+	globus_wsrf_mds_index_schema-noflavor-pgm pkg version: 0.3.0 software version: 0.1
+	globus_wsrf_mds_index_test-noflavor-pgm pkg version: 0.34.0 software version: 0.1
+	globus_wsrf_mds_trigger-noflavor-pgm pkg version: 1.0.1 software version: 0.1
+	globus_wsrf_mds_trigger_test-noflavor-pgm pkg version: 1.0.1 software version: 0.1
+	globus_wsrf_mds_usefulrp-noflavor-pgm pkg version: 0.27.0 software version: 0.1
+	globus_wsrf_mds_usefulrp_schema-noflavor-pgm pkg version: 0.10.0 software version: 0.1
+	globus_wsrf_mds_webmds-noflavor-pgm pkg version: 1.0.1 software version: 0.1
+	globus_wsrf_mds_webmds_file_source-noflavor-pgm pkg version: 0.3.0 software version: 0.1
+	globus_wsrf_mds_webmds_resource_property_source-noflavor-pgm pkg version: 1.0.1 software version: 0.1
+	globus_wsrf_mds_webmds_xml_dom_source-noflavor-pgm pkg version: 0.3.0 software version: 0.1
+	globus_wsrf_rendezvous_common_java-noflavor-pgm pkg version: 0.8.0 software version: 0.1.0
+	globus_wsrf_rendezvous_common_schema-gcc32-pgm pkg version: 0.8.0 software version: 0.1.0
+	globus_wsrf_rendezvous_service_java-noflavor-pgm pkg version: 0.1.0 software version: 0.1.0
+	globus_wsrf_rft_client_java-noflavor-pgm pkg version: 0.6.0 software version: 0.1.0
+	globus_wsrf_rft_common_java-noflavor-pgm pkg version: 0.2.0 software version: 0.1.0
+	globus_wsrf_rft_common_schema-noflavor-pgm pkg version: 0.2.0 software version: 0.1.0
+	globus_wsrf_rft_service_java-noflavor-pgm pkg version: 0.38.0 software version: 0.1.0
+	globus_wsrf_rft_service_java_setup-noflavor-pgm pkg version: 0.3.0
+	globus_wsrf_rft_service_java_usage-noflavor-pgm pkg version: 0.3.0 software version: 0.2.0
+	globus_wsrf_rft_test-noflavor-pgm pkg version: 0.5.0 software version: 0.1.0
+	globus_wsrf_servicegroup-noflavor-pgm pkg version: 0.56.0 software version: 0.1
+	globus_wsrf_servicegroup_schema-noflavor-pgm pkg version: 0.2.0 software version: 0.1
+	globus_xio-gcc32-dev pkg version: 0.37.0
+	globus_xio-gcc32-rtl pkg version: 0.37.0
+	globus_xio-gcc32dbg-dev pkg version: 0.37.0
+	globus_xio-gcc32dbg-rtl pkg version: 0.37.0
+	globus_xio-gcc32dbgpthr-dev pkg version: 0.37.0
+	globus_xio-gcc32dbgpthr-rtl pkg version: 0.37.0
+	globus_xio-gcc32pthr-dev pkg version: 0.37.0
+	globus_xio-gcc32pthr-rtl pkg version: 0.37.0
+	globus_xio_buffer-gcc32-dev pkg version: 0.8.0
+	globus_xio_buffer-gcc32-rtl pkg version: 0.8.0
+	globus_xio_buffer-gcc32dbg-dev pkg version: 0.8.0
+	globus_xio_buffer-gcc32dbg-rtl pkg version: 0.8.0
+	globus_xio_gridftp_driver-gcc32-dev pkg version: 0.3.0
+	globus_xio_gridftp_driver-gcc32-rtl pkg version: 0.3.0
+	globus_xio_gridftp_driver-gcc32dbg-dev pkg version: 0.3.0
+	globus_xio_gridftp_driver-gcc32dbg-rtl pkg version: 0.3.0
+	globus_xio_gridftp_driver-gcc32dbgpthr-dev pkg version: 0.3.0
+	globus_xio_gridftp_driver-gcc32dbgpthr-rtl pkg version: 0.3.0
+	globus_xio_gridftp_driver-gcc32pthr-dev pkg version: 0.3.0
+	globus_xio_gridftp_driver-gcc32pthr-rtl pkg version: 0.3.0
+	globus_xio_test-gcc32-dev pkg version: 2.10.0
+	globus_xio_test-gcc32-pgm pkg version: 2.10.0
+	globus_xio_test-gcc32-rtl pkg version: 2.10.0
+	globus_xio_test-noflavor-data pkg version: 2.10.0
+	globus_xmlsec1-gcc32-dev pkg version: 1.8.0
+	globus_xmlsec1-gcc32-pgm pkg version: 1.8.0
+	globus_xmlsec1-gcc32-rtl pkg version: 1.8.0
+	globus_xmlsec1-gcc32dbg-dev pkg version: 1.8.0
+	globus_xmlsec1-gcc32dbg-rtl pkg version: 1.8.0
+	globus_xmlsec1-noflavor-doc pkg version: 1.8.0
+	gsi_openssh-gcc32-pgm pkg version: 4.2.0 software version: GSI-OpenSSH 4.2 / OpenSSH 4.7p1 / HPN12v18
+	gsi_openssh_setup-noflavor-pgm pkg version: 4.2.0 software version: GSI-OpenSSH 4.2 / OpenSSH 4.7p1 / HPN12v18
+	gssapi_error-gcc32-dev pkg version: 2.5.0
+	gssapi_error-gcc32-rtl pkg version: 2.5.0
+	gssapi_error-gcc32dbg-dev pkg version: 2.5.0
+	gssapi_error-gcc32dbg-rtl pkg version: 2.5.0
+	gssapi_error-gcc32dbgpthr-dev pkg version: 2.5.0
+	gssapi_error-gcc32dbgpthr-rtl pkg version: 2.5.0
+	gssapi_error-gcc32pthr-dev pkg version: 2.5.0
+	gssapi_error-gcc32pthr-rtl pkg version: 2.5.0
+	myproxy-gcc32-dev pkg version: 4.2.0 software version: NCSA MyProxy v4.2 10 Jan 2008
+	myproxy-gcc32-pgm pkg version: 4.2.0 software version: NCSA MyProxy v4.2 10 Jan 2008
+	myproxy-gcc32-rtl pkg version: 4.2.0 software version: NCSA MyProxy v4.2 10 Jan 2008
+	myproxy-gcc32dbg-dev pkg version: 4.2.0 software version: NCSA MyProxy v4.2 10 Jan 2008
+	myproxy-gcc32dbg-rtl pkg version: 4.2.0 software version: NCSA MyProxy v4.2 10 Jan 2008
+	myproxy-noflavor-data pkg version: 4.2.0 software version: NCSA MyProxy v4.2 10 Jan 2008
+	myproxy-noflavor-doc pkg version: 4.2.0 software version: NCSA MyProxy v4.2 10 Jan 2008

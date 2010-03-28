@@ -1,0 +1,92 @@
+# Generated automatically from Makefile.in by configure.
+# $RCSfile: Makefile.in,v $ $Revision: 1.6 $ $Date: 2006/08/30 03:00:14 $
+# $AIST_Release: 4.2.4 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+include /Users/merzky/links/saga/trunk/adaptors/ninfg/ninfg-adaptor-1112/external/ng-4.2.4/utility/compile/defvar.mk
+
+INVOKE_SERVERS = gt2c gt4py ssh templ
+
+all: client
+
+server:
+	@true
+
+client:
+	@for i in / $(INVOKE_SERVERS) ; do \
+	    case $$i in \
+	    /)  true;; \
+	    *)\
+	        if test -f "./Makefile.$$i" ; then \
+	        ($(MAKE) -f "./Makefile.$$i" client ); \
+	    else \
+	        (cd $$i ; $(MAKE) client ); \
+	    fi \
+	    ;; \
+	    esac; \
+	done
+
+install: install_client
+
+install_server:
+	@true
+
+install_client:
+	@for i in / $(INVOKE_SERVERS) ; do \
+	    case $$i in \
+	    /)  true;; \
+	    *)\
+	        if test -f "./Makefile.$$i" ; then \
+	        ($(MAKE) -f "./Makefile.$$i" install_client ); \
+	    else \
+	        (cd $$i ; $(MAKE) install_client ); \
+	    fi \
+	    ;; \
+	    esac; \
+	done
+
+clean:
+	@for i in / $(INVOKE_SERVERS) ; do \
+	    case $$i in \
+	    /)  true;; \
+	    *)\
+	        if test -f "./Makefile.$$i" ; then \
+	        ($(MAKE) -f "./Makefile.$$i" clean ); \
+	    else \
+	        (cd $$i ; $(MAKE) clean); \
+	    fi \
+	    ;; \
+	    esac; \
+	done
+
+distclean:
+	@for i in / $(INVOKE_SERVERS) ; do \
+	    case $$i in \
+	    /)  true;; \
+	    *)\
+	        if test -f "./Makefile.$$i" ; then \
+	        ($(MAKE) -f "./Makefile.$$i" distclean ); \
+	    else \
+	        (cd $$i ; $(MAKE) distclean ); \
+	    fi \
+	    ;; \
+	    esac; \
+	done
+	$(RM) Makefile
+

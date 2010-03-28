@@ -1,0 +1,15 @@
+Ninf-G Java Client API Known problems
+
++ Building Ninf-G Java Client using java 5.0 causes the following warnings:
+    [javac] Note: Some input files use unchecked or unsafe operations.
+    [javac] Note: Recompile with -Xlint:unchecked for details.
+  Please ignore these warnings since Ninf-G Java Client is written for java 1.4.
+
++ <MDS_SERVER> "server_timeout" is not supported since javax.naming
+  package does not provide necessary functions for supporting this feature.
+
++ <CLIENT> "refresh_credential" will be ignored when using PreWS GRAM
+  without Invoke Server since GT4 library does not provide necessary
+  functions for supporting this feature.
+
++ <CLIENT> "tmp_dir" or the system properties of "TMP_DIR" are not supported.

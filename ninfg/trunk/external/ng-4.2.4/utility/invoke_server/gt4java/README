@@ -1,0 +1,55 @@
+Ninf-G4 Invoke Server GT4java
+
+This is the "invoke server" for GT4 WS GRAM written in java.
+Although the "invoke server" GT4py is included in Ninf-G4, it does not
+work on Windows.  "Invoke server" GT4java enables Ninf-G client running
+on Windows to call WS GRAM.
+
+Currently, many features such as "redirect_outerr, "staging", and some
+other attributes of the client configuration file are not supported by
+the "invoke server" GT4java.
+
+1. Prerequisite
+   - Java(JRE): 1.4 or later
+   - CoG      : 4.1.2 or later
+   - Ant      : 1.5 or later
+
+2. Set environment variables.
+
+   Before building "invoke server", set the following environment variables.
+
+     {sh}
+     % COG_INSTALL_PATH=/path/to/cog
+     % NG_DIR=/path/to/ninfg
+     % export COG_INSTALL_PATH NG_DIR
+     {csh}
+     % setenv COG_INSTALL_PATH /path/to/cog
+     % setenv NG_DIR /path/to/ninfg
+     {Windows}
+     You have to set environment variables by Control Panel.
+
+   $COG_INSTALL_PATH specifies the location of the Java CoG Kit.
+   It is used when the "invoke server" of GT4java is built.
+
+   $NG_DIR specifies the localhost of Ninf-G.
+   The "invoke server" of GT4java will be installed in $NG_DIR/bin.
+
+3. Run a following command in ng-4.x.x/utility/invoke_server/gt4java directory.
+
+     % ant
+
+   This will compile the sources and build the "invoke server" for GT4java.
+
+4. Copy files.
+
+   Copy the following files to $NG_DIR/bin
+
+   {Linux, UNIX}
+     - ng_invoke_server.GT4java
+
+   {Windows}
+     - ng_invoke_server.GT4java.bat
+     - nglcp.bat
+
+Now you are able to use ng_invoke_server.GT4java by specifying
+<SERVER> "invoke_server" to "GT4java".

@@ -1,0 +1,362 @@
+(4.2.3 -> 4.2.4)
+  < New features >
+  - Invoke Server NAREGISS utilizes bulk job of NAREGI SS for
+    initialization of function/object handles.
+
+  < Fixed BUGs >
+  - Ninf-G Client and Executables abnormally exit when gcc4.2 is used.
+  - Some values related to elapsed time measured by Ninf-G Executable
+    and stored in session information are incorrect.
+  - The default path of MDS4 is invalid.
+
+  < Change >
+  - Support GT 4.2.
+  - The version of NAREGI Middleware required by Invoke Server NAREGISS
+    was changed from "V1.0 or later" to "V1.1 or later".
+  - HP Alpha/Tru64 UNIX, MIPS/IRIX, and IA64/Linux are no longer
+    officially supported.
+
+(4.2.2 -> 4.2.3)
+  < New features >
+  - By default, Ninf-G Executables immediately exit if an
+    communication error had occurred. 
+  - New attribute continue_on_error in Executable configuration file 
+    has been added.
+  - New Invoke Server options, CandidateHost, IndividualCPUCount,
+    MemoryLimit, logFlags, WallTimeLimit have been added to
+    Invoke Server NAREGISS.
+
+  < Changes >
+  - The version of java required by Invoke Server NAREGISS was changed
+    from "1.4.2 or later" to "1.5.0 or later".
+  - The version of NAREGI Middleware required by Invoke Server NAREGISS
+    was changed from "beta 1.0.2 or later" to "V1.0 or later".
+  - Default value of workingPrefix invoke server option was changed
+    /tmp to user's home directory.
+  - tcp_nodelay attribute is no longer in <SERVER> section.
+    tcp_nodelay has become an attribute in <CLIENT> section.
+  - Two Invoke Server options; account and passphraseFile, have been removed
+    from Invoke Server NAREGISS. 
+
+  < Fixed BUGs >
+  - Invoke Server NAREGISS ignores environment attribute in <SERVER>
+    section in the client configuration file.
+  - Ninf-G has not supported gcc in AIX and Tru64, but there was a
+    description in Users Manual that Ninf-G supports them.
+  - A description about the version of NAREGI middleware supported by
+    Invoke Server NAREGISS was missing in Users Manual.
+  - A description about the version of Java supported by Invoke Server
+    NAREGISS was incorrect in Users Manual.
+  - Modified the API manual of grpc_is_canceled_np() as it takes an argument.
+  - An argument without parameter mode in an IDL file causes
+    Segmentation Fault for ng_gen command.
+  - Invoke Server NAREGISS ignores status_polling attribute in <INVOKE_SERVER>
+    section in the client configuration file.
+  - Invoke Server NAREGISS interprets the value of job_maxWallTime in seconds
+    though it should be in minutes.
+  - When a Ninf-G Client terminates, Invoke Server NAREGISS does not
+    terminate Ninf-G Executable in some cases.
+  - Invoke Server NAREGISS ignores OperatingSystemName and CPUArchitectureName
+    invoke server options, when a function/object handle uses multiple computing
+    nodes.
+  - Modified the API manuals of grpc_wait*() as these functions do not return
+    GRPC_CANCELED_NP.
+
+--------------------------------------------------------------------------------
+(4.2.1 -> 4.2.2)
+  < New features >
+  - Invoke Server NAREGISS has been supported.
+
+  < Fixed BUGs >
+  - Ninf-G Client freezes in grpc_*_handle_destruct() if grpc_call_async()
+    is called but it is not followed by grpc_wait*(). 
+                  
+  - 3D test was not included in Java diag suites.
+
+--------------------------------------------------------------------------------
+(4.2.0 -> 4.2.1)
+  < Fixed BUGs >
+  - The object file of a Ninf-G Executable (_stub_*.o) is corrupted
+    if it is compiled using mpicc in MPICH-1.
+
+--------------------------------------------------------------------------------
+(4.1.0 -> 4.2.0)
+  < New features >
+  - Three new Invoke Servers, SSH, Condor, and NAREGISS are added.
+  - Enabling cascading RPC, i.e. Ninf-G Executable can call subordinate RPCs.
+  - Invoke Server Developer's Manual was added to Ninf-G Users Manual.
+  - 'authonly' has been added as an available value for the crypt attribute
+    of a <SERVER> section.
+  - New attribute handling_signals in client configuration file <CLIENT>
+    section and Executable configuration file has been added.
+  - New attribute heartbeat_timeoutCountOnTransfer in client
+    configuration file <SERVER> section has been added.
+
+  < Fixed BUGs >
+  - Ninf-G Executable built as pthread flavor sometimes freezes at the end of
+    the execution.
+  - Ninf-G Executable is not terminated when a proxy certificate has been
+    expired.
+  - Ninf-G client aborts in grpc_function_handle_destruct() if there is an
+    outstanding grpc_wait_any() to the same function handle.
+  - Only a user certificate subject can be specified as 
+    <MDS_SERVER> subject attribute.
+
+--------------------------------------------------------------------------------
+(4.0.0 -> 4.1.0)
+  < New features >
+  - New platform (Mac OS X) have been supported.
+  - A scalar argument for remote functions and remote methods can be
+    passed by either an immediate value or a pointer to that value.  
+    New attribute 'fortran_compatible' in <CLIENT> section for the
+    client configuration file has been added to specify the mode of
+    the argument passing.
+
+--------------------------------------------------------------------------------
+(4.0.0b2 -> 4.0.0)
+  < New features >
+  - Different hostnames can be specified for each server as the
+    hostname of Ninf-G client.
+    (added a new attribute 'client_hostname' in <SERVER> section for
+    client configuration file.)
+  - Added description about 
+      "using multiple proxy certificates by using Invoke Server"
+    to the users manual.
+  - Multiple <SERVER> sections can be described for one server.
+    (added a new attribute 'tag' in <SERVER> section for client
+    configuration file.)
+  - grpc_signal_handler_set_np() has been added for setting signal
+    handler to Ninf-G client.
+  - Ninf-G client is able to use RSL extensions.
+    (added a new attribute 'job_rslExtension' in <SERVER> section for
+    client configuration file.)
+  - A sample program which uses grpc_wait_any() has been added.
+
+  < Changes >
+  - Implementation of APIs for handling signals have been changed to
+    use GT4 APIs for handling signals.
+
+  < Fixed BUGs >
+  - A freed memory will be accessed.
+  - A compile error occurs in AIX.
+  - Bugs of memory and socket leaks by Java Client have been fixed.
+  - Ninf-G client aborts in grpc_function_handle_destruct() if there
+    is an outstanding grpc_call() to the same function handle.
+  - Java API manual includes more detailed descriptions.
+
+--------------------------------------------------------------------------------
+(4.0.0b1 -> 4.0.0b2)
+  < New features >
+  - In addition to GT2 Pre-WS GRAM, GT4 WS GRAM can be used for remote process invocation.
+  - Grid middleware other than Globus Toolkit can be used for remote process invocation by plug in.  UNICORE plug in, which enables remote process invocation via UNICORE supporting AJO 4.0 or later, is included in Ninf-G4 package as an example.
+  - MDS4 (Information Services in GT4) has been supported.
+
+  < Changes >
+  - When grpc_finalize() is called, all outstanding jobs are canceled and resources used by Ninf-G are released.
+  - GRPC_ALREADY_INITIALIZED has been added to error codes.
+  - Ninf-G4 can support authentication/authorization mechanisms other than GSI.
+  - The default flavor has been changed from "gcc32dbg" to "gcc32dbgpthr".
+  - howToInstallNinfG4.txt was merged to Users Manual.
+
+--------------------------------------------------------------------------------
+(2.4.0 -> 4.0.0b1)
+  < New features >
+  - Merge NG4-alpha2 features
+  - Add invoke server for GT4 (python version, "gt4py")
+  - Add invoke server for GT2 (C version, "gt2c"), from invoke server branch
+
+  < Changes >
+  - Salvage howToInstallNinfG4.txt from alpha2, and modify for beta1
+  - Working base changed to invoke server branch
+    (Branch-tag branch-20050412-invokeServer-devel)
+  - C client uses invoke server
+
+--------------------------------------------------------------------------------
+(2.3.0 -> 2.4.0)
+  < New features >
+  - Thread-ID is put into log, when loglevel is set to 5(Debug).
+  - Ninf-G Executable retries to establish a connection to the Ninf-G client when the Ninf-G Executable could not connect to the Ninf-G client.
+  - The timeout value of a sessions can be specified by a session attribute.
+  - stdout and stderr of Ninf-G Executable can be put into files.
+  - "broadcast" and "allocate" modifier are added to Ninf-G IDL for MPI.
+    + "broadcast" : broadcast the variable to all nodes
+    + "allocate"  : allocate memory area for the variable on all nodes, but the value is not copied.
+  - ng_gen accepts CPP options.
+  - The compression for filename type variables is supported.
+  - Ninf-G client can re-read the client configuration file on-the-fly.  An API for re-read the client configuration file is added (grpc_config_file_read_np()).
+  - Ninf-G client can exit without waiting JOB_DONE message from the Globus jobmanager.
+  - Information of compression is added to grpc_session_info_t_np.
+  - Arguments and results can be divided into blocks when they are transferred between Ninf-G client and Ninf-G Executable.
+  - Available strings for GRAM resource manager contact are fully supported.
+  - A tutorial document and sample programs are added into tutorial directory.
+
+  < Changes >
+  - The default value of loglevel was changed from 0 (None) to 2 (Error).
+  - More detailed messages are put into log of Ninf-G Executable
+  - The performance of sending/receiving data has been improved
+  - Filename type variables are transferred without using GASS.
+  - Implementation of grpc_probe_or() was changed to be compliant with the GridRPC API specification.
+  - Ninf-G system checks the result field in the protocol data.
+  - Ninf-G Executable does not catch SIGFEP, SIGSEGV, SIGILL and SIGQUIT.
+  - log_filePath can take the following keywords:
+    + %t: the time of creation of the file (yyyymmdd-hhmmss-MMM)
+    + %p: process-ID
+    + %h: hostname
+  - changed the name of API for getting information of the last session
+    (grpc_get_last_error_np() -> grpc_last_error_get_np())
+
+  < Fixed BUGs >
+  - job_startTimeout is ignored when transfer_argument is set to "nowait".
+  - ninfg-user-env.sh script removes ${NG_PATH}* from $PATH.
+  - *_handle_is_ready() freezes when non-thread Ninf-G Client get
+    information of Remote Class from Ninf-G Executable
+  - Ninf-G Executable fails in making a log directory when multiple Ninf-G Executables are invoked at the same time.
+  - Ninf-G Executable does not return an error immediately when it fails
+    in making a directory for logfiles.
+  - Ninf-G client aborted when negative variable is set as job_startTimeout
+  - save_sessionInfo did't accept "-1" and "0".
+  - Ninf-G callback which has only OUT mode arguments causes an error.
+  - Ninf-G callback with no arguments causes an error.
+  - pthread Ninf-G Client sometimes freezes when it waits the completion of a session.
+
+  (IDL or ng_gen)
+  - Remote Function with no arguments cannot be called by "Calls".
+  - ng_gen can not process a big IDL file whose size is more than 4K Bytes.
+  - ng_gen overwrites the file which is specified as the 2nd argument.
+  - ng_gen detects an error if the callback type variable with no arguments is specified as the last argument of a Remote Function.
+
+  (Java Client)
+  - Java client cannot invoke Ninf-G Executable without LocalLDIF files.
+  - Java client cannot process Ninf-G Expression which has more than 30 terms.
+  - Java client occasionally returns incorrect results.
+
+  (skip)
+  - Shrink does not work correctly.
+  - Invalid parameter of shrink causes an abort.
+
+  (handle attribute)
+  - The number of MPI processes cannot be specified by a handle attribute of an object handle.
+  - handle_attr_get() causes Segmentation fault for an initialized handle attribute.
+
+--------------------------------------------------------------------------------
+(2.3.0 -> 4.0.0a2)
+  < New features >
+  - MDS4 (GT4 WS MDS) GridRPC information service
+  - howToInstallNinfG4.txt
+
+  < Changes >
+  - Update CHANGES
+  - Add "2004, 2005" in copyright notice in LICENSE.TXT
+  - Add about documentation in README
+  - Add information retrieving using MDS4 in Java client
+  - Add job status polling in GRAM client module in Java client
+  - Only one globus-gridftp-server started in Java client
+  - Use GridFTP in transferring file parameter
+  - Use GRAM4 (GT4 WS GRAM) to invoke job in Java client
+  - (ngclJob.c) ngcliJobCancel() return immediately when JOB was DONE (Rev. 1.76 -> 1.77)
+  - (ngexGASScopy.c) add debug log message for GASScopyFile (Rev. 1.10 -> 1.11)
+  - (grpc-test.c) It corrected to change of the interface of API (Rev. 1.1 -> 1.2)
+  - (pi_array/pi_client.c) API were corrected to new interface (Rev. 1.1 -> 1.2)
+  - (pingpong/client.c) change initialize with value of type of long (Rev. 1.8 -> 1.9)
+
+  < Fixed BUGs >
+  - (ngexGASScopy.c) fix URL generating code in ngexlGASScopyCreateURL() (Rev. 1.11.2.1 -> 1.11.2.2)
+  - (RemoteMachineInfo.java) add check that listEnvironment != listNewEnvironment (Rev. 1.18 -> 1.18.4.1)
+  - (function_handle_array/test_method.idl) insert dereference that needs (Rev. 1.1 -> 1.2)
+
+--------------------------------------------------------------------------------
+(2.2.0 -> 2.3.0)
+  < New features >
+  - New platforms (HP Alpha/Tru64 UNIX, IBM Power4/AIX) have been supported
+  - Attributes can be specified for each session
+    (grpc_{call,invoke}*_with_attr_np(), grpc_[gs]et_session_attr_np())
+  - TCP_NODELAY can be turning on/off in configuration file
+  - The number of MPI processes can be specified by a handle attribute
+  - The name of a target queue as defined by the scheduler can be specified by a handle attribute
+  - new APIs
+    + grpc_function_handle_is_ready_np()
+    + grpc_object_handle_is_ready_np()
+  - The following attributes have been added to client configuration file
+    + job_maxTime
+    + job_maxWallTime
+    + job_maxCpuTime
+
+  < Changes >
+  - Modified interface of the following APIs
+    + grpc_get_handle_np()
+    + grpc_function_handle_get_from_session_np()
+    + grpc_object_handle_get_from_session_np()
+  - disable TCP_NODELAY by default
+  - array of filename type parameter has been supported
+  - enable to call multiple grpc_call_async()/grpc_invoke_async() without interleaving grpc_wait_*().
+  - The performance of the Java client has been improved
+  - changed the name of API for canceling sessions 
+    (ngexIsCanceled() -> grpc_is_canceled_np())
+    ngexIsCanceled() is still available for backward compatibility
+
+  < Fixed BUGs >
+  - samples/pi program fails to execute between LINUX/AMD64 and
+    LINUX(IA32) system
+    (Programs using long type variables failed to execute)
+  - Ninf-G Executables linked with non-thread Globus libraries cause errors if heartbeat feature is enabled
+
+--------------------------------------------------------------------------------
+(2.1.0 -> 2.2.0)
+  < New features >
+  - Conformity to the GridRPC End-User API specification
+  - Timeout for sessions
+  - Compression of transferred arguments and results
+  - Performance measurements for file transfers
+  - Support of new platforms (Opteron/Linux, IA64/Linux)
+
+  < Changes >
+  - A canceled session is considered as an error session,
+    i.e. grpc_wait_*() returns an error if canceled sessions are
+    detected.
+  - An array with zero elements can be accepted as an argument.
+  - Enable to define more than 30 remote function in one IDL file.
+  - Change the default value of "gass_scheme" (in <SERVER> section of
+    configuration file) from "https" to "http".
+  - Change the default value of "refresh_credential" (in <CLIENT>
+    section of configuration file) from 42300 to 0.
+  - Use the capability of GRAM "(jobtype=mpi)" for launching an MPI
+    program on a server.
+
+  < Fixed BUGs >
+  - --with-cc option for configure command was not available
+  - Client program was aborted if information query to the MDS was failed.
+  - Shrinking was not available for object handles
+  - An error occurred if both filename type arguments and other types of
+    arguments are specified with OUT mode in a remote function or method.
+
+--------------------------------------------------------------------------------
+(2.0.0 -> 2.1.0)
+  < New functions >
+  - shrink arguments/results
+  - get information of RemoteFunction from Ninf-G Executables
+  - stage Ninf-G Executables
+    (This is not available for use of MPI as backend)
+  - add the following attributes to client configuration file
+    + "job_queue"
+    + "job_project"
+    + "job_hostCount"
+    + "job_minMemory"
+    + "job_maxMemory"
+  - refresh proxy credentials
+  - rotate log files
+  - add new APIs: grpc_{function,object}_handle_get_error_np()
+
+  < Modified functions >
+  - change the default value of "crypt" (in <SERVER> section of
+    configuration file) from "SSL" to "false".
+  - change the output of grpc_perror() from specified file (in
+    <CLIENT> section of configurationfile) to stderr.
+
+  < Fixed BUGs >
+  - grpc_call_async() after grpc_wait_any() fails
+  - "make server" & "make client" fails
+  - '\n' cannot be used in IDL
+  - GIIS cannot be used as an information server
+  - grpc_function_handle_init() with NULL arguments causes
+    Segmentation fault
+  - other small bugs

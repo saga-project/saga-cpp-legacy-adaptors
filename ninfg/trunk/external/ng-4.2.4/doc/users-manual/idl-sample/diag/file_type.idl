@@ -1,0 +1,77 @@
+Module file_type;
+Globals { #include "stdlib.h" }
+Globals { #include "string.h" }
+
+Define filename_test(IN filename namein, INOUT filename nameinout,
+    OUT filename nameout)
+{
+    char buffer[100];
+    int items, result;
+    FILE * fin = NULL;
+    FILE * finout = NULL;
+    FILE * fout = NULL;
+
+    /* 
+     * Copy from nameinout to nameout
+     */
+    finout = fopen(nameinout, "r");
+    if (finout == NULL) {
+        fprintf(stderr, "%s: fopen error\n", nameinout);
+        goto err;
+    }
+
+    fout = fopen(nameout, "w");
+    if (fout == NULL) {
+        fprintf(stderr, "%s: fopen error\n", nameout);
+        goto err;
+    }
+
+    while ((items = fread(buffer, 1, sizeof(buffer), finout)) > 0) {
+        result = fwrite(buffer, 1, items, fout);
+        if (result != items) {
+            fprintf(stderr, "%s: fwrite error\n", nameout);
+            goto err;
+        }
+    }
+
+    fclose(finout);
+    finout = NULL;
+    fclose(fout);
+    fout = NULL;
+
+    /*
+     * Copy from namein to nameinout
+     */
+    fin = fopen(namein, "r");
+    if (fin ==NULL) {
+        fprintf(stderr, "%s: fopen error\n", namein);
+        goto err;
+    }
+
+    finout  = fopen(nameinout, "w");
+    if (finout == NULL) {
+        fprintf(stderr, "%s: fopen error\n", nameinout);
+        goto err;
+    }
+
+    while ((items = fread(buffer, 1, sizeof(buffer), fin)) > 0) {
+        result = fwrite(buffer, 1, items, finout);
+        if (result != items) {
+            fprintf(stderr, "%s: fwrite error\n", nameinout);
+            goto err;
+        }
+    }
+
+    fclose(fin);
+    fin = NULL;
+    fclose(finout);
+    finout = NULL;
+
+err:
+    if (fin != NULL)
+        fclose(fin);
+    if (finout != NULL)
+        fclose(finout);
+    if (fout != NULL)
+        fclose(fout);
+}

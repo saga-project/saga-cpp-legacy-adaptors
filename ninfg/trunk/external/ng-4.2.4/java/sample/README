@@ -1,0 +1,97 @@
+Ninf-G Java Client API  Sample programs
+
+  The files in this directory is developed for the experimental test.
+  This README file describes what each program performs and how to
+  execute it. 
+
+1) Set environment variables
+   Before building sample programs, please make sure that a file
+   named "build.xml" is located in this directory.
+   Then set the following environment variables.
+
+   - JAVA_HOME		: java install path
+   - GLOBUS_LOCATION	: GT install path
+   - NG_DIR		: Ninf-G install path
+
+2) Build example programs
+   After setting environment variables, type following command.
+
+   % ant 
+
+   NOTE:
+     If you want to see information about sessions,
+     set "ng_print_info" as "on" in your build.xml.
+
+3) Modify properties for sample programs
+   Before executing sample programs, please make sure that a file
+   named "client.conf" is located in this directory, and the following
+   properties are set to correct values in the file.
+
+   You may need to modify the following variables.
+
+   + hostname in <SERVER> section
+     The name of host on which Ninf-G Executable(stub) will be run.
+     
+   + mpi_runNoOfCPUs in <SERVER> section
+     The number of CPUs for MPI.
+
+   + filename in <LOCAL_LDIF> section
+     The name of localldif files from which Ninf-G client gets
+     information of Executables(stub).
+
+   (optional: If you use MDS to get information, you need the following steps)
+   + mds_hostname in <SERVER> section
+     (If you use MDS to get information)
+     The name of MDS server from which Ninf-G client gets information
+     of Executables(stub).
+
+4) Execute sample programs
+   Four sample programs are provided.
+   The terms quoted with "" are variables of build.xml.
+
+   Before you run following programs, you have to modify "example.org"
+   in build.xml to the name of your host.
+
+   - ADD.java
+	Adds two dimensional arrays and return the result.
+	This program creates threads and runs in parallel.
+
+	+ "hostnames" specifies servers of invoking jobs.
+	  You can specify multiple servers as "hostnames".
+
+	After modifying build.xml, type
+	% ant add
+
+   - PI.java
+	Calculates the circle ratio using Monte-Carlo simulation.
+	This program creates threads and runs in parallel.
+
+	+ "hostnames" specifies servers of invoking jobs.
+	  You can specify multiple servers as "hostnames".
+        + "times" specifies times of calculating.
+
+	After modifying build.xml, type
+	% ant pi
+
+   - PIHandleArray.java
+	Calculates the circle ratio using Monte-Carlo simulation.
+	This program invokes multiple jobs in one GRAM request.
+
+	+ "hostname" specifies server of invoking jobs.
+	  You can specify *only one server* as "hostname".
+        + "times" specifies times of calculating.
+        + "nJobs" specifies number of invoking jobs.
+
+	After modifying build.xml, type
+	% ant piarray
+
+   - PI_MPI.java
+	Calculates the circle ratio using Monte-Carlo simulation.
+	This program uses MPI.
+
+	+ "hostname" specifies server of invoking jobs.
+	  You can specify *only one server* as "hostname".
+        + "times" specifies times of calculating.
+
+	After modifying build.xml, type
+	% ant pimpi

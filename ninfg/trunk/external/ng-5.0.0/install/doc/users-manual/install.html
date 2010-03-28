@@ -1,0 +1,784 @@
+<!--
+  $RCSfile: install.html,v $ $Revision: 1.11 $ $Date: 2008/03/28 08:47:44 $
+  $AIST_Release: 5.0.0 $
+  $AIST_Copyright:
+   Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+   National Institute of Advanced Industrial Science and Technology
+   Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+   
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+   $
+ -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+<title>Installation manual</title>
+</head>
+<body bgcolor=white>
+
+<h2><a name="Installation_manual">2 Installation manual</a></h2>
+
+<hr>
+<ul>
+<li><a href="#Prerequisites">
+    Prerequisites for installing Ninf-G</a>
+<li><a href="#Downloading_the_Ninf-G_package">
+    2.1 Downloading the Ninf-G package</a>
+<li><a href="#Creating_user_ninf">
+    2.2 Creating a "ninf" user</a>
+<li><a href="#Installation">
+    2.3 Installation</a>
+<li><a href="#Configure_options">
+    2.4 Configure command options</a>
+
+<li><a href="#appendix_install_GT4">
+    appendix A : Installing GT4</a>
+<ul>
+<li><a href="#appendix_GT4_install">
+    a.1 Installing the Globus Toolkit</a>
+<li><a href="#appendix_GT4_usageStatistics">
+    a.2 About Usage Statistics Collection by Globus Toolkit</a>
+<li><a href="#appendix_GT4_setupEnvironment">
+    a.3 Setting up the environment</a>
+<li><a href="#appendix_GT4_startContainer">
+    a.4 Starting the Container</a>
+<li><a href="#appendix_GT4_testWSGRAM">
+    a.5 Testing the WS GRAM</a>
+<li><a href="#appendix_GT4_BinaryInstaller">
+    a.6 Installing GT4 by Binary installer</a>
+</ul>
+<li><a href="#appendix_installedFileComposition">
+    appendix B : Installed file composition</a>
+</ul>
+<hr>
+
+<h3><a name="Prerequisites">Prerequisites for installing Ninf-G</a></h3>
+
+<ul>
+<li>Globus Toolkit is not necessarily required. It is optional.
+<li>If the Globus Toolkit is used, the globus_core must be installed,
+which is not installed by binary installer.
+Source installer installs this module, or post processing
+after the binary installer installation is required.
+(see <a href="#appendix_GT4_BinaryInstaller">
+a.6 Installing GT4 by Binary installer</a>)
+</ul>
+
+
+<h3><a name="Downloading_the_Ninf-G_package">
+2.1 Downloading the Ninf-G package</a></h3>
+
+<p>Download the Ninf-G package from the download Web page</p>
+(<a href="http://ninf.apgrid.org/packages/welcome.html">
+http://ninf.apgrid.org/packages/welcome.html</a>).
+
+<h3><a name="Creating_user_ninf">2.2 Creating a "ninf" user</a></h3>
+
+<p>It is recommended that you create a "ninf" user
+on the installation system.</p>
+
+<p>It is also possible, however, to install Ninf-G in
+a location where the user has read and write
+privileges under general user privileges
+(that user's home directory, for example).</p>
+
+<h3><a name="Installation">2.3 Installation</a></h3>
+
+<table border>
+<tr>
+<td>
+<ul>
+<li>
+<p>Ninf-G must be installed on the nodes on which
+Ninf-G Clients and Executable will be compiled. The Ninf-G may
+be installed in a shared directory.</p>
+
+<li>
+<p>If the Globus Toolkit is used,
+Globus Toolkit library must be installed on all nodes on which
+Ninf-G Clients and Executables may run.
+The Globus Toolkit may be installed in a shared directory.</p>
+</ul>
+</td>
+</tr>
+</table>
+
+<ul>
+<li>Expanding the source files
+
+<p>Move the files of the downloaded package to the directory
+in which the source files are to be expanded and then
+use the following command to expand the Ninf-G package files.
+(The ng5-CCYYMMDD.tgz in the command is a package name and
+5.x.x is the version number.)</p>
+
+<pre>% tar xfvz ng5-CCYYMMDD.tgz</pre>
+
+<p>Executing the above command will create a "ng-5.x.x" directory
+and expand the Ninf-G source files in that directory.</p>
+
+<p>Note: Use the GNU tar to expand the package.</p>
+
+<li>Running the configure script
+
+<p>(Move to the directory in which the source files are expanded.)</p>
+<pre>% cd ng-5.x.x </pre>
+<pre>% ./configure </pre>
+
+<p>Executing the above command,
+the host software environment is examined,
+and the execution environment for the tools used by compile is prepared
+(creating Makefile, etc.).</p>
+
+<p>Parameters such as those for specifying a particular Ninf-G
+installation directory can be included as shown below.</p>
+
+<p>For non Globus Toolkit environment:</p>
+<p>
+<pre><code>
+% ./configure --prefix=/usr/local/ng
+</code></pre>
+</p>
+
+<p>For Globus Toolkit environment:</p>
+<p>
+<pre>
+% ./configure --prefix=/usr/local/ng --with-cc=gcc --with-globusFlavor=gcc32dbgpthr
+</pre>
+</p>
+
+<p>In this example, the following parameters are specified.</p>
+
+<ul>
+<li>The path to the Ninf-G installation directory
+<li>The compiler to be used
+<li>The flavor of Globus Toolkit to be used
+</ul>
+
+<p>If the Globus Toolkit is used, The flavor must be Pthread (*pthr)
+and the compiler must be the same as the compiler by which the Globus
+Toolkit was compiled.</p>
+
+<p>If you do not know about flavors,
+ask the administrator for flavors which the system-installed
+Globus Toolkit implies. 
+(The flavors may be obtained by $GLOBUS_LOCATION/sbin/gpt-query command
+instead.)</p>
+
+<p>Other options are described in section 2.4.
+The options that can be used with the configure command can be
+viewed with the following command.</p>
+
+<p>
+<pre>% ./configure --help</pre>
+</p>
+
+<li>Executing the make command
+
+<pre>% make</pre>
+
+<p>Executing make generates the libraries needed by
+Ninf-G as well as an executable binary file.</p>
+
+<p>Note: Use the GNU make.</p>
+
+<p>To configure either the server environment only or
+the client environment only, run one of the following make commands.</p>
+
+<ul>
+<li>To configure the server environment only
+
+<p>The following command can be used to configure the
+server environment only.</p>
+
+<p>
+<pre>% make server</pre>
+</p>
+
+<li>To configure the client environment only
+<p>The following command can be used to configure the
+client environment only.</p>
+
+<p>
+<pre>% make client</pre>
+</p>
+</ul>
+
+<li>Installing the compiled files, etc.
+
+<p>With owner privileges for the directory in which the files
+are to be installed
+(specified by a --prefix at the time of configure command;
+the default is "/usr/local"),
+execute the following command from the directory in which
+the source files were expanded.</p>
+
+<pre>% make install</pre>
+
+<p>Executing the above command copies the libraries and
+executable binaries created by executing the make
+command and the commands needed to run Ninf-G to the
+specified directory.</p>
+
+<p>To install either the server environment only or the
+client environment only, execute the make command as described
+below.</p>
+
+<ul>
+<li>To install the server environment only
+
+<p>It is possible to install only the server environment by executing the
+following command.</p>
+
+<p>
+<pre>% make install_server</pre>
+</p>
+
+<li>To install the client environment only
+
+<p>It is possible to install only the client environment by executing the
+following command.</p>
+
+<p>
+<pre>% make install_client</pre>
+</p>
+</ul>
+
+<p>(The following commands are executed only on the server machine
+(where the Ninf-G Executable is run).<br>
+If Information Service MDS4 is not being used, the following tasks
+are not necessary.
+In that case, owner user privileges for $GLOBUS_LOCATION are
+also not needed.)</p>
+
+<li>Settings for provision of Ninf-G Executable information by MDS4
+
+<p>If the Ninf-G Client uses Information Service MDS4,
+MDS4 server setup is required.
+<b>This is required only on gatekeeper nodes.</b></p>
+
+<p>Execute the following items with owner user privileges
+for $GLOBUS_LOCATION (for example, "globus").</p>
+
+<ul>
+<li> Creating the information directory
+<p>
+<pre>
+% mkdir -p $GLOBUS_LOCATION/var/gridrpc
+% chmod a+w $GLOBUS_LOCATION/var/gridrpc
+% chmod +t $GLOBUS_LOCATION/var/gridrpc
+</pre>
+</p>
+
+<li> Building and deploying service
+<p>
+<pre>
+% cd ng-5.x.x/src/InformationService/mds4/webService
+% ant
+% ant deploy
+</pre>
+</p>
+
+<li> Editing GrpcInfoService configuration
+<p>Edit URL in wsa:Address element in
+$GLOBUS_LOCATION/etc/ng5grpcinfo/regist.xml .
+(You'll have to modify example.org to the IP-address or FQDN of your host.)
+</p>
+
+<p>Edit the hostName in $GLOBUS_LOCATION/etc/ng5grpcinfo/jndi-config.xml
+to match the following description.</p>
+
+<table border>
+<pre>
+&lt;parameter&gt;
+    &lt;name&gt;hostName&lt;/name&gt;
+    &lt;value&gt;example.org&lt;/value&gt;
+&lt;/parameter&gt;
+</pre>
+</table>
+
+<p>Note. This hostname is the name of the GRAM server host.</p>
+
+<p>Edit the infoDirPath in $GLOBUS_LOCATION/etc/ng5grpcinfo/jndi-config.xml
+to match the following description.</p>
+
+<table border>
+<pre>
+&lt;parameter&gt;
+    &lt;name&gt;infoDirPath&lt;/name&gt;
+    &lt;value&gt;/usr/local/gt4.0.0/var/gridrpc&lt;/value&gt;
+&lt;/parameter&gt;
+</pre>
+</table>
+
+<p>This may be $GLOBUS_LOCATION/var/gridrpc .</p>
+
+<p>Append following line to $GLOBUS_LOCATION/container-log4j.properties .
+</p>
+
+<pre>log4j.category.org.apgrid=INFO</pre>
+
+<p>Restart the WS Servlet container, and watch the console output.
+If the following message is output, registration was successful.</p>
+
+<pre>
+????-??-?? ??:??:??,??? INFO  impl.GrpcInfoHome [Thread-?,run:???] done rescan to regist
+</pre>
+
+<p>Note: If you change the information of the executable in
+$GLOBUS_LOCATION/var/gridrpc,
+the following command forcibly updates this information immediately.</p>
+
+<pre>
+% java -DGLOBUS_LOCATION=$GLOBUS_LOCATION \
+ -classpath $GLOBUS_LOCATION/lib/ng5grpcinfo.jar:$CLASSPATH \
+ org.apgrid.ninf.ng5.grpcinfo.client.RescanClient \
+ https://[IP-ADDR or FQDN]:8443/wsrf/services/org/apgrid/ninf/ng5/grpcinfo/GrpcInfoService
+</pre>
+</ul>
+</ul>
+
+<h3><a name="Configure_options">2.4 Configure command options</a></h3>
+
+<p>The entire options can be displayed with the following
+command.</p>
+
+<p>
+<pre>% ./configure --help</pre>
+</p>
+
+<p>The options that can be used with the configure script are
+described below.</p>
+
+<ul type=disc>
+
+<li> Features and packages
+
+<center>
+<table border>
+<caption align=top> Features and packages </caption>
+<tr>
+<th> option </th>
+<th> default </th>
+<th> description </th>
+</tr>
+
+<tr>
+<td> --enable-debug </td>
+<td>  </td>
+<td> whether to use debug option or not </td>
+</tr>
+
+<tr>
+<td> --enable-optimize </td>
+<td> </td>
+<td> whether to use optimize option or not </td>
+</tr>
+
+<tr>
+<td> --disable-largefile </td>
+<td> </td>
+<td> omit support for large files </td>
+</tr>
+
+<tr>
+<td> --with-cc=CC </td>
+<td> </td>
+<td> C compiler </td>
+</tr>
+
+<tr>
+<td> --with-pthread </td>
+<td> yes </td>
+<td> use pthread or not, for non Pthreads environment </td>
+</tr>
+
+<tr>
+<td> --with-poll </td>
+<td> </td>
+<td> whether to use poll or not </td>
+</tr>
+
+<tr>
+<td> --with-select </td>
+<td>  </td>
+<td> whether to use select or not </td>
+</tr>
+
+<tr>
+<td> --with-zlib </td>
+<td>  </td>
+<td> use zlib for compression </td>
+</tr>
+
+<tr>
+<td> --with-signal </td>
+<td>  </td>
+<td> whether to use signal or not </td>
+</tr>
+
+<tr>
+<td> --with-python </td>
+<td>  </td>
+<td> specify python command path </td>
+</tr>
+
+<tr>
+<td> --with-globus </td>
+<td>  </td>
+<td> Globus Toolkit </td>
+</tr>
+
+<tr>
+<td> --with-globusFlavor </td>
+<td> gcc32dbgpthr </td>
+<td> Globus Toolkit flavor </td>
+</tr>
+
+<tr>
+<td> --with-prewsgram </td>
+<td>  </td>
+<td> whether to use Pre-WS GRAM or not </td>
+</tr>
+
+<tr>
+<td> --with-wsgram </td>
+<td>  </td>
+<td> whether to use WS GRAM or not </td>
+</tr>
+
+<tr>
+<td> --with-communicationProxyGT </td>
+<td>  </td>
+<td> whether to use GT or not </td>
+</tr>
+
+<tr>
+<td> --with-ssh </td>
+<td>  </td>
+<td> whether to use Invoke Server SSH or not </td>
+</tr>
+
+<td> --with-naregi </td>
+<td> no </td>
+<td> Support NAREGI SS.</td>
+</tr>
+
+<tr>
+<td> --with-naregidir=NAREGIDIR </td>
+<td> /usr/naregi </td>
+<td> Specify the directory in which NAREGI Middleware has been installed.</td>
+</tr>
+
+<tr>
+<td> --with-naregi-jars=JARS </td>
+<td> (*1) </td>
+<td> Specify the jar files required by Invoke Server NAREGISS.
+A separator of jar files is a colon.
+</tr>
+
+<tr>
+<td> --with-nrf </td>
+<td>  </td>
+<td> whether to use Information Service NRF or not </td>
+</tr>
+
+</table>
+</center>
+<p>
+(*1)
+NAREGIDIR/lib/jars/NAREGI/gridss-client-2.0.jar:NAREGIDIR/lib/jars/NAREGI/renewal-gridss-1.0.jar:NAREGIDIR/lib/jars/NAREGI/renewal-client-1.0.jar
+</p>
+
+</ul>
+
+<h3><a name="appendix_install_GT4">
+appendix A : Installing GT4</a></h3>
+
+<p>Ninf-G can compile with Globus Toolkit installation.
+This appendix shows how to accomplish GT4 installation.
+When you install GT4, refer to
+<a href="http://www.globus.org">Globus Website</a> for exact information.
+</p>
+
+<p>This section gives hints for installing GT4.</p>
+
+<h4><a name="appendix_GT4_install">
+a.1 Installing the Globus Toolkit</a></h4>
+
+<p>Make the temporary directory.<p>
+
+<pre>% mkdir dirForInstaller </pre>
+
+<p>Install GT4 (we recommend Version 4.0.5 or later
+and "source" installer).</p>
+
+<pre>
+% cd dirForInstaller
+% tar xfvz [TARBALL LOCATION]/gt4.0.6-all-source-installer.tar.gz
+% cd gt4.0.6-all-source-installer
+% ./configure --prefix=/path/to/gt4-install
+% make
+% make install
+</pre>
+
+<p>See also information about setting the Globus Toolkit at following
+URL.</p>
+
+    http://www.globus.org/toolkit/docs/4.0/admin/docbook/
+
+<p>Ninf-G requires some components of the Globus Toolkit.
+Following URLs provide information about setting of components.</p>
+
+<ul>
+<li> Security Configuration of WS container
+    http://www.globus.org/toolkit/docs/4.0/admin/docbook/ch06.html
+
+<li> GridFTP (Ninf-G4 requires GridFTP server on the remote server)
+    http://www.globus.org/toolkit/docs/4.0/admin/docbook/ch08.html
+
+<li> RFT
+    http://www.globus.org/toolkit/docs/4.0/admin/docbook/ch10.html
+
+<li> WS-GRAM (GRAM4)
+    http://www.globus.org/toolkit/docs/4.0/admin/docbook/ch11.html
+</ul>
+
+<h4><a name="appendix_GT4_usageStatistics">
+a.2 About Usage Statistics Collection by Globus Toolkit</a></h4>
+
+<p>Globus Toolkit provides Usage statistics.
+(See http://www.globus.org/toolkit/docs/4.0/Usage_Stats.html)
+If you desire to prevent this, match the following configuration
+changes.</p>
+
+<p>Set the environment variable "GLOBUS_USAGE_OPTOUT" to "1."</p>
+<ul>
+<li>(csh, tcsh, etc)
+<pre>% setenv GLOBUS_USAGE_OPTOUT 1</pre>
+<li>  (sh, bash, etc)
+<pre>$ GLOBUS_USAGE_OPTOUT=1</pre>
+<pre>$ export GLOBUS_USAGE_OPTOUT</pre>
+</ul>
+
+<p>Comment out the "usageStatisticsTargets" parameter in the configuration
+file $GLOBUS_LOCATION/etc/globus_wsrf_core/server-config.wsdd</p>
+
+  This setting,
+<pre>
+    &lt;globalConfiguration&gt;
+        &lt;parameter name="usageStatisticsTargets"
+                   value="usage-stats.globus.org:4810"/&gt;
+</pre>
+
+  Delete or comment out as follows.
+<pre>
+    &lt;globalConfiguration&gt;
+        &lt;!--parameter name="usageStatisticsTargets"
+                   value="usage-stats.globus.org:4810"/--&gt;
+</pre>
+
+Also check the following URLs.
+<ul>
+<li>http://www.globus.org/toolkit/docs/4.0/common/javawscore/admin-index.html#s-ja
+vawscore-Interface_Config_Frag-usageStatisticsTargets
+<li>http://www.globus.org/toolkit/docs/4.0/data/gridftp/admin-index.html#s-gridftp-admin-usage
+</ul>
+
+<h4><a name="appendix_GT4_setupEnvironment">
+a.3 Setting up the environment</a></h4>
+
+<p>Setup the environment variable and execute the script
+for setting up the environment.</p>
+
+<ul>
+<li>(csh, tcsh, etc)
+<pre>
+% setenv GLOBUS_LOCATION /path/to/gt4-install
+% source $GLOBUS_LOCATION/etc/globus-user-env.csh
+</pre>
+<li>(sh, bash, etc)
+<pre>
+$ GLOBUS_LOCATION=/path/to/gt4-install
+$ export GLOBUS_LOCATION
+$ . $GLOBUS_LOCATION/etc/globus-user-env.sh
+</pre>
+</ul>
+
+<h4><a name="appendix_GT4_startContainer">
+a.4 Starting the Container</a></h4>
+
+<pre>
+% cd $GLOBUS_LOCATION
+% ./bin/globus-start-container
+</pre>
+
+<p>Starting the SOAP server at: https://[IP-ADDR]:8443/wsrf/services/
+with the following services:<p>
+
+<pre>
+[1]: https://[IP-ADDR]:8443/wsrf/services/TriggerFactoryService
+[2]: https://[IP-ADDR]:8443/wsrf/services/DelegationTestService
+....
+[48]: https://[IP-ADDR]:8443/wsrf/services/CASService
+[49]: https://[IP-ADDR]:8443/wsrf/services/ManagedJobFactoryService
+</pre>
+
+<h4><a name="appendix_GT4_testWSGRAM">
+a.5 Testing the WS GRAM</a></h4>
+
+<p>Test the WS GRAM using following procedures.</p>
+
+<pre>
+% cd $GLOBUS_LOCATION
+% ./bin/grid-proxy-init
+  (input your passphrase)
+% globusrun-ws -submit -job-description-file \
+    $GLOBUS_LOCATION/test/globus_wsrf_gram_service_java_test_unit/test.xml
+Submitting job...Done.
+Job ID: uuid:[UUIDUUID-UUID-UUID-UUID-UUIDUUIDUUID]
+Termination time: MM/DD/CCYY HH:MM GMT
+Current job state: Unsubmitted
+Current job state: Done
+Destroying job...Done.
+</pre>
+
+
+<h4><a name="appendix_GT4_BinaryInstaller">
+a.6 Installing GT4 by Binary installer</a></h4>
+
+<p>It is recommended to install Globus Toolkit from source installer.
+If Globus Toolkit is installed from binary installer,
+you need to install globus_core with the following command:</p>
+
+<pre>
+% $GLOBUS_LOCATION/sbin/gpt-build -nosrc &lt;flavor&gt;
+</pre>
+
+<p>Where flavor is the Globus Toolkit flavor you're passing to
+Ninf-G configure script.</p>
+
+<p>(GT4 Admin Guide 
+<a
+href="http://www.globus.org/toolkit/docs/4.0/admin/docbook/apb.html#id2579220">
+B.4. Using globus-makefile-header with a binary distribution</a>)</p>
+
+
+<h3><a name="appendix_installedFileComposition">
+appendix B : Installed file composition</a></h3>
+
+<p>The installed file composition is listed below.</p>
+
+<pre>
+$GLOBUS_LOCATION/
++etc
+| +gpt
+| | +packages
+| |   +ng5grpcinfo (optional)
+| |     +undeploy.xml (optional)
+| +ng5grpcinfo (optional)
+|   +regist.xml (optional)
+|   +server-config.wsdd (optional)
+|   +jndi-config.xml (optional)
++lib
+| +ng5grpcinfo.jar (optional)
+| +ng5grpcinfo_stubs.jar (optional)
++share
+| +schema
+|   +ng5grpcinfo (optional)
+|     +GrpcInfo_flattened.wsdl (optional)
+|     +GrpcInfo.wsdl (optional)
+|     +GrpcInfo_service.wsdl (optional)
+|     +GrpcInfo_bindings.wsdl (optional)
++var
+  +gridrpc (optional)
+
+$NG_DIR
++bin
+| +ng_version
+| +ng_hostname
+| +ng_cc
+| +ng_gen
+| +ng_gen_nrf
+| +ng_invoke_server.GT4py (optional)
+| +ng_invoke_server.GT2c (optional)
+| +ng_invoke_server.SSH (optional)
+| +ng_invoke_server.Condor (optional)
+| +ng_invoke_server.NAREGISS (optional)
+| +ng_invoke_server.GT4java (optional)
+| +ng_client_communication_proxy.GT (optional)
+| +ng_remote_communication_proxy.GT (optional)
+| +ng_client_relay.GT (optional)
+| +ng_remote_relay.GT (optional)
+| +ng_information_service.NRF (optional)
+| +ng_information_service.MDS4 (optional)
++doc
+| +tutorial
+| +users_manual
++etc
+| +ng_invoke_server.GTtempl
+| +ninfg-user-env.csh
+| +ninfg-user-env.sh
++include
+| +grpc.h
+| +grpc_error.h
+| +grpcError.h
+| +grpc_executable.h
+| +grpcLocal.h
+| +ng.h
+| +net.h
+| +ngClientInternal.h
+| +ngCommon.h
+| +ngConfigFile.h
+| +ngConfig.h
+| +ngEnvironment.h
+| +ngExecutableInternal.h
+| +ngEx.h
+| +ngFunctionInformation.h
+| +ngInternal.h
+| +ngUtility.h
+| +queue.h
++lib
+  +libexpat.a
+  +libngclient.a
+  +libngcommon.a
+  +libngemcommon.a
+  +libngexecutable.a
+  +libnggrpc.a
+  +libngnet.a
+  +libngutility.a
+  +template.mk
+  +template-print.mk
+  +ng_invoke_server.GT4.py (optional)
+  +gt4invokeserverconfig.py (optional)
+  +gt4invokeserver.py (optional)
+  +ioutils.py (optional)
+  +ngutils.py (optional)
+  +uuid.py (optional)
+  +classad.jar (optional)
+  +condorAPI.jar (optional)
+  +condorIS.jar (optional)
+  +ng_invoke_server.jar (optional)
+  +ngisgt4.jar (optional)
+  +naregissIS.jar (optional)
+  +naregiss_is_execute.sh (optional)
+  +ng_information_service_mds4.jar (optional)
+</pre>
+
+<hr>
+last update : $Date: 2008/03/28 08:47:44 $
+</body>
+</html>
+

@@ -1,0 +1,29 @@
+Ninf-G5 Java Client API Installation Instructions
+
+1) Set environment variables.
+
+   Before build Ninf-G Java client, set the following environment variables.
+
+     {sh}
+     % NG_DIR=/path/to/ninfg
+     % export NG_DIR
+     {csh}
+     % setenv NG_DIR /path/to/ninfg
+     {Windows}
+     You have to set environment variables through Control Panel.
+
+   $NG_DIR specifies the localhost of Ninf-G.
+   Ninf-G Java client library(ng.jar) will be installed in $NG_DIR/lib.
+
+2) Run the following command in the package directory.
+   ("package directory" is the directory named "ng-5.x.x/package")
+
+     % ant install
+
+   This will compile all the sources and build the jar for you. 
+
+Congratulations, you're ready to run the Ninf-G Java client!
+
+Sample programs are available(ng-5.x.x/src/java/sample,
+ng-5.x.x/src/java/diag).
+Please read README file in these directories.

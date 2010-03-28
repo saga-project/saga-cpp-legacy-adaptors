@@ -1,0 +1,33 @@
+Ninf-G Java Client API version4 Installation Instructions
+
+1) Set environment variables.
+
+   Before build Ninf-G Java client, set the following environment variables.
+
+     {sh}
+     % GLOBUS_LOCATION=/path/to/gt
+     % NG_DIR=/path/to/ninfg
+     % export GLOBUS_LOCATION NG_DIR
+     {csh}
+     % setenv GLOBUS_LOCATION /path/to/gt
+     % setenv NG_DIR /path/to/ninfg
+     {Windows}
+     You have to set environment variables through Control Panel.
+
+   $GLOBUS_LOCATION specifies the location of the GT.
+   It's used when Ninf-G Java client is built.
+
+   $NG_DIR specifies the localhost of Ninf-G.
+   Ninf-G Java client library(ng.jar) will be installed in $NG_DIR/lib.
+
+2) Run the following command in the top directory.
+   ("top directory" is the directory named "ng-4.x.x")
+
+     % ant install
+
+   This will compile all the sources and build the jar for you. 
+
+Congratulations, you're ready to run the Ninf-G Java client!
+
+Sample programs are available(ng-4.x.x/java/sample, ng-4.x.x/java/diag).
+Please read README file in these directories.

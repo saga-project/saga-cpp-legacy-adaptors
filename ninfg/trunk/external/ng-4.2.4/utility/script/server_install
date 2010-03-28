@@ -1,0 +1,158 @@
+#!/bin/sh -x
+
+# $RCSfile: server_install,v $ $Revision: 1.7 $ $Date: 2005/11/21 05:16:17 $
+# $AIST_Release: 4.2.4 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+# Edit here to setup MPI
+MPIRUN_NO_OF_CPUS=1
+
+# Specify your Virtual organization name
+VO_NAME=local
+
+LANG=C
+PATH="/bin:/usr/bin:${PATH}"
+
+TMP_FILE="/tmp/grid-info-resource.$$"
+
+if test -z ${GLOBUS_LOCATION}; then
+    echo "ERROR: Setup GLOBUS_LOCATION environment variable." >&2
+    exit 1
+fi
+
+GT_ETC_DIR="${GLOBUS_LOCATION}/etc"
+GT_VAR_DIR="${GLOBUS_LOCATION}/var"
+run_userid=`id | sed 's/^uid=\([0-9]*\)(.*$/\1/'`
+if test $? -ne 0; then
+    echo "ERROR: Failed to execute id or sed command." >&2
+    exit 1
+fi  
+
+check_id () {
+    ck_dir=$1
+    run_uid=$2
+    
+    dir_owner=`ls -ld ${ck_dir} | tail -1 | awk '{print $3}'`
+    if test $? -ne 0 -o "X${dir_owner}" = "X"; then
+        echo "ERROR: Failed to get owner info from ${ck_dir}" >&2
+        exit 1
+    fi
+
+    dir_uid=`id ${dir_owner} | sed 's/^uid=\([0-9]*\)(.*$/\1/'`
+    if test $? -ne 0; then
+        echo "ERROR: Failed to execute id or sed command." >&2
+        exit 1
+    fi  
+
+    if test "X${run_uid}" != "X${dir_uid}"; then
+        echo "ERROR: This script have to be run by user \"$dir_owner\"." >&2
+        exit 1
+    fi
+    if test ! -w ${ck_dir}; then
+        echo "ERROR: Unable to write ${ck_dir}" >&2
+        exit 1
+    fi
+}
+
+check_id $GT_ETC_DIR $run_userid
+check_id $GT_VAR_DIR $run_userid
+
+NG_GRIDRPC_DIR="${GT_VAR_DIR}/gridrpc"
+GT_INFO_RESOURCE_FILE="${GT_ETC_DIR}/grid-info-resource-ldif.conf"
+
+useMDS2=no
+if test -f ${GT_INFO_RESOURCE_FILE}; then
+    useMDS2=yes
+fi
+
+if test x"${useMDS2}" = xyes; then
+
+    if test ! -w ${GT_INFO_RESOURCE_FILE}; then
+        echo "ERROR: Unable to write ${GT_INFO_RESOURCE_FILE}" >&2
+        exit 1
+    fi
+
+    GT_INFO_ADD="../gt-etc/grid-info-resource-ldif.conf.add"
+    if test ! -r ${GT_INFO_ADD}; then
+        echo "ERROR: Unable to access ${GT_INFO_ADD}" >&2
+        exit 1
+    fi
+
+    GRPC_SCHEMA="../gt-etc/grpc.schema"
+    if test ! -r ${GRPC_SCHEMA}; then
+        echo "ERROR: Unable to access ${GRPC_SCHEMA}" >&2
+        exit 1
+    fi
+fi
+
+CATLDIF="./catldif"
+if test ! -r ${CATLDIF}; then
+    echo "ERROR: Unable to access ${CATLDIF}" >&2
+    exit 1
+fi
+
+HOSTNAME=`globus-hostname`
+if test $? -ne 0; then
+    echo "ERROR: Failed to execute globus-hostname command." >&2
+    echo "Check if already executed below" >&2
+    echo "${GLOBUS_LOCATION}/etc/globus-user-env.sh (or .csh)" >&2
+    exit 1
+fi
+if test -z ${HOSTNAME}; then
+    echo "ERROR: globus-hostname returns empty output." >&2
+    exit 1
+fi
+
+DN="Mds-Host-hn=${HOSTNAME},Mds-Vo-name=${VO_NAME},o=grid"
+
+
+mkdir -p $NG_GRIDRPC_DIR
+chmod a+w $NG_GRIDRPC_DIR
+chmod +t $NG_GRIDRPC_DIR
+
+if test x"${useMDS2}" = xyes; then
+    # remove gridrpc related line and add it again
+    awk ' BEGIN{flag=0} /NINF-G-START/ {flag=1} {if (flag==0) print $0} /NINF-G-END/ {flag=0}' \
+        < $GT_INFO_RESOURCE_FILE > $TMP_FILE
+    echo  "" >> $TMP_FILE
+    REPLACE="s:__GLOBUS_LOCATION__:${GLOBUS_LOCATION}:"
+
+    sed s/__ROOT_DN__/${DN}/ < $GT_INFO_ADD | \
+    sed "${REPLACE}" >> $TMP_FILE
+    cp $TMP_FILE $GT_INFO_RESOURCE_FILE
+
+    rm -f $TMP_FILE
+
+    # COPY grpc.schema to $GLOBUS_LOCATION/etc
+    cp $GRPC_SCHEMA $GT_ETC_DIR
+fi
+
+target_filename="${NG_GRIDRPC_DIR}/root.ldif"
+cat > $target_filename << EOF
+dn: Mds-Software-deployment=GridRPC-Ninf-G, __ROOT_DN__
+objectClass: Mds
+objectClass: MdsHost
+objectClass: GridRPC
+Mds-Host-hn: __HOSTNAME__
+Mds-Software-deployment: GridRPC-Ninf-G
+GridRPC-MpirunNoOfCPUs: $MPIRUN_NO_OF_CPUS
+EOF
+
+cp $CATLDIF $NG_GRIDRPC_DIR
+

@@ -1,0 +1,248 @@
+/*
+ * $RCSfile: callback.idl,v $ $Revision: 1.1 $ $Date: 2005/09/29 07:52:53 $
+ * $AIST_Release: 4.2.4 $
+ * $AIST_Copyright:
+ *  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+ *  National Institute of Advanced Industrial Science and Technology
+ *  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+ *  
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  $
+ */
+Module callback;
+
+Define callback_test(IN double a, IN int times, callback_func(IN double d[1]))
+{
+    double d = 0;
+    int i;
+
+    for (i = 0; i < times; i++) {
+        d += a;
+        callback_func(&d);
+    }
+}
+
+Define callback_test2(IN double a, IN int times, callback_func(IN double d[1]))
+{
+    double d = a;
+    int i;
+
+    for (i = 0; i < times; i++) {
+        callback_func(&d);
+    }
+}
+
+Define callback2D_test(IN int N, IN double a[N][N],
+    callback2D_func(IN double d[N][N]))
+{
+    callback2D_func(a);
+}
+
+Define callback_return_test(IN int N, IN double a[N][N], OUT double b[N][N],
+    callback_return_func(IN double c[N][N], OUT double d[N][N]))
+{
+    callback_return_func(a, b);
+}
+
+Define callback_multi_test(IN int N, IN double a[N][N], OUT double b[N][N],
+    callback_return_func(IN double c[N][N], OUT double d[N][N]),
+    callback_return_func2(IN double c[N][N], OUT double d[N][N]))
+{
+    double *c = (double*)malloc( N * N * sizeof(double));
+
+    callback_return_func (a, c);
+    callback_return_func2(c, b);
+}
+
+Define callbackstr(IN string a[5], callback_func(IN string b[1]))
+{
+    char string[64] = "";
+    char *tmp = string;  
+    int i;
+
+    for (i = 0; i < 5; i++) {
+      strcat(string, a[i]);
+    }
+
+    callback_func(&tmp);
+}
+
+DefClass callback_max_test
+{
+    DefState
+    {
+        int init, retValue;
+        int v01, v02, v03, v04, v05, v06, v07, v08;
+        int v09, v10, v11, v12, v13, v14, v15, v16;
+        int v17, v18, v19, v20, v21, v22, v23, v24;
+        int v25, v26, v27, v28, v29, v30, v31, v32;
+    }
+
+    DefMethod initialize()
+    {
+        init = 99; /* magic number */
+        retValue = 1;
+        v01 = v02 = v03 = v04 = v05 = v06 = v07 = v08 = 0;
+        v09 = v10 = v11 = v12 = v13 = v14 = v15 = v16 = 0;
+        v17 = v18 = v19 = v20 = v21 = v22 = v23 = v24 = 0;
+        v25 = v26 = v27 = v28 = v29 = v30 = v31 = v32 = 0;
+    }
+    
+    DefMethod finalize()
+    {
+        init = 0;
+        retValue = 0;
+        v01 = v02 = v03 = v04 = v05 = v06 = v07 = v08 = 0;
+        v09 = v10 = v11 = v12 = v13 = v14 = v15 = v16 = 0;
+        v17 = v18 = v19 = v20 = v21 = v22 = v23 = v24 = 0;
+        v25 = v26 = v27 = v28 = v29 = v30 = v31 = v32 = 0;
+    }
+    
+    DefMethod get_result(OUT int *ret)
+    {
+        assert(ret != NULL);
+
+        *ret = 1;
+        if (init != 99) {
+            *ret = 0;
+        }
+
+        if (retValue == 0) {
+            *ret = 0;
+        }
+    }
+    
+    DefMethod max_method2x(
+        IN int in, OUT int *ret,
+        callback_max_start(),
+        callback_max_get_func(
+            OUT int *i01, OUT int *i02, OUT int *i03, OUT int *i04,
+            OUT int *i05, OUT int *i06, OUT int *i07, OUT int *i08,
+            OUT int *i09, OUT int *i10, OUT int *i11, OUT int *i12,
+            OUT int *i13, OUT int *i14, OUT int *i15, OUT int *i16,
+            OUT int *i17, OUT int *i18, OUT int *i19, OUT int *i20,
+            OUT int *i21, OUT int *i22, OUT int *i23, OUT int *i24,
+            OUT int *i25, OUT int *i26, OUT int *i27, OUT int *i28,
+            OUT int *i29, OUT int *i30, OUT int *i31, OUT int *i32),
+        callback_max_put_func(
+            IN int *o01, IN int *o02, IN int *o03, IN int *o04,
+            IN int *o05, IN int *o06, IN int *o07, IN int *o08,
+            IN int *o09, IN int *o10, IN int *o11, IN int *o12,
+            IN int *o13, IN int *o14, IN int *o15, IN int *o16,
+            IN int *o17, IN int *o18, IN int *o19, IN int *o20,
+            IN int *o21, IN int *o22, IN int *o23, IN int *o24,
+            IN int *o25, IN int *o26, IN int *o27, IN int *o28,
+            IN int *o29, IN int *o30, IN int *o31, IN int *o32),
+        callback_max_end())
+    {
+        int m;
+        assert(ret != NULL);
+
+        *ret = 0;
+        m = 2; 
+
+        callback_max_start();
+
+        /* Get the value from client */
+        callback_max_get_func(
+            &v01, &v02, &v03, &v04, &v05, &v06, &v07, &v08,
+            &v09, &v10, &v11, &v12, &v13, &v14, &v15, &v16,
+            &v17, &v18, &v19, &v20, &v21, &v22, &v23, &v24,
+            &v25, &v26, &v27, &v28, &v29, &v30, &v31, &v32);
+
+        /* Modify the value */
+        v01 *= m; v02 *= m; v03 *= m; v04 *= m;
+        v05 *= m; v06 *= m; v07 *= m; v08 *= m;
+        v09 *= m; v10 *= m; v11 *= m; v12 *= m;
+        v13 *= m; v14 *= m; v15 *= m; v16 *= m;
+        v17 *= m; v18 *= m; v19 *= m; v20 *= m;
+        v21 *= m; v22 *= m; v23 *= m; v24 *= m;
+        v25 *= m; v26 *= m; v27 *= m; v28 *= m;
+        v29 *= m; v30 *= m; v31 *= m; v32 *= m;
+
+        /* Put the valude to client */
+        callback_max_put_func(
+            &v01, &v02, &v03, &v04, &v05, &v06, &v07, &v08,
+            &v09, &v10, &v11, &v12, &v13, &v14, &v15, &v16,
+            &v17, &v18, &v19, &v20, &v21, &v22, &v23, &v24,
+            &v25, &v26, &v27, &v28, &v29, &v30, &v31, &v32);
+
+        callback_max_end();
+
+        if ((in == 1) && (retValue != 0)) {
+            *ret = 1;
+        }
+    }
+
+    DefMethod max_method4x(
+        IN int in, OUT int *ret,
+        callback_max_start4x(),
+        callback_max_get_func4x(
+            OUT int *i01, OUT int *i02, OUT int *i03, OUT int *i04,
+            OUT int *i05, OUT int *i06, OUT int *i07, OUT int *i08,
+            OUT int *i09, OUT int *i10, OUT int *i11, OUT int *i12,
+            OUT int *i13, OUT int *i14, OUT int *i15, OUT int *i16,
+            OUT int *i17, OUT int *i18, OUT int *i19, OUT int *i20,
+            OUT int *i21, OUT int *i22, OUT int *i23, OUT int *i24,
+            OUT int *i25, OUT int *i26, OUT int *i27, OUT int *i28,
+            OUT int *i29, OUT int *i30, OUT int *i31, OUT int *i32),
+        callback_max_put_func4x(
+            IN int *o01, IN int *o02, IN int *o03, IN int *o04,
+            IN int *o05, IN int *o06, IN int *o07, IN int *o08,
+            IN int *o09, IN int *o10, IN int *o11, IN int *o12,
+            IN int *o13, IN int *o14, IN int *o15, IN int *o16,
+            IN int *o17, IN int *o18, IN int *o19, IN int *o20,
+            IN int *o21, IN int *o22, IN int *o23, IN int *o24,
+            IN int *o25, IN int *o26, IN int *o27, IN int *o28,
+            IN int *o29, IN int *o30, IN int *o31, IN int *o32),
+        callback_max_end4x())
+    {
+        int m;
+        assert(ret != NULL);
+
+        *ret = 0;
+        m = 4; 
+
+        callback_max_start4x();
+
+        /* Get the value from client */
+        callback_max_get_func4x(
+            &v01, &v02, &v03, &v04, &v05, &v06, &v07, &v08,
+            &v09, &v10, &v11, &v12, &v13, &v14, &v15, &v16,
+            &v17, &v18, &v19, &v20, &v21, &v22, &v23, &v24,
+            &v25, &v26, &v27, &v28, &v29, &v30, &v31, &v32);
+
+        /* Modify the value */
+        v01 *= m; v02 *= m; v03 *= m; v04 *= m;
+        v05 *= m; v06 *= m; v07 *= m; v08 *= m;
+        v09 *= m; v10 *= m; v11 *= m; v12 *= m;
+        v13 *= m; v14 *= m; v15 *= m; v16 *= m;
+        v17 *= m; v18 *= m; v19 *= m; v20 *= m;
+        v21 *= m; v22 *= m; v23 *= m; v24 *= m;
+        v25 *= m; v26 *= m; v27 *= m; v28 *= m;
+        v29 *= m; v30 *= m; v31 *= m; v32 *= m;
+
+        /* Put the valude to client */
+        callback_max_put_func4x(
+            &v01, &v02, &v03, &v04, &v05, &v06, &v07, &v08,
+            &v09, &v10, &v11, &v12, &v13, &v14, &v15, &v16,
+            &v17, &v18, &v19, &v20, &v21, &v22, &v23, &v24,
+            &v25, &v26, &v27, &v28, &v29, &v30, &v31, &v32);
+
+        callback_max_end4x();
+
+        if ((in == 1) && (retValue != 0)) {
+            *ret = 1;
+        }
+    }
+}

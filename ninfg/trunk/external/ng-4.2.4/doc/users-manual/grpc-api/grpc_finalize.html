@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>grpc_finalize</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>grpc_finalize</code> - Executes the Ninf-G end processing.
+<h3>SYNOPSIS</h3>
+<code>
+
+  grpc_error_t grpc_finalize()
+
+</code>
+<h3>DESCRIPTION</h3>
+<p>
+The grpc_finalize() function performs the processing for terminating
+Ninf-G.
+</p>
+<p>
+All outstanding jobs are canceled and resources used by Ninf-G are
+released.  The cancellation procedure includes end processing for the
+Globus Toolkit.
+</p>
+<p>
+This function is MT-unsafe.
+</p>
+<h3>RETURN VALUE</h3>
+<p>
+If successful, GRPC_NO_ERROR is returned. In the case of an error, Error code is returned
+</p>
+<h3>ERRORS</h3>
+<dl>
+<dt><code>  GRPC_NOT_INITIALIZED</code></dt>
+<dd>	GRPC client is not initialized yet.</dd>
+<dt><code>  GRPC_OTHER_ERROR_CODE</code></dt>
+<dd>	Internal error detected.</dd>
+</dl>
+<hr>
+last update : $Date: 2005/10/25 02:01:04 $
+</body>
+</html>

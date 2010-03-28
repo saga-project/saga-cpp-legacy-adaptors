@@ -1,0 +1,539 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+<title>Examples</title>
+</head>
+
+<body bgcolor=white>
+
+<h2><a name="example"> 5. Examples </a></h2>
+
+<p>This section give you a tutorial of how to use the
+Ninf-G system for programming on the Grid.
+Simplicity of programming is the most beneficial aspect
+of the Ninf-G system, and we hope that users will be
+able to gridify his programs easily after reading this document.
+We hope to extend this example further to cover more
+advanced Ninf-G features.
+Examples are provided for <a href="#grpcapi"> GRPC API</a>.</p>
+
+<h2><a name="grpcapi">Grid RPC API</a></h2>
+
+<ul>
+<li><a href="#1"> Gridifying a Numerical Library with GridRPC </a>
+
+<li><a href="#2"> Gridifying Programs that use Files </a>
+<li><a href="#3"> Using Multiple Servers for
+Parallel Programming on the Grid
+-- The Parameter Sweep Survey Example. </a>
+
+<ul>
+<li><a href="#4"> Calculating PI using a simple Monte Carlo Method </a>
+<li><a href="#5"> Gridifying the PI program. </a>
+<li><a href="#6"> Employing Multiple Servers for Task Parallel Computation.</a>
+</ul>
+</ul>
+
+<h3><a name=1>
+Gridifying a Numerical Library with Grid RPC API</a></h3>
+
+<p>We first cover the simple case where the library to be
+Gridifyied is defined as a linkable library function.
+Below is a sample code of a simple matrix multiply.
+The first scalar argument specifies the size of the
+matrix (n by n), parameters 
+<code> a</code> and <code> b</code> 
+ are references to matrices to be
+multiplied, and c is the reference to the result matrix.
+Notice that, 1) the matrix (defined as arrays) do not
+itself embody size as type information, and
+2) as a result there is a dependency between n and a, b, c.
+In fact, since array arguments are passed as a reference,
+one must assume the contents of the array are implicitly
+shared by the caller and the callee, with arbitrary choices
+as to using them as input, output, or temporary data structures.</p>
+
+
+<pre>
+<code>
+void mmul(int n, double * a, double * b, double * c)
+{
+    double t;
+    int i, j, k;
+    for (i = 0; i &lt; n; i++) {
+        for (j = 0; j &lt; n; j++) {
+            t = 0;
+            for (k = 0; k &lt; n; k++){
+                t += a[i * n + k] * b[k * n + j];
+            }
+            c[i * n + j] = t;
+        }
+    }
+}
+</code>
+</pre>
+
+<p>The main routine which calls mmul() might be as follows:</p>
+
+
+<pre>
+<code>
+main()
+{
+    double A[N*N], B[N*N], C[N*N];
+
+    initMatA(N, A); /* initialize */
+    initMatB(N, B); /* initialize */
+
+    mmul(N, A, B, C);
+}
+</code>
+</pre>
+
+
+<p>In order to "Gridify", or more precisely,
+allow mmul to be called remotely via GridRPC,
+we must describe the interface of the function so that
+information not embodied in the language type system
+becomes sufficiently available to the GridRPC system
+to make the remote call.
+Although future standardization is definitely conceivable,
+currently each GridRPC system has its
+own IDL (Interface Description Language);
+for example, Ninf has its own NinfIDL definition.
+Below we give the interface of mmul() defined by the NinfIDL
+syntax:</p>
+
+<pre>
+<code>
+1: Module mmul;
+2: 
+3: Define mmul(IN int N, IN double A[N*N], 
+4:             IN double B[N*N], OUT double C[N*N])
+5: "matmul"
+6: Required "mmul_lib.o"
+7: Calls "C" mmul(N, A, B, C);
+</code>
+</pre>
+
+<p>Line 1 declares the module name to be defined.
+There is a one-to-one correspondence between a module
+and an IDL file, and each module can have multiple entries to
+gridify multiple functions.
+Lines 3-7 are the definition for a particular entry mmul/mmul.
+Here, lines 3 and 4 declare the interface of the entry.
+The difference between a NinfIDL entry definition and
+the C prototype definition is that there are no return values
+(the return value of the Ninf call is used to return status info),
+argument input/output modes are specified, and array sizes
+are described in terms of the scalar arguments.</p>
+
+<p>We note here that NinfIDL has special features to efficiently
+support gridifying of a library
+(similar features are found in Netsolve IDL).
+In contrast to standard procedure calls within
+a shared memory space, GridRPC needs to transfer data
+over the network.
+Transferring the entire contents of the array will be
+naturally very costly, especially for huge matrices
+appearing in real applications.
+Here, one will quickly observe that surprising number of
+numerical libraries take for granted the fact that
+address space of data structures, in particular arrays are shared,
+and (a) only use subarrays of the passed arrays,
+(b) write back results in the passed arrays, and
+(c) pass arrays as scratchpad temporaries.
+The portion of the arrays to be operated, etc.,
+are determined by the semantics of the operation
+according to the input parameters passed to the function.
+For example in mmul, the whole arrays need to be passed,
+and their sizes are all N by N, where N is the first scalar parameter;
+A and B only need to be passed as input parameters and
+their contents do not change, while C is used as a return
+argument and thus need not be shipped to the server,
+but the result needs to be shipped back to the client.
+In general, in order to determine and minimize
+the size of transfer, NinfIDL allows flexible description
+of the array shape used by the remote library.
+One can specify leading dimensions, subarrays, and strides.
+In fact arbitrary arithmetic expressions involving constants
+and scalar arguments can be used in the array size expressions.</p>
+
+<p>Line 5 is the comment describing the entry,
+while line 6 specifies the necessary object file
+when the executable for the particular file is to be linked.
+Line 7 gives the actual library function to be called,
+and the calling sequence; here "C" denotes C-style (row-major)
+array layout.</p>
+
+<p>The user compiles this IDL file using the Ninf IDL compiler,
+and generates the stub code and its makefile.
+By executing this makefile a Ninf executable is generated.
+The user will subsequently register the executable to the server
+using the registry tool.</p>
+
+<p>Now the client us ready to make the call of the network.
+In order to make a GridRPC call, the user modifies his
+original main program in the following manner.
+We notice that only the function call
+is modified---No need to change the program to
+adjust to the skeleton that the IDL generator generates
+as is with typical RPC systems such as CORBA.
+Moreover, we note that the IDL, the stub files and
+the executables are only resident on the server side,
+and the client only needs to link his program with
+a generic Ninf client library.</p>
+
+
+<pre>
+<code>
+main()
+{
+    double A[N*N], B[N*N], C[N*N];
+    grpc_function_handle_t handle;
+ 
+    grpc_initialize(argv[1]);
+ 
+    initMatA(N, A); /* initialize */
+    initMatB(N, B); /* initialize */
+ 
+    grpc_function_handle_default(&amp;handle, "mmul/mmul");
+ 
+    if (grpc_call(&amp;handle, N, A, B, C) != GRPC_NO_ERROR) {
+        fprintf(stderr, "Error in grpc_call\n");
+        exit(1);
+    }
+ 
+    grpc_function_handle_destruct(&amp;handle);
+    ...
+    grpc_finalize();
+}
+</code>
+</pre>
+
+<h3><a name=2> Gridifying Programs that use Files </a></h3>
+
+<p>The above example assumes that the numerical routine
+is supplied as a library with well-defined function API,
+or at least its source is available in a way such
+that it could easily converted into a library.
+In practice, many numerical routines are only available
+in a non-library executable and/or binary form,
+with input/output interfaces using files.
+In order to gridify such "canned" applications,
+GridRPC systems typically support remote files and their
+automatic management/transfer.</p>
+
+<p>We take gnuplot as an example.
+Gnuplot in non-interactive mode inputs script from a
+specified file, and outputs the resulting graph to
+the standard output. Below is an example gnuplot script.</p>
+
+<pre>
+<code>
+set terminal postscript
+set xlabel "x"
+set ylabel "y"
+plot f(x) = sin(x*a), a = .2, f(x), a = .4, f(x)
+</code>
+</pre>
+
+<p>If this script is saved under a filename "gplot":</p>
+
+<p><code> &gt; gnuplot gplot &gt; graph.ps </code></p>
+
+<p>will store the postscript representation of the graph
+to the file graph.ps.
+In order to execute gnuplot remotely,
+we must package it appropriately, and moreover must
+automatically transfer the input (gplot) and output (graph.ps) files
+between the client and the server.</p>
+
+<p>Ninf-G IDL provides a type <i>filename</i> to specify that
+the particular argument is a file.
+Below is an example of using gnuplot via GridRPC.</p>
+
+<pre>
+<code>
+Module plot;
+Define plot(IN filename plotfile, OUT filename psfile )
+"invoke gnuplot"
+{
+    char buffer[1000];
+    sprintf(buffer, "gnuplot %s &gt; %s", plotfile, psfile);
+    system(buffer);
+}
+</code>
+</pre>
+
+<p>The IDL writes the string command sequence
+to invoke gnuplot into a variable buffer[],
+and invokes gnuplot as a system library.
+The file specified as an input is automatically transferred
+to the temporary directory of the server,
+and its temporary file name is passed to the stub function.
+As for the output file, only the temporary file name is
+created and passed to the stub function.
+After the stub program is executed,
+the files in output mode as specified in the IDL
+are automatically transferred to the client,
+and saved there under the name given in the argument.</p>
+
+<p>Below is an example of how this function might be
+called via GridRPC.</p>
+
+<pre>
+<code>
+#include &lt;stdio.h&gt;
+#include "grpc.h"
+
+main(int argc, char **argv)
+{
+    grpc_function_handle_t handle;
+
+    grpc_initialize(argv[1]);
+
+    grpc_function_handle_default(&amp;handle, "plot/plot");
+
+    if (grpc_call(&amp;handle, argv[2], argv[3]) != GRPC_NO_ERROR) {
+        fprintf(stderr, "Error in grpc_call\n");
+        exit(1);
+    }
+
+    grpc_function_handle_destruct(&amp;handle);
+    ...
+    grpc_finalize();
+}
+</code>
+</pre>
+
+<p>We also note that, by combining this feature with
+the technique of using multiple servers simultaneously
+described in the next section, we can process large
+amount of data at once.</p>
+
+<h3><a name=3>
+Using Multiple Servers for Parallel Programming on
+the Grid --- The Parameter Sweep Survey Example.</a></h3>
+
+<p>GridRPC can serve as a task-parallel programming abstraction,
+whose programs can scale from local workstations to the Grid.
+Here, we take an example of simple parameter sweep survey,
+and investigate how it can be easily programmed using GridRPC.</p>
+
+<h4><a name=4>
+Calculating PI using a simple Monte Carlo Method </a></h4>
+
+<p>As an example,
+we compute the value of PI using a simple Monte Carlo Method.
+We generate a large number of random points within
+the square region that exactly encloses
+a unit circle (actually, 1/4 of a circle).
+We calculate the value of PI by inverse computing
+the area of the circle according to the probability
+that the points will fall within the circle.
+The program below shows the original sequential version.</p>
+
+<pre>
+<code>
+long pi_trial(int seed, long times)
+{
+    long l, long counter = 0;
+
+    srandom(seed);
+    for (l = 0; l &lt; times; l++){
+        double x = (double)random() / RAND_MAX;
+        double y = (double)random() / RAND_MAX;
+        if (x * x + y * y &lt; 1.0)
+            counter++;
+    }
+    return counter;
+}
+
+main(int argc, char **argv)
+{
+    double pi;
+    long times = atol(argv[1]);
+    count = pi_trial(10, times);
+    pi = 4.0 * (count / (double) times);
+    printf("PI = %f\n", pi);
+}
+</code>
+</pre>
+
+<h4><a name=5> Gridifying the PI program. </a></h4>
+
+<p>First,
+we rewrite the program so that it does the appropriate GridRPC calls.
+The following steps are needed:</p>
+
+<ol>
+<li> Separate out the pi_trail() function into
+a separate file (say, trial_pi.c),
+and create its object file trial_pi.o using a standard C compiler.
+
+<li> Describe the interface of pi_trial in an IDL file.
+
+<pre>
+<code>
+Module pi;
+
+Define pi_trial(IN int seed, IN long times, OUT long * count)
+"monte carlo pi computation"
+Required "pi_trial.o"
+{
+    long counter;
+    counter = pi_trial(seed, times);
+    *count = counter;
+}
+</code>
+</pre>
+
+<li> Rewrite the main program so that it makes a GridRPC call.
+
+<pre>
+<code>
+main(int argc, char **argv)
+{
+    double pi;
+    long times, count;
+    grpc_function_handle_t handle;
+
+    grpc_initialize(argv[1]);
+
+    times = atol(argv[2]);
+
+    grpc_function_handle_default(&amp;handle, "pi/pi_trial");
+
+    if (grpc_call(&amp;handle, 10, times, &amp;count) != GRPC_NO_ERROR) {
+        fprintf(stderr, "Failed in grpc_call\n");
+        exit(2);
+    }
+
+    pi = 4.0 * ( count / (double) times);
+    printf("PI = %f\n", pi);
+
+    grpc_function_handle_destruct(&amp;handle);
+
+    grpc_finalize();
+}
+</code>
+</pre>
+
+</ol>
+
+<p>We now have made the body of the computation remote.
+The next phase is to parallelise it.</p>
+
+<h4><a name=6>
+Employing Multiple Servers for Task Parallel Computation.</a></h4>
+
+<p>We next rewrite the main program so that
+parallel tasks are distributed to multiple servers.
+Although distribution of tasks are possible using metaserver
+scheduling with Ninf (and Agents with Netsolve),
+it is sometimes better to specify a host explicitly
+for performance reasons,
+for low overhead and explicit load balancing.
+Ninf-G allows explicit specification of servers by
+specifying the hostname in the initialization of the function handle.</p>
+
+<p>The standard grpc_call() RPC is synchronous in
+that the client waits until the completion of the computation
+on the server side.
+For task-parallel execution,
+Ninf-G facilitates several asynchronous call APIs.
+For example, the most basic asynchronous call grpc_call_async
+is almost identical to grpc_call except that
+it returns immediately after all the arguments have been sent.
+The return value is the session ID of the asynchronous call;
+the ID is used for various synchronizations such as waiting
+for the return value of the call.</p>
+
+<p>There are several calls for synchronization.
+The most basic is the 
+<code>grpc_wait(grpc_sessionid_t ID)</code>,
+where we wait for the result of the asynchronous call
+with the supplied session ID.
+grpc_wait_all() waits for all preceding asynchronous
+invocations made.
+Here, we employ grpc_wait_all() to parallelize
+the above PI client so that it uses multiple
+simultaneous remote server calls:</p>
+
+<pre>
+<code>
+     1  #include "grpc.h"
+     2  #define NUM_HOSTS 8
+     3  char * hosts[] = {"node0.example.org", "node1.example.org", "node2.example.org", "node3.example.org",
+     4                    "node4.example.org", "node5.example.org", "node6.example.org", "node7.example.org"};
+     5 
+     6  grpc_function_handle_t handles[NUM_HOSTS];
+     7  grpc_sessionid_t ids[NUM_HOSTS];
+     8
+     9  main(int argc, char **argv){
+    10      double pi;
+    11      long times, count[NUM_HOSTS], sum;
+    12      char * config_file;
+    13      int i;
+    14      if (argc &lt; 3) {
+    15          fprintf(stderr, "USAGE: %s CONFIG_FILE TIMES \n", argv[0]);
+    16          exit(2);
+    17      }
+    18      config_file = argv[1];
+    19      times = atol(argv[2]) / NUM_HOSTS;
+    20 
+    21      /* Initialize GRPC runtimes. */
+    22      if (grpc_initialize(config_file) != GRPC_NO_ERROR) {
+    23          exit(2);
+    24      }
+    25      /* Initialize handles. */
+    26      for (i = 0; i &lt; NUM_HOSTS; i++)
+    27          grpc_function_handle_init(&amp;handles[i], hosts[i], "pi/pi_trial");
+    28
+    29      for (i = 0; i &lt; NUM_HOSTS; i++) {
+    30          /* Parallel non-blocking remote function invocation. */
+    31          if (grpc_call_async(&amp;handles[i], &amp;ids[i], i, times, &amp;count[i]) != GRPC_NO_ERROR){
+    32              grpc_perror_np("pi_trial");
+    33              exit(2);
+    34          }
+    35      }
+    36      /* Sync. */
+    37      if (grpc_wait_all() != GRPC_NO_ERROR) {
+    38          grpc_perror_np("wait_all");
+    39          exit(2);
+    40      }
+    41
+    42      for (i = 0; i &lt; NUM_HOSTS; i++)
+    43          grpc_function_handle_destruct(&amp;handles[i]);
+    44
+    45      /* Compute and display pi. */
+    46      for (i = 0, sum = 0; i &lt; NUM_HOSTS; i++)
+    47          sum += count[i];
+    48      pi = 4.0 * ( sum / ((double) times * NUM_HOSTS));
+    49      printf("PI = %f\n", pi);
+    50
+    51      /* Finalize GRPC runtimes. */
+    52      grpc_finalize();
+    53 }
+</code>
+</pre>
+
+<p>We specify the number of server hosts and their names
+in lines 2 and 3-4, respectively.
+Line 6 is the port number used, and line 19 divides the number of trials
+with the number of servers, determining the number of trials per server.
+The for loop in lines 29-35 invokes the servers asynchronously.
+Line 47 aggregates the results returned from all the servers.</p>
+
+<p>In this manner,
+we can easily write a parallel parameter sweep survey program using the
+task parallel primitives of GridRPC.
+We next modify the program to perform dynamic load balancing.</p>
+
+<hr>
+last update : $Date: 2005/07/07 11:06:40 $
+</body>
+</html>
+

@@ -1,0 +1,14 @@
+/* This is sample server-side program for Ninf-G, calculate PI */
+Module pi;
+
+Define pi_trial(IN int seed, IN long times, OUT long *count)
+"monte carlo pi computation"
+Required "pi_trial.o"
+{
+  extern long pi_trial(int seed, long times);
+  long counter;
+
+  counter = pi_trial(seed, times);
+  *count = counter;
+}
+

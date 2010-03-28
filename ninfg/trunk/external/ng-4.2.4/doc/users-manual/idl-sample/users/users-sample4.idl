@@ -1,0 +1,27 @@
+Module idl_sample4;
+
+#define max( a, b)  ((a)>(b) ? (a) : (b) )
+
+Define idl_sample4_func(  IN char type,
+                INOUT double a[lda][itmp2-itmp1+1],
+                IN int lda,
+                IN long wantz,
+                INOUT double z[ldz][lihiz-liloz+1],
+                IN int ldz,
+                IN long block,
+                INOUT int *irow1,
+                INOUT int *icol1,
+                IN int istart,
+                IN int istop,
+                IN int itmp1,
+                IN int itmp2,
+                IN int liloz,
+                IN int lihiz,
+                IN double vecs[max(lda, itmp2-itmp1+1)],
+                INOUT dcomplex *v2,
+                INOUT dcomplex *v3,
+                INOUT dcomplex *t1,
+                INOUT dcomplex *t2,
+                INOUT double *t3
+)
+Calls "Fortran" func( type, a, lda, wantz, z, ldz, block, irow1, icol1, istart, istop, itmp1, itmp2, liloz, lihiz, vecs, v2, v3, t1, t2, t3);

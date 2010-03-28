@@ -1,0 +1,149 @@
+<!-- ======================================================= -->
+<!--             Ninf-G Java Client tset                     -->
+<!-- ======================================================= -->
+<project name="Ninf-G Diag" default="build" basedir=".">
+
+  <property environment="env"/>
+  <!-- ======================================================= -->
+  <!-- set properties for user                                 -->
+  <!-- ======================================================= -->
+  <property name="my_java_home" value="${env.JAVA_HOME}" />
+  <property name="my_coglib" value="${env.GLOBUS_LOCATION}/lib" />
+  <property name="my_ng_dir" value="${env.NG_DIR}" />
+
+  <!-- argument for sample programs -->
+  <property name="hostnames" value="gram0.example.org gram1.example.org " />
+  <property name="times" value="10000" />
+  <property name="hostname" value="gram.example.org" />
+  <property name="nJobs" value="5" />
+
+  <property name="config_file" value="client.conf" />
+  <property name="ng_log_level" value="2" />
+  <property name="ng_print_info" value="off" />
+  <property name="globus_debug_level" value="-1" />
+ 
+  <!-- ======================================================= -->
+  <!-- set properties for Java Runtime                         -->
+  <!-- ======================================================= -->
+  <property name="java_home" value="${my_java_home}" />
+  <property name="jdb" value="${java_home}/bin/jdb" />
+  <property name="rmic" value="${java_home}/bin/rmic" />
+  <property name="java" value="${java_home}/bin/java" />
+
+  <!-- ======================================================= -->
+  <!-- set properties for CoG                                  -->
+  <!-- ======================================================= -->
+  <property name="coglib" value="${my_coglib}" />
+  <path id="coglibpath">
+    <path path="."/>
+    <path path="${env.GLOBUS_LOCATION}"/>
+    <path path="${env.GLOBUS_LOCATION}/build/classes"/>
+    <fileset dir="${coglib}" >
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <!-- ======================================================= -->
+  <!-- set properties for Ninf-G                               -->
+  <!-- ======================================================= -->
+  <property name="nglib" value="${my_ng_dir}/lib/ng.jar" />
+
+  <!-- ======================================================= -->
+  <!-- set properties for all libraries                        -->
+  <!-- ======================================================= -->
+  <!-- for build environment -->
+  <path id="ngbuildlibpath">
+    <pathelement path="${nglib}" />
+    <path refid="coglibpath" />
+    <pathelement path="." />
+  </path>
+  <property name="ngbuildlib" refid="ngbuildlibpath" />
+
+  <!-- for run time environment -->
+  <path id="ngrunlibpath">
+    <pathelement path="${nglib}" />
+    <path refid="coglibpath" />
+    <pathelement path="." />
+  </path>
+  <property name="ngrunlib" refid="ngrunlibpath" />
+
+  <!-- ======================================================= -->
+  <!-- build Ninf-G java diag programs                         -->
+  <!-- ======================================================= -->
+  <target name="build">
+    <javac srcdir="." 
+	   classpath="${ngbuildlib}"
+           destdir="."
+           deprecation="on"
+           debug="off" />
+  </target>
+
+  <!-- ======================================================= -->
+  <!-- exec Ninf-G java diag programs                          -->
+  <!-- ======================================================= -->
+  <target name="exec_test">
+    <exec executable="${java}">
+      <arg value="-classpath" />
+      <arg value="${ngrunlib}" />
+      <arg line="-Djava.endorsed.dirs=${env.GLOBUS_LOCATION}/endorsed" />
+      <arg line="-DGLOBUS_LOCATION=${env.GLOBUS_LOCATION}" />
+      <arg line="-Dorg.globus.debug.level=${globus_debug_level}" />
+      <arg line="-Dninfg.configFile=${config_file}" />
+      <arg line="-Dninfg.logLevel=${ng_log_level}" />
+      <arg line="-Dninfg.sample.printInfo=${ng_print_info}" />
+      <arg line="-DNG_DIR=${my_ng_dir}" />
+      <arg value="${test_target}" />
+      <arg value="${config_file}" />
+      <arg line="${another_arguments}" />
+    </exec>
+  </target>
+
+  <target name="exec_test_with_arg_line">
+    <exec executable="${java}">
+      <arg value="-classpath" />
+      <arg value="${ngrunlib}" />
+      <arg value="${test_target}" />
+      <arg line="${another_arguments}" />
+    </exec>
+  </target>
+
+  <!-- ADD -->
+  <target name="add">
+    <property name="test_target" value="ADD" />
+    <property name="another_arguments" value="${hostnames}" />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- PI -->
+  <target name="pi">
+    <property name="test_target" value="PI" />
+    <property name="another_arguments" value="${times} ${hostnames}" />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- PIArray -->
+  <target name="piarray">
+    <property name="test_target" value="PIHandleArray" />
+    <property name="another_arguments" value="${times} ${hostname} ${nJobs}" />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- PI_MPI -->
+  <target name="pimpi">
+    <property name="test_target" value="PI_MPI" />
+    <property name="another_arguments" value="${times} ${hostname}" />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              CLEAN                                      -->
+  <!-- ======================================================= -->
+  <target name="clean" >
+    <delete>
+    <fileset dir="." >
+      <include name="*.class"/>
+    </fileset>
+    </delete>
+  </target>
+
+</project>

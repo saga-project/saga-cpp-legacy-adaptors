@@ -1,0 +1,207 @@
+Module skip;
+Globals { #include "stdlib.h" }
+Globals { #include "string.h" }
+
+Define skip_char_test(IN int size, IN int start, IN int end, IN int skip,
+    IN  char  in[size:start,end,skip],
+    OUT char out[size:start,end,skip])
+"skip char test"
+Shrink "yes"
+{
+    int i;
+
+    for (i = start; i < size; i += skip) {
+        out[i] = in[i] * 2;
+    }
+}
+
+Define skip_short_test(IN int size, IN int start, IN int end, IN int skip,
+    IN  short  in[size:start,end,skip],
+    OUT short out[size:start,end,skip])
+"skip short test"
+Shrink "yes"
+{
+    int i;
+
+    for (i = start; i < size; i += skip) {
+        out[i] = in[i] * 2;
+    }
+}
+
+Define skip_int_test(IN int size, IN int start, IN int end, IN int skip,
+    IN  int  in[size:start,end,skip],
+    OUT int out[size:start,end,skip])
+"skip int test"
+Shrink "yes"
+{
+    int i;
+
+    for (i = start; i < size; i += skip) {
+        out[i] = in[i] * 2;
+    }
+}
+
+Define skip_long_test(IN int size, IN int start, IN int end, IN int skip,
+    IN  long  in[size:start,end,skip],
+    OUT long out[size:start,end,skip])
+"skip long test"
+Shrink "yes"
+{
+    int i;
+
+    for (i = start; i < size; i += skip) {
+        out[i] = in[i] * 2;
+    }
+}
+
+Define skip_float_test(IN int size, IN int start, IN int end, IN int skip,
+    IN  float  in[size:start,end,skip],
+    OUT float out[size:start,end,skip])
+"skip float test"
+Shrink "yes"
+{
+    int i;
+
+    for (i = start; i < size; i += skip) {
+        out[i] = in[i] * 2;
+    }
+}
+
+Define skip_double_test(IN int size, IN int start, IN int end, IN int skip,
+    IN  double  in[size:start,end,skip],
+    OUT double out[size:start,end,skip])
+"skip double test"
+Shrink "yes"
+{
+    int i;
+
+    for (i = start; i < size; i += skip) {
+        out[i] = in[i] * 2;
+    }
+}
+
+Define skip_scomplex_test(IN int size, IN int start, IN int end, IN int skip,
+    IN  scomplex  in[size:start,end,skip],
+    OUT scomplex out[size:start,end,skip])
+"skip scomplex test"
+Shrink "yes"
+{
+    int i;
+
+    for (i = start; i < size; i += skip) {
+        out[i].r = in[i].r * 2;
+        out[i].i = in[i].i + 0.1;
+    }
+}
+
+Define skip_dcomplex_test(IN int size, IN int start, IN int end, IN int skip,
+    IN  dcomplex  in[size:start,end,skip],
+    OUT dcomplex out[size:start,end,skip])
+"skip dcomplex test"
+Shrink "yes"
+{
+    int i;
+
+    for (i = start; i < size; i += skip) {
+        out[i].r = in[i].r * 2;
+        out[i].i = in[i].i + 0.1;
+    }
+}
+
+Define skip_inout_test(IN int size, IN int start, IN int end, IN int skip,
+    IN    int    in[size:start,end,skip],
+    INOUT int inout[size:start,end,skip],
+    OUT   int   out[size:start,end,skip])
+"skip INOUT test"
+Shrink "yes"
+{
+    int i;
+
+    for (i = start; i < size; i += skip) {
+        out[i] = inout[i] * 4;
+    }
+
+    for (i = start; i < size; i += skip) {
+        inout[i] = in[i] * 4;
+    }
+}
+
+Define skip_2D_test(IN int size, IN int start, IN int end, IN int skip,
+    IN  int  in[size:start,end,skip][size:start,end,skip],
+    OUT int out[size:start,end,skip][size:start,end,skip])
+"skip 2D test"
+Shrink "yes"
+{
+    int i, j;
+
+    for (i = start; i < size; i += skip) {
+        for (j = start; j < size; j += skip) {
+            *(out + i * size + j) = *(in + i * size + j) * 2;
+        }
+    }
+}
+
+Define skip_3D_test(IN int size, IN int start, IN int end, IN int skip,
+    IN  int  in[size:start,end,skip][size:start,end,skip][size:start,end,skip],
+    OUT int out[size:start,end,skip][size:start,end,skip][size:start,end,skip])
+"skip 3D test"
+Shrink "yes"
+{
+    int i, j, k;
+
+    for (i = start; i < size; i += skip) {
+        for (j = start; j < size; j += skip) {
+            for (k = start; k < size; k += skip) {
+                *(out + i * size * size + j * size + k) =
+                    *(in + i * size * size + j * size + k) * 2;
+            }
+        }
+    }
+}
+
+Define skip_callback_test(IN int size, IN int start, IN int end, IN int skip,
+    IN  int  in[size][size], OUT int out[size][size],
+    callback_func(IN int si[1], IN int st[1], IN int en[1], IN int sk[1],
+                  IN int a[size][size], OUT int b[size][size]))
+"skip callback test"
+Shrink "yes"
+{
+    callback_func(&size, &start, &end, &skip, in, out);
+}
+
+Define skip_omit_skip_test(IN int size, IN int start, IN int end,
+    IN  int  in[size:start,end],
+    OUT int out[size:start,end])
+"skip test of omit value of skip"
+Shrink "yes"
+{
+    int i;
+
+    for (i = start; i < size; i++) {
+        out[i] = in[i] * 2;
+    }
+}
+
+Define skip_omit_end_test(IN int size, IN int start,
+    IN  int  in[size:start],
+    OUT int out[size:start])
+"skip test of omit value of end and skip"
+Shrink "yes"
+{
+    int i;
+
+    for (i = start; i < size; i++) {
+        out[i] = in[i] * 2;
+    }
+}
+
+Define skip_omit_start_test(IN int size, IN int in[size], OUT int out[size])
+"skip test of omit value of start and end, skip"
+Shrink "yes"
+{
+    int i;
+
+    for (i = 0; i < size; i++) {
+        out[i] = in[i] * 2;
+    }
+}

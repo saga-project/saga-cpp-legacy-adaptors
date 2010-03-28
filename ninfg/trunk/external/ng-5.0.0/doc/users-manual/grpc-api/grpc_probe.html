@@ -1,0 +1,64 @@
+<!--
+  $RCSfile: grpc_probe.html,v $ $Revision: 1.2 $ $Date: 2008/02/08 05:21:46 $
+  $AIST_Release: 5.0.0 $
+  $AIST_Copyright:
+   Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+   National Institute of Advanced Industrial Science and Technology
+   Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+   
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+   $
+ -->
+
+<html>
+<head>
+<title>grpc_probe</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>grpc_probe</code> - Checks the session execution status.
+<h3>SYNOPSIS</h3>
+<code>
+  grpc_error_t grpc_probe(grpc_sessionid_t session_id)
+
+</code>
+<h3>ARGUMENTS</h3>
+<dl>
+<dt><code>  grpc_sessionid_t session_id</code></dt>
+<dd>	The session ID</dd>
+</dl>
+<h3>DESCRIPTION</h3>
+  The grpc_probe() function returns the execution status of the session specified by the session ID.<br>
+
+<p> This function is MT-safe. </p>
+<br>
+<h3>RETURN VALUE</h3>
+  If the session is completed, GRPC_NO_ERROR is returned. Otherwise, GRPC_NOT_COMPLETED is returned. If <br>
+the grpc_probe itself failed, Error code is returned.<br>
+<br>
+<h3>ERRORS</h3>
+<dl>
+<dt><code>  GRPC_NOT_INITIALIZED</code></dt>
+<dd>	GRPC client is not initialized yet.</dd>
+<dt><code>  GRPC_INVALID_SESSION_ID</code></dt>
+<dd>    Session ID is not valid.</dd>
+<dt><code>  GRPC_NOT_COMPLETED</code></dt>
+<dd>    Call has not completed.</dd>
+<dt><code>  GRPC_OTHER_ERROR_CODE</code></dt>
+<dd>	Internal error detected.</dd>
+</dl>
+<hr>
+last update : $Date: 2008/02/08 05:21:46 $
+</body>
+</html>

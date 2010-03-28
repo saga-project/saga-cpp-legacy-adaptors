@@ -1,0 +1,180 @@
+<!--
+  $RCSfile: build.xml,v $ $Revision: 1.2 $ $Date: 2008/02/08 04:21:15 $
+  $AIST_Release: 5.0.0 $
+  $AIST_Copyright:
+   Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+   National Institute of Advanced Industrial Science and Technology
+   Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+   
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+   $
+ -->
+
+<!--
+    =======================================================
+     Ninf-G Diag Test for Java Client
+    =======================================================
+-->
+<project name="Ninf-G Diag" default="build" basedir=".">
+
+  <!--
+      =======================================================
+       Set properties for Test
+      =======================================================
+  -->
+  <property environment="env"/>
+  <property name="ng_dir"      value="${env.NG_DIR}" />
+  <property name="nglib"       value="${ng_dir}/lib/ng.jar" />
+  <property name="java_home"   value="${env.JAVA_HOME}" />
+  <property name="java"        value="${java_home}/bin/java" />
+  <property name="config_file" value="client.conf" />
+
+  <!--
+      =======================================================
+       Set properties for all libraries
+      =======================================================
+  -->
+  <!-- for build environment -->
+  <path id="ngbuildlibpath">
+    <pathelement path="${nglib}" />
+    <pathelement path="." />
+  </path>
+  <property name="ngbuildlib" refid="ngbuildlibpath" />
+
+  <!-- for run time environment -->
+  <path id="ngrunlibpath">
+    <pathelement path="${nglib}" />
+    <pathelement path="." />
+  </path>
+  <property name="ngrunlib" refid="ngrunlibpath" />
+
+  <!--
+      =======================================================
+       Build Ninf-G Java Diag Programs
+      =======================================================
+  -->
+  <target name="build" description="build diag programs">
+    <javac srcdir="."
+	   classpath="${ngbuildlib}"
+       destdir="."
+       deprecation="on"
+       debug="on" />
+  </target>
+
+  <!--
+      =======================================================
+       Exec Ninf-G Java Diag Programs
+      =======================================================
+  -->
+  <target name="exec_test">
+    <exec executable="${java}">
+      <arg value="-classpath" />
+      <arg value="${ngrunlib}" />
+      <arg line="-DNG_DIR=${ng_dir}" />
+      <arg value="${test_target}" />
+      <arg value="${config_file}" />
+      <arg line="${another_arguments}" />
+    </exec>
+  </target>
+
+  <target name="exec_test_with_arg_line">
+    <exec executable="${java}">
+      <arg value="-classpath" />
+      <arg value="${ngrunlib}" />
+      <arg value="${test_target}" />
+      <arg line="${another_arguments}" />
+    </exec>
+  </target>
+
+  <!-- Callback -->
+  <target name="callback" description="diagnose Ninf-G callback">
+    <property name="test_target" value="CallbackTest" />
+    <property name="another_arguments" value="" />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- CancelTest -->
+  <target name="cancel" description="diagnose cancel session">
+    <property name="test_target" value="CancelTest" />
+    <property name="another_arguments" value="" />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- DataTest -->
+  <target name="data" description="diagnose Ninf-G Data types">
+    <property name="test_target" value="DataTest" />
+    <property name="another_arguments" value="" />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- FileTest -->
+  <target name="file" description="diagnose file transfer">
+    <property name="test_target" value="FileTest" />
+    <property name="another_arguments" value="." />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- FileArrayTest -->
+  <target name="filearray" description="diagnose file array transfer">
+    <property name="test_target" value="FileArrayTest" />
+    <property name="another_arguments" value="." />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- NullArgumentTest -->
+  <target name="null" description="diagnose null as argument of GrpcObjectHandle#invoke()">
+    <property name="test_target" value="NullArgumentTest" />
+    <property name="another_arguments" value="." />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- SkipTest -->
+  <target name="skip" description="diagnose shrinking">
+    <property name="test_target" value="SkipTest" />
+    <property name="another_arguments" value="." />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- ZeroElementTest -->
+  <target name="zero" description="diagnose transfer arguments and result data with no elements">
+    <property name="test_target" value="ZeroElementTest" />
+    <property name="another_arguments" value="." />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- All tests -->
+  <target name="diagall" description="run all diagnostic programs">
+    <antcall target="callback"/>
+    <antcall target="cancel"/>
+    <antcall target="data"/>
+    <antcall target="file"/>
+    <antcall target="filearray"/>
+    <antcall target="null"/>
+    <antcall target="skip"/>
+    <antcall target="zero"/>
+  </target>
+
+  <!--
+      =======================================================
+       Clean
+      =======================================================
+  -->
+  <target name="clean" description="clean the class files">
+    <delete>
+      <fileset dir="." >
+        <include name="*.class"/>
+      </fileset>
+    </delete>
+  </target>
+
+</project>

@@ -1,0 +1,1811 @@
+dnl $RCSfile: configure.in,v $ $Revision: 1.81 $ $Date: 2008/09/19 11:12:27 $
+dnl $AIST_Release: 4.2.4 $
+dnl $AIST_Copyright:
+dnl  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+dnl  National Institute of Advanced Industrial Science and Technology
+dnl  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+dnl  
+dnl  Licensed under the Apache License, Version 2.0 (the "License");
+dnl  you may not use this file except in compliance with the License.
+dnl  You may obtain a copy of the License at
+dnl  
+dnl      http://www.apache.org/licenses/LICENSE-2.0
+dnl  
+dnl  Unless required by applicable law or agreed to in writing, software
+dnl  distributed under the License is distributed on an "AS IS" BASIS,
+dnl  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+dnl  See the License for the specific language governing permissions and
+dnl  limitations under the License.
+dnl  $
+dnl	This file is an input file used by the GNU "autoconf" program to
+dnl	generate the file "configure", which is run during installation
+dnl	to configure the system for the local environment.
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# Let the initiation begin....
+
+AC_INIT(c/include/ng.h)
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# Make some shell functions
+
+checkNull () {
+    if test -z "$1"; then
+	return 0
+    else
+	return 1
+    fi
+}
+
+genConfHdr () {
+    dstHdr=./c/include/ngConfig.h
+    tmpHdr=/tmp/.tmpHdr.$$
+    > $tmpHdr
+    for i in $*
+    do
+	case $i in
+	    -I*)
+		true;;
+	    -D*)
+		def=`echo $i | sed 's/-D//'`
+		hasEq=`echo ${def} | grep '=' 2>/dev/null`
+		checkNull "${hasEq}"
+		if test $? -eq 0; then
+		    case ${def} in
+			NG_OS_*|NG_CPU_*)
+			    echo "#ifndef ${def}" >> $tmpHdr
+			    echo "#define ${def} 1" >> $tmpHdr
+			    echo "#endif /* !${def} */" >> $tmpHdr;;
+			*)
+			    echo "#define ${def} 1" >> $tmpHdr;;
+		    esac
+		else
+		    mcr=`echo ${def} | awk -F'=' '{ print $1 }'`
+		    val=`echo ${def} | awk -F'=' '{ print $NF }'`
+		    if test "x$val" = "x0"; then
+			echo "#undef ${mcr}" >> $tmpHdr
+		    else
+			echo "#define ${mcr} ${val}" >> $tmpHdr
+		    fi
+		fi;;
+	    -U*)
+		def=`echo $i | sed 's/-U//'`
+		echo "#undef ${def}" >> $tmpHdr;;
+	esac
+    done
+
+    AC_MSG_RESULT([creating ${dstHdr}])
+    cat $tmpHdr ./c/include/ngPlatform.h | sed 's:_NGPLATFORM_H:_NGCONFIG_H:g' > $dstHdr
+    delIt $tmpHdr
+}
+
+
+rm -f ./.cnfg.sts.end
+doItNow () {
+    eval $1
+    if test -f ${TOPDIR}/.cnfg.sts.end; then
+	true
+    else
+	> ${TOPDIR}/.cnfg.sts.end
+    fi
+    echo "$1" >> ${TOPDIR}/.cnfg.sts.end
+}
+
+
+finalizeTheDoItNow () {
+    cnfS=${TOPDIR}/config.status
+    cnfE=${TOPDIR}/.cnfg.sts.end
+
+    if test -f ${cnfS} -a -f ${cnfE}; then
+	cat ${cnfS} ${cnfE} | sed "s:^exit 0::" > /tmp/.cnfSts.$$
+	mv /tmp/.cnfSts.$$ ${cnfS}
+	echo "exit 0" >> ${cnfS}
+	chmod 755 ${cnfS}
+    fi
+    delIt ${cnfE}
+}
+
+
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# prefix directory check and modify
+
+if test "${prefix}" = "NONE"; then
+    prefix=/usr/local
+fi
+
+orgPrefix=${prefix}
+AC_SUBST(orgPrefix)
+
+t=`echo ${prefix} | egrep '^/.*$'`
+if test "x${t}" = "x${prefix}"; then
+    prefix="\$(DESTDIR)${prefix}"
+else
+    prefix="\$(DESTDIR)/${prefix}"
+fi
+unset t
+
+if test "${exec_prefix}" = "NONE"; then
+    orgExec_prefix=${orgPrefix}
+    exec_prefix='${prefix}'
+else
+    orgExec_prefix=${exec_prefix}
+    t=`echo ${exec_prefix} | egrep '^/.*$'`
+    if test "x${t}" = "x${exec_prefix}"; then
+	exec_prefix="\$(DESTDIR)${exec_prefix}"
+    else
+	exec_prefix="\$(DESTDIR)/${exec_prefix}"
+    fi
+fi
+AC_SUBST(orgExec_prefix)
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# Generate TOPDIR
+
+TOPDIR=`pwd`
+AC_SUBST(TOPDIR)
+
+NG_INCDIR='-I$(TOPDIR)/c/include'
+AC_SUBST(NG_INCDIR)
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# check GLOBUS_LOCATION, GPT_LOCATION
+checkNull "${GLOBUS_LOCATION}"
+if test $? -eq 0; then
+    AC_MSG_RESULT([GLOBUS_LOCATION is not set. exit.])
+    exit 1
+fi
+
+checkNull "${GPT_LOCATION}"
+if test $? -eq 0; then
+    AC_MSG_RESULT([GPT_LOCATION is not set. exit.])
+    exit 1
+fi
+
+# check if it's globus 2.2 or later
+#
+if test ! -x ${GLOBUS_LOCATION}/bin/globus-makefile-header; then
+    AC_MSG_RESULT([Specified Globus Toolkit is not 2.2 or later. exit.])
+    exit 1;
+fi
+
+# check if it's globus 4.2 or later
+GT42="NO"
+if test -x ${GLOBUS_LOCATION}/bin/globus-version; then
+    GT_VERSION=`${GLOBUS_LOCATION}/bin/globus-version`
+    GT_MAJOR=`echo "$GT_VERSION" | awk -F. '{print $1}'`
+    GT_MINOR=`echo "$GT_VERSION" | awk -F. '{print $2}'`
+    if test "$GT_MAJOR" -gt 4                     ;then GT42="yes";fi
+    if test "$GT_MAJOR" -eq 4 -a "$GT_MINOR" -ge 2;then GT42="yes";fi
+
+    AC_MSG_RESULT([Specified Globus Toolkit is "${GT_VERSION}"])
+fi
+
+# exec gpt_query to get information about packages.
+#
+if test -x ${GPT_LOCATION}/sbin/gpt-query; then
+    AC_MSG_CHECKING([for gpt-query])
+    ${GPT_LOCATION}/sbin/gpt-query > ${TOPDIR}/etc/gpt-query-result.txt
+    AC_MSG_RESULT([ok])
+fi
+
+# --------------------------------------------------------------------
+# Next, check Globus. Paths for SSL and LDAP are determined from
+# Globus configurations (in case version 1).
+
+globusPath=${GLOBUS_LOCATION}
+AC_SUBST(globusPath)
+
+globusDevPathFlavor=''
+pthreadCppFlags=""
+AC_ARG_WITH(globusFlavor,
+    [  --with-globusFlavor=FLAVOR  specify Globus runtime library flavor],
+    [globusDevPathFlavor=$withval], [globusDevPathFlavor=gcc32dbgpthr])
+case "$globusDevPathFlavor" in
+  *pthr) pthreadCppFlags="-DNG_PTHREAD" ;;
+esac
+GLOBUS_DEVPATH_FLAVOR=${globusDevPathFlavor}
+AC_SUBST(GLOBUS_DEVPATH_FLAVOR)
+
+# Check if it's specified "--with-mds"
+#
+AC_ARG_WITH(mds,
+    [  --with-mds              obsolete option (use mds2 or mds4)],
+    [appearMDS=$withval], [appearMDS=no])
+if test ! "x${appearMDS}" = "xno"; then
+    AC_MSG_RESULT([--with-mds option is obsolete.])
+    exit 1
+fi
+
+# Check if it's specified "--without-mds2"
+#
+mds2CppFlags=""
+AC_ARG_WITH(mds2,
+    [  --with-mds2             include functions for getting information of servers and functions from PreWS MDS (no default)],
+    [useMDS2=$withval], [useMDS2=no])
+if test "x${useMDS2}" = "xno"; then
+    mds2CppFlags="-DNGI_NO_MDS2_MODULE"
+fi
+
+# Check if it's specified "--with-mds4"
+#
+mds4CppFlags=""
+AC_ARG_WITH(mds4,
+    [  --with-mds4             include functions for getting information of servers and functions from WS MDS (no default)],
+    [useMDS4=$withval], [useMDS4=no])
+if test "x${useMDS4}" = "xno"; then
+    mds4CppFlags="-DNGI_NO_MDS4_MODULE"
+fi
+
+# Check if it's specified "--without-zlib". (only argument)
+AC_ARG_WITH(zlib,
+    [  --with-zlib             use zlib for compression (yes default if available)],
+    [useZlib=$withval], [useZlib=undefined])
+
+# Check if it's specifid "--without-largefile".
+AC_ARG_WITH(largefile,
+    [  --with-largefile        support largefile (yes default)],
+    [useLargeFile=$withval], [useLargeFile=yes])
+
+# Emit Globus include and libs.
+gloLibDir=''
+gloIncDir=''
+gDefs=`sh ./utility/script/globusflags.in -f ${globusDevPathFlavor}`
+if test $? -ne 0; then
+    AC_MSG_RESULT([Can't find Globus include/library directory. exit.])
+    exit 1
+fi
+for i in `echo $gDefs`
+do
+    case $i in
+	-I*)
+	    gloIncDir="${gloIncDir} $i";;
+	-L*)
+	    gloLibDir="${gloLibDir} $i";;
+    esac
+done
+GLOBUS_LIBDIR=${gloLibDir}
+AC_SUBST(GLOBUS_LIBDIR)
+GLOBUS_INCDIR=${gloIncDir}
+AC_SUBST(GLOBUS_INCDIR)
+
+# Get Globus libraries for stub.
+AC_MSG_CHECKING([for globus-makefile-header server])
+GLOBUS_CFLAGS=''
+globusStubLibs=''
+globusModules="globus_common globus_io globus_gass_copy"
+gDefs=`sh ./utility/script/globusflags.in -stub -ng -f ${globusDevPathFlavor} ${globusModules}`
+if test $? -ne 0; then
+    AC_MSG_RESULT([Can't find Globus I/O libraries configuration from Globus. exit.])
+    exit 1
+fi
+for i in `echo $gDefs`
+do
+    case $i in
+	-L*|-l*)
+	    globusStubLibs="${globusStubLibs} ${i}";;
+	-D*|-I*|-U*)
+	    true;;
+	-pthread)
+	    GLOBUS_CFLAGS="${i}";;
+	*)
+	    true;;
+    esac
+done
+GLOBUS_STUBLIBS="${gloLibDir} ${globusStubLibs}"
+AC_SUBST(GLOBUS_STUBLIBS)
+AC_MSG_RESULT([ok])
+
+# Get Globus libraries for clients.
+AC_MSG_CHECKING([for globus-makefile-header client])
+globusClientLibs=''
+globusModules="globus_common globus_io globus_gass_server_ez globus_gram_client"
+if test "x${useMDS2}" = "xno"; then
+    true
+else
+    globusModules="globus_openldap ${globusModules}"
+fi
+
+if test "x${useMDS4}" = "xno"; then
+    true
+else
+    globusModules="${globusModules} globus_c_ws_messaging"
+    globusModules="${globusModules} index_service_bindings"
+fi
+
+OS=`./utility/compile/config.guess | grep -v Linking | awk -F- '{ print $3 }' | sed 's/\./_/g'`
+case $OS in
+    aix*)
+       OS=aix;;
+esac
+
+gDefs=`sh ./utility/script/globusflags.in -client -ng -f ${globusDevPathFlavor} ${globusModules}`
+
+if test $? -ne 0; then
+    AC_MSG_RESULT([Can't find Globus I/O libraries configuration from Globus. exit.])
+    exit 1
+fi
+for i in `echo $gDefs`
+do
+    case $i in
+	    -L*|-l*)
+		globusClientLibs="${globusClientLibs} ${i}";;
+	    -I*|-U*)
+		true;;
+	    -D*)
+		globusCppFlags="${globusCppFlags} ${i}";;
+	    -pthread)
+		GLOBUS_CFLAGS="${i}";;
+	    *)
+		true;;
+    esac
+
+    if test x${OS} = xaix -a x${i} = x-brtl
+    then
+	globusClientLibs="${globusClientLibs} ${i}"
+    fi
+done
+GLOBUS_CLIENTLIBS="${gloLibDir} ${globusClientLibs}"
+AC_SUBST(GLOBUS_CLIENTLIBS)
+AC_SUBST(GLOBUS_CFLAGS)
+AC_MSG_RESULT([ok])
+
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# loading some functions
+
+. utility/script/delIt.sh
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# First of all, check on what system we are running.
+
+HOSTARCH=`./utility/compile/config.guess | grep -v Linking`
+CPU=`echo $HOSTARCH | awk -F- '{ print $1 }' | sed 's/\./_/g'`
+OS=`echo $HOSTARCH | awk -F- '{ print $3 }' | sed 's/\./_/g'`
+
+case $CPU in
+    i*86)
+        CPU=i386;;
+    alpha*)
+	CPU=alpha;;
+esac
+
+case $OS in
+    sunos*)
+        OS=sunos;;
+    solaris*)
+        OS=solaris;;
+    freebsd*)
+	OS=freebsd;;
+    irix*)
+	OS=irix;;
+    aix*)
+	OS=aix;;
+    darwin*)
+	OS=macosx;;
+esac
+
+AC_SUBST(OS)
+AC_SUBST(CPU)
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# Next, check what CC will be used, and set compile flags
+
+ccType="unknown"
+
+isSunCC=no
+sunCCPre6=0
+isMipsCC=no
+isAIXCC=no
+isGcc=no
+
+mustCFlags=""
+mustCppFlags=""
+
+optCFlags=""
+warnCFlags=""
+debCFlags=""
+
+userOptCFlags=""
+userDebCFlags=""
+
+debCppFlags=""
+userCppFlags=""
+
+ccCom=""
+AC_ARG_WITH(cc,
+    [  --with-cc=CC            specify C compiler to use ("cc" default)],
+    [ccCom=$withval], [ccCom=""])
+
+AC_ARG_WITH(opt,
+    [  --with-opt=OPT          specify C compiler options for optimization],
+    [userOptCFlags=$withval], [userOptCFlags=""])
+
+AC_ARG_WITH(debug,
+    [  --with-debug=OPT        specify C compiler options for debuggable executable file creation],
+    [userDebCFlags=$withval], [userDebCFlags=""])
+
+AC_ARG_WITH(cppflag,
+    [  --with-cppflag=OPT      specify C preprocessor options],
+    [userCppFlags=$withval], [userCppFlags=""])
+
+pythonCom=""
+AC_ARG_WITH(python,
+    [  --with-python=OPT       specify python command path],
+    [pythonCom=$withval], [pythonCom=""])
+
+withNaregi=""
+AC_ARG_WITH(naregi,
+    [  --with-naregi           support invoking jobs via NAREGI SS],
+    [withNaregi=$withval], [withNaregi="no"])
+
+naregiDir=""
+AC_ARG_WITH(naregidir,
+    [  --with-naregidir=NAREGIDIR NAREGI Middleware is installed in NAREGIDIR[/usr/naregi]],
+    [naregiDir=$withval], [naregiDir="/usr/naregi"])
+
+oCC=${CC}
+oCFLAGS=${CFLAGS}
+progCC=""
+AC_ARG_ENABLE(gcc,
+    [  --enable-gcc            allow use of gcc if available],
+    [ng_ok=$enableval], [ng_ok=no])
+if test "$ng_ok" = "yes"; then
+    AC_PROG_CC
+    progCC=${CC}
+fi
+CFLAGS=${oCFLAGS}
+CC=${oCC}
+
+if test "x${ccCom}" != "x"; then
+    CC=${ccCom}
+elif test "x${progCC}" != "x"; then
+    CC=${progCC}
+fi
+
+if test "x${CC}" = "x"; then
+   CC=cc
+fi
+
+AC_ARG_ENABLE(debug,
+    [  --enable-debug          enable generate executable with debug symbol (false default).],
+    [doDebug=$enableval], [doDebug=no])
+if test "x${doDebug}" = "xyes"; then
+    debCFlags="-g"
+    debCppFlags=""
+fi
+
+# Check it's GCC by command name
+cCom=`echo ${CC} | awk '{ print $1 }'`
+if test "x${GCC}" = "xyes" -o "`basename ${cCom}`" = "gcc" ; then
+    isGcc=yes
+fi
+if test "x${isGcc}" = "xno"; then
+    # Check it's GCC by command line option
+    tmp=/tmp/.ngConfCC
+    ${cCom} -v > $tmp 2>&1
+    if test $? -eq 0; then
+	chk=`tail -1 $tmp | awk '{ print $3 }'`
+	case $chk in
+	    egcs*|2.*|3.*|4.*)
+		isGcc=yes;;
+	    *)
+		isGcc=no;;
+	esac
+    fi
+    delIt $tmp
+fi
+
+# OK now it must be decided gcc or not.
+if test "x${isGcc}" = "xno"; then
+    case $OS in
+	solaris*)
+	    tmp=/tmp/.ngConf.$$
+	    ${CC} -V > $tmp 2>&1
+	    if test $CPU = i386; then
+		cStr='cc: PC'
+	    else
+		cStr='WorkShop'
+	    fi
+	    x=`grep "$cStr" $tmp`
+	    if test "X${x}" != "X"; then
+		isSunCC=yes
+		case $CPU in
+		    sparc*)
+			cStr='WorkShop Compilers'
+			x=`grep "$cStr" $tmp`
+			if test "X${x}" != "X"; then
+			    sunCCPre6=1
+			fi;;
+		esac
+	    fi
+	    delIt $tmp
+	    ;;
+	irix*)
+	    tmp=/tmp/.ngConf.$$
+	    ${CC} -version > $tmp 2>&1
+	    x=`grep 'MIPSpro' $tmp`
+	    if test "X${x}" != "X"; then
+		isMipsCC=yes
+	    fi
+	    delIt $tmp
+	    ;;
+	aix*)
+	    # XXXXX FIXEME: Are there any other compilers running on AIX???
+	    # Anyway assume it's XLC.
+	    isAIXCC=yes
+	    ;;
+    esac
+fi
+
+CPPCOM="${CPP}"
+if test "x${CPPCOM}" = "x"; then
+    CPPCOM="${CC} -E"
+fi
+# GCC
+if test "x${isGcc}" = "xyes"; then
+    # for old gcc/systems ...
+    mustCppFlags="-D__USE_FIXED_PROTOTYPES__"
+    warnCFlags="-Wall"
+    optCFlags="-O2"
+    CPP="${CC} -E"
+    CPPCOM="${CC} -xc -E"
+    ccType=gcc
+fi
+
+# Sun CC
+if test "X${isSunCC}" = "Xyes"; then
+    mustCppFlags="-D__EXTENSIONS__"
+    if test $sunCCPre6 -eq 0; then
+	mustCppFlags="${mustCppFlags} -DSUN_WS_CC_6"
+    fi
+    mustCFlags="-v"
+    debCFlags="${debCFlags} -xs"
+    if test $CPU = i386; then
+	oLvl=4
+    else
+	oLvl=5
+    fi
+    optCFlags="-fast -xO${oLvl}"
+    ccType=SunCC
+fi
+
+# Mips CC
+if test "X${isMipsCC}" = "Xyes"; then
+    optCFlags="-O3"
+    ccType=MipsCC
+fi
+
+# AIX XLC
+if test "X${isAIXCC}" = "Xyes"; then
+    mustCppFlags="-DUSE_PROTOTYPE"
+    optCFlags="-O3 -qstrict"
+    ccType=AIXCC
+fi
+
+AC_SUBST(CPPCOM)
+
+# Generate cpu/os specifier
+changequote(<<, >>)dnl
+CPUDEF=-DNG_CPU_`echo $CPU | tr '[a-z]' '[A-Z]'`
+OSDEF=-DNG_OS_`echo $OS | tr '[a-z]' '[A-Z]'`
+changequote([, ])dnl
+
+# ARCH number
+gan=${TOPDIR}/utility/script/getarchnumber
+cat ${gan}.in | sed "s:@TOPDIR@:${TOPDIR}:g" > ${gan}
+chmod 755 ${gan}
+aStr=`./utility/script/getarchstring`
+aNum=`./utility/script/getarchnumber`
+ARCHDEFS="-DPLAT_${aStr} -DNGI_ARCHITECTURE_ID=${aNum}"
+
+# Setup zlib
+# This should done after --with-cc was proceed, and before CPPFLAGS is decided.
+if test "x${useZlib}" = "xundefined"; then
+    AC_CHECK_LIB(z, deflate, [useZlib=yes], [useZlib=no])
+fi
+if test "x${useZlib}" = "xno"; then
+    zlibCppFlags="-DNGI_NO_ZLIB"
+    ZLIB_LIBS=""
+else
+    zlibCppFlags=""
+    ZLIB_LIBS="-lz"
+fi
+AC_SUBST(ZLIB_LIBS)
+
+# largefile
+if test "x${useLargeFile}" = "xyes"; then
+
+    AC_MSG_CHECKING([for large_file_option])
+
+#   check from configure-2.57. support largefile with no operation?
+    AC_TRY_RUN([
+#include <sys/types.h>
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
+  int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
+                     && LARGE_OFF_T % 2147483647 == 1)
+                    ? 1 : -1];
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+    ], largeFileOption=no, largeFileOption=yes, largeNoOption=yes)
+
+    if test "x$largeFileOption" = "xyes"; then
+        AC_MSG_RESULT([yes])
+
+        AC_MSG_CHECKING([for _FILE_OFFSET_BITS])
+
+#       support largefile with -D_FILE_OFFSET_BITS=64?
+        AC_TRY_RUN([
+#define _FILE_OFFSET_BITS 64
+#include <sys/types.h>
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
+  int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
+                     && LARGE_OFF_T % 2147483647 == 1)
+                    ? 1 : -1];
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+        ], largeFileEffective=yes, largeFileEffective=no, largeFileEffective=no)
+
+        if test "x$largeFileEffective" = "xyes"; then
+            AC_MSG_RESULT([64])
+            largeFileCppFlags="-D_FILE_OFFSET_BITS=64"
+        else
+            AC_MSG_RESULT([no])
+        fi
+
+        AC_MSG_CHECKING([for _LARGE_FILES])
+
+#       support largefile with -D_LARGE_FILES (for AIX)
+        AC_TRY_RUN([
+#define _LARGE_FILES 1
+#include <sys/types.h>
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
+  int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
+                     && LARGE_OFF_T % 2147483647 == 1)
+                    ? 1 : -1];
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+        ], largeFileEffective=yes, largeFileEffective=no, largeFileEffective=no)
+
+        if test "x$largeFileEffective" = "xyes"; then
+            AC_MSG_RESULT([yes])
+            largeFileCppFlags="-D_LARGE_FILES=1"
+        else
+            AC_MSG_RESULT([no])
+        fi
+
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+# end largefile
+
+# Check that globus_thread_t cast to long int.
+
+tmpCppflags=${CPPFLAGS}
+CPPFLAGS="${CPPFLAGS} ${gloIncDir}"
+AC_MSG_CHECKING([for globus_thread_t castable to long])
+AC_TRY_COMPILE( [ #include <globus_common.h> ],
+	        [ globus_thread_t x; long y; y = (long)x; ],
+		AC_MSG_RESULT([yes]),
+		AC_DEFINE(NGI_NO_THREAD_T_CASTABLE_LONG)
+		AC_MSG_RESULT([no])
+		)
+CPPFLAGS=${tmpCppflags}
+
+# Check globus_callback_space_register_signal_handler() existing
+tmpLibs=${LIBS}
+LIBS="${GLOBUS_CLIENTLIBS}"
+AC_CHECK_FUNC(globus_callback_space_register_signal_handler,,
+              AC_DEFINE(NGI_NO_GLOBUS_CALLBACK_SPACE_REGISTER_SIGNAL_HANDLER))
+LIBS=${tmpLibs}
+
+AC_MSG_CHECKING([for sigwait bug])
+AC_TRY_RUN([
+#ifdef sun
+#define _POSIX_PTHREAD_SEMANTICS
+#endif
+#include <sys/types.h>
+#include <signal.h>
+#include <unistd.h>
+#include <sys/wait.h>
+int main(void)
+{
+    sigset_t mask;
+    int result, sigNo, status;
+    pid_t pid, wpid;
+                                            
+    pid = fork();
+    if (pid < 0) {
+        return 1;
+    }
+    if (pid == 0) {
+        result = sigemptyset(&mask);
+        if (result != 0) {
+            return 1;
+        }
+        result = sigaddset(&mask, SIGINT);
+        if (result != 0) {
+            return 1;
+        }
+        result = sigprocmask(SIG_BLOCK, &mask, NULL);
+        if (result != 0) {
+            return 1;
+        }
+        result = sigwait(&mask, &sigNo);
+        /* Continue if error occurred */
+        return 1;
+    }
+    sleep(1);
+    result = kill(pid, SIGUSR1);
+    /* Continue if error occurred */
+    sleep(1);
+    result = kill(pid, SIGKILL);
+    /* Continue if error occurred */
+    wpid = wait(&status);
+    if ((wpid > 0) &&
+        (WIFSIGNALED(status) != 0) &&
+        (WTERMSIG(status) == SIGUSR1)) {
+        return 0;
+    }
+    return 1;
+}], ng_ok=1, ng_ok=0, ng_ok=0)
+if test "$ng_ok" = 1; then
+    AC_MSG_RESULT([ok])
+else
+    AC_MSG_RESULT([sigwait() has bug])
+    AC_DEFINE(NGI_SIGWAIT_HAS_BUG)
+fi
+
+AC_MSG_CHECKING([for va_arg() accepts function pointer])
+AC_TRY_RUN([
+#include <stdlib.h>
+#include <stdarg.h>
+
+#if 0
+#define NGI_VA_ARG_FUNCTION_PTR_NOT_WORK
+#endif
+
+void test_va(int c, int n, ...);
+void test_va2(int c, int n, va_list va);
+void cb_increment();
+int counter = 0;
+
+int main(int argc, char *argv[])
+{
+#ifdef NGI_VA_ARG_FUNCTION_PTR_NOT_WORK
+    return 1;
+#else /* NGI_VA_ARG_FUNCTION_PTR_NOT_WORK */
+    test_va(3, 2, cb_increment, cb_increment);
+    if (counter != 6) {
+        return 1;
+    }
+
+    return 0;
+#endif /* NGI_VA_ARG_FUNCTION_PTR_NOT_WORK */
+}
+
+void test_va(int c, int n, ...)
+{
+    va_list va;
+
+    va_start(va, n);
+    test_va2(c, n, va);
+    va_end(va);
+}
+
+void test_va2(int c, int n, va_list va)
+{
+    void (*fp)();
+    int i, j;
+
+    for (i = 0; i < n; i++) {
+        fp = va_arg(va, void(*)());
+        for (j = 0; j < c; j++) {
+            (*fp)();
+        }
+    }
+}
+
+void cb_increment()
+{
+    counter++;
+}], ng_ok=1, ng_ok=0, ng_ok=0)
+if test "$ng_ok" = 1; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+    AC_DEFINE(NGI_NO_VA_ARG_FUNCTION_PTR)
+fi
+
+AC_MSG_CHECKING([for cpp accepts idl suffix])
+ng_ok=0
+if test "x${TMPDIR}" = "x"; then
+    TMPDIR="/tmp"
+fi
+tmp_idl_file="${TMPDIR}/ngtmpfile-$$.idl"
+echo > $tmp_idl_file
+${CPPCOM} $tmp_idl_file >/dev/null 2>&1
+if test $? -eq 0; then
+    result_count=`(${CPPCOM} ${tmp_idl_file} >/dev/null) 2>&1 | wc -l`
+    if test $result_count -eq 0; then
+        ng_ok=1
+    fi
+fi
+rm -f $tmp_idl_file
+
+if test "$ng_ok" = 1; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+    AC_DEFINE(NGI_NO_CPP_ACCEPT_IDL_FILE)
+fi
+
+delIt core *.core
+
+# Finally, emit.
+AC_SUBST(CC)
+AC_SUBST(ccType)
+
+CPPFLAGS="${CPPFLAGS} ${CPUDEF} ${OSDEF} ${ARCHDEFS}"
+CPPFLAGS="${CPPFLAGS} ${largeFileCppFlags}"
+CPPFLAGS="${CPPFLAGS} ${globusCppFlags}"
+CPPFLAGS="${CPPFLAGS} ${debCppFlags} ${userCppFlags} ${pthreadCppFlags}"
+CPPFLAGS="${CPPFLAGS} ${mds2CppFlags} ${mds4CppFlags} ${zlibCppFlags} ${mustCppFlags}"
+AC_SUBST(CPPFLAGS)
+
+# set LD_RUN_PATH
+platNgLDRunPath=""
+if test "x${isGcc}" = "xyes"; then
+    platNgLDRunPath="-Wl,-R${GLOBUS_LOCATION}/lib"
+else
+    case ${OS} in
+    solaris*)
+	platNgLDRunPath="-Wl,-R${GLOBUS_LOCATION}/lib";;
+    IRIX*)
+	platNgLDRunPath="-Wl,'-rpath ${GLOBUS_LOCATION}/lib'";;
+    osf*)
+	platNgLDRunPath="-Wl,-rpath,${GLOBUS_LOCATION}/lib";;
+    esac
+fi
+case ${OS} in
+macosx*)
+    platNgLDRunPath="-Wl,-L${GLOBUS_LOCATION}/lib";;
+esac
+
+NG_PLAT_LD_RUN_PATH=${platNgLDRunPath}
+AC_SUBST(NG_PLAT_LD_RUN_PATH)
+
+if test "x${doDebug}" != "xyes"; then
+    if test "x${userOptCFlags}" = "x"; then
+	optOpt=${optCFlags}
+    else
+ 	optOpt=${userOptCFlags}
+    fi
+else
+    if test "x${userDebCFlags}" = "x"; then
+	optOpt=${debCFlags}
+    else
+ 	optOpt=${userDebCFlags}
+    fi
+fi
+CFLAGS="${CFLAGS} ${warnCFlags} ${optOpt} ${mustCFlags}"
+AC_SUBST(CFLAGS)
+NG_DEBUG_FLAGS="${debCFlags}"
+AC_SUBST(NG_DEBUG_FLAGS)
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# Cygwin/Windows things.
+
+AC_CYGWIN
+AC_EXEEXT
+AC_OBJEXT
+
+AC_SUBST(CYGWIN)
+
+exe=$EXEEXT
+obj=$OBJEXT
+
+AC_SUBST(exe)
+AC_SUBST(obj)
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# Generic config from here.
+
+#--------------------------------------------------------------------
+#	alloca check.
+#--------------------------------------------------------------------
+AC_FUNC_ALLOCA
+
+#--------------------------------------------------------------------
+#	Supply substitutes for missing POSIX header files.  Special
+#	notes:
+#	    - stdlib.h doesn't define strtol, strtoul, or
+#	      strtod insome versions of SunOS
+#	    - some versions of string.h don't declare procedures such
+#	      as strstr
+#--------------------------------------------------------------------
+AC_CHECK_HEADER(errno.h, , AC_DEFINE(NO_ERRNO_H))
+AC_CHECK_HEADER(limits.h, , AC_DEFINE(NO_LIMITS_H))
+AC_CHECK_HEADER(stdlib.h, , AC_DEFINE(NO_STDLIB_H))
+AC_CHECK_HEADER(string.h, , AC_DEFINE(NO_STRING_H))
+AC_CHECK_HEADER(strings.h, , AC_DEFINE(NO_STRINGS_H))
+AC_CHECK_HEADER(unistd.h, , AC_DEFINE(NO_UNISTD_H))
+AC_CHECK_HEADER(stdarg.h, AC_DEFINE(HAVE_STDARG_H),)
+
+AC_CHECK_HEADER(locale.h, haveLocale=yes, haveLocale=no)
+if test "X${haveLocale}" = "Xyes"; then
+	AC_DEFINE(HAVE_LOCALE_H)
+	AC_EGREP_HEADER(setlocale, locale.h, AC_DEFINE(HAVE_SETLOCALE),)
+fi
+
+AC_CHECK_HEADER(ieeefp.h, , AC_DEFINE(NO_IEEEFP_H))
+AC_CHECK_HEADER(float.h, , AC_DEFINE(NO_FLOAT_H)) 
+AC_CHECK_HEADER(netdb.h, , AC_DEFINE(NO_NETDB_H))
+AC_CHECK_HEADER(sys/socket.h, , AC_DEFINE(NO_SYS_SOCKET_H))
+AC_CHECK_HEADER(netinet/in.h, , AC_DEFINE(NO_NETINET_IN_H))
+AC_CHECK_HEADER(arpa/inet.h, , AC_DEFINE(NO_ARPA_INET_H))
+AC_CHECK_HEADER(sys/resource.h, , AC_DEFINE(NO_RESOURCE_H))
+
+AC_EGREP_HEADER(strdup, string.h, AC_DEFINE(HAVE_STRDUP),)
+
+#------------------------------------------------------------------------------
+#       Find out all about time handling differences.
+#------------------------------------------------------------------------------
+AC_CHECK_HEADERS(sys/time.h)
+AC_HEADER_TIME
+
+#--------------------------------------------------------------------
+#	Check for various typedefs and provide substitutes if
+#	they don't exist.
+#--------------------------------------------------------------------
+AC_TYPE_MODE_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_TYPE_UID_T
+
+#--------------------------------------------------------------------
+#	endian check
+#--------------------------------------------------------------------
+AC_C_BIGENDIAN
+
+#--------------------------------------------------------------------
+#	The code below deals with several issues related to gettimeofday:
+#	1. Some systems don't provide a gettimeofday function at all
+#	   (set NO_GETTOD if this is the case).
+#	2. SGI systems don't use the BSD form of the gettimeofday function,
+#	   but they have a BSDgettimeofday function that can be used instead.
+#--------------------------------------------------------------------
+AC_CHECK_FUNC(BSDgettimeofday, AC_DEFINE(HAVE_BSDGETTIMEOFDAY),
+	AC_CHECK_FUNC(gettimeofday, , AC_DEFINE(NO_GETTOD)))
+AC_MSG_CHECKING([for gettimeofday declaration])
+AC_EGREP_HEADER(gettimeofday, sys/time.h, AC_MSG_RESULT(present), [
+    AC_MSG_RESULT(missing)
+    AC_DEFINE(GETTOD_NOT_DECLARED)
+])
+
+
+#--------------------------------------------------------------------
+#       Check to see whether the system provides a vfork kernel call.
+#       If not, then use fork instead.  Also, check for a problem with
+#       vforks and signals that can cause core dumps if a vforked child
+#       resets a signal handler.  If the problem exists, then use fork
+#       instead of vfork.
+#--------------------------------------------------------------------
+AC_TYPE_SIGNAL()
+AC_CHECK_FUNC(vfork, ng_ok=1, ng_ok=0)
+if test "$ng_ok" = 1; then
+    AC_MSG_CHECKING([vfork/signal bug]);
+    AC_TRY_RUN([
+#include <stdio.h>
+#include <signal.h>
+#include <sys/wait.h>
+int gotSignal = 0;
+sigProc(sig)
+    int sig;
+{
+    gotSignal = 1;
+}
+main()
+{
+    int pid, sts;
+    (void) signal(SIGCHLD, sigProc);
+    pid = vfork();
+    if (pid <  0) {
+        exit(1);
+    } else if (pid == 0) {
+        (void) signal(SIGCHLD, SIG_DFL);
+        _exit(0);
+    } else {
+        (void) wait(&sts);
+    }
+    exit((gotSignal) ? 0 : 1);
+}], ng_ok=1, ng_ok=0, ng_ok=0)
+    if test "$ng_ok" = 1; then
+        AC_MSG_RESULT(ok)
+    else
+        AC_MSG_RESULT([buggy, using fork instead])
+    fi
+fi
+delIt core *.core
+if test "$ng_ok" = 0; then
+    AC_DEFINE(vfork, fork)
+fi
+
+
+# check system libraries
+
+MATH_LIBS="-lm"
+#--------------------------------------------------------------------
+#       On AIX systems, libbsd.a has to be linked in to support
+#       non-blocking file IO.  This library has to be linked in after
+#       the MATH_LIBS or it breaks the pow() function.  The way to
+#       insure proper sequencing, is to add it to the tail of MATH_LIBS.
+#        This library also supplies gettimeofday.
+#--------------------------------------------------------------------
+libbsd=no
+if test "`uname -s`" = "AIX" ; then
+    AC_CHECK_LIB(bsd, gettimeofday, libbsd=yes)
+    if test $libbsd = yes; then
+	MATH_LIBS="$MATH_LIBS -lbsd"
+    fi
+fi
+AC_SUBST(MATH_LIBS)
+
+# check socket libraries
+
+SOCK_LIBS=""
+#--------------------------------------------------------------------
+#       Check for the existence of the -lsocket and -lnsl libraries.
+#       The order here is important, so that they end up in the right
+#       order in the command line generated by make.  Here are some
+#       special considerations:
+#       1. Use "connect" and "accept" to check for -lsocket, and
+#          "gethostbyname" to check for -lnsl.
+#       2. Use each function name only once:  can't redo a check because
+#          autoconf caches the results of the last check and won't redo it.
+#       3. Use -lnsl and -lsocket only if they supply procedures that
+#          aren't already present in the normal libraries.  This is because
+#          IRIX 5.2 has libraries, but they aren't needed and they're
+#          bogus:  they goof up name resolution if used.
+#       4. On some SVR4 systems, can't use -lsocket without -lnsl too.
+#          To get around this problem, check for both libraries together
+#          if -lsocket doesn't work by itself.
+#--------------------------------------------------------------------
+oLIBS=$LIBS
+LIBS=""
+ng_checkBoth=0
+AC_CHECK_FUNC(connect, ng_checkSocket=0, ng_checkSocket=1)
+if test "$ng_checkSocket" = 1; then
+    AC_CHECK_LIB(socket, main, LIBS="$LIBS -lsocket", ng_checkBoth=1)
+fi
+if test "$ng_checkBoth" = 1; then
+    ng_oldLibs=$LIBS
+    LIBS="$LIBS -lsocket -lnsl"
+    AC_CHECK_FUNC(accept, ng_checkNsl=0, [LIBS=$ng_oldLibs])
+fi
+AC_CHECK_FUNC(gethostbyname, , AC_CHECK_LIB(nsl, main, [LIBS="$LIBS -lnsl"]))
+SOCK_LIBS=$LIBS
+LIBS=$oLIBS
+
+#--------------------------------------------------------------------
+#       Interactive UNIX requires -linet instead of -lsocket, plus it
+#       needs net/errno.h to define the socket-related error codes.
+#--------------------------------------------------------------------
+if test "x${SOCK_LIBS}" = "x"; then
+    oLIBS=$LIBS
+    AC_CHECK_LIB(inet, main, [LIBS="$LIBS -linet"])
+    AC_CHECK_HEADER(net/errno.h, AC_DEFINE(HAVE_NET_ERRNO_H))
+    SOCK_LIBS=$LIBS
+    LIBS=$oLIBS
+fi
+
+AC_SUBST(SOCK_LIBS)
+
+
+# check XDR library
+
+XDR_LIBS=""
+#--------------------------------------------------------------------
+#	Check where xdr_*() functions are.
+#	1. In some systems (like a Linux), xdr_*() are in libc.
+#	   Check them first.
+#	2. If not in libc, check librpcsvc next.
+#	3. If not in librpcsvc, check $SOCK_LIBS next.
+#	4. We are over/dead/whatever.
+#--------------------------------------------------------------------
+oLIBS=$LIBS
+LIBS=""
+AC_CHECK_FUNC(xdr_int, ng_checkRpcsvc=0, ng_checkRpcsvc=1)
+if test $ng_checkRpcsvc -eq 1; then
+    AC_CHECK_LIB(rpcsvc, xdr_int, [ng_checkSock=0; LIBS="$LIBS -lrpcsvc"], ng_checkSock=1)
+    if test $ng_checkSock -eq 1; then
+	ng_weAreDead=1
+	if test "x${SOCK_LIBS}" != "x"; then
+	    LIBS=""
+	    libWOdashl=`echo $SOCK_LIBS | sed 's:-l::g'`
+	    AC_SEARCH_LIBS(xdr_int, [${libWOdashl}], [LIBS=""; ng_weAreDead=0], [ng_weAreDead=1])
+	fi
+	if test $ng_weAreDead -eq 1; then
+            if test "x${OS}" = "xcygwin32"; then
+                LIBS=""
+                AC_CHECK_LIB(rpclib, xdr_int, [ng_cygwin=1; LIBS="$LIBS -lrpclib"], [ng_cygwin=0])
+                if test $ng_cygwin -eq 0; then
+                    AC_MSG_RESULT([You have to install Sun RPC package for Cygwin32. exit.])
+                    exit 1
+                fi
+            else
+	        AC_MSG_RESULT([can't find XDR functions. exit.])
+	        exit 1
+            fi
+	fi
+    fi
+fi
+XDR_LIBS=$LIBS
+LIBS=$oLIBS
+
+AC_SUBST(XDR_LIBS)
+
+
+# check xdr_longlong_t
+oLIBS=$LIBS
+LIBS="$XDR_LIBS $SOCK_LIBS"
+
+AC_MSG_CHECKING([xdr_longlong_t() in $LIBS])
+AC_TRY_LINK(
+    [],
+    [(void)xdr_longlong_t(0, 0);],
+    [AC_MSG_RESULT([yes])],
+    [AC_MSG_RESULT([no]) ;
+     AC_DEFINE(NO_XDR_LONGLONG)]
+)
+
+LIBS=$oLIBS
+
+
+# Generic config end here.
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# checking gcc union size bug
+
+gccUnionBug=unknown
+delIt ./gccBug.* ./gccBug
+if test "x${isGcc}" = "xyes"; then
+    AC_MSG_CHECKING([gcc has large union size bug])
+    # check 512MB union.
+    oSz='0x1fffffff'
+    ${CC} ${CPPFLAGS} ${CFLAGS} -DLARGE_BUF=${oSz} -o ./gccBug ./utility/compile/gccUnionBug.c > /dev/null 2>&1
+    if test -x ./gccBug; then
+	sz=`./gccBug`
+	if test "x${sz}" = "x${oSz}"; then
+	    gccUnionBug=no
+	else
+	    gccUnionBug=yes
+	fi
+    else
+	gccUnionBug=yes
+    fi
+    AC_MSG_RESULT([$gccUnionBug])
+fi
+delIt ./gccBug.* ./gccBug
+AC_SUBST(gccUnionBug)
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# check has "long long"
+
+hasLL=no
+AC_MSG_CHECKING([has long long])
+AC_TRY_COMPILE([],[long long int x;], [hasLL=yes], [hasLL=no])
+AC_MSG_RESULT($hasLL)
+hasLLFlags=""
+if test $hasLL = yes; then
+    hasLLFlags="-DHAS_LONGLONG"
+    AC_DEFINE(HAS_LONGLONG)
+fi
+
+hasLD=no
+AC_MSG_CHECKING([has long double])
+AC_TRY_COMPILE([],[long double x;], [hasLD=yes], [hasLD=no])
+AC_MSG_RESULT($hasLD)
+hasLDFlags=""
+if test $hasLD = yes; then
+    hasLDFlags="-DHAS_LONGDOUBLE"
+    AC_DEFINE(HAS_LONGDOUBLE)
+fi
+
+AC_CHECK_SIZEOF(unsigned short)
+AC_CHECK_SIZEOF(unsigned int)
+AC_CHECK_SIZEOF(unsigned long)
+llTyp=''
+if test $hasLL = yes; then
+    AC_CHECK_SIZEOF(unsigned long long)
+    llTyp='longlongint'
+fi
+AC_CHECK_SIZEOF(float)
+AC_CHECK_SIZEOF(double)
+ldTyp=''
+if test $hasLD = yes; then
+    AC_CHECK_SIZEOF(long double)
+    ldTyp='longdouble'
+fi
+AC_CHECK_SIZEOF(void *)
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# align
+
+for i in char short int long "$llTyp" float double "$ldTyp"
+do
+    if test "x${i}" = x; then
+	continue
+    fi
+    getAlign=0
+    delIt ./align ./align.*
+    case $i in
+	longlongint)
+	    AC_MSG_CHECKING([default align of long long int]);;
+	longdouble)
+	    AC_MSG_CHECKING([default align of long double]);;
+	*)
+	    AC_MSG_CHECKING([default align of $i]);;
+    esac
+    ${CC} ${CPPFLAGS} ${CFLAGS} ${hasLLFlags} ${hasLDFlags} -DCHECK_TYPE=$i ./utility/compile/align.c -o align
+    if test -x ./align; then
+	getAlign=`./align | grep -v Linking`
+    fi
+    if test $getAlign -eq 0; then
+	AC_MSG_RESULT(can't determine????)
+	exit 1
+    else
+	AC_MSG_RESULT($getAlign)
+	case $i in
+	    char)
+		AC_DEFINE_UNQUOTED(CHAR_ALIGN, $getAlign);;
+	    short)
+		AC_DEFINE_UNQUOTED(SHORT_ALIGN, $getAlign);;
+	    int)
+		AC_DEFINE_UNQUOTED(INT_ALIGN, $getAlign);;
+	    long)
+		AC_DEFINE_UNQUOTED(LONG_ALIGN, $getAlign);;
+	    longlongint)
+		AC_DEFINE_UNQUOTED(LONGLONG_ALIGN, $getAlign);;
+	    float)
+		AC_DEFINE_UNQUOTED(FLOAT_ALIGN, $getAlign);;
+	    double)
+		AC_DEFINE_UNQUOTED(DOUBLE_ALIGN, $getAlign);;
+	    longdouble)
+		AC_DEFINE_UNQUOTED(LONGDOUBLE_ALIGN, $getAlign);;
+	esac
+    fi
+    delIt ./align ./align.*
+done
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# i386 double-align
+
+if test ${CPU} = "i386" -a "x${isGcc}" = "xyes"; then
+    for i in char short int long "$llTyp" float double "$ldTyp"
+    do
+	if test "x${i}" = x; then
+	    continue
+	fi
+	getAlign=0
+	delIt ./align ./align.*
+	case $i in
+	    longlongint)
+		AC_MSG_CHECKING([i386 double-align of long long int]);;
+	    longdouble)
+		AC_MSG_CHECKING([i386 double-align of long double]);;
+	    *)
+		AC_MSG_CHECKING([i386 double-align of $i]);;
+	esac
+	${CC} ${CPPFLAGS} ${CFLAGS} -malign-double ${hasLLFlags} ${hasLDFlags} -DCHECK_TYPE=$i ./utility/compile/align.c -o align
+	if test -x ./align; then
+	    getAlign=`./align | grep -v Linking`
+	fi
+	if test $getAlign -eq 0; then
+	    AC_MSG_RESULT(can't determine????)
+	    exit 1
+	else
+	    AC_MSG_RESULT($getAlign)
+	    case $i in
+		char)
+		    AC_DEFINE_UNQUOTED(I386_CHAR_ALIGN2, $getAlign);;
+		short)
+		    AC_DEFINE_UNQUOTED(I386_SHORT_ALIGN2, $getAlign);;
+		int)
+		    AC_DEFINE_UNQUOTED(I386_INT_ALIGN2, $getAlign);;
+		long)
+		    AC_DEFINE_UNQUOTED(I386_LONG_ALIGN2, $getAlign);;
+		longlongint)
+		    AC_DEFINE_UNQUOTED(I386_LONGLONG_ALIGN2, $getAlign);;
+		float)
+		    AC_DEFINE_UNQUOTED(I386_FLOAT_ALIGN2, $getAlign);;
+		double)
+		    AC_DEFINE_UNQUOTED(I386_DOUBLE_ALIGN2, $getAlign);;
+		longdouble)
+		    AC_DEFINE_UNQUOTED(I386_LONGDOUBLE_ALIGN2, $getAlign);;
+	    esac
+	fi
+	delIt ./align ./align.*
+    done
+fi
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# 32/64 bit int type
+
+delIt ./szchk ./szchk.*
+AC_MSG_RESULT([creating size check program])
+${CC} ${CPPFLAGS} ${CFLAGS} ${hasLLFlags} ./utility/compile/size.c -o szchk
+if test ! -x ./szchk; then
+    AC_MSG_RESULT([can't create size check program. exit.])
+    exit 1
+fi
+
+for i in 16 32 64
+do
+    AC_MSG_CHECKING([$i bit integer])
+    typName=`./szchk $i`
+    if test "x${typName}" = "xunknown"; then
+	case $i in
+	    16)
+		TYPE_INT16="short"
+		AC_SUBST(TYPE_INT16)
+		asump=${TYPE_INT16};;
+	    32)
+		TYPE_INT32="int"
+		AC_SUBST(TYPE_INT32)
+		asump=${TYPE_INT32};;
+	    64)
+		TYPE_INT64="long long int"
+		AC_SUBST(TYPE_INT64)
+		asump=${TYPE_INT64};;
+	esac
+	AC_MSG_RESULT([not supported. use $asump])
+    else
+	AC_MSG_RESULT([$typName])
+	case $i in
+	    16)
+		AC_DEFINE(HAS_INT16)
+		TYPE_INT16=${typName}
+		AC_SUBST(TYPE_INT16);;
+	    32)
+		AC_DEFINE(HAS_INT32)
+		TYPE_INT32=${typName}
+		AC_SUBST(TYPE_INT32);;
+	    64)
+		AC_DEFINE(HAS_INT64)
+		TYPE_INT64=${typName}
+		AC_SUBST(TYPE_INT64);;
+	esac
+    fi
+done
+delIt ./szchk ./szchk.*
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# check size of integer enough to hold size of void *
+
+AC_MSG_CHECKING([integer type enough to hold void pointer])
+${CC} -I. ${CPPFLAGS} ${CFLAGS} ${hasLLFlags} ./utility/compile/chkvoidp.c -o chkvoidp
+voidPint="unknown"
+if test -x ./chkvoidp; then
+    voidPint=`./chkvoidp`
+else
+    AC_MSG_RESULT([can't create check program. exit.])
+    exit 1
+fi
+if test "x${voidPint}" = "xunknown"; then
+    AC_MSG_RESULT([can't determine????])
+    exit 1
+else
+    AC_MSG_RESULT([$voidPint])
+fi
+INT_ENUFF_FOR_VOIDP=$voidPint
+AC_SUBST(INT_ENUFF_FOR_VOIDP)
+delIt ./chkvoidp.* ./chkvoidp
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# check 64 bit virtual address
+
+AC_MSG_CHECKING([64 bit virtual address])
+${CC} -I. ${CPPFLAGS} ${CFLAGS} ./utility/compile/addr64.c -o ./addr64
+addrIs64="unknown"
+if test -x ./addr64; then
+    addrIs64=`./addr64`
+else
+    AC_MSG_RESULT([can't create check program. exit.])
+    exit 1
+fi
+if test "x$addrIs64" = "xunknown"; then
+    AC_MSG_RESULT([can't determine????])
+    exit 1
+else
+    if test "x$addrIs64" = "x8"; then
+	AC_MSG_RESULT([yes])
+	AC_DEFINE(ADDR_IS_64)
+    else
+	AC_MSG_RESULT([no])
+    fi
+fi
+delIt ./addr64.* ./addr64
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# XML (expat)
+# NOTE: These directories are only valid after installation.
+
+EXPAT_LIBS='-L$(NG_DIR)/lib -lexpat'
+
+AC_SUBST(EXPAT_LIBS)
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# has printf "%qd"
+
+delIt ./hasqd.* ./hasqd
+AC_MSG_CHECKING([has quad-precision print format])
+${CC} -I. ${CPPFLAGS} ${CFLAGS} ./utility/compile/hasqd.c -o ./hasqd > /dev/null 2>&1
+hasQD=no
+if test -x ./hasqd; then
+    ret=`./hasqd`
+    if test "x$ret" = "xqd" -o "x$ret" = "x%qd"; then
+	hasQD=no
+    else
+	hasQD=yes
+    fi
+fi
+AC_MSG_RESULT([${hasQD}])
+if test "x${hasQD}" = "xyes"; then
+    AC_DEFINE(HAS_QUAD_PRINT)
+fi
+delIt ./hasqd.* ./hasqd
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# Various command check
+
+# Check ranlib
+AC_PROG_RANLIB
+if test "x${isGcc}" = "xno"; then
+    case $OS in
+	solaris*|irix*)
+	    RANLIB=':';;
+    esac
+fi
+
+if test "${OS}" = "cygwin32" -o "x${CYGWIN}" = "xyes"; then
+    INSTALLCOM='install -c'
+    MKDIRCOM='mkdir -p'
+else
+    INSTALLCOM='$(TOPDIR)/utility/script/install-sh -c'
+    MKDIRCOM='$(TOPDIR)/utility/script/mkdirhier'
+fi
+
+RM='$(TOPDIR)/utility/script/del.del.del'
+
+AR="ar cr"
+
+YACCCOM=""
+AC_PATH_PROG(YACCCOM, yacc, no, ${PATH}:/usr/local/bin:/opt/bin:/opt/local/bin:/opt/gnu/bin:/usr/bin:/bin)
+if test x"${YACCCOM}" = xno; then
+    BISONCOM=""
+    AC_PATH_PROG(BISONCOM, bison, no, ${PATH}:/usr/local/bin:/opt/bin:/opt/local/bin:/opt/gnu/bin:/usr/bin:/bin)
+    if test x"${BISONCOM}" = xno; then
+        AC_MSG_RESULT([cannot find yacc or bison program. exit.])
+        exit 1
+    fi
+    YACCCOM="$BISONCOM -y"
+fi
+
+RMCOM=""
+AC_PATH_PROG(RMCOM, rm, no, /usr/bin:/bin)
+if test x"${RMCOM}" = xno; then
+    AC_MSG_RESULT([cannot find rm program. exit.])
+    exit 1
+fi
+
+ENVCOM=""
+AC_PATH_PROG(ENVCOM, env, no, /usr/bin:/bin)
+if test x"${ENVCOM}" = xno; then
+    AC_MSG_RESULT([cannot find env program. exit.])
+    exit 1
+fi
+
+# Python
+PYTHONCOM="${pythonCom}"
+if test x"${PYTHONCOM}" = xno; then
+    AC_MSG_CHECKING([for python])
+    usePython=no
+    explicitNoPython=yes
+    AC_MSG_RESULT([no])
+fi
+
+if test x"${usePython}" != xno -a x"${PYTHONCOM}" = x; then
+    AC_PATH_PROG(PYTHONCOM, python, no)
+    if test x"${PYTHONCOM}" = xno; then
+        AC_MSG_RESULT([cannot find python.])
+        usePython=no
+    fi
+fi
+
+if test x"${usePython}" != xno; then
+    PYTHON="${ENVCOM} - PATH='' ${PYTHONCOM}"
+
+    AC_MSG_CHECKING([for python exec])
+    if ${PYTHON} -c ''; then
+        AC_MSG_RESULT([${PYTHON}])
+    else
+        AC_MSG_RESULT([failed to exec ${PYTHON} .])
+        usePython=no
+    fi
+fi
+
+if test x"${usePython}" != xno; then
+    pythonVar='import sys; sys.version >= "2.3" and sys.exit(0) or sys.exit(1)'
+    AC_MSG_CHECKING([for python version])
+    if ${PYTHON} -c "${pythonVar}"; then
+        AC_MSG_RESULT([>= 2.3])
+    else
+        AC_MSG_RESULT([ng4 requires python version >= 2.3.])
+        usePython=no
+    fi
+fi
+
+if test x"${usePython}" = xno; then
+    if test x"${explicitNoPython}" != xyes; then
+        AC_MSG_WARN([python for Ninf-G Client Invoke Server GT4py not found.])
+    fi
+    PYTHONCOM="python"
+fi
+
+# Java
+availableJava15="no"
+JAVACOM=""
+JAVACCOM=""
+JARCOM=""
+AC_MSG_CHECKING([for JAVA_HOME])
+if test x"${JAVA_HOME}" != x; then
+    AC_MSG_RESULT(["$JAVA_HOME"])
+    AC_PATH_PROG(JAVACOM,  java,  no, "$JAVA_HOME/bin")
+    AC_PATH_PROG(JAVACCOM, javac, no, "$JAVA_HOME/bin")
+    AC_PATH_PROG(JARCOM,   jar,   no, "$JAVA_HOME/bin")
+
+    if test "x$JAVACOM" != xno && test "x$JAVACCOM" != xno && test "x$JARCOM" != xno; then
+        AC_MSG_CHECKING([for java version])
+        # Check Java's version
+        [java_version=`eval "$JAVACOM" -version 2>&1 | sed -n '/java version/p' | sed 's/^.*java version[ ]*"\([0-9._]*\)".*$/\1/'`]
+        if test "x$java_version" != x; then
+            AC_MSG_RESULT([$java_version])
+        else
+            AC_MSG_RESULT([Failed to check java version.])
+        fi
+
+        if test "x$java_version" != x; then
+            # Require 1.5.0
+            [java_majar_version=`echo $java_version | sed 's/^\([0-9]*\).*$/\1/'`]
+            [java_minor_version=`echo $java_version | sed 's/^[0-9]*\.\([0-9]*\).*$/\1/'`]
+            if (test "$java_majar_version" -gt 1) || \
+               (test "$java_majar_version" -eq 1 && test "$java_minor_version" -ge 5); then
+                availableJava15="yes"
+                AC_SUBST(JAVA_HOME)
+                AC_SUBST(JAVACOM)
+                AC_SUBST(JAVACCOM)
+                AC_SUBST(JARCOM)
+            fi
+        fi
+    fi
+else
+    AC_MSG_RESULT([not defined.])
+fi
+
+#ant
+ANTCOM=
+availableAnt="no"
+AC_MSG_CHECKING([for ANT_HOME])
+if test x"${ANT_HOME}" != x; then
+    AC_MSG_RESULT(["$ANT_HOME"])
+    AC_PATH_PROG(ANTCOM,  ant,  no, "$ANT_HOME/bin")
+
+    if test "x$ANTCOM" != xno; then
+        availableAnt="yes"
+    fi
+else
+    AC_MSG_RESULT([not defined.])
+fi
+
+# find
+AC_PATH_PROG(FINDCOM, find, no)
+
+# Invoke Server
+INVOKE_SERVERS="gt2c gt4py ssh templ"
+
+# NAREGI SS
+NAREGI_DIR="${naregiDir}"
+if test x"$withNaregi" = x"yes"; then
+    if test x"$availableJava15" != xyes; then
+        AC_MSG_ERROR([Invoke Serve NAREGI SS requires Java 1.5.0 or later.])
+        exit 1
+    fi
+
+    if test x"$availableAnt" != xyes; then
+        AC_MSG_ERROR([Invoke Serve NAREGI SS requires Ant.])
+        exit 1
+    fi
+    INVOKE_SERVERS="naregiss $INVOKE_SERVERS"
+
+    if test x"${FINDCOM}" = xno; then
+        AC_MSG_ERROR([Invoke Serve NAREGI SS requires find command.])
+        exit 1
+    fi
+fi
+
+AC_SUBST(NAREGI_DIR)
+
+
+JAVA_CLASS_RESOURCE_UNKNOWN_FAULT_TYPE="org.oasis.wsrf.properties.ResourceUnknownFaultType"
+JAVA_CLASS_ADDRESS="org.apache.axis.message.addressing.Address"
+JAVA_CLASS_ENDPOINT_REFERENCE_TYPE="org.apache.axis.message.addressing.EndpointReferenceType"
+if test "x$GT42" = "xyes";then
+    JAVA_CLASS_RESOURCE_UNKNOWN_FAULT_TYPE="org.oasis.wsrf.resource.ResourceUnknownFaultType"
+    JAVA_CLASS_ADDRESS="org.globus.axis.message.addressing.Address"
+    JAVA_CLASS_ENDPOINT_REFERENCE_TYPE="org.globus.axis.message.addressing.EndpointReferenceType"
+fi
+
+AC_SUBST(JAVA_CLASS_RESOURCE_UNKNOWN_FAULT_TYPE)
+AC_SUBST(JAVA_CLASS_ADDRESS)
+AC_SUBST(JAVA_CLASS_ENDPOINT_REFERENCE_TYPE)
+AC_SUBST(GT42)
+
+AC_SUBST(INVOKE_SERVERS)
+
+AC_SUBST(RM)
+AC_SUBST(AR)
+
+AC_SUBST(INSTALLCOM)
+AC_SUBST(MKDIRCOM)
+AC_SUBST(YACCCOM)
+AC_SUBST(RMCOM)
+AC_SUBST(ENVCOM)
+AC_SUBST(PYTHONCOM)
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# Makefile include
+
+MK_VARTMPL=${TOPDIR}/utility/compile/defvar.mk
+MK_DEFRULE=${TOPDIR}/utility/compile/defrules.mk
+
+AC_SUBST(MK_VARTMPL)
+AC_SUBST(MK_DEFRULE)
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# Finally, sed.
+
+del=utility/script/del.del.del
+delin=${del}.in
+out=./.del.tmp
+
+echo '#!/bin/sh' > $out
+echo 'exe=@exe@; obj=@obj@; st=0;' >> $out
+cat $out utility/script/delIt.sh > $delin
+echo 'delIt $*; exit $?' >> $delin
+delIt $out
+
+defsTmp=.defsTmp.$$
+echo '@DEFS@' > ${defsTmp}.in
+echo ${CPUDEF} >> ${defsTmp}.in
+echo ${OSDEF} >> ${defsTmp}.in
+
+AC_OUTPUT(
+$defsTmp
+$del
+utility/compile/defvar.mk
+utility/compile/defrules.mk
+utility/script/ng_cc
+utility/script/globusflags
+c/include/ngPlatform.h
+Makefile
+c/include/Makefile
+c/expat/Makefile
+c/client/Makefile
+c/executable/Makefile
+c/net/Makefile
+c/common/Makefile
+c/grpc/Makefile
+c/utility/Makefile
+etc/Makefile
+lib/Makefile
+lib/template.mk
+lib/template.sh
+utility/base64/Makefile
+utility/generator/Makefile
+utility/version/Makefile
+utility/invoke_server/Makefile
+utility/invoke_server/Makefile.ssh
+utility/invoke_server/gt2c/Makefile
+utility/invoke_server/gt4py/Makefile
+utility/invoke_server/gt4py/ng_invoke_server.GT4py
+utility/invoke_server/gt4py/gt4invokeserverconfig.py
+utility/invoke_server/templ/Makefile
+utility/script/Makefile
+doc/Makefile
+utility/invoke_server/Makefile.naregiss
+utility/invoke_server/naregiss/Makefile
+utility/invoke_server/naregiss/ng_invoke_server.NAREGISS
+utility/invoke_server/naregiss/getnaregijars.sh
+java/org/apgrid/grpc/ng/MDS4QueryClient.java
+infoService/config.sh
+)
+
+genConfHdr `cat ${defsTmp}`
+
+doItNow "chmod 755 utility/script/ng_cc"
+doItNow "chmod 755 utility/script/del.del.del"
+doItNow "utility/script/del.del.del ${defsTmp} ${defsTmp}.in"
+doItNow "chmod 755 utility/script/globusflags"
+
+doItNow "chmod 755 utility/invoke_server/naregiss/ng_invoke_server.NAREGISS"
+doItNow "chmod 755 utility/invoke_server/naregiss/getnaregijars.sh"
+
+finalizeTheDoItNow
+# --------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------
+# Done.
+
+exit 0

@@ -1,0 +1,92 @@
+dnl $RCSfile$ $Revision$ $Date$
+dnl $AIST_Release: 4.2.4 $
+dnl $AIST_Copyright:
+dnl  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+dnl  National Institute of Advanced Industrial Science and Technology
+dnl  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+dnl  
+dnl  Licensed under the Apache License, Version 2.0 (the "License");
+dnl  you may not use this file except in compliance with the License.
+dnl  You may obtain a copy of the License at
+dnl  
+dnl      http://www.apache.org/licenses/LICENSE-2.0
+dnl  
+dnl  Unless required by applicable law or agreed to in writing, software
+dnl  distributed under the License is distributed on an "AS IS" BASIS,
+dnl  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+dnl  See the License for the specific language governing permissions and
+dnl  limitations under the License.
+dnl  $
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_DEFUN([AC_LANG_WERROR],
+[m4_divert_text([DEFAULTS], [ac_[]_AC_LANG_ABBREV[]_werror_flag=])
+ac_[]_AC_LANG_ABBREV[]_werror_flag=yes])# AC_LANG_WERROR
+
+AC_PREREQ(2.59)
+AC_INIT([InvokeServerSSH], [1.00], [http://ninf.apgrid.org/bugzilla/en/])
+AC_CONFIG_SRCDIR([ngInvokeServer.c])
+AC_CONFIG_HEADER([config.h])
+
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([fcntl.h limits.h stddef.h stdlib.h string.h unistd.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+# Checks for library functions.
+AC_CHECK_FUNCS([fork malloc realloc])
+AC_FUNC_SELECT_ARGTYPES
+AC_FUNC_SETVBUF_REVERSED
+AC_FUNC_STAT
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([dup2 localtime_r memmove memset select strdup strerror strstr strtol strtoul])
+
+# Checks COMPILER extention
+AC_MSG_CHECKING(compiler is able to check arguments of function like printf)
+AC_TRY_COMPILE(,[void test_func(char *,...)__attribute__((__format__(__printf__, 1, 2)));],
+    ngis_attribute_format_printf=yes,
+    ngis_attribute_format_printf=no)
+AC_MSG_RESULT($ngis_attribute_format_printf)
+if test "$ngis_attribute_format_printf" = "yes"; then
+    AC_DEFINE(NGIS_AVAILABLE_ATTRIBUTE_PRINTF, 1,
+        [compiler is able to check arguments of function like printf])
+fi
+
+# Check warning if there is unused static variable(const char[]) in first line
+AC_LANG_WERROR
+AC_MSG_CHECKING(RCS tag string warning)
+AC_TRY_COMPILE([static const char rcsid[] = "RCSfile Revision Date";],,
+    ngis_rcs_tag=no, ngis_rcs_tag=yes)
+AC_MSG_RESULT($ngis_rcs_tag)
+if test "$ngis_rcs_tag" = "no"; then
+    AC_DEFINE(NGIS_NO_WARN_RCSID, 1, [no warning rcsid])
+fi
+
+# Checks $NG_DIR
+AC_MSG_CHECKING([\$NG_DIR])
+if test -n "${NG_DIR}"
+then
+    AC_MSG_RESULT(${NG_DIR})
+else
+    AC_MSG_RESULT([\$NG_DIR is not defined])
+    exit 1
+fi
+
+AC_SUBST(NG_DIR)
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

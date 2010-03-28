@@ -1,0 +1,5 @@
+"xmlwf/xmlfile.c", line 149: warning: implicit function declaration: close
+"xmlwf/xmlfile.c", line 153: warning: implicit function declaration: read
+
+/usr/ccs/bin/yacc -d nggenIdl.y
+conflicts: 12 shift/reduce

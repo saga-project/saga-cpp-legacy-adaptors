@@ -1,0 +1,32 @@
+#  $RCSfile: template.sh.in,v $ $Revision: 1.12 $ $Date: 2006/04/07 08:14:42 $
+#  $AIST_Release: 4.2.4 $
+#  $AIST_Copyright:
+#   Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#   National Institute of Advanced Industrial Science and Technology
+#   Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#   
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#   
+#       http://www.apache.org/licenses/LICENSE-2.0
+#   
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#   $
+NG_CPPFLAGS="@CPPFLAGS@"
+
+NG_GT_INCDIR="@GLOBUS_INCDIR@"
+NG_CFLAGS="@NG_DEBUG_FLAGS@ @GLOBUS_CFLAGS@ -I${NG_DIR}/include ${NG_GT_INCDIR}"
+
+NG_GT_STUB_LDFLAGS="@GLOBUS_STUBLIBS@"
+
+NG_STUB_LDFLAGS="-L${NG_DIR}/lib -lngexecutable -lngcommon -lngnet -lngutility -lexpat @NG_PLAT_LD_RUN_PATH@ ${NG_GT_STUB_LDFLAGS} @SOCK_LIBS@ @XDR_LIBS@ @MATH_LIBS@ @ZLIB_LIBS@" 
+
+NG_GT_LDFLAGS="@GLOBUS_CLIENTLIBS@"
+
+NG_LDFLAGS="-L${NG_DIR}/lib -lnggrpc -lngclient -lngcommon -lngnet -lngutility -lexpat ${NG_GT_LDFLAGS} @SOCK_LIBS@ @XDR_LIBS@ @MATH_LIBS@ @ZLIB_LIBS@"
+

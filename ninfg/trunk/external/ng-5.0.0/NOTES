@@ -1,0 +1,17 @@
+Known Issues
+
+---------------
+Compile warning
+---------------
+  You may find some compiler warnings, but they are harmless.
+
+    - Ninf-G compile
+      + On Solaris/cc 5.6
+          Refer to "WARNING-Solaris-cc5.6.txt" for more details of warning.
+
+      + On Solaris/gcc 3.3.2
+          Refer to "WARNING-Solaris-gcc3.3.2.txt" for more details of warning.
+
+      + On Mac OS X/gcc 4.0.0
+          Refer to "WARNING-MacOSX-gcc4.0.0.txt" for more details of warning.
+

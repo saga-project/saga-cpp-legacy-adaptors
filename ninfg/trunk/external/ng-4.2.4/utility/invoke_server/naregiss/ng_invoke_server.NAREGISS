@@ -1,0 +1,81 @@
+#!/bin/sh
+
+# $RCSfile: ng_invoke_server.NAREGISS.in,v $ $Revision: 1.11 $ $Date: 2008/09/19 11:12:29 $
+# $AIST_Release: 4.2.4 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+NAREGI_DIR=/usr/naregi
+FIND=/usr/bin/find
+
+SS_PROPERTY= 
+
+if test -z "${GLOBUS_LOCATION}"; then
+    echo '${GLOBUS_LOCATION} is not set'>&2
+fi
+
+SS_PROPERTY="${SS_PROPERTY} -DGLOBUS_LOCATION=${GLOBUS_LOCATION}"
+SS_PROPERTY="${SS_PROPERTY} -Djava.endorsed.dirs=${GLOBUS_LOCATION}/endorsed"
+SS_PROPERTY="${SS_PROPERTY} -Daxis.ClientConfigFile=$GLOBUS_LOCATION/client-config.wsdd"
+
+if test -z "${NG_DIR}"; then
+    echo '$NG_DIR is not set'>&2
+fi
+
+if test -n "${X509_USER_PROXY}"; then
+    SS_PROPERTY="${SS_PROPERTY} -DX509_USER_PROXY=${X509_USER_PROXY}"
+fi
+
+if test -r "/dev/urandom then";then
+    SS_PROPERTY="${SS_PROPERTY} -Djava.security.egd=/dev/urandom"
+fi
+
+ENV_PROPERTY="-Dorg.apgrid.grpc.ngDir=${NG_DIR} -Dorg.apgrid.grpc.X509UserProxy=${X509_USER_PROXY}"
+XML_PROPERTY=-Dorg.w3c.dom.DOMImplementationSourceList=com.sun.org.apache.xerces.internal.dom.DOMImplementationSourceImpl
+FACTORY_PROPERTY=-Dorg.apgrid.grpc.tools.invokeServer.FactoryClassName=org.apgrid.grpc.tools.invokeServer.naregiSS.NaregiSSJobFactory
+
+PROPERTY="${SS_PROPERTY} ${ENV_PROPERTY} ${XML_PROPERTY} ${FACTORY_PROPERTY} ${DEFAULTLOG_PROPERTY}"
+
+MAINCLASS=org.apgrid.grpc.tools.invokeServer.InvokeServer
+
+append_classpath () {
+    if test -z "${CLASSPATH}";then
+        CLASSPATH=$1
+    else
+        CLASSPATH=${CLASSPATH}:$1
+    fi
+}
+
+trap "" INT
+trap "" TSTP
+trap "" HUP
+trap "" TERM
+
+CLASSPATH=
+append_classpath ${NG_DIR}/lib/ng_invoke_server.jar
+append_classpath ${NG_DIR}/lib/naregissIS.jar
+
+NAREGI_JARS_DIR="${NAREGI_DIR}/lib/jars"
+for i in `${FIND} "${NAREGI_JARS_DIR}" -name '*.jar'`
+do
+    append_classpath "$i"
+done
+
+export CLASSPATH
+
+ -classpath ${CLASSPATH} ${PROPERTY} ${MAINCLASS} $*

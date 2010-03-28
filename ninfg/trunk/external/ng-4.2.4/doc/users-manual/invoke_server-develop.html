@@ -1,0 +1,1303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+<title>Invoke Server Developer's Manual</title>
+</head>
+<body bgcolor=white>
+
+<h2><a name="InvokeServer_develop">Invoke Server Developer's Manual</a></h2>
+
+<p>This document describes how to develop a Ninf-G Invoke Server.</p>
+
+<hr>
+<ul>
+<li><a href="#Introduction">
+    1. Introduction</a>
+
+<ul>
+<li><a href="#Overview">
+    1.1 Overview of a typical client application</a>
+<li><a href="#Requirements">
+    1.2 Requirements for underlying middleware</a>
+<li><a href="#Implementation">
+    1.3 Implementation Overview</a>
+<li><a href="#Execution">
+    1.4 Execution flow</a>
+</ul>
+
+<li><a href="#Specifications">
+    2. Specifications of Invoke Server</a>
+
+<ul>
+<li><a href="#Detailed">
+    2.1 Detailed overview of Invoke Server</a>
+<li><a href="#Protocol">
+    2.2 Protocol between a Ninf-G Client and Invoke Server</a>
+<ul>
+<li><a href="#Protocol_Overview">
+    2.2.1 Overview</a>
+<li><a href="#Protocol_Detail">
+    2.2.2 Protocol</a>
+<li><a href="#Protocol_Request">
+    2.2.2.1 Request</a>
+<li><a href="#Protocol_Reply">
+    2.2.2.2 Reply</a>
+<li><a href="#Protocol_Notify">
+    2.2.2.3 Notify</a>
+<li><a href="#Protocol_JOB_CREATE_Request">
+    2.2.2.4 <code>JOB_CREATE</code> Request</a>
+</ul>
+</ul>
+
+<li><a href="#How_to_specify">
+    Appendix A. How to specify the Invoke Server</a>
+<ul>
+<li><a href="#How_to_specify_Invoke_Server">
+    A.1.  How to specify Invoke Server</a>
+<li><a href="#How_to_pass_information">
+    A.2. How to pass information to Invoke Server</a>
+<li><a href="#Polling_interval">
+    A.3. Polling interval</a>
+<li><a href="#Logfile">
+    A.4. Logfile</a>
+<li><a href="#Maximum_number_of_jobs">
+    A.5. Maximum number of jobs per Invoke Server</a>
+<li><a href="#path_of_the_Invoke_Server">
+    A.6. How to specify the path of the Invoke Server</a>
+</ul>
+
+<li><a href="#Miscellaneous">
+    Appendix B. Miscellaneous information</a>
+<ul>
+<li><a href="#Job_Timeout">
+    B.1. Job Timeout</a>
+<li><a href="#Redirect_stdout_stderr">
+    B.2. Redirect stdout/stderr is implemented using files</a>
+</ul>
+</ul>
+
+<hr>
+
+<h3><a name="Introduction">
+1. Introduction</a></h3>
+
+<p>A Ninf-G Client invokes a Ninf-G Executable on the server machine
+when a function requiring initialization of function/object handles,
+such as grpc_function_handle_init(), is called.
+Ninf-G, Version 2, implements the remote process invocation using
+the Globus Toolkit's Pre-WS GRAM feature.
+Implemented using the Globus API, the invocation mechanism has been
+embedded in Ninf-G.
+In order to utilize other systems, such as WS GRAM, UNICORE,
+or Condor for remote process invocation, Ninf-G, Version 4,
+implements the invocation mechanism as a separate module called
+"Invoke Server."
+This design enables users and developers to implement and add
+a new Invoke Server that can utilize any job invocation mechanism.</p>
+
+
+<p>Ninf-G Version 4.2.0 includes the following Invoke Servers:</p>
+
+<ul>
+<li>Invoke Server for WS GRAM, implemented in Python (GT4py)
+<li>Invoke Server for SSH, implemented in C (SSH)
+<li>Invoke Server for Condor, implemented in Java (Condor)
+<li>Invoke Server for Pre-WS GRAM, implemented in C (GT2c)
+<li>Invoke Server for WS GRAM, implemented in Java (GT4java)
+<li>Invoke Server for UNICORE, implemented in Java (UNICORE)
+<li>Invoke Server for NAREGI Super Scheduler, implemented in Java (NAREGISS)
+</ul>
+
+<h4><a name="Overview">
+1.1 Overview of a typical client application</a></h4>
+
+<p>Here is a typical flow of a Ninf-G Client application:</p>
+
+<ul>
+<li>(1) grpc_initialize()
+
+<p>Initializes data structures used by the Ninf-G Client.</p>
+
+<li>(2) grpc_function_handle_init()
+
+<p>Creates a function/object handle which requests remote process
+invocation.
+The request will be processed and a Ninf-G Executable
+will be created on the server machine.
+When the Ninf-G Executable is created,
+it connects to the Ninf-G Client to establish a TCP connection
+between the Ninf-G Executable and the Ninf-G Client.</p>
+
+<li>(3) grpc_call() or grpc_call_async()/grpc_wait_any()
+
+<p>Calls the remote function, i.e.
+(3.1) the Ninf-G Client sends arguments to the Ninf-G Executable,
+(3.2) the Ninf-G Executable performs some form of computation,
+and (3.3) the Ninf-G Executable sends the results to the
+Ninf-G Client.</p>
+
+
+<li>(4) grpc_function_handle_destruct()
+
+<p>Requests the Ninf-G Executable to terminate its process.
+If an error occurs during the termination,
+the Ninf-G Client requests the Invoke Server to kill
+the Ninf-G Executable.</p>
+
+
+<li>(5) grpc_finalize()
+
+<p>Frees the data structures used by the Ninf-G Client.</p>
+</ul>
+
+<p>Invoke Server is required to implement initialization and
+finalization of the function/object handles
+which are described in steps (2) and (4).</p>
+
+
+<h4><a name="Requirements">
+1.2 Requirements for underlying middleware</a></h4>
+
+<p>The only requirement for underlying middleware is that
+the middleware must be capable of remote process invocation.
+Examples of such middleware include the Globus Toolkit Pre-WS GRAM,
+Globus Toolkit WS GRAM, Unicore, Condor, and SSH.</p>
+
+<h4><a name="Implementation">
+1.3 Implementation overview</a></h4>
+
+<p>Invoke Server is an adapter for the underlying middleware and it
+handles requests from a Ninf-G Client.
+Invoke Server analyzes and processes the request sent from
+the Ninf-G Client and replies to the Ninf-G Client.
+For example, if Invoke Server receives a <code>JOB_CREATE</code>
+request from the Ninf-G Client, Invoke Server creates a Job ID,
+returns the Job ID to the Ninf-G Client,
+and invokes the job processes called for in the request.</p>
+
+<p>Invoke Server can be implemented using any language.
+The details of the protocol existing between the Ninf-G Client
+and Invoke Server are described in
+<a href="#Specifications"> Section 2.</a></p>
+
+<h4><a name="Execution">
+1.4 Execution flow</a></h4>
+
+<p>This section describes a sample RPC flow to a server called serverA
+via the Invoke Server, <code>IS_SAMPLE</code>.
+
+<ul>
+<li><b>(Prerequisite)</b>
+
+<li><p>(1) A client configuration file that describes that
+Invoke Server <code>IS_SAMPLE</code> is used for RPC to serverA
+must be prepared.</p>
+
+<li><b>(grpc_function_handle_init())</b>
+
+<li><p>(2) The Ninf-G Client requests Invoke Server
+<code>IS_SAMPLE</code> to create a
+function/object handle.</p>
+
+<li><p>(3) The first time <code>IS_SAMPLE</code> is required to create
+a function/object handle, the <code>IS_SAMPLE</code> process is spawned by
+the Ninf-G Client on the same machine.
+<code>${NG_DIR}/bin/ng_invoke_server.IS_SAMPLE</code> is a command
+for spawning an <code>IS_SAMPLE</code> process.</p>
+
+<li><p>(4) The Ninf-G Client and <code>IS_SAMPLE</code>
+communicate using three pipes (stdin, stdout, and stderr).</p>
+
+<li><p>(5) When grpc_function_handle_init() is called,
+the Ninf-G Client sends <code>JOB_CREATE</code> request to
+<code>IS_SAMPLE</code>,
+followed by the required information
+(e.g., the hostname and port number of the remote server),
+and <code>JOB_CREATE_END</code>.</p>
+
+<li><p>(6) When <code>IS_SAMPLE</code> receives
+<code>JOB_CREATE</code> request,
+<code>IS_SAMPLE</code> returns <code>"S"</code> to the Ninf-G Client,
+which indicates that the request has been received by
+the Invoke Server.</p>
+
+<li><p>(7) <code>IS_SAMPLE</code> generates a new Job ID that corresponds
+to the Request ID that was transferred with the <code>JOB_CREATE</code>
+ request, and notifies the Job ID to the Ninf-G Client.
+Then, <code>IS_SAMPLE</code> invokes the remote processes
+(Ninf-G Executable) on serverA using its underlying middleware.</p>
+
+<li><p>(8) The Ninf-G Client waits for the reply from
+<code>IS_SAMPLE</code>,
+and notify of Job ID.
+When the Ninf-G Client receives the reply and Job ID,
+it resumes the execution without waiting for actual job invocation
+on serverA.</p>
+
+<li><b>(grpc_call())</b>
+
+<li><p>(9) When the Ninf-G Executable is invoked on serverA,
+it connects to the Ninf-G Client using Globus IO.
+The connection is used for communication
+(e.g., argument transfers from the Ninf-G Client to the Ninf-G Executable)
+between the Ninf-G Client and the Ninf-G Executable.
+<code>IS_SAMPLE</code> does nothing for grpc_call().
+If the underlying middleware for <code>IS_SAMPLE</code> returns an error
+on remote process invocation, <code>IS_SAMPLE</code> must notify
+the Ninf-G Client that the job invocation has failed.</p>
+
+
+<li><b>(grpc_function_handle_destruct())</b>
+
+<li><p>(10) When grpc_function_handle_destruct() is called,
+the Ninf-G Client requests the Ninf-G Executable to exit the process.
+This communication is carried out between the Ninf-G Client and
+the Ninf-G Executable.
+The Ninf-G Client does not wait for the Ninf-G Executables
+to be terminated.</p>
+
+<li><p>(11) When the Ninf-G Executable exits the process,
+the job status managed by <code>IS_SAMPLE</code> should be changed to
+<code>DONE</code>,
+and <code>IS_SAMPLE</code> notifies the Ninf-G Client of the change
+in job status to <code>DONE</code>.</p>
+
+<li><p>(12) The Ninf-G Client sends a <code>JOB_DESTROY</code> request to
+<code>IS_SAMPLE</code>.</p>
+
+<li><p>(13) <code>IS_SAMPLE</code> returns <code>"S"</code> to
+the Ninf-G Client when it receives the <code>JOB_DESTROY</code>
+request.</p>
+
+<li><p>(14) <code>IS_SAMPLE</code> returns <code>DONE</code> to
+the Ninf-G Client
+if the state of the corresponding job is <code>DONE</code>.
+Otherwise, <code>IS_SAMPLE</code> cancels the job and notifies
+the Ninf-G Client of the change in status to <code>DONE</code>
+when the cancellation is completed and the status of
+the job actually becomes <code>DONE</code>.</p>
+
+<li><b>(grpc_finalize())</b>
+
+<li><p>(15) When grpc_finalize() is called,
+the Ninf-G Client sends an <code>EXIT</code> request to
+<code>IS_SAMPLE</code>.</p>
+
+
+<li><p>(16) <code>IS_SAMPLE</code> returns <code>"S"</code> to
+the Ninf-G Client when it receives the <code>EXIT</code> request.
+The pipes between <code>IS_SAMPLE</code> and Ninf-G Client
+(stdin, stdout, stderr) are closed after it.</p>
+
+<li><p>(17) <code>IS_SAMPLE</code> cancels all jobs and wait
+the termination of all jobs, and exit.</p>
+
+<li><p>(18) When the Ninf-G Client receives an <code>"S"</code> from
+<code>IS_SAMPLE</code>,
+it continues its execution, and does not wait for the termination
+of all jobs.</p>
+</ul>
+
+
+<p>The following figure illustrates the interaction between
+the Ninf-G Client, Invoke Server, and the Ninf-G Executable.</p>
+
+<center>
+<img src="figure/invoke_server-image.png"
+    alt="Interaction of Invoke Server">
+<p>Figure 1: Interaction between the Ninf-G Client,
+Invoke Server and the Ninf-G Executable</p>
+</center>
+
+
+<h3><a name="Specifications">
+2. Specifications of Invoke Server</a></h3>
+
+<p>This section describes a detailed overview of Invoke Server
+and the protocol existing between a Ninf-G Client and Invoke Server.</p>
+
+
+<h4><a name="Detailed">
+2.1 Detailed overview of Invoke Server</a></h4>
+
+<ol>
+<li><p>Invoke Server is invoked when a Ninf-G Client initializes a
+function/object handle on the remote server which Ninf-G Client is
+configured to use with Invoke Server.</p>
+
+<li><p>The maximum number of jobs per Invoke Server is limited.
+If the number of jobs exceeds the limit,
+a new Invoke Server is invoked.</p>
+
+<li><p>Invoke Server exits the process if it receives an
+<code>EXIT</code> request
+from the Ninf-G Client.
+This request is sent when the Ninf-G Client calls grpc_finalize().
+Invoke Server also exits the process if it is managing the
+maximum number of jobs and all jobs are terminated.</p>
+
+<li><p>The Ninf-G Client and Invoke Server communicate using three pipes,
+created by the Ninf-G Client when the Invoke Server is invoked.</p>
+
+<li><p>Ninf-G Client does not wait for the termination of Invoke Server
+after the Ninf-G Client sends an <code>EXIT</code> request to
+Invoke Server.</p>
+
+<li><p>If the Ninf-G Client exits abnormally, the pipes will be
+disconnected.
+When Invoke Server detects that the pipes have been disconnected,
+Invoke Server must cancel all jobs and exit the process.</p>
+
+<li><p>Invoke Server is implemented as a Unix executable or script file
+which should be located in the <code>${NG_DIR}/bin</code> directory.
+It can be located in another directory if Invoke Server is
+supplied with an absolute path to the executable file.</p>
+
+<li><p>The file names used with Invoke Server must follow the naming
+convention of "ng_invoke_server" + suffix, where the suffix
+corresponds to rules for the underlying middleware used for remote
+process invocation.</p>
+
+<li><p>Log file for Invoke Server can be specified as an optional
+argument of the Invoke Server command.</p>
+
+<p> Example:
+<pre>
+<code>
+-l [Log file name]
+</code>
+</pre>
+</p>
+
+<p>If this option is specified, Invoke Server outputs logs to the file
+specified by this argument.  Otherwise, logs are not recorded.</p>
+</ol>
+
+
+<h4><a name="Protocol">
+2.2 Protocol between a Ninf-G Client and Invoke Server</a></h4>
+
+<h5><a name="Protocol_Overview">
+2.2.1 Overview</a></h5>
+
+<p>A Ninf-G Client and Invoke Server exchange three types of messages,
+Request, Reply, and Notify.
+A Request message is sent from a Ninf-G Client to Invoke Server.
+Reply and Notify messages are sent from Invoke Server to
+the Ninf-G Client.
+The Ninf-G Client assumes that a Reply message must be returned
+from Invoke Server when the Ninf-G Client sends a Request message.
+A Notify message is used to send messages from Invoke Server
+to the Ninf-G Client asynchronously.
+Three different pipes are used for sending these three types of
+message.</p>
+
+<p>
+<center>
+<table border>
+<tr><th>Name</th><th>fd</th><th colspan=3>direction</th>
+<tr><td>Request</td><td>stdin</td>
+    <td>Ninf-G</td><td>----&gt;</td><td>Invoke</td></tr>
+<tr><td>Reply</td><td>stdout</td>
+    <td>Client</td><td>&lt;----</td><td>Server</td></tr>
+<tr><td>Notify</td><td>stderr</td>
+    <td></td><td> &lt;---- </td><td></td></tr>
+</table>
+</center>
+</p>
+
+<h5><a name="Protocol_Detail">
+2.2.2 Protocol</a></h5>
+
+<p>All messages are sent as plain text.
+The Return code (&lt;RET&gt;) is
+<code>0x0d0a</code>.
+The Return code is a delimiter that determines the unit of
+messages.
+A Job ID is generated by Invoke Server.</p>
+
+
+<h6><a name="Protocol_Request">
+2.2.2.1 Request</a></h6>
+
+<p>Four Request messages,
+<code>JOB_CREATE</code>, <code>JOB_STATUS</code>,
+<code>JOB_DESTROY</code>, and <code>EXIT</code>
+are supported.</p>
+
+<ol>
+<li><code>JOB_CREATE</code>
+
+<ul>
+<li>Format
+
+<p>
+<table border>
+<tr><td>
+<pre>
+<code>
+JOB_CREATE &lt;Request ID&gt;&lt;RET&gt;
+hostname .....&lt;RET&gt;
+port .....&lt;RET&gt;
+... (snip)
+JOB_CREATE_END&lt;RET&gt;
+</code>
+</pre>
+</td></tr>
+</table>
+</p>
+
+<li>Explanation
+<p>This request is used to create and invoke a new job.
+Required information for job invocation is described as a
+set of attributes that is transferred along with
+a <code>JOB_CREATE</code> request.
+The details of these attributes are described in 
+<a href="#Protocol_JOB_CREATE_Request">Section 2.2.2.4</a>.
+<code>JOB_CREATE</code> is the only request that is described
+using multiple lines.
+All the other requests can be described with a single line.</p>
+
+
+<p>A Ninf-G Client transfers a Request ID to Invoke Server.
+Invoke Server generates a unique Job ID and returns
+it to the Ninf-G Client.
+The Job ID is used by the Ninf-G Client to specify the job.</p>
+
+
+<p>When Invoke Server receives a <code>JOB_CREATE</code> request,
+it must send a Reply message to the Ninf-G Client.
+Then, Invoke Server generates a unique Job ID and notifies
+the Ninf-G Client of the Job ID.
+Finally, Invoke Server requests job invocation on remote servers
+via the underlying middleware used with the Invoke Server.</p>
+</ul>
+
+
+<li><code>JOB_STATUS</code>
+<ul>
+<li>Format
+
+<p>
+<table border>
+<tr><td>
+<pre>
+<code>
+JOB_STATUS &lt;Job ID&gt;&lt;RET&gt;
+</code>
+</pre>
+</td></tr>
+</table>
+</p>
+
+<li>Explanation
+<p>This request queries Invoke Server on the status of jobs.
+The current version of Ninf-G4 and prior does not use this
+<code>JOB_STATUS</code> request.</p>
+</ul>
+
+
+<li><code>JOB_DESTROY</code>
+<ul>
+<li>Format
+
+<p>
+<table border>
+<tr><td>
+<pre>
+<code>
+JOB_DESTROY &lt;Job ID&gt;&lt;RET&gt;
+</code>
+</pre>
+</td></tr>
+</table>
+</p>
+
+<li>Explanation
+<p>This request is used to terminate and destroy jobs.
+Invoke Server cancels all jobs if it receives this request and
+the corresponding jobs are not completed.
+When Invoke Server confirms that all jobs are cancelled,
+it sends <code>DONE</code> to the Ninf-G Client.</p>
+</ul>
+
+
+<li><code>EXIT</code>
+<ul>
+<li>Format
+
+<p>
+<table border>
+<tr><td>
+<pre>
+<code>
+EXIT&lt;RET&gt;
+</code>
+</pre>
+</td></tr>
+</table>
+</p>
+
+<li>Explanation
+<p>This request is used to terminate Invoke Server.
+If Invoke Server receives this <code>EXIT</code> request,
+it must cancel all outstanding jobs and wait for their termination.</p>
+</ul>
+</ol>
+
+
+<h6><a name="Protocol_Reply">
+2.2.2.2 Reply</a></h6>
+
+<p>Invoke Server must send a Reply message to a Ninf-G Client
+if Invoke Server receives a Request message from that Ninf-G Client.</p>
+
+<p>The reply to <code>JOB_CREATE</code>, <code>JOB_DESTROY</code>,
+and <code>EXIT</code> messages is:</p>
+
+<p>
+<table border>
+<tr><td>
+<pre>
+<code>
+[S   | F &lt;Error String&gt;]&lt;RET&gt;
+</code>
+</pre>
+</td></tr>
+</table>
+</p>
+
+<p>where <code>S</code> is sent in case of Success.
+Otherwise, <code>F</code> is returned, followed by
+&lt;Error String&gt;.</p>
+
+<p>The reply to a <code>JOB_STATUS</code> message is:</p>
+
+<p>
+<table border>
+<tr><td>
+<pre>
+<code>
+[S &lt;Status&gt;  | F &lt;Error String&gt;]&lt;RET&gt;
+</code>
+</pre>
+</td></tr>
+</table>
+</p>
+
+<p>Where &lt;Status&gt; is denoted as: </p>
+<pre>
+<code>
+&lt;Status&gt; : [PENDING | ACTIVE | DONE | FAILED]
+</code>
+</pre>
+
+<p>Each status indication indicates the status such that:</p>
+
+<ul>
+<li><code>PENDING</code> : the Ninf-G Executable is waiting for invocation.
+<li><code>ACTIVE</code> : the Ninf-G Executable is already invoked.
+<li><code>DONE</code> : the Ninf-G Executable is already done.
+<li><code>FAILED</code> : the Ninf-G Executable exited abnormally.
+</ul>
+
+<h6><a name="Protocol_Notify">
+2.2.2.3 Notify</a></h6>
+
+<p>A Notify message is used to send an asynchronous message from
+Invoke Server to a Ninf-G Client.
+Two types of Notify message are provided.</p>
+
+<ol>
+<li><code>CREATE_NOTIFY</code>
+<ul>
+<li>Format
+
+<p>
+<table border>
+<tr><td>
+<pre>
+<code>
+CREATE_NOTIFY &lt;Request ID&gt; [S &lt;Job ID&gt; | F &lt;Error String&gt;]&lt;RET&gt;
+</code>
+</pre>
+</td></tr>
+</table>
+</p>
+
+<li>Explanation
+<p>This is used to notify the Ninf-G Client of the Job ID.  A Job ID is
+case sensitive and cannot include invisible characters.</p>
+</ul>
+
+
+<li><code>STATS_NOTIFY</code>
+<ul>
+<li>Format
+
+<p>
+<table border>
+<tr><td>
+<pre>
+<code>
+STATUS_NOTIFY &lt;Job ID&gt; &lt;Status&gt; &lt;String&gt;&lt;RET&gt;
+</code>
+</pre>
+</td></tr>
+</table>
+</p>
+
+<pre>
+<code>
+&lt;Status&gt; : [PENDING | ACTIVE | DONE | FAILED]
+</code>
+</pre>
+
+
+<li>Explanation
+
+<p>This message is used to send notification that the status of a job has
+been changed.</p>
+
+<p>&lt;String&gt; can be any string,
+and the &lt;String&gt; is stored in an output log.
+It should be noted that the status of job can be changed from
+<code>PENDING</code> to <code>DONE</code>.</p>
+</ul>
+</ol>
+
+
+<h6><a name="Protocol_JOB_CREATE_Request">
+2.2.2.4 <code>JOB_CREATE</code> Request</a></h6>
+
+<p>This section describes the details of
+a <code>JOB_CREATE</code> Request.</p>
+
+<ul>
+<li>Format
+
+<p>
+<table border>
+<tr><td>
+<pre>
+<code>
+JOB_CREATE &lt;Request ID&gt;&lt;RET&gt;
+hostname .....&lt;RET&gt;
+port .....&lt;RET&gt;
+... (snip)
+JOB_CREATE_END&lt;RET&gt;
+</code>
+</pre>
+</td></tr>
+</table>
+</p>
+
+<p>Attributes are placed between <code>JOB_CREATE&lt;RET&gt;</code>
+and <code>JOB_CREATE_DONE&lt;RET&gt;</code>.
+Only one attribute can occupy one line and one line must
+include one and only one attribute.
+Attributes can be placed in any order.
+There are two types of attributes, mandatory attributes and
+optional attributes.  Invoke Server must return an error
+if mandatory attributes are not included.
+Any unknown optional attributes must be ignored.</p>
+
+<li>Attributes
+
+<p>The following is a list of attributes supported by Ninf-G.
+Some of these attributes are provided for the Globus Toolkit's
+Pre-WS GRAM and WS-GRAM.
+Any new attribute can be defined using the
+Client configuration file &lt;SERVER&gt; section
+<code>"invoke_server_option"</code> attribute.</p>
+
+<p>
+<table border>
+<tr>
+<th> name </th>
+<th> mandatory </th>
+<th> meanings </th>
+</tr>
+
+<tr>
+<td> <a href="#attribute-hostname">
+     hostname </a></td>
+<td> yes </td>
+<td> Host name of the server </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-port">
+     port </a></td>
+<td> yes </td>
+<td> Port number </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-jobmanager">
+     jobmanager </a></td>
+<td> no </td>
+<td> Job Manager </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-subject">
+     subject </a></td>
+<td> no </td>
+<td> Subject of the GRAM </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-client_name">
+     client_name </a></td>
+<td> yes </td>
+<td> Host name of the Ninf-G Client </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-executable_path">
+     executable_path </a></td>
+<td> yes </td>
+<td> Path of the Ninf-G Executable </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-backend">
+     backend </a></td>
+<td> yes </td>
+<td> Backend of the remote function (e.g., MPI) </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-count">
+     count </a></td>
+<td> yes </td>
+<td> Number of Ninf-G Executables </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-staging">
+     staging </a></td>
+<td> yes </td>
+<td> A flag indicating if staging is used or not </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-argument">
+     argument </a></td>
+<td> yes </td>
+<td> Arguments for the Ninf-G Executable </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-work_directory">
+     work_directory </a></td>
+<td> no </td>
+<td> Working directory of the remote function </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-gass_url">
+     gass_url </a></td>
+<td> no </td>
+<td> The URL of GASS </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-redirect_enable">
+     redirect_enable </a></td>
+<td> yes </td>
+<td> A flag indicating redirection of stdout/stderr </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-stdout_file">
+     stdout_file </a></td>
+<td> no </td>
+<td> file name of stdout </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-stderr_file">
+     stderr_file </a></td>
+<td> no </td>
+<td> file name of stderr </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-environment">
+     environment </a></td>
+<td> no </td>
+<td> Environment variables </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-tmp_dir">
+     tmp_dir </a></td>
+<td> no </td>
+<td> temporary files directory </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-status_polling">
+     status_polling </a></td>
+<td> yes </td>
+<td> Interval of status polling </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-refresh_credential">
+     refresh_credential </a></td>
+<td> yes </td>
+<td> Interval of credential refresh </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-max_time">
+     max_time </a></td>
+<td> no </td>
+<td> Maximum execution time </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-max_wall_time">
+     max_wall_time </a></td>
+<td> no </td>
+<td> Maximum wall clock time </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-max_cpu_time">
+     max_cpu_time </a></td>
+<td> no </td>
+<td> Maximum CPU time </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-queue_name">
+     queue_name </a></td>
+<td> no </td>
+<td> Name of the queue </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-project">
+     project </a></td>
+<td> no </td>
+<td> Name of the project </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-host_count">
+     host_count </a></td>
+<td> no </td>
+<td> Number of executables per host </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-min_memory">
+     min_memory </a></td>
+<td> no </td>
+<td> Minimum size of requested memory </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-max_memory">
+     max_memory </a></td>
+<td> no </td>
+<td> Maximum size of requested memory </td>
+</tr>
+
+<tr>
+<td> <a href="#attribute-rsl_extensions">
+     rsl_extensions </a></td>
+<td> no </td>
+<td> RSL extension </td>
+</tr>
+
+</table>
+</p>
+
+<p>Detailed description</p>
+
+<ul>
+<li><a name="attribute-hostname">
+  hostname </a>
+
+<p>Host name of the server machine.</p>
+
+
+<li><a name="attribute-port">
+  port </a>
+
+<p>The server port number on which the server is listening.
+The default value is depend on underlying middleware.</p>
+
+
+<li><a name="attribute-jobmanager">
+  jobmanager </a>
+
+<p>The job manager used on the server machine.</p>
+
+
+<li><a name="attribute-subject">
+  subject [subject] </a>
+
+<p>The certificate subject of the resource manager contact.</p>
+
+
+<li><a name="attribute-client_name">
+  client_name [client name] </a>
+
+<p>The host name of the client machine.</p>
+
+
+<li><a name="attribute-executable_path">
+  executable_path [path to the executable] </a>
+
+<p>Absolute path of the Ninf-G Executable.
+The path represents a remote path if staging is off.
+Otherwise, the path represents a local path.</p>
+
+
+<li><a name="attribute-backend">
+  backend [backend] </a>
+
+<p>The method for launching the Ninf-G Executable is specified as
+backend.
+The value is <code>NORMAL</code>,
+<code>MPI</code>, or <code>BLACS</code>.
+If <code>MPI</code> or <code>BLACS</code> is specified,
+the Ninf-G Executable must be invoked via the mpirun command.</p>
+
+
+<li><a name="attribute-count">
+  count [N] </a>
+
+<p>The number of Ninf-G Executables to be invoked.
+If the backend is <code>MPI</code> or <code>BLACS</code>,
+count means the number of nodes.</p>
+
+
+<li><a name="attribute-staging">
+  staging [true/false] </a>
+
+<p>The value is true if staging is on and Invoke Server must transfer
+the Ninf-G Executable file from the local machine to the remote
+machine.</p>
+
+
+<li><a name="attribute-argument">
+  argument [argument] </a>
+
+<p>An argument for the Ninf-G Executable is specified
+using this attribute.
+This attribute can specify one argument only,
+and multiple arguments must be specified one by one,
+by using this attribute for each one.
+The arguments must be passed to the Ninf-G Executable as arguments.</p>
+
+<p>
+Example:
+<pre>
+<code>
+argument --client=...
+argument --gass_server=...
+</code>
+</pre>
+</p>
+
+<li><a name="attribute-work_directory">
+  work_directory [directory] </a>
+
+<p>This attribute specifies the directory in which the Ninf-G
+Executable is invoked.</p>
+
+
+<li><a name="attribute-gass_url">
+  gass_url </a>
+
+<p>This directory specifies the URL of the GASS server
+on the Client machine.
+This attribute is used for the Globus Toolkit's Pre-WS GRAM.</p>
+
+
+<li><a name="attribute-redirect_enable">
+  redirect_enable [true/false] </a>
+
+<p>This attribute is set to true if the stdout/stderr of the Ninf-G
+Executable has been requested to be transferred to the Ninf-G
+Client.</p>
+
+
+<li><a name="attribute-stdout_file">
+  stdout_file [filename] </a>
+
+<p>If redirect_enable is set to true,
+this attribute specifies the name of the output file for stdout.
+Invoke Server must output the stdout to this file.
+The Ninf-G Client reads this file as an output file
+and writes the contents of the file to the stdout of the Ninf-G
+Client.</p>
+
+
+<li><a name="attribute-stderr_file">
+  stderr_file [filename] </a>
+
+<p>If redirect_enable is set to true,
+this attribute specifies the name of the output file of the stderr.
+Invoke Server must output the stderr to this file.
+The Ninf-G Client reads this file as an output file
+and writes the contents of the file to the stderr of the Ninf-G
+Client.</p>
+
+
+<li><a name="attribute-environment">
+  environment [ENV=VALUE] </a>
+
+<p>The environment variable for the Ninf-G Executable
+is passed using this attribute.
+The environment variable and its value are connected by <code>=</code>.
+Only the variable is specified if it does not take a value.
+Multiple environment variables must be specified one by one.</p>
+
+<li><a name="attribute-tmp_dir">
+     tmp_dir [directory] </a>
+
+<p>The directory in which temporal files are placed.</p>
+
+<li><a name="attribute-status_polling">
+  status_polling [interval] </a>
+
+<p>Invoke Server may need to check the status of jobs by polling the
+status of existing jobs.
+This attribute specifies the interval of the polling.
+The value is in seconds, and if it is not specified,
+the default value 0 is passed.</p>
+
+
+<li><a name="attribute-refresh_credential">
+  refresh_credential [interval] </a>
+
+<p>This attribute specifies the interval for refreshing credentials.
+The value is in seconds, and if it is not specified, the default
+value 0 is passed.</p>
+
+
+<li><a name="attribute-max_time">
+  max_time [time] </a>
+
+<p>This attribute specifies the maximum time of the job.</p>
+
+
+<li><a name="attribute-max_wall_time">
+  max_wall_time [time] </a>
+
+<p>This attributes specifies the maximum wall clock time of the job.</p>
+
+
+<li><a name="attribute-max_cpu_time">
+  max_cpu_time [time] </a>
+
+<p>This attribute specifies the maximum cpu time of the job.</p>
+
+
+<li><a name="attribute-queue_name">
+  queue_name [queue] </a>
+
+<p>This attribute specifies the name of the queue to which the Ninf-G
+Executable should be submitted.</p>
+
+
+<li><a name="attribute-project">
+  project [projectname] </a>
+
+<p>This attribute specifies the name of the project.</p>
+
+
+<li><a name="attribute-host_count">
+  host_count [number of nodes] </a>
+
+<p>This attribute specifies the number of nodes.</p>
+
+
+<li><a name="attribute-min_memory">
+  min_memory [memory size (MB)] </a>
+
+
+<p>This attribute specifies the minimum requirements
+for the memory size of the job.</p>
+
+
+<li><a name="attribute-max_memory">
+  max_memory [memory size (MB)] </a>
+
+<p>This attribute specifies the maximum memory size of the job.</p>
+
+<li><a name="attribute-rsl_extensions">
+  rsl_extensions [RSL extension] </a>
+
+<p>This attribute can be used to specify the RSL extension which is
+available for the Globus Toolkit's WS GRAM.</p>
+
+</ul>
+</ul>
+
+
+<h3><a name="How_to_specify">
+Appendix A. How to specify the Invoke Server</a></h3>
+
+
+Invoke Server is specified by the Ninf-G Client using a Client
+configuration file.
+
+<h4><a name="How_to_specify_Invoke_Server">
+A.1.  How to specify Invoke Server</a></h4>
+
+<p>Invoke Server is specified by using the invoke_server attribute in the
+&lt;SERVER&gt; section.</p>
+
+<p>
+<pre>
+<code>
+invoke_server [type]
+</code>
+</pre>
+</p>
+
+<p>Type specifies the type of the Invoke Server,
+such as GT4py or UNICORE.</p>
+
+<h4><a name="How_to_pass_information">
+A.2. How to pass information to Invoke Server</a></h4>
+
+<p>Invoke Server may require options for its execution.
+Such options can be specified by an option attribute
+in the &lt;INVOKE_SERVER&gt; section or
+by an invoke_server_option attribute in the &lt;SERVER&gt; section.
+
+<p>
+<pre>
+<code>
+option [String]
+invoke_server_option [String]
+</code>
+</pre>
+</p>
+
+<p>Multiple attributes can be specified in the &lt;SERVER&gt; or
+&lt;INVOKE_SERVER&gt; sections.</p>
+
+
+<h4><a name="Polling_interval">
+A.3. Polling interval</a></h4>
+
+<p>Invoke Server must check the status of jobs,
+and this may be implemented using polling.
+The polling interval can be specified by the
+status_polling attribute in the &lt;INVOKE_SERVER&gt; section.
+
+<p>
+<pre>
+<code>
+status_polling [interval (seconds)]
+</code>
+</pre>
+</p>
+
+<h4><a name="Logfile">
+A.4. Logfile</a></h4>
+
+<p>The filename of the Invoke Server's execution log
+can be specified by the invoke_server_log attribute
+in the &lt;CLIENT&gt; section.
+
+<p>
+<pre>
+<code>
+invoke_server_log [filename]
+</code>
+</pre>
+</p>
+
+<p>If this attribute is specified,
+Invoke Server outputs logs to a file with
+the specified filename and file type of that Invoke Server.</p>
+
+<p>The log_filePath attribute in the &lt;INVOKE_SERVER&gt; section
+can be used to specify a log file for a specific Invoke Server.</p>
+
+<p>
+<pre>
+<code>
+log_filePath [Log file name]
+</code>
+</pre>
+</p>
+
+
+<h4><a name="Maximum_number_of_jobs">
+A.5. Maximum number of jobs per Invoke Server</a></h4>
+
+<p>The maximum number of jobs per Invoke Server can be limited
+by the max_jobs attribute in the &lt;INVOKE_SERVER&gt; section.
+If the number of requested jobs exceeds this value,
+the Ninf-G Client invokes a new Invoke Server
+and requests that Invoke Server to manage the new jobs.</p>
+
+<p>
+<pre>
+<code>
+max_jobs [maximum number of jobs]
+</code>
+</pre>
+</p>
+
+<h4><a name="path_of_the_Invoke_Server">
+A.6. How to specify the path of the Invoke Server</a></h4>
+
+<p>If Invoke Server is not located in a pre-defined directory,
+the path attribute in &lt;INVOKE_SERVER&gt; can be used to
+specify the path of the Invoke Server.</p>
+
+<p>
+<pre>
+<code>
+path [path of the Invoke Server]
+</code>
+</pre>
+</p>
+
+
+<h3><a name="Miscellaneous">
+Appendix B. Miscellaneous Information</a></h3>
+
+
+<h4><a name="Job_Timeout">
+B.1. Job Timeout</a></h4>
+
+<p>The Job Timeout function is managed by the Ninf-G Client.
+Invoke Server is not responsible for the timeout.</p>
+
+<h4><a name="Redirect_stdout_stderr">
+B.2. Redirect stdout/stderr is implemented using files</a></h4>
+
+<p>Redirect stdout/stderr is implemented using files.</p>
+
+<ul>
+<li>The Ninf-G Client passes the filename to Invoke Server as an
+attribute for the <code>JOB_CREATE</code> request.
+
+<li>Invoke Server outputs the stdout/stderr of
+the Ninf-G Executable to the file.
+
+<li>The Ninf-G Client outputs the contents of the file
+to the stdout/stderr.
+</ul>
+
+<hr>
+last update : $Date: 2006/09/20 04:57:42 $
+</body>
+</html>
+

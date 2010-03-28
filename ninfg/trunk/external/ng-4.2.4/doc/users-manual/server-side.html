@@ -1,0 +1,976 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+<title>Creating and setting up server-side programs</title>
+</head>
+
+<body bgcolor=white>
+
+<h2><a name="Creating_and_setting_up_server-side_prog">
+3 Creating and setting up server-side programs</a></h2>
+
+<hr>
+<ul>
+<li><a href="#Creating_a_Ninf-G_Executable">
+    3.1 Creating a Ninf-G Executable</a>
+<li> <a href="#Setting_up_the_Ninf-G_Executable_environment">
+    3.2 Setting up the Ninf-G Executable operating environment</a>
+<li><a href="#Specifications_for_the_configuration_file">
+    3.3 Specifications for the configuration file used by Ninf-G Executable</a>
+<ul>
+<li><a href="#Structure_of_the_configuration_file">
+    3.3.1 Structure of the configuration file</a>
+<li><a href="#Attributes_and_attribute_values">
+    3.3.2 Attributes and attribute values</a>
+</ul>
+</ul>
+<hr>
+
+<h3><a name="Creating_a_Ninf-G_Executable">
+3.1 Creating a Ninf-G Executable</a></h3>
+
+<ul>
+<li>Describing the interface information with Ninf-G IDL
+
+<p>The following kinds of information are described with IDL.</p>
+
+<ul>
+<li> Module name (Ninf-G Executable identifier)
+<li> Interface information
+<li> Other information required by Ninf-G Executable
+</ul>
+
+<p>The following is a sample of IDL for implementing
+matrix multiplication.
+For detailed Ninf-G IDL specifications,
+see chapter 6,
+<a href="idl-spec.html">"Ninf-G IDL Specifications"</a>.</p>
+
+<center>
+<table border>
+<caption align=top> Ninf-G IDL sample </caption>
+<tr><td>
+<pre>
+<code>
+Module mmul;
+
+Define dmmul(IN int n, IN double A[n][n], IN double B[n][n],
+                 OUT double C[n][n])
+"... description ..."
+Required "libxxx.o" /* specify library including this routine. */
+Calls "C" mmul(n,A,B,C); /* Use C calling convention. */
+</code>
+</pre>
+</td></tr>
+</table>
+</center>
+
+<p>The following is an example of a "callback", that can be
+described with Ninf-G IDL.</p>
+
+<center>
+<table border>
+<caption align=top> Ninf-G IDL sample (callback) </caption>
+<tr><td>
+<pre>
+<code>
+Module test;
+
+Define callback_test(IN int a, OUT int *b,
+                     callback_func(IN int c[1], OUT int d[1]))
+{ 
+    int executableStatus, clientStatus;
+    executableStatus = calc(a, b);
+    callback_func(executableStatus, &amp;clientStatus);
+    if (d == 1) {
+        /* client is alive */
+    }
+}
+</code>
+</pre>
+</td></tr>
+</table>
+</center>
+
+<p>Note: You may find some compiler warnings when you
+compile Callback function, but they are harmless.
+For example, following compiler warning is output
+by Solaris/vendor-cc.</p>
+
+<p>
+<code>
+"warning: old-style declaration or incorrect type for: callback_test"
+</code>
+</p>
+
+<li>Implementation of remote functions and remote methods
+
+<p>The required remote functions and remote methods
+(those called in the IDL) must be implemented (in C or FORTRAN).</p>
+
+<p>The source code (C) for the mmul() function used in the Ninf-G IDL
+sample shown above is presented below.</p>
+
+<center>
+<table border>
+<caption align=top> Remote function (Remote method) sample </caption>
+<tr><td>
+<pre>
+<code>
+void mmul(int n, double * a, double * b, double * c)
+{
+    double t;
+    int i, j, k;
+
+    for (i = 0; i &lt; n; i++) {
+        for (j = 0; j &lt; n; j++) {
+            t = 0;
+            for (k = 0; k &lt; n; k++){
+                t += a[i * n + k] * b[k * n + j];
+            }
+            c[i * n + j] = t;
+        }
+    }
+}
+</code>
+</pre>
+</td></tr>
+</table>
+</center>
+
+<p>Note: Implementing cancel processing</p>
+
+<p>When implementing processing for canceling a session,
+call grpc_is_canceled_np() in the Ninf-G Executable Library
+API from within a remote function or remote method and
+check the return value.
+Coding for performing session cancel processing
+if the return value is 1 is needed.</p>
+
+<center>
+<table border>
+<caption align=top> Example of cancel processing implementation </caption>
+<tr><td>
+<pre>
+<code>
+#include &lt;grpc_executable.h&gt;
+
+void  mmul(int n, double * a, double * b, double * c)
+{
+    double t;
+    int i, j, k;
+
+    for (i = 0; i &lt; n; i++) {  
+        for (j = 0; j &lt; n; j++) {
+            t = 0;
+            for (k = 0; k &lt; n; k++){
+                t += a[i * n + k] * b[k * n + j];
+            }
+            c[i * n + j] = t;
+        }
+
+        if (grpc_is_canceled_np() == 1) {
+            /* canceled */
+            break;
+        }
+    }
+}
+</code>
+</pre>
+</td></tr>
+</table>
+</center>
+<br>
+
+<li>Using the Ninf-G generator to compile the IDL
+
+<p>
+<code>% ${NG_DIR}/bin/ng_gen </code>
+</p>
+
+<p>Executing the above command generates the following.</p>
+
+<ul>
+<li>Ninf-G stub for executing a remote function (remote method)
+<li>makefile for generating a Ninf-G Executable
+<li>LDIF file (for saving the interface information)
+<li>Local LDIF file (for saving the interface information)
+</ul>
+<br>
+
+<li>Creating the Ninf-G Executable
+
+<p>The makefile generated by the stub generator is
+used to execute the make command.</p>
+
+<p>
+<code>% make -f &lt;module_name&gt;.mak</code>
+</p>
+
+<p>An executable Ninf-G Executable is generated.</p>
+
+<p>(The following tasks are not necessary if MDS is not being used.
+The Ninf-G Executable information can be acquired without MDS
+by using the Ninf-G Executable path information that is contained
+in the local LDIF file on the client side or in
+the Ninf-G Client configuration file.)</p>
+
+<li>Copying the LDIF file to the specified location
+
+<p>The LDIF file generated by the stub generator is copied to
+$GLOBUS_LOCATION/var/gridrpc.</p>
+
+<p>
+<code>% make -f &lt;module_name&gt;.mak install</code>
+</p>
+
+<p>The content of the copied LDIF file is shown below.</p>
+
+<center>
+<table border>
+<caption align=top> Example LDIF file </caption>
+<tr><td>
+<pre>
+<code>
+dn: GridRPC-Funcname=mmul/dmmul, Mds-Software-deployment=GridRPC-Ninf-G,
+objectClass: GlobusSoftware
+objectClass: MdsSoftware
+objectClass: GridRPCEntry
+Mds-Software-deployment: GridRPC-Ninf-G
+GridRPC-Funcname: mmul/dmmul
+GridRPC-Module: mmul
+GridRPC-Entry: dmmul
+GridRPC-Path: /path/to/_stub_dmmul
+GridRPC-Stub:: ICA8Y2xhc3MgbmFtZT0ibW11bC9kbW11bCIgdmVyc2lvbj0iMS4wIiBud
+ ...
+</code>
+</pre>
+</td></tr>
+</table>
+</center>
+
+<p>Note: Copying the LDIF file to the prescribed location as above
+enables provision of Ninf-G Executable information by MDS.</p>
+
+<p>Ninf-G provides utility commands (described below) for
+managing the Ninf-G Executable information supplied by MDS.
+Details on the commands can be found in chapter 8,
+<a href="util-reference/util_reference.html">
+"Utility Command Reference"</a>.</p>
+
+<ul>
+<li>Display the Ninf-G Executable information provided
+by the MDS of the host.
+(the ng_dump_functions command)
+<li>Delete the Ninf-G Executable information from MDS
+(the ng_delete_functions command)
+</ul>
+</ul>
+
+<h3>
+<a name="Setting_up_the_Ninf-G_Executable_environment">
+3.2 Setting up the Ninf-G Executable operating environment
+</a></h3>
+
+<ul>
+<li>Preparing the configuration file for use by Ninf-G Executable
+
+<p>Prepared according to the need for a configuration file
+for adjusting the location of the temporary files generated
+during filename type argument processing and for the log output.</p>
+
+<ul>
+<li>System settings
+<p>Written in ${GLOBUS_LOCATION}/var/gridrpc/ngstub.conf.</p>
+
+<li>User settings
+<p>Write ".ngstubrc" in the user's home directory.</p>
+</ul>
+
+<p>If the system settings and user settings described above
+both have the same setting items,
+the user settings have priority.</p>
+
+</ul>
+
+<h3><a name="Specifications_for_the_configuration_file">
+3.3 Specifications for the configuration file used by Ninf-G Executable
+</a></h3>
+
+<h4><a name="Structure_of_the_configuration_file">
+3.3.1 Structure of the configuration file
+</a></h4>
+
+<p>The Ninf-G Executable configuration file is a text file
+which contains the settings information that is required
+for operation of Ninf-G Executable.</p>
+
+<ul>
+<li>This file is placed on the server on which Ninf-G Executable runs.
+<li>The system attribute file is located in $GLOBUS_LOCATION/var/gridrpc/.
+ The file name is ngstub.conf.
+<li>The user definition file (user settings file) is placed in
+the user's home directory. The file name is .ngstubrc.
+<li>If the user wants to change a system attribute,
+the attribute to be changed is written in the user definition file.
+</ul>
+
+<p>An example of entries in the Ninf-G Executable configuration file is
+shown below.</p>
+
+<center>
+<table border>
+<tr><td>
+<pre>
+
+#comment
+
+attribute    value    # comment
+
+attribute    value    # comment
+attribute    value    # comment
+
+...
+</pre>
+</td></tr>
+</table>
+</center>
+
+<ul>
+<li>Each line consists of an attribute and its value.
+<li>One line defines one attribute.
+<li>What follows after a pound sign (#) is interpreted as a comment.
+<li>The attribute and attribute value must be separated by one
+or more spaces or by a TAB character.
+<li>Multiple attributes cannot be written on one line.
+<li>The attribute and attribute value must be written on the same line.
+<li>One attribute definition cannot extend over more than one line.
+<li>An attribute must have a defining attribute value.
+An attribute alone defines nothing.
+<li>Attribute values of attributes for which multiple definitions
+are possible cannot overlap.
+</ul>
+
+<p>The following description produces an error.</p>
+
+<center>
+<table border>
+<tr><td>
+<pre>
+AttributeValue
+        #  No delimiter between attribute and attribute value
+
+Attribute    Value    Attribute    Value
+        # Multiple attributes on a line
+
+Attribute
+Value
+        #  attribute value extend across more than one line
+
+Attribute
+        #  No attribute value
+
+tmp_dir /tmp
+tmp_dir /var/tmp
+        # Overlapping of the attribute values of an attribute
+        #  that can not have multiple definitions
+</pre>
+</td></tr>
+</table>
+</center>
+
+
+
+<h4><a name="Attributes_and_attribute_values">
+3.3.2 Attributes and attribute values</a></h4>
+
+<p>The attributes and their attribute value definitions are listed below.</p>
+
+<center>
+<table border>
+<tr><td>
+<pre>
+tmp_dir                        Directory
+loglevel                       [0-5]
+loglevel_globusToolkit         [0-5]
+loglevel_ninfgProtocol         [0-5]
+loglevel_ninfgInternal         [0-5]
+log_filePath                   File name
+log_suffix                     Suffix
+log_nFiles                     Number of files
+log_maxFileSize                Number of bytes
+log_overwriteDirectory         [true/false]
+commLog_enable                 [true/false]
+commLog_filePath               PathFile name
+commLog_suffix                 Suffix
+commLog_nFiles                 FilesNumber of files
+commLog_maxFileSize            FileSizeNumber of bytes
+commLog_overwriteDirectory     [true/false]
+save_stdout                    File name
+save_stderr                    File name
+handling_signals               Signals ...
+continue_on_error              [true/false]
+</pre>
+</td></tr>
+</table>
+</center>
+
+<p>The definable attributes and attribute values are listed below.</p>
+
+<center>
+<table border>
+<tr>
+<th> Attribute </th>
+<th> Attribute value </th>
+<th> Default value </th>
+<th> Multiple </th>
+<th> Explanation </th>
+</tr>
+
+<tr>
+<td> <a href="#attr-tmp_dir">
+     tmp_dir </a></td>
+<td> For temporary files </td>
+<td> /tmp </td>
+<td> Not possible </td>
+<td> The directory in which temporary files are placed Directory </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-loglevel">
+     loglevel </a></td>
+<td> [0-5] </td>
+<td> 2 </td>
+<td> Not possible </td>
+<td> Overall log level </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-loglevel">
+     loglevel_globusToolkit </a></td>
+<td> [0-5] </td>
+<td> 2 </td>
+<td> Not possible </td>
+<td> Error generated by the Globus Toolkit API </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-loglevel">
+     loglevel_ninfgProtocol </a></td>
+<td> [0-5] </td>
+<td> 2 </td>
+<td> Not possible </td>
+<td> Error concerning the Ninf-G protocol </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-loglevel">
+     loglevel_ninfgInternal </a></td>
+<td> [0-5] </td>
+<td> 2 </td>
+<td> Not possible </td>
+<td> Internal Ninf-G error </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-log_filePath">
+     log_filePath </a></td>
+<td> File name </td>
+<td> stderr </td>
+<td> Not possible </td>
+<td> Log file name </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-log_suffix">
+     log_suffix </a></td>
+<td> Suffix </td>
+<td> Sequence number </td>
+<td> Not possible </td>
+<td> Log file suffix </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-log_nFiles">
+     log_nFiles </a></td>
+<td> Number of files </td>
+<td> 1 </td>
+<td> Not possible </td>
+<td> Number of log output files </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-log_maxFileSize">
+     log_maxFileSize </a></td>
+<td> Number of bytes </td>
+<td> 1M/unlimited </td>
+<td> Not possible </td>
+<td> Maximum number of bytes for log file </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-log_overwriteDirectory">
+     log_overwriteDirectory </a></td>
+<td> [true/false] </td>
+<td> False </td>
+<td> Not possible </td>
+<td> Over-write permission for log directory </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-commLog_enable">
+     commLog_enable </a></td>
+<td> [true/false] </td>
+<td> False </td>
+<td> Not possible </td>
+<td> Communication log output enabled/disabled </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-commLog_filePath">
+     commLog_filePath </a></td>
+<td> File name </td>
+<td> stderr </td>
+<td> Not possible </td>
+<td> Communication log file name </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-commLog_suffix">
+     commLog_suffix </a></td>
+<td> Suffix </td>
+<td> Sequence number </td>
+<td> Not possible </td>
+<td> Communication log file suffix </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-commLog_nFiles">
+     commLog_nFiles </a></td>
+<td> Number of files </td>
+<td> 1 </td>
+<td> Not possible </td>
+<td> Number of files for outputting communication log </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-commLog_maxFileSize">
+     commLog_maxFileSize </a></td>
+<td> Number of bytes </td>
+<td> 1M/unlimited </td>
+<td> Not possible </td>
+<td> Maximum number of bytes for communication log file </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-commLog_overwriteDirectory">
+     commLog_overwriteDirectory </a></td>
+<td> [true/false] </td>
+<td> False </td>
+<td> Not possible </td>
+<td> Over-write communication log directory enabled/disabled Permitted </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-save_stdout">
+     save_stdout </a></td>
+<td> File name </td>
+<td> None </td>
+<td> Not possible </td>
+<td> Save stdout to file </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-save_stderr">
+     save_stderr </a></td>
+<td> File name </td>
+<td> None </td>
+<td> Not possible </td>
+<td> Save stderr to file </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-handling_signals">
+     handling_signals </a></td>
+<td> Signal names/numbers </td>
+<td>  SIGHUP SIGINT SIGTERM </td>
+<td> Not possible </td>
+<td> Handling signals </td>
+</tr>
+
+<tr>
+<td> <a href="#attr-continue_on_error">
+     continue_on_error </a></td>
+<td> [true/false] </td>
+<td> False </td>
+<td> Not possible </td>
+<td> continue computation if an error occurs</td>
+</tr>
+
+</table>
+</center>
+
+<p>The meanings of the log level values are described below.</p>
+
+<center>
+<table border>
+<tr>
+<th> Value </th>
+<th> Meaning </th>
+<th> Explanation </th>
+</tr>
+
+<tr>
+<td> 0 </td>
+<td> Off </td>
+<td> Nothing is output. </td>
+</tr>
+
+<tr>
+<td> 1 </td>
+<td> Fatal </td>
+<td> A fatal error is output. </td>
+</tr>
+
+<tr>
+<td> 2 </td>
+<td> Error </td>
+<td> A nonfatal error is output. </td>
+</tr>
+
+<tr>
+<td> 3 </td>
+<td> Warning </td>
+<td> A warning error is output. </td>
+</tr>
+
+<tr>
+<td> 4 </td>
+<td> Information </td>
+<td> Guidance or other such information is output. </td>
+</tr>
+
+<tr>
+<td> 5 </td>
+<td> Debug </td>
+<td> Debugging information is output. </td>
+</tr>                                                      
+</table>
+</center>
+
+<ul>
+<li><a name="attr-tmp_dir">
+    tmp_dir (temporary file directory)</a>
+
+<p>The directory in which temporal files are placed for passing the
+filename type arguments to a remote method.</p>
+
+<p>When omitted, if TMPDIR environment variable is defined,
+it is used; otherwise, "/tmp" is used.</p>
+
+<li><a name="attr-loglevel">
+    loglevel* (log level)</a>
+
+<p>The log level is specified for all log categories by loglevel and
+for each category individually by loglevel_*.</p>
+
+<p>When the log level for each category has not been specified,
+the log level for all categories is applied.</p>
+
+<p>When omitted, the value of the NG_LOG_LEVEL environment variable is used.<br>
+If the NG_LOG_LEVEL environment variable is not set, 2 (Error) is used as
+the default value of loglevel.</p>
+
+<li><a name="attr-log_filePath">
+    log_filePath (log file name)</a>
+
+<p>The name of the file to which the log is output is specified
+in the log file name.</p>
+
+<p>The file name may include a path that includes a directory
+(e.g., "/home/myHome/var/logFile").</p>
+
+<p>The file and directory name can include the following
+specifiers.</p>
+
+<p>
+<ul>
+<li>"%t"
+<p>"%t" is replaced with the date as year, month and day,
+and the time in hours, minutes, seconds and milliseconds
+("yyyymmdd-hhmmss-MMM")
+(e.g., "/ home/myHome/var/logDir%t/logFile" is replaced by
+"/home/myHome/var/logDir20030101-154801-123/logFile").</p>
+
+<li>"%h"
+<p>"%h" is replaced with the Ninf-G Executable hostname.</p>
+
+<li>"%p"
+<p>"%p" is replaced with the process id of the Ninf-G Executable.</p>
+
+</ul>
+</p>
+
+<p>The Ninf-G Executable id number is added to the end of the
+file name.</p>
+
+<p>When omitted, the log is output to standard error.
+If the log file name is omitted, the log_suffix, log_nFiles, and
+log_maxFileSize are ignored.</p>
+
+<p>Note: When the Ninf-G Executable exits abnormally on startup,
+the executable id is not added and the hostname and
+process id are added to the end of the file name.</p>
+
+<li><a name="attr-log_suffix">
+    log_suffix (log file suffix)</a>
+
+<p>When a log file is specified, this specifies the suffix used when the
+log file is created.</p>
+
+<p>If a suffix is specified, the generated file name will be from
+"filename[000].suffix" to "filename[nnn].suffix".
+If omitted, the generated file name will be
+from "filename.[000]" to "filename.[nnn]".
+The number of files minus 1 is "nnn."</p>
+
+<p>The number of digits in "nnn" is the same as the number of digits in
+number of files minus 1. For example, if the number of files is set to 100,
+then the number will range from "00" to "99."</p>
+
+<li><a name="attr-log_nFiles">
+    log_nFiles (the number of files for log output)</a>
+
+<p>This is the number of files created for log output.</p>
+
+<p>0 indicates that an unlimited number of files can be output.
+A negative value results in an error.</p>
+
+<p>If omitted, the value 1 is used.</p>
+
+<li><a name="attr-log_maxFileSize">
+    log_maxFileSize (maximum number of bytes for the log file)</a>
+
+<p>This is the maximum number of bytes for the log file.
+A unit indicator from among "kKmMgG" can be appended to the numerical
+value to indicate Kilobytes (1024 bytes),
+Megabytes (1024 Kbytes), or Gigabytes (1024 Mbytes).</p>
+
+<p>If omitted, the value will be unlimited if the number of files
+is one, or 1 Mbyte if the number of files is two or more.</p>
+
+<li><a name="attr-log_overwriteDirectory">
+    log_overwriteDirectory
+    (over-write permission for the directory
+    in which the log files are generated)</a>
+
+<p>This establishes overwrite permission for the directory.
+If the specified directory exists, this specifies whether
+the creation of log files in that directory is enabled or disabled.</p>
+
+<p>Operation in the case that the directory exists is shown below.</p>
+
+<p>
+<ul>
+<li>true: If the file specified by log_filePath exists in
+the directory, that file is overwritten.
+<li>false: Error.
+</ul>
+</p>
+
+<li><a name="attr-commLog_enable">
+    commLog_enable
+    (whether communication log output is enabled or disabled)</a>
+
+<p>This specifies whether the communication log output function is
+enabled or disabled. If 'true' is specified, the communication log is output.
+If not specified, the default value is false.</p>
+
+<li><a name="attr-commLog_filePath">
+    commLog_filePath (communication log file name)</a>
+
+<p>The name of the file to which the communication log is
+output is specified in the log file name.</p>
+
+<p>The file name may include a path that includes a directory
+(e.g., "/home/myHome/var/logFile").</p>
+
+<p>The file and directory name can include the following
+specifiers.</p>
+
+<p>
+<ul>
+<li>"%t"
+<p>"%t" is replaced with the date as year, month and day,
+and the time in hours, minutes, seconds and milliseconds
+("yyyymmdd-hhmmss-MMM")
+(e.g., "/ home/myHome/var/logDir%t/logFile" is replaced by
+"/home/myHome/var/logDir20030101-154801-123/logFile").</p>
+
+<li>"%h"
+<p>"%h" is replaced with the Ninf-G Executable hostname.</p>
+
+<li>"%p"
+<p>"%p" is replaced with the process id of the Ninf-G Executable.</p>
+
+</ul>
+</p>
+
+<p>The Ninf-G Executable id number is added to the end of the
+file name.</p>
+
+<p>When omitted, the log is output to standard error.
+If the communication log file name is omitted, the commLog_suffix,
+commLog_nFiles, and commLog_maxFileSize are ignored.</p>
+
+<li><a name="attr-commLog_suffix">
+    commLog_suffix (communication log file suffix)</a>
+
+<p>When the communication log file is specified, this specifies the
+suffix used when the log file is created.</p>
+
+<p>If a suffix is specified, the generated file name will be from
+"filename[000].suffix" to "filename[nnn].suffix".
+If omitted, the generated file name will be from
+"filename.[000]" to "filename.[nnn]".
+The number of files minus 1 is "nnn."</p>
+
+<p>The number of digits in "nnn" is the same as the number of digits in
+the number of files minus 1.
+For example, if the number of files is set to 100,
+then the number will range from "00" to "99."</p>
+
+<li><a name="attr-commLog_nFiles">
+    commLog_nFiles (number of files for communication log output)</a>
+
+<p>This is the number of files created for communication log output.</p>
+
+<p>0 indicates an unlimited number of files can be output.
+A negative value results in an error.</p>
+
+<p>If omitted, the value 1 is used.</p>
+
+<li><a name="attr-commLog_maxFileSize">
+    commLog_maxFileSize
+    (maximum number of bytes for the communication log file)</a>
+
+<p>This specifies the maximum number of bytes for the communication log
+file.
+A unit indicator from among "kKmMgG" can be appended to the numerical
+value to indicate Kilobytes (1024 bytes),
+Megabytes (1024 Kbytes), or Gigabytes (1024 Mbytes).</p>
+
+<p>If omitted, the value is either unlimited if the number of files
+is one or 1 Mbyte if the number of files is two or more.</p>
+
+<li><a name="attr-commLog_overwriteDirectory">
+    commLog_overwriteDirectory
+    (over-write permission for the directory
+    in which the communication log files are generated)</a>
+
+<p>This establishes overwrite permission for the directory.
+If the specified directory exists, this specifies whether
+the creation of log files in that directory is enabled or disabled.
+Operation in the case that the directory exists is shown below.</p>
+
+<p>
+<ul>
+<li>true: If the file specified by log_filePath exists
+in the directory, that file is overwritten.
+<li>false: Error.
+</ul>
+</p>
+
+<li><a name="attr-save_stdout">
+    save_stdout (Save stdout to file)</a>
+
+<p>This specifies the file name to save stdout.</p>
+
+<p>If this attribute is set, stdout is saved to the specified file.</p>
+
+<p>If the given file name for both save_stdout and save_stderr attribute
+is the same, output is shared to one file in arbitrary order.</p>
+
+<p>The output file is opend by append mode.</p>
+
+<p>If omitted, stdout output is delivered to Ninf-G Client or
+discarded.</p>
+
+<li><a name="attr-save_stderr">
+    save_stderr (Save stderr to file)</a>
+
+<p>This specifies the file name to save stderr.</p>
+
+<p>If this attribute is set, stderr is saved to the specified file.</p>
+
+<p>If the given file name for both save_stdout and save_stderr attribute
+is the same, output is shared to one file in arbitrary order.</p>
+
+<p>The output file is opend by append mode.</p>
+
+<p>If omitted, stderr output is delivered to Ninf-G Client or
+discarded.</p>
+
+<li><a name="attr-handling_signals">
+    handling_signals </a>
+
+<p>This attribute specifies signals which will be caught
+by Ninf-G Executable.</p>
+
+<p>When the Ninf-G Executable catches the signal,
+Ninf-G cleans up all temporary files, and exits.
+This clean up process is performed only for signals
+which are specified in this attribute.</p>
+
+<p>The signals are specified by either signal name or signal number.
+Multiple signals can be specified by space-delimited enumeration.
+The value "none" can be specified if no signals need to be caught.</p>
+
+<p>If ommitted, SIGINT, SIGTERM and SIGHUP
+will be caught by Ninf-G Executable.</p>
+
+<p>Note: This attribute is available for Ninf-G Version 4.2.0 or later.</p>
+
+<li><a name="attr-continue_on_error">
+    continue_on_error (continue computation if an error occurs) </a>
+
+<p>This attribute is used to control behaviors of a Ninf-G
+Executable when a communication error occurs.
+Such a communication includes explicit one (e.g. data transfer)
+as well as implicit one (e.g. heartbeating).</p>
+
+<p>If the value is set to 'false', which is the default value, the
+Ninf-G Executable immediately exits from its execution when a
+communication error occurs.  This enables Ninf-G Executables to
+release computing resources immediately after the error. It is
+also useful to avoid Ninf-G Executables remaining as zombie
+processes when the Ninf-G Client would die.</p>
+
+<p>If the value is set to 'true', a Ninf-G Executable does not exit
+and continues to run until the callee function or method will be
+completed. This configuration is valuable if the callee functions
+and methods record results of the computation as files in the
+server machines. In this case, it may be worth to continue the
+execution of the Ninf-G Executable even if a communication error
+occurs.</p>
+
+<p>If omitted, the value 'false' is used.</p>
+
+<p>Note: Even if the value is set to true, Ninf-G Executables may exit
+by catching signals from queueing system like SGE or PBS,
+when the Ninf-G Client was killed by SIGHUP, SIGINT or SIGTERM
+signal.</p>
+
+<p>Note: In order for Ninf-G Executables to detect an error immediately
+when the connection to the Ninf-G Client was closed, Ninf-G
+Executables must be linked with the pthread flavor of the
+Globus Toolkit libraries.</p>
+
+</ul>
+
+<hr>
+last update : $Date: 2008/03/28 06:23:30 $
+</body>
+</html>
+

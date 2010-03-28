@@ -1,0 +1,60 @@
+Module callback;
+Globals { #include "stdlib.h" }
+Globals { #include "string.h" }
+
+Define callback_test(IN double a, IN int times, callback_func(IN double d[1]))
+{
+    double d = 0;
+    int i;
+
+    for (i = 0; i < times; i++) {
+        d += a;
+        callback_func(&d);
+    }
+}
+
+Define callback_test2(IN double a, IN int times, callback_func(IN double d[1]))
+{
+    double d = a;
+    int i;
+
+    for (i = 0; i < times; i++) {
+        callback_func(&d);
+    }
+}
+
+Define callback2D_test(IN int N, IN double a[N][N],
+    callback2D_func(IN double d[N][N]))
+{
+    callback2D_func(a);
+}
+
+Define callback_return_test(IN int N, IN double a[N][N], OUT double b[N][N],
+    callback_return_func(IN double c[N][N], OUT double d[N][N]))
+{
+    callback_return_func(a, b);
+}
+
+Define callback_multi_test(IN int N, IN double a[N][N], OUT double b[N][N],
+    callback_return_func(IN double c[N][N], OUT double d[N][N]),
+    callback_return_func2(IN double c[N][N], OUT double d[N][N]))
+{
+    double *c = (double*)malloc( N * N * sizeof(double));
+
+    callback_return_func (a, c);
+    callback_return_func2(c, b);
+}
+
+Define callbackstr(IN string a[5], callback_func(IN string b[1]))
+{
+    char string[64] = "";
+    char *tmp = string;  
+    int i;
+
+    for (i = 0; i < 5; i++) {
+      strcat(string, a[i]);
+    }
+
+    callback_func(&tmp);
+}
+

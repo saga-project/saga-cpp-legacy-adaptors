@@ -1,0 +1,57 @@
+# $RCSfile: Makefile.in,v $ $Revision: 1.5 $ $Date: 2007/10/10 07:47:20 $
+# $AIST_Release: 5.0.0 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+include /Users/merzky/links/saga/trunk/adaptors/ninfg/ninfg-adaptor-1112/external/ng-5.0.0/utility/compile/defvar.mk
+
+CLEAN_TARGET	=	lib include libexpat.a tmp
+
+SRCS	=	xmltok/xmltok.c xmltok/xmlrole.c \
+		xmlparse/xmlparse.c \
+		xmlwf/xmlfile.c xmlwf/codepage.c \
+		xmlwf/unixfilemap.c
+
+OBJS	=	$(SRCS:.c=.o)
+
+MY_CPPFLAGS	=	-I./xmltok -I./xmlparse -I. -DXML_NS -DXML_DTD
+CPPFLAGS	=	$(MY_CPPFLAGS) $(NG_CPPFLAGS)
+
+LIB_TARGET	=	libexpat.a
+
+all:	libexpat.a
+
+server: all
+
+client: all
+
+libexpat.a:	$(OBJS)
+	$(RM) $@
+	$(AR) $@ $(OBJS)
+
+install_server:: install
+
+install_client:: install
+
+#install::
+
+clean::
+	find . -name '*.o' -print | xargs $(RM)
+
+include /Users/merzky/links/saga/trunk/adaptors/ninfg/ninfg-adaptor-1112/external/ng-5.0.0/utility/compile/defrules.mk
+

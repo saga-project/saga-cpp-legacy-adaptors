@@ -1,0 +1,26 @@
+Module sample;
+Library "-lm";
+
+Globals { int x,y,z; }
+
+Define sin(IN double d, OUT double result[])
+" This is test ..."
+{    
+    double sin();
+    *result = sin(d);
+}
+
+Define mmul(IN long n, IN double A[n][n], 
+    IN double B[n][n], OUT double C[n][n])
+Required "sample.o"
+Calls "C" mmul(n,A,B,C);
+
+Define mmul2(IN long n, IN double A[n*n+1-1], 
+        IN double B[n*n+2-3+1], OUT double C[n*n])
+Required "sample.o"
+Calls "C" mmul(n,A,B,C);
+
+
+Define FFT(IN int n,IN int m, OUT float x[n][m], float INOUT y[m][n])
+Required "sample.o"
+Calls "Fortran" FFT(n,x,y);

@@ -1,0 +1,2 @@
+/usr/bin/yacc -d nggenIdl.y
+yacc: 12 shift/reduce conflicts

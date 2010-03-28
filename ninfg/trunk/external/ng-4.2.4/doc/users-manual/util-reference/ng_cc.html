@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>ng_cc</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>ng_cc</code> - The Ninf-G Client compiler
+<h3>SYNOPSIS</h3>
+<code>
+  ng_cc [compiler options]
+
+</code>
+<h3>DESCRIPTION</h3>
+  The ng_cc is a script that wraps the compiler and linker. It generates Ninf-G Client programs by compiling and linking application programs.<br>
+<br>
+  Options and arguments for the compiler and linker can be written on the ng_cc command line. Those are passed to the compiler and linker used in ng_cc .<br>
+  For example, executing the following command will to generate Ninf-G Client(test_client) from the test_client.c application program using the default (C language) compiler and linker.<br>
+<br>
+<pre>
+    % ng_cc -g -o test_client test_client.c
+</pre>
+<br>
+  The default compiler and linker used by ng_cc is the C compiler and linker, cc. If the application program is written in C and the cc compiler and linker is used, executing the ng_cc command will create an Ninf-G Client.<br>
+<br>
+  A compiler and linker other than cc can be used by setting the  NG_COMPILER and NG_LINKER environment variables to specify the compiler and linker to be used by ng_cc.<br>
+<br>
+
+<p>Note: Mixed utilization of off_t and other file size related data
+types may cause mismatch of data size.
+By default, ng_cc uses large file option such as
+_FILE_OFFSET_BITS=64 (on Linux) as its compile option.
+Thus, the size of off_t type compiled by ng_cc may differ from the
+size of off_t type compiled by non ng_cc command.</p>
+
+<h3>ERRORS</h3>
+<p>If the compiling of the application program fails,
+the compiler error message is output.</p>
+<hr>
+last update : $Date: 2008/03/12 09:07:12 $
+</body>
+</html>

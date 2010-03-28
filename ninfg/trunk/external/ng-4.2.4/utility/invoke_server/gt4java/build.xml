@@ -1,0 +1,117 @@
+<!-- ======================================================= -->
+<!--         Ninf-G Java Invoke Server for GT4               -->
+<!-- ======================================================= -->
+<project name="Ninf-G4 Invoke Server" default="install" basedir=".">
+
+  <property environment="env"/>
+  <!-- ======================================================= -->
+  <!-- Modify the following variable to the appropriate        -->
+  <!-- directory which you wish to install                     --> 
+  <!-- ======================================================= -->
+  <property name="dist" value="${env.NG_DIR}" />
+
+  <!-- ======================================================= -->
+  <!-- Modify the following variable to the appropriate        -->
+  <!-- directory which CoG was installed                       --> 
+  <!-- ======================================================= -->
+  <property name="coglib" value="${env.COG_INSTALL_PATH}/lib" />
+
+  <!-- ======================================================= -->
+  <!-- set global properties for this build                    -->
+  <!-- ======================================================= -->
+  <property name="src" value="src" />
+  <property name="build" value="build" />
+  <property name="dist.lib" value="${dist}/lib" />
+  <property name="javadoc.home" value="doc/users-manual/java-api" />
+
+  <!-- ======================================================= -->
+  <!--             CoG Libraries                               -->
+  <!-- ======================================================= -->
+  <path id="coglibpath">
+    <fileset dir="${coglib}" >
+      <include name="gt4_0_0/**/*.jar"/>
+      <include name="**/*.jar"/>
+      <exclude  name="axis.jar"/>
+    </fileset>
+  </path>
+
+  <property name="cog.jars" refid="coglibpath" />
+
+  <!-- ======================================================= -->
+  <!--             Message for help                            -->
+  <!-- ======================================================= -->
+  <target name="help">
+   <echo>
+   ******************************************************
+   *  Ninf-G Java Client API BUILD HELP                 *
+   ******************************************************
+   ant install          : compile and install 
+   ant clean            : delete jar files and class files 
+   ant javadoc          : generate documentation 
+   ant javadoc_clean    : clean documentation 
+   </echo>
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              Make Directories                           -->
+  <!-- ======================================================= -->
+  <target name="prepare">
+    <mkdir dir="${build}/ng" />
+    <mkdir dir="${dist.lib}" />
+  </target>
+
+  <!-- ======================================================= -->
+  <!--   Compile Ninf-G Java Invoke Server sources             -->
+  <!-- ======================================================= -->
+  <target name="install" depends="prepare">
+    <javac srcdir="${src}/" 
+           includes="org/apgrid/grpc/tools/invokeServer/gt4/***"
+	   classpath="${cog.jars}"
+           destdir="${build}/ng"
+           deprecation="on"
+           debug="on" />
+    <jar jarfile="${dist.lib}/ngisgt4.jar" basedir="${build}/ng"
+         includes="**" />
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              JAVADOC                                    -->
+  <!-- ======================================================= -->
+  <target name="prepare_javadoc">
+    <tstamp/>
+    <mkdir dir="${javadoc.home}" />
+  </target>
+
+  <target name="javadoc" depends="prepare_javadoc" >
+    <javadoc packagenames="org.apgrid.grpc.tools"
+             sourcepath="${src}"
+             classpath="${cog.jars}"
+             doctitle="Ninf-G Java InvokeServer" 
+             windowtitle="Ninf-G Java InvokeServer"
+             overview="src/overview.html"
+             destdir="${javadoc.home}"
+             public="true"
+             use="true"
+             version="true"
+             author="false"/>
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              CLEAN                                      -->
+  <!-- ======================================================= -->
+  <target name="jar_clean">
+    <delete file="${dist.lib}/ngisgt4.jar" />
+  </target>
+
+  <target name="build_clean">
+    <delete dir="${build}" />
+  </target>
+
+  <target name="javadoc_clean">
+    <delete dir="${javadoc.home}" />
+  </target>
+
+  <target name="clean" depends="jar_clean, build_clean">
+  </target>
+
+</project>

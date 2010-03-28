@@ -1,0 +1,1059 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+<title>Installation manual</title>
+</head>
+<body bgcolor=white>
+
+<h2><a name="Installation_manual">2 Installation manual</a></h2>
+
+<hr>
+<ul>
+<li><a href="#Prerequisites">
+    Prerequisites for installing Ninf-G</a>
+<li><a href="#Downloading_the_Ninf-G_package">
+    2.1 Downloading the Ninf-G package</a>
+<li><a href="#Creating_user_ninf">
+    2.2 Creating a "ninf" user</a>
+<li><a href="#Installation">
+    2.3 Installation</a>
+<li><a href="#Configure_options">
+    2.4 Configure command options</a>
+
+<li><a href="#appendix_install_GT4">
+    appendix : Installing GT4</a>
+<ul>
+<li><a href="#appendix_GT4_install">
+    a.1 Installing the Globus Toolkit</a>
+<li><a href="#appendix_GT4_usageStatistics">
+    a.2 About Usage Statistics Collection by Globus Toolkit</a>
+<li><a href="#appendix_GT4_setupEnvironment">
+    a.3 Setting up the environment</a>
+<li><a href="#appendix_GT4_startContainer">
+    a.4 Starting the Container</a>
+<li><a href="#appendix_GT4_testWSGRAM">
+    a.5 Testing the WS GRAM</a>
+<li><a href="#appendix_GT4_MDS4install">
+    a.6 Installing Index Service Bindings</a>
+<li><a href="#appendix_GT4_BinaryInstaller">
+    a.7 Installing GT4 by Binary installer</a>
+<li><a href="#appendix_installedFileComposition">
+    a.8 Installed file composition</a>
+</ul>
+</ul>
+<hr>
+
+<h3><a name="Prerequisites">Prerequisites for installing Ninf-G</a></h3>
+
+<ul>
+<li> If GT4 is used:
+<ol>
+<li> GT4 Pre-WS MDS should be setup
+(using configure --enable-prewsmds option)
+if MDS2 is needed by the user.
+<li> GT4 Information Services C bindings
+should be setup if MDS4 on C Client is needed by the user.
+<li> The globus_core must be installed, which is not installed
+by binary installer.  Source installer installs this module.
+</ol>
+
+<li> If GT2 is used:
+<ol>
+<li> All SDK bundles of the Globus Toolkit (resource, data, and
+information) must be built from source bundles.
+<li> All SDK bundles of the Globus Toolkit (resource, data, and
+information) must have a common flavor by which those bundles
+are built. The flavor should be specified as the Globus flavor
+when installing (configuring) Ninf-G except when the flavor is
+gcc32dbg.
+</ol>
+
+<li> Python 2.3 or later must be installed.
+</ul>
+
+<p>Note: <strong>We recommend you use *pthr flavor.</strong>
+Some features don't work with non-*pthr flavor. 
+</p>
+
+<h3><a name="Downloading_the_Ninf-G_package">
+2.1 Downloading the Ninf-G package</a></h3>
+
+<p>Download the Ninf-G package from the download Web page</p>
+(<a href="http://ninf.apgrid.org/packages/welcome.html">
+http://ninf.apgrid.org/packages/welcome.html</a>).
+
+<h3><a name="Creating_user_ninf">2.2 Creating a "ninf" user</a></h3>
+
+<p>It is recommended that you create a "ninf" user
+on the installation system.</p>
+
+<p>It is also possible, however, to install Ninf-G in
+a location where the user has read and write
+privileges under general user privileges
+(that user's home directory, for example).</p>
+
+<h3><a name="Installation">2.3 Installation</a></h3>
+
+<table border>
+<tr>
+<td>
+<ul>
+<li>Globus libraries built from source bundles must be
+installed on all nodes on which Ninf-G Clients and Executables
+may run.  The libraries may be installed in a shared directory.
+<br>
+<li>Ninf-G libraries must be installed on the nodes on which Ninf-G
+Clients and Executables will be compiled.  The libraries may be
+installed in a shared directory.<br>
+<li>The server_install command for registering the host information
+needs to be executed only on a front-end node on which the
+Globus gatekeeper is running.<br>
+</ul>
+</td>
+</tr>
+</table>
+
+<ul>
+<li>Expanding the source files
+
+<p>Move the files of the downloaded package to the directory
+in which the source files are to be expanded and then
+use the following command to expand the Ninf-G package files.
+(The 4.x.x in the command is the version number.)</p>
+
+<pre>% gunzip -c ng-4.x.x.tgz | tar xvf -</pre>
+
+<p>Executing the above command will create a "ng-4.x.x" directory
+and expand the Ninf-G source files in that directory.</p>
+
+<p>Note: The Ninf-G package is created by GNU tar, so it requires you
+to use GNU tar to expand the package.</p>
+
+<li>Running the configure script
+
+<p>(Move to the directory in which the source files are expanded.)</p>
+<pre>% cd ng-4.x.x </pre>
+<pre>% ./configure </pre>
+
+<p>Executing the above command,
+the host software environment is examined,
+and the execution environment for the tools used by compile
+is prepared
+(creating Makefile, etc.).</p>
+
+
+<p>Parameters such as those for specifying a particular Ninf-G
+installation directory can be included as shown below.</p>
+
+<p>
+<pre>
+% ./configure --prefix=/usr/local/ng --with-globusFlavor=gcc32dbgpthr
+</pre>
+</p>
+
+<p>In this example, the following parameters are specified.</p>
+
+<ul>
+<li>The path to the Ninf-G installation directory
+<li>The flavor of Globus Toolkit to be used
+</ul>
+
+<p>If you do not know about flavors,
+ask the administrator for flavors which the system-installed
+Globus Toolkit implies. 
+(The flavors may be obtained by $GPT_LOCATION/sbin/gpt-query command
+instead.)</p>
+
+<p>If the Ninf-G user desires to use MDS2 or MDS4 on a C client,
+--with-mds2 or --with-mds4 options must be specified.</p>
+
+<p>Other options are described in section 2.4.
+The options that can be used with the configure command can be
+viewed with the following command.</p>
+
+<p>
+<pre>% ./configure --help</pre>
+</p>
+
+<li>Executing the make command
+
+<p>Execute the following command in the directory
+for expanding the source files.</p>
+
+<pre>% make</pre>
+
+<p>Executing make generates the libraries needed by
+Ninf-G as well as an executable binary file.</p>
+
+<p>In Ninf-G, the Makefile is created by using
+the GNU autoconf configure script.
+If there is code in the Makefile written with
+the POSIX make program that cannot be executed,
+try using the GNU make program.</p>
+
+<p>To configure either the server environment only or
+the client environment only, run one of the following make commands.</p>
+
+<ul>
+<li>To configure the server environment only
+
+<p>The following command can be used to configure the
+server environment only.</p>
+
+<p>
+<pre>% make server</pre>
+</p>
+
+<li>To configure the client environment only
+<p>The following command can be used to configure the
+client environment only.</p>
+
+<p>
+<pre>% make client</pre>
+</p>
+</ul>
+
+<li>Installing the compiled files, etc.
+
+<p>With owner privileges for the directory in which the files
+are to be installed
+(specified by a --prefix at the time of configure command;
+the default is "/usr/local"),
+execute the following command from the directory in which
+the source files were expanded.</p>
+
+<p>If you want to specify a number of CPUs for MPI for LocalLDIF(*.ngdef),
+you have to modify &lt package_dir &gt /etc/server.conf and change
+the variable of MPIRUN_NO_OF_CPUS.</p>
+
+<pre>% make install</pre>
+
+<p>Executing the above command copies the libraries and
+executable binaries created by executing the make
+command and the commands needed to run Ninf-G to the
+specified directory.</p>
+
+<p>To install either the server environment only or the
+client environment only, execute the make command as described
+below.</p>
+
+<ul>
+<li>To install the server environment only
+
+<p>It is possible to install only the server environment by executing the
+following command.</p>
+
+<p>
+<pre>% make install_server</pre>
+</p>
+
+<li>To install the client environment only
+
+<p>It is possible to install only the client environment by executing the
+following command.</p>
+
+<p>
+<pre>% make install_client</pre>
+</p>
+</ul>
+
+<p>(The following commands are executed only on the server machine
+(where the Ninf-G Executable is run).<br>
+If MDS is not being used, the following tasks are not necessary.
+In that case, owner user privileges for $GLOBUS_LOCATION are
+also not needed.)</p>
+
+<li>Registering the host information </li>
+
+<p>If the Ninf-G Client uses MDS2 or MDS4, MDS setup is required.
+<b>This is required only on gatekeeper nodes.</b></p>
+<p>Execute the following command with owner user privileges
+for $GLOBUS_LOCATION (for example, "globus").<br>
+If you want to specify the number of CPUs for MPI, you have to edit
+server_install and change the variable of MPIRUN_NO_OF_CPUS.</p>
+
+<p>
+<pre>% cd ng-4.x.x/utility/script</pre>
+<pre>% ./server_install</pre>
+</p>
+
+<li>Settings for provision of Ninf-G Executable information by MDS2
+
+<p>If the Ninf-G Client uses MDS2, MDS2 setup is required.
+<b>This is required only on gatekeeper nodes.</b></p>
+
+<p>Execute the following items with owner user privileges
+for $GLOBUS_LOCATION (for example, "globus").</p>
+
+<ul>
+<li>Add the following line to ${GLOBUS_LOCATION}/etc/grid-info-slapd.conf.
+
+<p>
+<pre>"include ${GLOBUS_LOCATION}/etc/grid-info-resource.schema"</pre>
+</p>
+
+<p>Below that line, add the following line.</p>
+
+<p>
+<pre>"include ${GLOBUS_LOCATION}/etc/grpc.schema"</pre>
+</p>
+
+<li>Restarting MDS </li>
+
+<p>
+<pre> % ${GLOBUS_LOCATION}/sbin/globus-mds stop</pre>
+<pre> % ${GLOBUS_LOCATION}/sbin/globus-mds start</pre>
+</p>
+</ul>
+
+<li>Settings for provision of Ninf-G Executable information by MDS4
+
+<p>If the Ninf-G Client uses MDS4, MDS4 setup is required.
+<b>This is required only on gatekeeper nodes.</b></p>
+
+<p>Execute the following items with owner user privileges
+for $GLOBUS_LOCATION (for example, "globus").</p>
+
+<ul>
+<li> Building and deploying service
+<p>
+<pre> % cd ng-4.x.x/infoService </pre>
+<pre> % ant </pre>
+<pre> % ant deploy </pre>
+</p>
+
+<li> Editing GrpcInfoService configuration
+<p>Edit URL in wsa:Address element in
+$GLOBUS_LOCATION/etc/ng4grpcinfo/regist.xml .
+(You'll have to modify example.org to the IP-address or FQDN of your host.)
+</p>
+
+<p>Edit the hostName in $GLOBUS_LOCATION/etc/ng4grpcinfo/jndi-config.xml
+to match the following description.</p>
+
+<table border>
+<pre>
+&lt;parameter&gt;
+    &lt;name&gt;hostName&lt;/name&gt;
+    &lt;value&gt;example.org&lt;/value&gt;
+&lt;/parameter&gt;
+</pre>
+</table>
+
+<p>Note. This hostname is the name of the GRAM server host.</p>
+
+<p>Edit the infoDirPath in $GLOBUS_LOCATION/etc/ng4grpcinfo/jndi-config.xml
+to match the following description.</p>
+
+<table border>
+<pre>
+&lt;parameter&gt;
+    &lt;name&gt;infoDirPath&lt;/name&gt;
+    &lt;value&gt;/usr/local/gt4.0.0/var/gridrpc&lt;/value&gt;
+&lt;/parameter&gt;
+</pre>
+</table>
+
+<p>This may be $GLOBUS_LOCATION/var/gridrpc .</p>
+
+<p>Append following line to $GLOBUS_LOCATION/container-log4j.properties .
+</p>
+
+<pre>log4j.category.org.apgrid=INFO</pre>
+
+<p>Restart the WS Servlet container, and watch the console output.
+If the following message is output, registration was successful.</p>
+
+<pre>
+????-??-?? ??:??:??,??? INFO  impl.GrpcInfoHome [Thread-?,run:???] done rescan to regist
+</pre>
+
+<p>Note: If you change the information of the executable in
+$GLOBUS_LOCATION/var/gridrpc,
+the following command forcibly updates this information immediately.</p>
+
+<pre>
+% java -DGLOBUS_LOCATION=$GLOBUS_LOCATION \
+ -classpath $GLOBUS_LOCATION/lib/ng4grpcinfo.jar:$CLASSPATH \
+ org.apgrid.ninf.ng4.grpcinfo.client.RescanClient \
+ -s https://[IP-ADDR or FQDN]:8443/wsrf/services/org/apgrid/ninf/ng4/grpcinfo/GrpcInfoService
+</pre>
+</ul>
+</ul>
+
+<h3><a name="Configure_options">2.4 Configure command options</a></h3>
+
+<p>The available options can be displayed with the following
+command.</p>
+
+<p>
+<pre>% ./configure --help</pre>
+</p>
+
+<p>The options that can be used with the configure script are
+described below.</p>
+
+<ul type=disc>
+<li>General configure command options
+
+<p>The general configure command options have no effect
+on the Ninf-G functions.</p>
+
+<center>
+<table border>
+<caption align=top> General configure options </caption>
+<tr>
+<th> option </th>
+<th> description </th>
+</tr>
+
+<tr>
+<td> --cache-file=FILE </td>
+<td> Cache test results in FILE </td>
+</tr>
+
+<tr>
+<td> --help </td>
+<td> Print help message </td>
+</tr>
+
+<tr>
+<td> --no-create </td>
+<td> Do not create output files </td>
+</tr>
+
+<tr>
+<td> --quiet, --silent </td>
+<td> Do not print `checking...' messages </td>
+</tr>
+
+<tr>
+<td> --version </td>
+<td> Print the version of autoconf that created configure </td>
+</tr>
+</table>
+</center>
+
+<br>
+
+<li> Directory and file names
+
+<p>Specify the location for installing Ninf-G.</p>
+<p>Specify the installation path for the targets listed below.</p>
+<p>The default values are shown.</p>
+
+<center>
+<table border>
+<caption align=top> Directory and file names </caption>
+<tr>
+<th> option </th>
+<th> default </th>
+<th> description </th>
+</tr>
+
+<tr>
+<td> --prefix=PREFIX </td>
+<td> /usr/local </td>
+<td> Install architecture-independent files in PREFIX </td>
+</tr>
+
+<tr>
+<td> --exec-prefix=EPREFIX </td>
+<td> same as prefix </td>
+<td> Install architecture-dependent files in EPREFIX </td>
+</tr>
+
+<tr>
+<td> --bindir=DIR </td>
+<td> EPREFIX/bin </td>
+<td> User executables in DIR </td>
+</tr>
+
+<tr>
+<td> --sbindir=DIR </td>
+<td> EPREFIX/sbin </td>
+<td> System admin executables in DIR </td>
+</tr>
+
+<tr>
+<td> --libexecdir=DIR </td>
+<td> EPREFIX/libexec </td>
+<td> Program executables in DIR </td>
+</tr>
+
+<tr>
+<td> --datadir=DIR </td>
+<td> EPREFIX/share </td>
+<td> Read-only architecture-independent data in DIR </td>
+</tr>
+
+<tr>
+<td> --sysconfdir=DIR </td>
+<td> EPREFIX/etc </td>
+<td> Read-only single-machine data in DIR </td>
+</tr>
+
+<tr>
+<td> --sharedstatedir=DIR </td>
+<td> EPREFIX/com </td>
+<td> Modifiable architecture-independent data in DIR </td>
+</tr>
+
+<tr>
+<td> --localstate=DIR </td>
+<td> EPREFIX/var </td>
+<td> Modifiable single-machine data in DIR </td>
+</tr>
+
+<tr>
+<td> --lib-dir=DIR </td>
+<td> EPREFIX/lib </td>
+<td> Object code libraries in DIR </td>
+</tr>
+
+<tr>
+<td> --includedir=DIR </td>
+<td> EPREFIX/include </td>
+<td> C header files in DIR </td>
+</tr>
+
+<tr>
+<td> --oldincludedir=DIR </td>
+<td> /usr/include </td>
+<td> C header files for non-gcc in DIR </td>
+</tr>
+
+<tr>
+<td> --infodir=DIR </td>
+<td> EPREFIX/info </td>
+<td> Info documentation in DIR </td>
+</tr>
+
+<tr>
+<td> --mandir=DIR </td>
+<td> EPREFIX/man </td>
+<td> Man documentation in DIR </td>
+</tr>
+
+<tr>
+<td> --srcdir </td>
+<td> configure dir or ... </td>
+<td> Find the sources in DIR </td>
+</tr>
+
+<tr>
+<td> --program-prefix=PREFIX </td>
+<td>  </td>
+<td> Prepend PREFIX to installed program names </td>
+</tr>
+
+<tr>
+<td> --program-suffix=SUFFIX </td>
+<td>  </td>
+<td> Append SUFFIX to installed program names </td>
+</tr>
+
+<tr>
+<td> --program-transform-name=PROGRAM </td>
+<td>  </td>
+<td> Run sed PROGRAM on installed program names </td>
+</tr>
+</table>
+</center>
+
+<br>
+
+<li> Features and packages
+
+<center>
+<table border>
+<caption align=top> Features and packages </caption>
+<tr>
+<th> option </th>
+<th> default </th>
+<th> description </th>
+</tr>
+
+<tr>
+<td> --disable-FEATURE </td>
+<td>  </td>
+<td> Do not include FEATURE (same as --enable-FEATURE=no) </td>
+</tr>
+
+<tr>
+<td> --enable-FEATURE[=ARG] </td>
+<td> ARG=yes </td>
+<td> Include FEATURE </td>
+</tr>
+
+<tr>
+<td> --with-PACKAGE[=ARG] </td>
+<td> ARG=yes </td>
+<td> Use PACKAGE </td>
+</tr>
+
+<tr>
+<td> --without-PACKAGE </td>
+<td>  </td>
+<td> Do not use PACKAGE (same as --with-PACKAGE=no) </td>
+</tr>
+
+<tr>
+<td> --with-globusFlavor=FLAVOR </td>
+<td> gcc32dbgpthr </td>
+<td> Specify Globus runtime library flavor </td>
+</tr>
+
+<tr>
+<td> --with-mds </td>
+<td>  </td>
+<td> Obsolete option (use mds2 or mds4) </td>
+</tr>
+
+<tr>
+<td> --with-mds2 </td>
+<td> no </td>
+<td> Include functions for getting information on servers
+and functions from PreWS MDS </td>
+</tr>
+
+<tr>
+<td> --with-mds4 </td>
+<td> no </td>
+<td> Include functions for getting information on servers
+and functions from WS MDS </td>
+</tr>
+
+<tr>
+<td> --with-zlib </td>
+<td> yes if available </td>
+<td> Use zlib for compression </td>
+</tr>
+
+<tr>
+<td> --with-largefile </td>
+<td> yes </td>
+<td> Support largefile </td>
+</tr>
+
+<tr>
+<td> --with-cc=CC </td>
+<td> cc </td>
+<td> Specify C compiler to use </td>
+</tr>
+
+<tr>
+<td> --with-opt=OPT </td>
+<td>  </td>
+<td> Specify C compiler options for optimization </td>
+</tr>
+
+<tr>
+<td> --with-debug=OPT </td>
+<td>  </td>
+<td> Specify C compiler options for debuggable executable file creation </td>
+</tr>
+
+<tr>
+<td> --with-cppflag=OPT </td>
+<td>  </td>
+<td> Specify C preprocessor options </td>
+</tr>
+
+<tr>
+<td> --with-python </td>
+<td>  </td>
+<td> Specify python command path </td>
+</tr>
+
+<tr>
+<td> --with-naregi </td>
+<td> no </td>
+<td> Support NAREGI SS.</td>
+</tr>
+
+<tr>
+<td> --with-naregidir=NAREGIDIR </td>
+<td> /usr/naregi </td>
+<td> Specify the directory in which NAREGI Middleware has been installed.</td>
+</tr>
+
+<tr>
+<td> --enable-gcc </td>
+<td>  </td>
+<td> Allow use of gcc if available </td>
+</tr>
+
+<tr>
+<td> --enable-debug </td>
+<td> no </td>
+<td> Enable generate executable with debug symbol </td>
+</tr>
+</table>
+</center>
+
+</ul>
+
+<h3><a name="appendix_install_GT4">
+appendix : Installing GT4</a></h3>
+
+<p>Ninf-G requires Globus Toolkit installation.
+This appendix shows how to accomplish GT4 installation.
+When you install GT4, refer to
+<a href="http://www.globus.org">Globus Website</a> for exact information.
+</p>
+
+<p>This section gives hints for installing GT4.</p>
+
+<h4><a name="appendix_GT4_install">
+a.1 Installing the Globus Toolkit</a></h4>
+
+<p>Make the temporary directory.<p>
+
+<pre>% mkdir dirForInstaller </pre>
+
+<p>Install GT4 (we recommend Version 4.0.1 or later (not 4.0.0)
+and "source" installer).</p>
+
+<pre>
+% cd dirForInstaller
+% gunzip -c [TARBALL LOCATION]/gt4.0.1-all-source-installer.tar.gz | tar xf -   
+% cd gt4.0.1-all-source-installer
+% ./configure --prefix=/path/to/gt4-install
+% make
+% make install
+</pre>
+
+<p>Note: Use of MDS2 on Ninf-G requires the --enable-prewsmds option on
+GT4.</p>
+
+<p>See also information about setting the Globus Toolkit at following
+URL.</p>
+
+    http://www.globus.org/toolkit/docs/4.0/admin/docbook/
+
+<p>Ninf-G4 requires some components of the Globus Toolkit.
+Following URLs provide information about setting of components.</p>
+
+<ul>
+<li> Security Configuration of WS container
+    http://www.globus.org/toolkit/docs/4.0/admin/docbook/ch06.html
+
+<li> GridFTP (Ninf-G4 requires GridFTP server on the remote server)
+    http://www.globus.org/toolkit/docs/4.0/admin/docbook/ch08.html
+
+<li> RFT
+    http://www.globus.org/toolkit/docs/4.0/admin/docbook/ch10.html
+
+<li> WS-GRAM (GRAM4)
+    http://www.globus.org/toolkit/docs/4.0/admin/docbook/ch11.html
+</ul>
+
+<h4><a name="appendix_GT4_usageStatistics">
+a.2 About Usage Statistics Collection by Globus Toolkit</a></h4>
+
+<p>Globus Toolkit provides Usage statistics.
+(See http://www.globus.org/toolkit/docs/4.0/Usage_Stats.html)
+If you desire to prevent this, match the following configuration
+changes.</p>
+
+<p>Set the environment variable "GLOBUS_USAGE_OPTOUT" to "1."</p>
+<ul>
+<li>(csh, tcsh, etc)
+<pre>% setenv GLOBUS_USAGE_OPTOUT 1</pre>
+<li>  (sh, bash, etc)
+<pre>$ GLOBUS_USAGE_OPTOUT=1</pre>
+<pre>$ export GLOBUS_USAGE_OPTOUT</pre>
+</ul>
+
+<p>Comment out the "usageStatisticsTargets" parameter in the configuration
+file $GLOBUS_LOCATION/etc/globus_wsrf_core/server-config.wsdd</p>
+
+  This setting,
+<pre>
+    &lt;globalConfiguration&gt;
+        &lt;parameter name="usageStatisticsTargets"
+                   value="usage-stats.globus.org:4810"/&gt;
+</pre>
+
+  Delete or comment out as follows.
+<pre>
+    &lt;globalConfiguration&gt;
+        &lt;!--parameter name="usageStatisticsTargets"
+                   value="usage-stats.globus.org:4810"/--&gt;
+</pre>
+
+Also check the following URLs.
+<ul>
+<li>http://www.globus.org/toolkit/docs/4.0/common/javawscore/admin-index.html#s-ja
+vawscore-Interface_Config_Frag-usageStatisticsTargets
+<li>http://www.globus.org/toolkit/docs/4.0/data/gridftp/admin-index.html#s-gridftp-admin-usage
+</ul>
+
+<h4><a name="appendix_GT4_setupEnvironment">
+a.3 Setting up the environment</a></h4>
+
+<p>Setup the environment variable and execute the script
+for setting up the environment.</p>
+
+<ul>
+<li>(csh, tcsh, etc)
+<pre>
+% setenv GLOBUS_LOCATION /path/to/gt4-install
+% source $GLOBUS_LOCATION/etc/globus-user-env.csh
+</pre>
+<li>(sh, bash, etc)
+<pre>
+$ GLOBUS_LOCATION=/path/to/gt4-install
+$ export GLOBUS_LOCATION
+$ . $GLOBUS_LOCATION/etc/globus-user-env.sh
+</pre>
+</ul>
+
+<h4><a name="appendix_GT4_startContainer">
+a.4 Starting the Container</a></h4>
+
+<pre>
+% cd $GLOBUS_LOCATION
+% ./bin/globus-start-container
+</pre>
+
+<p>Starting the SOAP server at: https://[IP-ADDR]:8443/wsrf/services/
+with the following services:<p>
+
+<pre>
+[1]: https://[IP-ADDR]:8443/wsrf/services/TriggerFactoryService
+[2]: https://[IP-ADDR]:8443/wsrf/services/DelegationTestService
+....
+[48]: https://[IP-ADDR]:8443/wsrf/services/CASService
+[49]: https://[IP-ADDR]:8443/wsrf/services/ManagedJobFactoryService
+</pre>
+
+<h4><a name="appendix_GT4_testWSGRAM">
+a.5 Testing the WS GRAM</a></h4>
+
+<p>Test the WS GRAM using following procedures.</p>
+
+<pre>
+% cd $GLOBUS_LOCATION
+% ./bin/grid-proxy-init
+  (input your passphrase)
+% globusrun-ws -submit -job-description-file \
+    $GLOBUS_LOCATION/test/globus_wsrf_gram_service_java_test_unit/test.xml
+Submitting job...Done.
+Job ID: uuid:[UUIDUUID-UUID-UUID-UUID-UUIDUUIDUUID]
+Termination time: MM/DD/CCYY HH:MM GMT
+Current job state: Unsubmitted
+Current job state: Done
+Destroying job...Done.
+</pre>
+
+<h4><a name="appendix_GT4_MDS4install">
+a.6 Installing Index Service Bindings</a></h4>
+
+<p>If the Ninf-G C Client uses MDS4, the Index Service Bindings
+should be installed with Globus Toolkit.</p>
+
+<p>Execute the following items with owner user privileges
+for $GLOBUS_LOCATION (for example, "globus").</p>
+
+<pre>
+% cd gt4.0.1-all-source-installer
+% make globus_c_wsrf_core_bindings-thr
+% make globus_handler_ws_addressing-thr
+% $GLOBUS_LOCATION/sbin/gpt-build index_service_bindings-1.2.tar.gz [flavor]
+</pre>
+
+<p>Note: threaded flavor recommended.</p>
+
+<ul>
+<li> How to build an index_service_bindings package
+
+<p>An index_service_bindings package is not prepared at the beginning.
+The user must create the package.</p>
+
+<p>Note: For convenience, the Ninf-G4 package includes a generated
+index_service_bindings package on ng-4.x.x/external/index_service.</p>
+
+<ol>
+<li> Copy the non-thread flavor's template archive
+(the with-thread flavor version has problems).
+<pre>
+% cp \
+gt4.0.1-all-source-installer/source-trees/wsrf/c/parser/cgen/source/globus_wsrf_bindings_template.tar.gz \
+$GLOBUS_LOCATION/share/globus_c_wsrf_cgen
+</pre>
+<li> Edit client-stub-source-doclit.tmpl.
+<p> Edit and remove line 657 of
+$GLOBUS_LOCATION/share/globus_c_wsrf_cgen/client-stub-source-doclit.tmpl
+.</p>
+<table border>
+<tr><td>
+<pre>
+<code>
+     646             if(chain)
+     647             {
+     648                 globus_handler_chain_register_invoke(
+     649                     chain,
+     650                     GLOBUS_HANDLER_TYPE_REQUEST,
+     651                     request-&gt;client_handle-&gt;message,
+     652                     $internal_func_prefix$_i_request_done_callback,
+     653                     request);
+     654             }
+     655         }
+     656
+!    657         globus_mutex_unlock(&request-&gt;mutex);  --- *** REMOVE THIS LINE *** 
+     658         break;
+     659
+     660     case $sname.toUpperCase()$_REQUEST_INVOKING_HANDLERS:
+     661
+     662         if(request-&gt;done)
+     663         {
+     664             if(request-&gt;result != GLOBUS_SUCCESS)
+     665             {
+     666                 result = request-&gt;result;
+     667                 goto error_exit;
+     668             }
+</code>
+</pre>
+</td></tr>
+</table>
+
+<pre>
+% $GLOBUS_LOCATION/bin/globus-wsrf-cgen -no-service \
+ -s index_service -flavor gcc32dbg -d $PWD/bindings \
+ $GLOBUS_LOCATION/share/schema/mds/index/index_service.wsdl
+</pre>
+
+<p>The package is created in bindings/index_service_bindings-1.2.tar.gz
+</p>
+
+</ol>
+</ul>
+
+<h4><a name="appendix_GT4_BinaryInstaller">
+a.7 Installing GT4 by Binary installer</a></h4>
+
+<p>It is recommended to install Globus Toolkit from source installer.
+If Globus Toolkit is installed from binary installer,
+you need to install globus_core with the following command:</p>
+
+<pre>
+% $GLOBUS_LOCATION/sbin/gpt-build -nosrc &lt;flavor&gt;
+</pre>
+
+<p>Where flavor is the Globus Toolkit flavor you're passing to
+Ninf-G configure script.</p>
+
+<p>(GT4 Admin Guide 
+<a
+href="http://www.globus.org/toolkit/docs/4.0/admin/docbook/apb.html#id2579220">
+B.4. Using globus-makefile-header with a binary distribution</a>)</p>
+
+<h4><a name="appendix_installedFileComposition">
+a.8 Installed file composition</a></h4>
+
+<pre>
+$GLOBUS_LOCATION/
++etc
+| +grid-info-resource-ldif.conf (optional) (*1)
+| +grpc.schema (optional)
+| +gpt
+| | +packages
+| |   +ng4grpcinfo (optional)
+| |     +undeploy.xml (optional)
+| +ng4grpcinfo (optional)
+|   +regist.xml (optional)
+|   +server-config.wsdd (optional)
+|   +jndi-config.xml (optional)
++lib
+| +ng4grpcinfo.jar (optional)
+| +ng4grpcinfo_stubs.jar (optional)
++share
+| +schema
+|   +ng4grpcinfo (optional)
+|     +GrpcInfo_flattened.wsdl (optional)
+|     +GrpcInfo.wsdl (optional)
+|     +GrpcInfo_service.wsdl (optional)
+|     +GrpcInfo_bindings.wsdl (optional)
++var
+  +gridrpc (optional)
+    +catldif (optional)
+    +root.ldif (optional)
+    +*.ldif (optional)
+
+    *1) The information of Ninf-G was added to this file.
+
+$NG_DIR
++bin
+| +base64encode
+| +globusflags
+| +ng_cc
+| +ng_delete_functions
+| +ng_dump_functions
+| +ng_gen
+| +ng_gen_dif
+| +ng_invoke_server.Condor (optional)
+| +ng_invoke_server.GT2c
+| +ng_invoke_server.GT4java (optional)
+| +ng_invoke_server.GT4py
+| +ng_invoke_server.SSH
+| +ng_invoke_server.NAREGISS (optional)
+| +ng_version
++doc
+| +tutorial
+| +users_manual
++etc
+| +gpt-query-result.txt
+| +ng_invoke_server.GTtempl
+| +ninfg-user-env.csh
+| +ninfg-user-env.sh
+| +server.conf
++include
+| +grpc.h
+| +grpcError.h
+| +grpcLocal.h
+| +grpc_executable.h
+| +net.h
+| +ng.h
+| +ngClientInternal.h
+| +ngCommon.h
+| +ngConfig.h
+| +ngConfigFile.h
+| +ngEx.h
+| +ngExecutableInternal.h
+| +ngFunctionInformation.h
+| +ngInternal.h
+| +ngPlatform.h
+| +ngXML.h
++lib
+  +classad.jar (optional)
+  +condorAPI.jar (optional)
+  +condorIS.jar (optional)
+  +gt4invokeserver.py
+  +gt4invokeserverconfig.py
+  +ioutils.py
+  +libexpat.a
+  +libngclient.a
+  +libngcommon.a
+  +libngexecutable.a
+  +libnggrpc.a
+  +libngnet.a
+  +libngutility.a
+  +ng_invoke_server.GT4.py
+  +ng_invoke_server.jar (optional)
+  +ngisgt4.jar (optional)
+  +ngutils.py
+  +template.mk
+  +template.sh
+  +uuid.py
+  +naregissIS.jar (optional)
+  +naregiss_is_execute.sh (optional)
+</pre>
+
+<hr>
+last update : $Date: 2008/09/12 08:27:42 $
+</body>
+</html>
+

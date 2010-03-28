@@ -1,0 +1,44 @@
+Ninf-G5 Java Client API
+
+This package includes the following documents.
+- README (This file)
+- INSTALL
+- FAQ
+- BUG
+
+This package includes a set of Java client APIs for Ninf-G system
+allowing users to access remote libraries on Ninf-G servers via their
+Java program.  We have built the package with pure Java so that 
+you even access to Ninf-G servers from Windows machines. 
+
+Ninf-G is a GridRPC system which offers network-based
+numerical library functionality via the use of RPC technology.  Parts
+of applications making procedure calls can be replaced with
+high-performance, remote equivalents in a substantially transparent
+manner, usually only a small modification to the call itself, without
+any RPC data types, prologue/epilogues, IDL management, etc.
+
+We have used a variety of off-the-shelf technologies Jakarta Ant for source
+code management. 
+
+Requirement:
+  - Java(JRE): 5 or later
+    (http://java.sun.com/)
+
+  - Ant      : 1.6 or later
+    (http://ant.apache.org/, It's called "Jakarta Ant" until version 1.5.)
+
+We tested Ninf-G Java Client API on the following environments.
+  - Ubuntu 7.10 (i386)
+  - JDK 1.5.0_06
+  - Ant 1.6.2
+
+Research papers and other documents are downloadable on the Ninf
+project web site at:
+ http://ninf.apgrid.org/
+
+Send all comments, questions, bugs, feature requests, etc to:
+
+ninf@apgrid.org
+
+Thanks for checking out/downloading the Ninf-G Java Client package.

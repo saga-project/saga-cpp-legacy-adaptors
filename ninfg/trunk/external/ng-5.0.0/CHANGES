@@ -1,0 +1,28 @@
+
+(Ninf-G4 -> 5.0.0)
+  < New features >
+  - Globus-based RPC is still available, however external modules
+    (Communication Proxy and Information Services) of Ninf-G5 enable
+    non-Globus-based RPC for which Globus Toolkit (Globus GRAM, Globus
+    I/O, MDS) is no longer a prerequisite software.
+  - In Ninf-G4, connections between a Ninf-G Client and Ninf-G
+    Executables are kept until the function/object handles will be
+    destructed.  In addition to this usual connection-full
+    communications, Ninf-G5 supports connection-less communications
+    which do not keep connections during RPC.
+
+  < Compatibility >
+  - The GridRPC API and Ninf-G API implemented by Ninf-G5 is compatible
+    with Ninf-G4 except the following two items.
+    + The acceptable format of the second argument (server_name) of
+      function/object handle initialize functions has been changed.
+      Ninf-G5 does not accept the format of Globus GRAM Resource
+      Manager Contact as a valid second argument though it can be
+      used in Ninf-G4.
+    + An argument (error) has been added to comply with the
+      specification. This change is a bug fix.
+  - Ninf-G Client configuration file for Ninf-G4 is not compatible
+    with Ninf-G5.
+  - Due to protocol changes, Ninf-G4 client cannot communicate with
+    Ninf-G5 executables and vice versa.
+

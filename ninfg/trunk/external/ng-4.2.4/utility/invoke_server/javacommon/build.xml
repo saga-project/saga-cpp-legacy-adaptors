@@ -1,0 +1,81 @@
+<!-- $RCSfile: build.xml,v $ $Revision: 1.2 $ $Date: 2007/02/05 08:57:22 $ -->
+<!-- $AIST_Release: 4.2.4 $ -->
+
+<!-- ======================================================= -->
+<!--         Invoke Server Module                            -->
+<!-- ======================================================= -->
+<project name="Invoke Server NAREGISS" default="install" basedir=".">
+
+  <property environment="env"/>
+  <!-- ======================================================= -->
+  <!-- Modify the following variable to the appropriate        -->
+  <!-- directory which you wish to install                     --> 
+  <!-- ======================================================= -->
+  <property name="dist"  value="${env.NG_DIR}" />
+  <property name="debug" value="off" />
+
+  <!-- ======================================================= -->
+  <!-- set global properties for this build                    -->
+  <!-- ======================================================= -->
+
+  <property name="src"          value="." />
+  <property name="dist.lib"     value="${dist}/lib" />
+  <property name="jar"          value="ng_invoke_server.jar" />
+  <property name="manifest"     value="ng_invoke_server.manifest" />
+
+  <!-- ======================================================= -->
+  <!--             Message for help                            -->
+  <!-- ======================================================= -->
+  <target name="help">
+   <echo>
+   ******************************************************
+   *  Invoke Server NAREGISS  BUILD HELP                *
+   ******************************************************
+   ant install          : install jar file
+   ant jar              : create jar file
+   ant compile          : compile java files
+   ant clean            : delete jar files and class files 
+   </echo>
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              Make Directories                           -->
+  <!-- ======================================================= -->
+  <target name="depend">
+      <depend srcdir="${src}"/>
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              Compile Ninf-G Java sources                -->
+  <!-- ======================================================= -->
+  <target name="compile" depends="depend">
+      <javac srcdir="${src}" debug="${debug}" />
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              Compile Ninf-G Java sources                -->
+  <!-- ======================================================= -->
+  <target name="jar" depends="compile">
+      <jar jarfile="${jar}"
+           basedir="${src}"
+           manifest="${manifest}"
+           includes="**/*.class" />
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              Compile Ninf-G Java sources                -->
+  <!-- ======================================================= -->
+  <target name="install" depends="jar">
+      <copy file="${jar}" todir="${dist.lib}" />
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              CLEAN                                      -->
+  <!-- ======================================================= -->
+  <target name="clean">
+    <delete file="${jar}" />
+    <delete>
+        <fileset dir="." includes="**/*.class"/>
+    </delete>
+  </target>
+</project>

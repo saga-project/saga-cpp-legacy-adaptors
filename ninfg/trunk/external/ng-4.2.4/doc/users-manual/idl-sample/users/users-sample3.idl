@@ -1,0 +1,30 @@
+Module idl_sample3;
+
+#define ROW_a lda
+#define COL_a n
+#define ROW_af ldaf
+#define COL_af n
+#define ROW_b ldb
+#define COL_b nrhs
+#define ROW_x ldx
+#define COL_x nrhs
+Define idl_sample3_func( IN char trans,
+                IN int n,
+                IN int nrhs,
+                IN double global_a[ROW_a][COL_a],
+                IN int lda,
+                IN double global_af[ROW_af][COL_af],
+                IN int ldaf,
+                IN int ipiv[n],
+                IN double global_b[ROW_b][COL_b],
+                IN int ldb,
+                INOUT double global_x[ROW_x][COL_x],
+                IN int ldx,
+                OUT double global_ferr[nrhs],
+                OUT double global_berr[nrhs],
+                WORK double work[1],
+                WORK int iwork[1],
+                OUT int *info
+)
+Required "object.o"
+Calls "C" func(trans, n, nrhs, global_a, lda, global_af, ldaf, ipiv, global_b, ldb, global_x, ldx, global_ferr, global_berr, work, iwork, info);

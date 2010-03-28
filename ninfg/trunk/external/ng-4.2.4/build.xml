@@ -1,0 +1,115 @@
+<!-- ======================================================= -->
+<!--         Ninf-G Java Client API                          -->
+<!-- ======================================================= -->
+<project name="Ninf-G4" default="install" basedir=".">
+
+  <property environment="env"/>
+  <!-- ======================================================= -->
+  <!-- Modify the following variable to the appropriate        -->
+  <!-- directory which you wish to install                     --> 
+  <!-- ======================================================= -->
+  <property name="dist" value="${env.NG_DIR}" />
+
+  <!-- ======================================================= -->
+  <!-- Modify the following variable to the appropriate        -->
+  <!-- directory which GT was installed                       --> 
+  <!-- ======================================================= -->
+  <property name="coglib" value="${env.GLOBUS_LOCATION}/lib" />
+
+  <!-- ======================================================= -->
+  <!-- set global properties for this build                    -->
+  <!-- ======================================================= -->
+  <property name="src" value="java" />
+  <property name="build" value="build" />
+  <property name="dist.lib" value="${dist}/lib" />
+  <property name="javadoc.home" value="doc/users-manual/java-api" />
+
+  <!-- ======================================================= -->
+  <!--             GT Libraries                                -->
+  <!-- ======================================================= -->
+  <path id="coglibpath">
+    <fileset dir="${coglib}" >
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <property name="cog.jars" refid="coglibpath" />
+
+  <!-- ======================================================= -->
+  <!--             Message for help                            -->
+  <!-- ======================================================= -->
+  <target name="help">
+   <echo>
+   ******************************************************
+   *  Ninf-G Java Client API BUILD HELP                 *
+   ******************************************************
+   ant install          : compile and install 
+   ant clean            : delete jar files and class files 
+   ant javadoc          : generate documentation 
+   ant javadoc_clean    : clean documentation 
+   </echo>
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              Make Directories                           -->
+  <!-- ======================================================= -->
+  <target name="prepare">
+    <mkdir dir="${build}/ng" />
+    <mkdir dir="${dist.lib}" />
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              Compile Ninf-G Java sources                -->
+  <!-- ======================================================= -->
+  <target name="install" depends="prepare">
+    <javac srcdir="${src}/" 
+           includes="org/apgrid/grpc/** org/gridforum/gridrpc/**"
+	   classpath="${cog.jars}"
+           destdir="${build}/ng"
+           deprecation="on"
+           debug="off" />
+    <jar jarfile="${dist.lib}/ng.jar" basedir="${build}/ng"
+         includes="**" />
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              JAVADOC                                    -->
+  <!-- ======================================================= -->
+  <target name="prepare_javadoc">
+    <tstamp/>
+    <mkdir dir="${javadoc.home}" />
+  </target>
+
+  <target name="javadoc" depends="prepare_javadoc" >
+    <javadoc packagenames="org.gridforum.gridrpc, org.apgrid.grpc.ng, org.apgrid.grpc.util"
+             sourcepath="${src}"
+             classpath="${cog.jars}"
+             doctitle="Ninf-G Java Client API" 
+             windowtitle="Ninf-G Java Client API"
+             overview="java/overview.html"
+             destdir="${javadoc.home}"
+             public="true"
+             use="true"
+             version="true"
+             author="false"/>
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              CLEAN                                      -->
+  <!-- ======================================================= -->
+  <target name="jar_clean">
+    <delete file="${dist.lib}/ng.jar" />
+  </target>
+
+  <target name="build_clean">
+    <delete dir="${build}" />
+  </target>
+
+  <target name="javadoc_clean">
+    <delete dir="${javadoc.home}" />
+  </target>
+
+  <target name="clean" depends="jar_clean, build_clean">
+  </target>
+
+</project>

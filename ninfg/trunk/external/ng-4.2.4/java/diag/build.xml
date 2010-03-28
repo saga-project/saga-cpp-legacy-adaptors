@@ -1,0 +1,183 @@
+<!-- ======================================================= -->
+<!--             Ninf-G Java Client tset                     -->
+<!-- ======================================================= -->
+<project name="Ninf-G Diag" default="build" basedir=".">
+
+  <property environment="env"/>
+  <!-- ======================================================= -->
+  <!-- set properties for user                                 -->
+  <!-- ======================================================= -->
+  <property name="my_java_home" value="${env.JAVA_HOME}" />
+  <property name="my_coglib" value="${env.GLOBUS_LOCATION}/lib" />
+  <property name="my_ng_dir" value="${env.NG_DIR}" />
+
+  <property name="filetest_target" value="1" />
+
+  <property name="config_file" value="client.conf" />
+  <property name="ng_log_level" value="2" />
+  <property name="globus_debug_level" value="-1" />
+
+  <!-- ======================================================= -->
+  <!-- set properties for Java Runtime                         -->
+  <!-- ======================================================= -->
+  <property name="java_home" value="${my_java_home}" />
+  <property name="jdb" value="${java_home}/bin/jdb" />
+  <property name="rmic" value="${java_home}/bin/rmic" />
+  <property name="java" value="${java_home}/bin/java" />
+
+  <!-- ======================================================= -->
+  <!-- set properties for CoG                                  -->
+  <!-- ======================================================= -->
+  <property name="coglib" value="${my_coglib}" />
+  <path id="coglibpath">
+    <path path="."/>
+    <path path="${env.GLOBUS_LOCATION}"/>
+    <path path="${env.GLOBUS_LOCATION}/build/classes"/>
+    <fileset dir="${coglib}" >
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <!-- ======================================================= -->
+  <!-- set properties for Ninf-G                               -->
+  <!-- ======================================================= -->
+  <property name="nglib" value="${my_ng_dir}/lib/ng.jar" />
+
+  <!-- ======================================================= -->
+  <!-- set properties for all libraries                        -->
+  <!-- ======================================================= -->
+  <!-- for build environment -->
+  <path id="ngbuildlibpath">
+    <pathelement path="${nglib}" />
+    <path refid="coglibpath" />
+    <pathelement path="." />
+  </path>
+  <property name="ngbuildlib" refid="ngbuildlibpath" />
+
+  <!-- for run time environment -->
+  <path id="ngrunlibpath">
+    <pathelement path="${nglib}" />
+    <path refid="coglibpath" />
+    <pathelement path="." />
+  </path>
+  <property name="ngrunlib" refid="ngrunlibpath" />
+
+  <!-- ======================================================= -->
+  <!-- build Ninf-G java diag programs                         -->
+  <!-- ======================================================= -->
+  <target name="build">
+    <javac srcdir="." 
+	   classpath="${ngbuildlib}"
+           destdir="."
+           deprecation="on"
+           debug="off" />
+  </target>
+
+  <!-- ======================================================= -->
+  <!-- exec Ninf-G java diag programs                          -->
+  <!-- ======================================================= -->
+  <target name="exec_test">
+    <exec executable="${java}">
+      <arg value="-classpath" />
+      <arg value="${ngrunlib}" />
+      <arg line="-Djava.endorsed.dirs=${env.GLOBUS_LOCATION}/endorsed" />
+      <arg line="-DGLOBUS_LOCATION=${env.GLOBUS_LOCATION}" />
+      <arg line="-Dorg.globus.debug.level=${globus_debug_level}" />
+      <arg line="-Dng2.configFile=${config_file}" />
+      <arg line="-Dng2.logLevel=${ng_log_level}" />
+      <arg line="-DNG_DIR=${my_ng_dir}" />
+      <arg value="${test_target}" />
+      <arg value="${config_file}" />
+      <arg line="${another_arguments}" />
+    </exec>
+  </target>
+
+  <target name="exec_test_with_arg_line">
+    <exec executable="${java}">
+      <arg value="-classpath" />
+      <arg value="${ngrunlib}" />
+      <arg value="${test_target}" />
+      <arg line="${another_arguments}" />
+    </exec>
+  </target>
+
+  <!-- Callback -->
+  <target name="callback">
+    <property name="test_target" value="CallbackTest" />
+    <property name="another_arguments" value="" />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- CancelTest -->
+  <target name="cancel">
+    <property name="test_target" value="CancelTest" />
+    <property name="another_arguments" value="" />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- DataTest -->
+  <target name="data">
+    <property name="test_target" value="DataTest" />
+    <property name="another_arguments" value="" />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- FileTest -->
+  <target name="file">
+    <property name="test_target" value="FileTest" />
+    <property name="another_arguments" value="." />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- FileArrayTest -->
+  <target name="filearray">
+    <property name="test_target" value="FileArrayTest" />
+    <property name="another_arguments" value="." />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- NullArgumentTest -->
+  <target name="null">
+    <property name="test_target" value="NullArgumentTest" />
+    <property name="another_arguments" value="." />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- SkipTest -->
+  <target name="skip">
+    <property name="test_target" value="SkipTest" />
+    <property name="another_arguments" value="." />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- ZeroElementTest -->
+  <target name="zero">
+    <property name="test_target" value="ZeroElementTest" />
+    <property name="another_arguments" value="." />
+    <antcall target="exec_test"/>
+  </target>
+
+  <!-- All tests -->
+  <target name="diagall">
+    <antcall target="callback"/>
+    <antcall target="cancel"/>
+    <antcall target="data"/>
+    <antcall target="file"/>
+    <antcall target="filearray"/>
+    <antcall target="null"/>
+    <antcall target="skip"/>
+    <antcall target="zero"/>
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              CLEAN                                      -->
+  <!-- ======================================================= -->
+  <target name="clean" >
+    <delete>
+    <fileset dir="." >
+      <include name="*.class"/>
+    </fileset>
+    </delete>
+  </target>
+
+</project>

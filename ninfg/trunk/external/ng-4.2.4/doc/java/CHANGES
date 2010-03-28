@@ -1,0 +1,110 @@
+Ninf-G Java Client API ChangeLog
+
+===== followings are new features and bug fixes included in 4.0.0 release =====
+  - Different hostnames can be specified for each server as the
+    hostname of Ninf-G client.
+    (added a new attribute 'client_hostname' in <SERVER> section for
+    client configuration file.)
+
+  - Multiple <SERVER> sections can be described for one server.
+    (added a new attribute 'tag' in <SERVER> section for client
+    configuration file.)
+
+  - Ninf-G client is able to use RSL extensions.
+    (added a new attribute 'job_rslExtensions' in <SERVER> section for
+    client configuration file.)
+
+  - Bugs of memory and socket leaks by Java Client have been fixed.
+
+===== followings are new features included in 4.0.0b2 release =====
+(2005/10)
+  - In addition to GT2 Pre-WS GRAM, GT4 WS GRAM can be used
+    for remote process invocation.
+
+  - MDS4 (Information Services in GT4) has been supported.
+
+===== followings are new features and changes included in 2.4.0 release =====
+(2005/07)
+  - Timeout of sessions can be specified by a session attribute.
+
+  - Compression for filename type variable has been supported.
+
+  - Re-reading configuration file by a Ninf-G Client has been supported.
+    (Added NgGrpcClient#readConfig())
+
+  - A new attribute 'job_noWait' has been added for exiting Ninf-G Client
+    without waiting JOB_DONE
+
+  - Statistical information of compression has been added into NgGrpcExecInfo
+
+  - Division of arguments/results has been supported.
+
+  - The default loglevel has been changed from 0(None) to 2(Error)
+
+  - GASS is no longer used for transferring filename type variables.
+
+  - Following keywords for log_filePath has been added.
+    + %t: the time of created the file (yyyymmdd-hhmmss-MMM)
+    + %p: process-ID
+    + %h: hostname
+
+===== followings are changes included in 2.3.0 release =====
+(2004/11)
+  - The number of CPUS for MPI is specified by *handle.
+
+  - Some RSL attributes have been added.
+    (maxTime, maxWallTime, maxCpuTime)
+
+===== followings are new features and changes included in 2.2.0 release =====
+(2004/07)
+  - Session timeout feature has been added.
+
+  - commLog feature has been added.
+
+  - 0-size array can be used.
+
+  - A mechanism for invoking MPI jobs has been changed.
+    (mpi jobtype is used instead of direct execution of mpirun command.)
+
+  - Zlib data encoding has been added.
+
+===== followings are new features and changes included in 2.1.0 release =====
+
+(2004/04)
+  - argument shrink has added.
+
+  - Following attributes in "<SERVER>" section have been added.
+    + "job_queue"
+    + "job_project"
+    + "job_hostCount"
+    +  "job_minMemory",
+    + "job_maxMemory"
+
+  - The default value of "crypt" has been changed from "SSL" to "false".
+
+===== followings are new features and bug fixes included in 2.0.0 release =====
+
+(2004/01)
+  - heartbeat has been added.
+
+  - Bugs of String type variable has been fixed.
+    (IN/INOUT mode didn't work)
+
+  - callback type variable has been added.
+
+===== followings are new features and bug fixes included in 2.0.0a2 release =====
+
+  - Bugs of MDS access problem have been fixed
+    (Requires user credentials when it searches on MDS servers)
+
+(2003/12)  
+  - XML protocol has been added.
+
+  - filename type variable has been added
+
+  - Bugs of reading configuration file problem has been fixed.
+    (Wrong descriptions in client configuration file caused a bug).
+
+(2003/11)  
+  - Bugs of crypt problem has been fixed.
+    (Cannot send/receive data without encrypt or with GSI enabled socket)

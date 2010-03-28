@@ -1,0 +1,1966 @@
+<!--
+  $RCSfile: tutorial.html,v $ $Revision: 1.8 $ $Date: 2008/03/28 09:54:27 $
+  $AIST_Release: 5.0.0 $
+  $AIST_Copyright:
+   Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+   National Institute of Advanced Industrial Science and Technology
+   Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+   
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+   $
+ -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+<title>Instruction Manual of Ninf-G</title>
+</head>
+<body bgcolor=white>
+
+<h1><a name="Instruction_Manual">
+Instruction Manual of Ninf-G</a></h1>
+
+
+<p>These guidelines provide detailed examples for using Ninf-G.
+In addition to the instructions on Ninf-G given in Chapters 2 to
+9, also see the sample programs.</p>
+
+<hr>
+
+<h2> Table of contents </h2>
+
+<ul>
+<li><a href="#Basic_information">
+    1. Basic information </a>
+<li><a href="#Batch_system">
+    1.1 Batch system </a>
+<li><a href="#Globus_Toolkit">
+    1.2 Globus Toolkit </a>
+<li><a href="#Ninf-G">
+    1.3 Ninf-G </a>
+<li><a href="#What_can_ninfg_do">
+    1.3.1 What can Ninf-G do? </a>
+<li><a href="#Unsupported_functions">
+    1.3.2 Unsupported functions in Ninf-G </a>
+</ul>
+
+<ul>
+<li><a href="#How_to_use_Ninf-G">
+    2. How to use Ninf-G </a>
+<li><a href="#Technical_terms">
+    2.1 Technical terms and definitions </a>
+<li><a href="#Assumed_operating_environment">
+    2.2 Assumed operating environment </a>
+<li><a href="#Sample_program">
+    2.3 Sample program </a>
+<li><a href="#User_prepared_files">
+    2.4 Ninf-G user-prepared files and settings </a>
+
+<li><a href="#Configuration">
+    3. Configuration </a>
+<li><a href="#Configuration_of_Globus_Toolkit">
+    3.1 Configuration of Globus Toolkit </a>
+<li><a href="#Configuration_of_Ninf-G">
+    3.2 Configuration of Ninf-G </a>
+<li><a href="#Configuration_initial">
+    3.3 Initial configuration </a>
+</ul>
+
+<ul>
+<li><a href="#Test_not_Ninf-G_based">
+    4. Sequential Program </a>
+<li><a href="#Test_1server">
+    5. Test of Ninf-G with the API of synchronous call (1 server)</a>
+<li><a href="#Test_2servers">
+    6. Test of Ninf-G with the API of asynchronous call (2 servers) </a>
+<li><a href="#Test_array">
+    7. Multiple job execution with a single request for job activation </a>
+<li><a href="#Test_remote_object">
+    8. Using remote object capability of Ninf-G </a>
+<li><a href="#Test_MPI">
+    9. Using MPI </a>
+</ul>
+
+<ul>
+<li><a href="#FAQ_top">
+    12. FAQ </a>
+<li><a href="#FAQ_Q1">
+    Q1. Is the domain name necessary for the server's name? </a>
+<li><a href="#FAQ_Q2">
+    Q2. What causes the execution error and log output? </a>
+<li><a href="#FAQ_Q3">
+    Q3. What does the error message "Request to Invoke Server XXX(0) failed"
+    mean? </a>
+<li><a href="#FAQ_Q4">
+    Q4. What does the error message "Unexpected job_done" mean? </a>
+<li><a href="#FAQ_Q5">
+    Q5. The error about Information Services occur. </a>
+<li><a href="#FAQ_Q6">
+    Q6. What is the file ~/gram_job_mgr_[numerics].log on server's home
+    directory? </a>
+<li><a href="#FAQ_Q7">
+    Q7. Is a sample program for Ninf-G available? </a>
+<li><a href="#FAQ_Q8">
+    Q8. Computation time on the server is long. Is it OK? </a>
+<li><a href="#FAQ_Q9">
+    Q9. How do I debug? </a>
+<li><a href="#FAQ_Q10">
+    Q10. What does the heartbeat-related warning mean? </a>
+<li><a href="#FAQ_Q11">
+    Q11. Is shared memory available for Ninf-G? </a>
+<li><a href="#FAQ_Q12">
+    Q12. Can I set the compiler and linker? </a>
+<li><a href="#FAQ_Q13">
+    Q13. Why are jobs not executed immediately? </a>
+<li><a href="#FAQ_Q14">
+    Q14. What is the workDirectory? </a>
+<li><a href="#FAQ_Q15">
+    Q15. Why aren't stdout and stderr are sent to the client? </a>
+<li><a href="#FAQ_Q16">
+    Q16. How can I create a NRF file? </a>
+</ul>
+
+<hr>
+
+<h2><a name="Basic_information">
+1. Basic information </a></h2>
+
+<p>Ninf-G software helps the development and execution of parallel
+task application working on a computational Grid consisting of
+multiple clusters.
+Ninf-G was developed to utilize various Grid middleware like
+the Globus Toolkit.
+In order to exercise this tutorial, the required software has to be
+properly installed and ready for use in all the machines (clusters).
+Required software includes a batch scheduler (for clusters),
+the Globus Toolkit (optional), SSH (optional) and Ninf-G.
+An outline of the batch scheduler, the Globus Toolkit and
+Ninf-G is given below.</p>
+
+<h3><a name="Batch_system">
+1.1 Batch system </a></h3>
+
+A batch system is used for successive execution of jobs
+that users place in the queue.
+It is introduced for the following functions:
+
+<ul>
+<li> The system automatically selects an empty node and executes
+the user's job,
+and the user does not have to assign which computation host is to be used.
+
+<li> When many users share the clusters,
+the system controls the number of jobs that can be executed simultaneously.
+It also provides each user with a virtual exclusive use environment
+and prevents overload.
+
+<li> If all the users use the clusters through the batch system,
+the system can check the usage of the clusters and the information
+of processes running on the computational hosts,
+and eliminate unwanted processes remaining on the computational hosts.
+</ul>
+
+<p>These functions are important for the management and use of
+large-scale clusters, and in fact most large-scale clusters
+have introduced batch systems and require users to always
+use the batch system.
+Portable Batch System (PBS) and Sun Grid Engine (SGE) are
+widely used as batch systems.
+
+<h3><a name="Globus_Toolkit">
+1.2 Globus Toolkit </a></h3>
+
+<p>Globus Toolkit is software package that provides UNIX commands
+and API of C and Java to implement some of the functions necessary
+for the development and execution of Grid software and applications.
+Currently, Globus Toolkit Version 4 is released
+and Ninf-G Version 5 supports Globus Toolkit Version 4.</p>
+
+<p>In general in Pre-WS GRAM, Globus Gatekeeper runs on the entrance
+host of each cluster and sets a jobmanager,
+which activates jobs on the computation hosts with help of
+a batch system such as PBS or SGE, as a default jobmanager.
+In other words, unless a jobmanager is explicitly specified,
+jobs are activated on the computation hosts through the batch system.
+The computation hosts are utilized through Globus Gatekeeper
+on the entrance host and the jobmanager,
+since Globus Gatekeeper is not running on the computation hosts.</p>
+
+<h3><a name="Ninf-G">
+1.3 Ninf-G </a></h3>
+
+<p>Ninf-G is the supporting software for the development
+and execution of programs with the Grid Remote Procedure Call
+(GridRPC) on Grid.
+Here we explain the Ninf-G Version 5 (Ninf-G5).
+Ninf-G provides simple, yet powerful, client-server-based
+frameworks for programming on the Grid.  Ninf-G has been designed
+so that it provides 1) high performance in a large-scale
+computational Grid, 2) rich functionalities which are required to
+compensate for the heterogeneity and unreliability of a Grid
+environment, and 3) an API which supports easy development and
+execution of Grid applications.
+For the details of Ninf-G,
+see <a href="#How_to_use_Ninf-G"> Chapt. 2 "How to use Ninf-G" </a>
+of this document and "Ninf-G Users Manual"
+(in the package, or
+<a href="http://ninf.apgrid.org/documents/">
+Web page</a>).
+
+<h4><a name="What_can_ninfg_do">
+1.3.1 What can Ninf-G do?</a></h4>
+
+<p>Ninf-G allows you to carry out the following tasks.</p>
+
+<ul>
+<li> Parallelization of programs with RPC model
+<li> Rapid development of Grid programs with RPC model
+<li> Large-scale computation with multiple computational servers
+<li> Dynamical assignment, use and release of computational servers
+<li> Development of programs to detect and
+    prevent accidents and failure in computational servers and network
+</ul>
+
+<h4><a name="Unsupported_functions">
+1.3.2 Unsupported functions in Ninf-G </a></h4>
+
+<p>Simply speaking, Ninf-G does not provide the following functions.
+The following are the functions that should be set,
+if necessary, in the programs using Ninf-G.</p>
+
+<ul>
+<li> Scheduling function
+    (Dynamical search and selective use of available resources, and
+     dynamical selection of computation node according to the loads on computational servers.)
+<li> Automatic resubmitting of jobs after the detection of failure
+<li> Automatic transforming function from MPI programs to Ninf-G programs.
+<li> Automatic parallelization of computational program
+<li> Parallel programming with shared memory model
+<li> Automatic finding of computation hosts and their use, including application for permission to use computation hosts.
+</ul>
+
+<hr>
+
+<h2><a name="How_to_use_Ninf-G">
+2. How to use Ninf-G </a></h2>
+
+<p>In Chapter 3 and the following chapters,
+the procedure for actual use of Ninf-G is described
+based on the sample programs.
+Firstly, we rewrite a sequential C program of non Ninf-G type
+to a program that uses Ninf-G,
+and gradually sophisticate the utilization of Ninf-G.</p>
+
+<p>In this and the following chapters,
+use the sample programs to check the procedure.</p>
+
+<h3><a name="Technical_terms">
+2.1 Technical terms and definitions </a></h3>
+
+<p>We define the technical terms that will be used in this
+and the following chapters and explain the terms necessary
+for using Ninf-G.</p>
+
+<dl>
+<dt> User:
+<dd>
+<p>The user is the one that creates Ninf-G based programs.</p>
+
+<dt> RPC function:
+<dd>
+<p>RPC function means in Ninf-G a function that actually carries out
+numerical computation.
+It is executed on a computational server and requires
+computational resources (CPU time and memory) on
+the server for the execution.
+The user should create an RPC function and can use the functions
+that other users made (share the RPC functions).
+(Users should set a function that requires
+the computational resources as an RPC function.)</p>
+
+<dt> Ninf-G client:
+<dd>
+<p>It is a program or a process that calls RPC functions
+and controls the entire computation.
+The Ninf-G client program should be created by users.</p>
+
+<dt> Ninf-G Executable, Ninf-G server program:
+<dd>
+<p>Ninf-G Executable is a program to perform numerical computation
+as an RPC function.
+It is activated when a function handle is created from the Ninf-G client.
+When activated, it waits for start request for the
+execution (computation) of the RPC function.</p>
+
+<p>There are two types of Ninf-G Executable:
+One that can define only one RPC function and
+does not retain the function call state
+i.e. does not retain the result of the previous function call,
+and the other that can define more than one RPC function (method)
+and retain the result of the previous function call.
+The latter is called the Ninf-G remote object.
+
+<dt> Client machine:
+<dd>
+<p>A machine on which users execute the Ninf-G client program</p>
+
+<dt> Server machine:
+<dd>
+<p>A machine on which users execute the Ninf-G server program</p>
+
+<dt> Function handle:
+<dd>
+<p>It is <code>grpc_function_handle_t</code> type data prepared
+or created by the Ninf-G client to call the RPC function.
+It is an abstraction of the connection (communication path)
+between the Ninf-G remote object and the Ninf-G client.</p>
+
+<p>A computational server name needs to be given for
+creating a function handle.
+A function handle has one-to-one correspondence with the
+Ninf-G Executable process activated on the computational server.</p>
+
+<dt> Object handle:
+<dd>
+<p>It is <code>grpc_object_handle_t_np</code> type data prepared
+or created by the Ninf-G client to make the Ninf-G remote object
+and call a method function.
+It is an abstraction of the connection (communication path) between
+the Ninf-G remote object and the Ninf-G client.</p>
+
+<p>A computational server name needs to be given for
+creating an object handle.
+An object handle has one-to-one correspondence with the
+Ninf-G Executable process activated on the computational server.</p>
+
+<dt> IDL file:
+<dd>
+<p>IDL is an abbreviation of Interface Description Language
+and defines, in an IDL file, the input/output type and order
+for the RPC function call</p>
+
+<p>In Ninf-G IDL, object files (ending with .o) and others
+can be specified to make a link for
+the actual computational processing procedure
+and execution of the function described in IDL.</p>
+
+<p>The Ninf-G server program and NRF file are
+created based on this user-created IDL file.</p>
+
+<dt> NRF file:
+<dd>
+<p>NRF file is a file containing information of a Ninf-G
+Executable, such as path and arguments of the Ninf-G Executable.</p>
+
+NRF file is created when the IDL file is compiled and the Ninf-G
+Executable is created on the server machine.  Ninf-G Client
+retrieves information of Ninf-G Executable from the NRF
+file when its attribute is specified in Client Configuration file.</p>
+</dl>
+
+<p>In the following command line explanation,
+there are lines starting with "%" or "$".
+The symbols mean a command prompt on various shells.
+If the line starts with "%", the command is executed
+on csh (C shell) or tcsh.
+If the line starts with "$", the command is executed
+on sh (Bourne shell) or bash.</p>
+
+<h3><a name="Assumed_operating_environment">
+2.2 Assumed operating environment </a></h3>
+
+<p>In this document, the following operating environment is assumed.</p>
+
+<ul>
+<li> Client machine : client.example.org
+<li> Server machine : server01.example.org and/or server02.example.org
+</ul>
+
+<p>The above machine names are just tentative and do not exist.
+Replace them with the actual machine names users use to edit
+and execute the samples.</p>
+
+<h3><a name="Sample_program">
+2.3 Sample program </a></h3>
+
+<p>The sample programs are listed below.</p>
+
+<p>The directory of each sample program is presented
+on the right side of the symbol ":".</p>
+
+<p>
+<center>
+<table>
+<tr>
+<th> Chapter </th>
+<th> Contents </th>
+<th> : </th>
+<th> Directory name </th>
+</tr>
+
+<tr>
+<td> 4 </td>
+<td><a href="#Test_not_Ninf-G_based">
+    Sequential Program </a></td>
+<td> : </td>
+<td><a href="serial/">serial</a></td>
+</tr>
+
+<tr>
+<td> 5 </td>
+<td><a href="#Test_1server">
+    Test of Ninf-G with the API of synchronous call (1 server)</a></td>
+<td> : </td>
+<td><a href="1server/"> 1server </a></td>
+</tr>
+
+<tr>
+<td> 6 </td>
+<td><a href="#Test_2servers">
+    Test of Ninf-G with the API of asynchronous call (2 servers) </a></td>
+<td> : </td>
+<td><a href="2servers/"> 2servers </a></td>
+<td></td>
+</tr>
+
+<tr>
+<td> 7 </td>
+<td><a href="#Test_array">
+    Multiple job execution with a single request of job activation </a></td>
+<td> : </td>
+<td><a href="array/"> array </a></td>
+<td></td>
+</tr>
+
+<tr>
+<td> 8 </td>
+<td><a href="#Test_remote_object">
+    Using remote object capability of Ninf-G </a></td>
+<td> : </td>
+<td><a href="object/"> object </a></td>
+</tr>
+
+<tr>
+<td> 9 </td>
+<td><a href="#Test_MPI"> Using MPI </a></td>
+<td> : </td>
+<td><a href="mpi/"> mpi </a></td>
+</tr>
+
+</table>
+</center>
+</p>
+
+<h3><a name="User_prepared_files">
+2.4 Ninf-G user-prepared files and settings </a></h3>
+
+<p>Users should prepare the following files to use Ninf-G
+and the sample programs include them.</p>
+
+<ol>
+<li> Files necessary for server machine
+
+<ul>
+<li> IDL file
+<li> Object files of computational functions that the user defined
+in the IDL file, and library files
+</ul>
+
+<li> Files necessary for client machines
+
+<ul>
+<li> Ninf-G client program
+<li> Configuration file
+<li> NRF file (created in IDL compiling)
+</ul>
+
+</ol>
+
+<p>Before the execution of the sample programs,
+make the following modification.</p>
+
+<ul>
+<li> Modification of client configuration file
+<p>Change "example.org" in the file to the host name of the server
+actually used.</p>
+
+<ul>
+<li> Change the hostname in &lt;SERVER&gt; section.
+<li> Change the hostname in source attribute in
+&lt;INFORMATION_SOURCE&gt; section.
+</ul>
+
+<li> Select one of Invoke Server GT4py (WS GRAM),
+GT2c (Pre-WS GRAM) or SSH and enable the invoke_server attribute
+in &lt;SERVER&gt; section.
+
+<li> For Invoke Server GT4py or SSH for parallel systems using a batch
+queueing systems, set the jobmanager attribute in &lt;SERVER&gt;
+section appropriately, e.g. jobmanager-pbs and jobmanager-sge.
+</ul>
+
+<hr>
+
+<h2><a name="Configuration">
+3. Configuration </a></h2>
+
+<p>You need to set user environments for Ninf-G prior to the
+execution of Ninf-G applications. In addition, if you use the
+Globus Toolkit, you need to set user environments for the Globus
+Toolkit.
+The configuration of Globus Toolkit and Ninf-G is necessary on every login,
+although you do not have to set manually every time
+if you write the procedure in advance in the file,
+such as .cshrc, .login, .profile or .bashrc that the shell loads
+on each login.</p>
+
+<h3><a name="Configuration_of_Globus_Toolkit">
+3.1 Configuration of Globus Toolkit </a></h3>
+
+<p>If the Invoke Server GT4py (WS GRAM) or GT2c (Pre-WS GRAM) is used,
+Globus Toolkit must be available.</p>
+
+<p>For the user environment of Globus Toolkit,
+see Globus Toolkit manual.
+Configuration of Globus Toolkit Version 4,
+for example, should be set in the following steps.</p>
+
+<ul>
+<li> Set the environment variable GLOBUS_LOCATION to the directory
+where Globus Toolkit is installed.
+<li> Load the configuration file globus-user-env.sh or globus-user-env.csh.
+</ul>
+
+(Configuration for sh or bash)
+<pre><code>
+$ GLOBUS_LOCATION=[directory where Globus Toolkit is installed]
+$ export GLOBUS_LOCATION
+$ . $GLOBUS_LOCATION/etc/globus-user-env.sh
+</code></pre>
+
+(Configuration for csh or tcsh)
+<pre><code>
+% setenv GLOBUS_LOCATION [directory where Globus Toolkit is installed]
+% source $GLOBUS_LOCATION/etc/globus-user-env.csh
+</code></pre>
+
+<h3><a name="Configuration_of_Ninf-G">
+3.2 Configuration of Ninf-G </a></h3>
+
+<p>User configuration of Ninf-G should be set in the following
+steps.</p>
+
+<ul>
+<li> Set the environment variable NG_DIR to the directory where Ninf-G is installed.
+<li> Load the configuration file $NG_DIR/etc/ninfg-user-env.{sh,csh}.
+</ul>
+
+(Configuration for sh or bash)
+<pre><code>
+$ NG_DIR=[directory where Ninf-G is installed]
+$ export NG_DIR
+$ . $NG_DIR/etc/ninfg-user-env.sh
+</code></pre>
+
+(Configuration for csh or tcsh)
+<pre><code>
+% setenv NG_DIR [directory where Ninf-G is installed]
+% source $NG_DIR/etc/ninfg-user-env.csh
+</code></pre>
+
+<h3><a name="Configuration_initial">
+3.3 Initial configuration </a></h3>
+
+<p>Before running Ninf-G Client, preparation is required on the client
+machine.</p>
+
+<ul>
+<li>Preparation for Invoke Server GT4py or GT2c
+
+<p>If the Invoke Server GT4py or GT2c is used, Globus proxy
+certificate is required.</p>
+
+<pre><code>
+% grid-proxy-init
+'Enter passphrase'
+</code></pre>
+
+The command <code>grid-proxy-init</code> is not necessary for all
+the executions of the client programs.
+The command does not have to be executed again until
+the created proxy certificate will be expired.
+You can confirm the status of your proxy certificate by
+<code>grid-proxy-info</code> command.
+
+<li> Test your Globus if you use Invoke Server GT4py or GT2c
+
+<p>You should test the Globus GRAM.  If the remote WS GRAM or
+Pre-WS GRAM server (for example, server01.example.org) is
+available, the following test should be succeeded.</p>
+
+<p>
+(for WS GRAM server)
+<pre><code>
+% globusrun-ws -submit -F https://server01.example.org:8443/ -s -c /bin/hostname
+</code></pre>
+</p>
+
+<p>
+(for Pre-WS GRAM server)
+<pre><code>
+% globus-job-run server01.example.org /bin/hostname
+</code></pre>
+</p>
+
+<p>If the command is successful, the command outputs the hostname
+of the server.</p>
+
+<li> Preparation for Invoke Server SSH
+
+<p>If Invoke Server SSH is used, remote shell execution without
+password or passphrase must be possible.</p>
+
+<p>For example, SSH Agent is used for this case.</p>
+
+<p>
+(for sh or bash)
+<pre><code>
+$ eval `ssh-agent`
+$ ssh-add
+'Enter passphrase'
+</code></pre>
+</p>
+
+<p>
+(for csh or tcsh)
+<pre><code>
+% eval `ssh-agent -c`
+% ssh-add
+'Enter passphrase'
+</code></pre>
+</p>
+
+<p>The ssh-agent command does not have to be executed again
+during the agent is alive and the user does not logout.</p>
+
+<li> Test Invoke Server SSH
+
+<p>If a SSH daemon in the remote server (for example,
+server01.example.org) is available,
+the following test should be succeeded.</p>
+
+<pre><code>
+% ssh server01.example.org /bin/hostname
+</code></pre>
+
+<p>If the test is successful, the command outputs the hostname of
+the server without entering password.</p>
+</ul>
+
+
+<hr>
+
+<h2><a name="Test_not_Ninf-G_based">
+4. Sequential Program </a></h2>
+
+<p>The sample program which does not utilize Ninf-G is
+available in the "serial" directory.</p>
+
+<p>This sample program is a sequential program to compute the
+circle ratio using the Monte Carlo method.
+In the Monte Carlo method, a dot is randomly placed within
+a square whose side length is 1.
+Check if the distance between the origin and the dot is shorter than 1.
+The circle ratio can be obtained by repeating these steps
+a number of times.</p>
+
+<p>The circle ratio is derived from the following equation:</p>
+
+<pre>
+  Circle ratio
+    = the number of dots whose distance from the origin is shorter than 1
+        / total number of dots x 4
+</pre>
+
+<p>In this method, the computation precision of the circle ratio
+varies with the number of dots.
+The number of dots should be increased to improve the precision.</p>
+
+<p>Placing dots within the square requires some computational capacity,
+and more capacity is needed to achieve a higher precision result.
+Ninf-G uses RPC to improve the utilization of the computational
+capacity.</p>
+
+<p>In the simple execution of the programs created
+by not utilizing Ninf-G, pi_serial.c,
+only one CPU can be used as computation power or resource.
+However Ninf-G allows simultaneous/parallel use of multiple
+computational servers and can produce more dots
+in the same computation time.
+Consequently, a more precise result could be obtained.</p>
+
+<p>A function suitable for RPC is one that can start computation
+only with the information provided as input,
+just like <code>pi_trial()</code> function used in this program.</p>
+
+<p>Execute the program in the following steps. </p>
+
+<ol>
+<li> Change the directory.
+<pre>
+% cd serial
+</pre>
+
+<li> Compile.
+<pre>
+% make
+</pre>
+<p>The execution file "pi_serial" is created.</p>
+
+<li> Execute.
+<pre>
+% ./pi_serial 100000
+</pre>
+<p>The computed circle ratio is displayed as a result.
+Here 100000 is the number of dots and you may enter
+an arbitrary number.</p>
+</ol>
+
+<hr>
+<h2><a name="Test_1server">
+5. Test of Ninf-G with the API of synchronous call (1 server)
+</a></h2>
+
+<p>The first example uses a synchronous call.</p>
+
+<p>A server program is invoked by a client program.
+The client and the server run on different machines.</p>
+
+<center>
+<table>
+<tr><td> Sample program </td><td> : </td>
+<td><a href="1server/"> 1server </a></td></tr>
+
+<tr><td> Server machine </td><td> : </td>
+<td> server01.example.org (Step 5.1) </td></tr>
+
+<tr><td> Client machine </td><td> : </td>
+<td> client.example.org (Step 5.2) </td></tr>
+</table>
+</center>
+
+<p>Change to the sample program directory before proceeding.</p>
+<pre>
+% cd 1server
+</pre>
+
+<h3> 5.1 Server setup </h3>
+
+<p>Login on the server machine and go to the directory 1server.
+Follow the below steps.<p>
+
+<ol>
+<li> Compiling of IDL file
+<pre>
+% ng_gen pi.idl
+</pre>
+
+<li> Creation of Ninf-G Executable
+<pre>
+% make -f pi.mak
+</pre>
+
+<p>(The above steps, i.e. server setup (1) and (2), are given in Makefile.
+So the execution of the '<code>make stub</code>' command will also follow the same
+procedure.)</p>
+</ol>
+
+<p>The NRF file "pi.server01.example.org.nrf"
+that contains the server machine name is created simultaneously.
+This file is used by Ninf-G client.</p>
+
+
+<h3> 5.2 Client setup </h3>
+
+<ol>
+<li> Compiling of client program
+<pre>
+% ng_cc -o pi_client_1server pi_client_1server.c
+</pre>
+
+<p>(The above steps, i.e. client setup (1), are given in Makefile.
+So the execution of the '<code>make pi_client_1server</code>' command will
+also follow the same procedure.)</p>
+
+<li> Copy of NRF file
+<p>The file "pi.server01.example.org.nrf" in the directory
+on server01.example.org, where Ninf-G Executable is compiled,
+must be copied to the client machine client.example.org.</p>
+
+<pre>
+% scp server01.example.org:/path/to/pi.server01.example.org.nrf .
+</pre>
+
+<p>(In this case the command <code>scp</code> is used for copying.
+It is a program included in SSH
+(Secure SHell: Remote operation command with coded communication path).
+Here <code>scp</code> copies the remote file into
+the current directory. )</p>
+
+<li> Modification of configuration file
+<p>Edit client.conf file.
+(Use the text editor like <code>vi</code> and <code>emacs</code> command)</p>
+
+<p>
+<ul>
+<li> Change "example.org" to "server01.example.org".
+<li> Change "pi.example.org.nrf" to "pi.server01.example.org.nrf".
+<li> Enable one of Invoke Servers by removing first <code>#</code>.
+</ul>
+</p>
+
+<li> Execution of client program
+
+<pre>
+% ./pi_client_1server 10000 server01.example.org
+</pre>
+
+<p>pi_client_1server receives the number of dots and
+the server host name in the arguments.</p>
+</ol>
+
+<p>It should be noted that a single activation of a job requires
+more than several seconds if the Globus Toolkit is used.
+Most of the time is caused by the overhead of the Globus Toolkit
+such as authentication and authorization by GSI and process
+invocation via the Globus jobmanager.
+Job activation corresponds to the creation of a function handle
+for Ninf-G, and therefore the creation of a function handle
+takes more than several seconds.</p>
+
+<p>This means, even if the actual RPC calculation time is
+less than 1 second, the execution of the client program takes
+more than several seconds.
+But the overhead can be negligible for large-scale applications.</p>
+
+<p>Also, this waiting time varies depending on the batch system
+and queuing system of jobs.
+In some scheduling of the batch system, the activation of jobs
+may not start immediately and may have to wait until other jobs end.</p>
+
+<h3> 5.3 How to change the program to use Ninf-G </h3>
+
+<p>1server/pi_client_1server executed in this chapter is
+a program modified from the one explained in Chapter 4.</p>
+
+<p>The Ninf-G server program for calculating PI is
+defined in the IDL file, pi.idl.
+To be more precise, the program is modified so that
+the <code>pi_trial()</code> function can be used as
+an RPC function and executed through Ninf-G.
+Also in the modification, the <code>pi_trial()</code> function is called
+from an IDL file and the RPC function <code>pi_trial()</code>
+defined in the IDL is called from the Ninf-G client program.</p>
+
+<p>A procedure for calling the defined RPC function
+<code>pi_trial()</code> is also added in the Ninf-G client program.
+The added procedure calls the following GridRPC API functions.</p>
+
+<ul>
+<li> API of the initialization and finalization for using Ninf-G
+<p><code>grpc_initialize()</code>, <code>grpc_finalize()</code></p>
+
+<li> API of the creation and destruction of function handle for calling RPC
+<p><code>grpc_function_handle_init()</code>,
+<code>grpc_function_handle_destruct()</code></p>
+
+<li> API for requesting the function handle to execute the RPC
+<p><code>grpc_call()</code></p>
+</ul>
+
+<p>This GridRPC APIs enable RPC model computation with Ninf-G.</p>
+
+<p>With these steps, it is confirmed that the Ninf-G client program
+activated on client.example.org requests server01.example.org
+to execute PI library function.</p>
+
+<p>The client machine and the server machine can be located
+at geographically separated locations.
+As seen here, the computation of using remote computation
+resources over the network can be performed with Ninf-G.</p>
+
+<hr>
+<h2><a name="Test_2servers">
+6. Test of Ninf-G with the API of asynchronous call (2 servers) </a></h2>
+
+<p>Next, the operation of Ninf-G is tested with the API of asynchronous call.</p>
+
+<p>Two server programs are invoked by a client program.
+The client and the server run on different machines.
+Parallel computation is realized by distributing
+the job to the two computational servers.</p>
+
+<center>
+<table>
+<tr><td> Sample program </td><td> : </td>
+<td><a href="2servers/"> 2servers</a></td></tr>
+
+<tr><td> Server machine 1</td><td> : </td>
+<td> server01.example.org (Step 6.1) </td></tr>
+
+<tr><td> Server machine 2</td><td> : </td>
+<td> server02.example.org (Step 6.1) </td></tr>
+
+<tr><td> Client machine </td><td> : </td>
+<td> client.example.org (Step 6.2) </td></tr>
+</table>
+</center>
+
+<p>Move to the sample program directory before proceeding.</p>
+<pre>
+% cd 2servers
+</pre>
+
+<h3> 6.1 Server setup </h3>
+
+<p>Login each server machine and follow the steps in 5.1. 
+(Since Makefile contains the rule, the execution of the make command
+will create the server program.)
+<p>
+
+<h3> 6.2 Client setup </h3>
+
+<ol>
+<li> Modification of client program file
+<p>Modify pi_client_1server.c, used for test in Chapter 5,
+for executing asynchronous computation.
+(Modified source file is pi_client_2servers.c.)</p>
+
+<p>
+<ul>
+<li> Major changes
+<p>
+<ul>
+<li>grpc_call() is replaced with grpc_call_async() and grpc_wait_all(). 
+<li>Since we have 2 computational servers,
+2 data structure related to the computational servers should be prepared.
+<li>Creation of a function handle, call of RPC and destruction
+of the function handle are repeated for each of the servers used. 
+</ul>
+</p>
+</ul>
+</p>
+
+<li> Compiling of client program
+<p>Login the client machine and make an operation.</p>
+
+<pre>
+% ng_cc -o pi_client_2servers pi_client_2servers.c
+</pre>
+
+<li> Copy of NRF file
+<p>The files "pi.server01.example.org.nrf" and
+"pi.server02.example.org.nrf" in the directory on
+server01.example.org and server02.example.org,
+where Ninf-G Executable is compiled,
+must be copied to the client machine client.example.org.</p>
+
+<pre>
+% scp server01.example.org:/path/to/pi.server01.example.org.nrf .
+% scp server02.example.org:/path/to/pi.server02.example.org.nrf .
+</pre>
+
+<li> Modification of configuration file
+<p>Edit client.conf file.</p>
+<ul>
+<li> Change "example1.org" to "server01.example.org".
+<li> Change "pi.example1.org.nrf" to "pi.server01.example.org.nrf".
+<li> Change "example2.org" to "server02.example.org".
+<li> Change "pi.example2.org.nrf" to "pi.server02.example.org.nrf".
+<li> Enable one of Invoke Servers by removing first <code>#</code>
+for both servers.
+</ul>
+
+<li> Execution of client program
+<pre>
+% ./pi_client_2servers 10000 server01.example.org server02.example.org
+</pre>
+
+<p>pi_client_2servers receives the number of dots and
+the server host name in the arguments.</p>
+</ol>
+
+<p>With these steps, it is confirmed that the usage of the
+API for asynchronous GridRPC call on the Ninf-G client program.</p>
+
+<p>The API for synchronous GridRPC call used in the previous Chapter
+is a blocking call and the API will not return until the server
+completes the computation and the client receives the results
+from the server.
+Therefore, the Ninf-G client can do nothing until the API will
+return.</p>
+
+<p>The asynchronous GridRPC call is a non-blocking call and
+it does not wait for the end of computation by the server.
+Therefore, the Ninf-G client is able to call other functions
+immediately after calling <code>grpc_call_async()</code> with
+regardless of the status of the computation by the server.
+For example, you can call <code>grpc_call_async()</code> for
+another server after calling <code>grpc_call_async()</code>.
+It is required to call waiting functions such as
+<code>grpc_wait()</code> or its variants
+(e.g. <code>grpc_wait_all()</code>) for waiting the end of
+the computation and receive the result from the server.</p>
+
+<p>Asynchronous GridRPC call is usually used for the implementation
+of task-parallel applications, i.e. calling
+multiple asynchronous GridRPC calls simultaneously
+on different servers enables to implement task-parallel
+applications.</p>
+
+<p>In this program, the computational servers share the dots,
+whose total number is specified in the command line argument,
+and carry out the computation in parallel.</p>
+
+<p>Therefore the computation time of this program with two servers
+is smaller than that with a single server.
+If the number of the dots is of the order of 10,000,
+the computation ends immediately and the effect of
+parallelization is not clear.
+However if the computation takes a long time such as one day,
+multiple server computation reduces the computation time significantly.
+The more computational servers we have,
+the smaller the computation time is.</p>
+
+<hr>
+
+<h2><a name="Test_array">
+7. Multiple job execution with a single request for job activation </a></h2>
+
+<p>A cluster system usually has multiple computational servers
+(computational nodes).
+The jobs submitted to the job submission node of the cluster system
+are allocated to each computational node and executed in the system.</p>
+
+<p>To use more than one computational node from Ninf-G,
+a function handle needs to be created for each of the nodes.</p>
+
+<p>The creation of one function handle takes at least several seconds,
+and that of more than one function handle takes time
+proportional to the number of the handles to be created.
+Also, a Globus Toolkit jobmanager process is activated in the
+entrance host every time the request
+for creating a function handle is submitted.
+So the entrance host will be overloaded if more than several
+tens or more than several hundreds of function handles are
+created in the simple way, i.e. by making the handle one by one.
+To prevent the overload, Ninf-G has a function to create
+more than one function handle simultaneously
+when it receives a single request for the creation of the handles.
+With this function of Ninf-G, the creation time is saved and
+a large number of (several tens to several hundreds of)
+function handles can be created.</p>
+
+<p>A test on using this function is conducted in this chapter.</p>
+
+<center>
+<table>
+<tr><td> Sample program </td><td> : </td>
+<td><a href="array/"> array </a></td></tr>
+
+<tr><td> Server machine </td><td> : </td>
+<td> server01.example.org (Step 7.1) </td></tr>
+
+<tr><td> Client machine </td><td> : </td>
+<td> client.example.org (Step 7.2) </td></tr>
+</table>
+</center>
+
+<p>Move to the sample program directory before proceeding.</p>
+<pre>
+% cd array
+</pre>
+
+<h3> 7.1 Server setup </h3>
+<p>Login the server machine (cluster management node) and
+make operations following the steps in 5.1.
+
+<h3> 7.2 Client setup </h3>
+
+<ol>
+<li> Modification of client program file
+<p>pi_client_2servers.c, used as the sample in Chapter 6,
+is modified with API <code>grpc_function_handle_array_init_np()</code>
+to create more than one function handle simultaneously.
+(The source file obtained by the modification is pi_client_array.c.)</p>
+
+<p>
+<ul>
+<li> Major changes
+<ul>
+<li> 2 calls for <code>grpc_function_handle_init()</code>
+is changed to a single call for
+<code>grpc_function_handle_array_init_np()</code>.
+</ul>
+</ul>
+</p>
+
+<li> Compiling of client program
+<pre>
+% ng_cc -o pi_client_array pi_client_array.c
+</pre>
+
+<li> Copy of NRF file
+<p>The file "pi.server01.example.org.nrf"
+in the directory on server01.example.org,
+where Ninf-G Executable is compiled, should be copied to
+the client machine client.example.org.</p>
+
+<pre>
+% scp server01.example.org:/path/to/pi.server01.example.org.nrf .
+</pre>
+
+<li> Modification of configuration file
+<p>Edit client.conf file.</p>
+<ul>
+<li> Change "example.org" to "server01.example.org".
+<li> Change "pi.example.org.nrf" to "pi.server01.example.org.nrf".
+<li> Enable one of Invoke Servers by removing first <code>#</code>.
+<li> If the server is a parallel system using a batch queueing system
+and Invoke Server GT4py or SSH is used, specify an appropriate
+jobmanager.
+</ul>
+
+<li> Execution of client program
+<pre>
+% ./pi_client_array 10000 server01.example.org 4
+</pre>
+
+<p>pi_client_array receives arguments of the number of dots,
+server hostname, and the number of handles.</p>
+
+<p>"4" at the end of the command line represents the
+number of function handles to be created.
+Here the number is set to 4, although it is not necessarily 4.
+If the cluster system you use is shared with other users,
+pay attention to the number of the created handles
+and be sure to use the system insofar as it is allowed.</p>
+</ol>
+
+<p>This program uses
+"Simultaneous creation function of function handles"
+to suppress the overhead in the creation of function handles
+and keep the number of the jobmanagers activated in the
+entrance host as small as possible.
+This function is needed for the usage of a large size
+cluster system with tens to hundreds processors.</p>
+
+<h2><a name="Test_remote_object">
+8. Using remote object capability of Ninf-G </a></h2>
+
+<p>Ninf-G Executable is state-less.
+Namely, even when the RPC function is called repeatedly
+with the same function handle,
+the state in the previous call is not retained in Ninf-G Executable.
+So, data needs to be sent for each computation even
+in the repeated computations with the same data.</p>
+
+<p>Ninf-G provides Ninf-G Executable, as a remote object,
+capable of retaining states.
+More than one function (method) can be defined in the remote object,
+and the object provides a function for Ninf-G client to call
+these methods.</p>
+
+<p>For use of the remote object capability, object handles,
+not function handles, should be created.
+Object handles are the <code>grpc_object_handle_t_np</code> type data
+and abstraction of the connection (communication path)
+between Ninf-G remote object and Ninf-G client.
+Once an object handle is created,
+the corresponding remote object retains the state
+until the object handle is discarded.
+It can also call various methods to change the state
+for the object handle.</p>
+
+<p>For example when the input data of RPC is extremely large
+and the same input data is used in the call for every RPC,
+the remote object capability can be effectively utilized.
+Once an initialization method sending the large input data
+is called just one time after each handle is created,
+and saved in Ninf-G Executable,
+the large input data need not to be transferred again
+in the subsequent calls for RPC
+and the system performance is improved.</p>
+
+<p>The following is another example of
+the implementation of methods in Ninf-G class.</p>
+
+<ul>
+<li> Initialization processing method:
+<p>Arguments are given.
+The given arguments are stored in the data holding area.</p>
+
+<li> Computation 1 method:
+<p>The data in the holding area is used to execute Computation 1.
+The result is stored in the data holding area and not returned.</p>
+
+<li> Computation 2 method:
+<p>The result in the data holding area is used to execute Computation 2.
+The final result of Computation 2 is returned to the client.</p>
+</ul>
+
+<center>
+<table>
+<tr><td> Sample program </td><td> : </td>
+<td><a href="object/"> object </a></td></tr>
+
+<tr><td> Server machine </td><td> : </td>
+<td> server01.example.org (Step 8.1) </td></tr>
+
+<tr><td> Client machine </td><td> : </td>
+<td> client.example.org (Step 8.2) </td></tr>
+</table>
+</center>
+
+<p>Move to the sample program directory before proceeding.</p>
+
+<pre>
+% cd object
+</pre>
+
+<h3> 8.1 Server setup </h3>
+
+<ol>
+<li> Modification of IDL file
+<p> The IDL file pi.idl used in Chapters 5-7 is changed to an object.
+(The source file obtained in the modification is pi_object.idl)
+Edit pi_object.idl.</p>
+
+<p>
+<ul>
+<li> Major changes
+<ul>
+<li> Define is changed to DefClass.
+<li> Function processing method is moved to DefMethod pi_trial.
+</ul>
+</ul>
+</p>
+
+<li> Compiling of IDL file
+<pre>
+% ng_gen pi_object.idl
+</pre>
+
+<li> Creation of Ninf-G Executable
+<pre>
+% make -f pi_object.mak
+</pre>
+</ol>
+
+<h3> 8.2 Client setup </h3>
+
+<ol>
+<li> Modification of client program file
+<p>pi_client_2servers.c, used as an example in Chapter 6,
+is modified to a form that executes computation using
+Ninf-G remote object capability.
+(The source file obtained in the modification is pi_client_object.c)</p>
+
+<p>
+<ul>
+<li> Major changes
+<ul>
+<li> The name of the function to be called is modified.
+<li> The API and data structure starting from the grpc_function_handle
+is modified to those from grpc_object_handle.
+</ul>
+</ul>
+</p>
+
+<li> Compiling client program
+<pre>
+% ng_cc -o pi_client_object pi_client_object.c
+</pre>
+
+<li> Copy of NRF file
+<p>The file "pi.server01.example.org.nrf" in the directory
+on server01.example.org, where Ninf-G Executable is compiled,
+should be copied to the client machine client.example.org.</p>
+
+<pre>
+% scp server01.example.org:/path/to/pi_object.server01.example.org.nrf .
+</pre>
+
+<li> Modification of configuration file
+<p> Edit client.conf file.</p>
+
+<ul>
+<li> Change "example.org" to "server01.example.org".
+<li> Change "pi_object.example.org.nrf" to
+"pi_object.server01.example.org.nrf".
+<li> Enable one of Invoke Servers by removing first <code>#</code>.
+</ul>
+
+<li> Execution of client program
+<pre>
+% ./pi_client_object 10000 server01.example.org
+</pre>
+
+<p>pi_client_object receives arguments of the number of dots
+and server hostname.</p>
+</ol>
+
+<hr>
+
+<h2><a name="Test_MPI">
+9. Using MPI </a></h2>
+
+<p>Parallel programs written in MPI can be set
+as RPC functions in Ninf-G.
+This feature allows the programming to perform
+fine-grained parallel processing with MPI on a server machine
+that are called in remote procedure call,
+in addition to the master-worker type parallel task
+programming mentioned in the above.</p>
+
+<center>
+<table>
+<tr><td> Sample program </td><td> : </td>
+<td><a href="mpi/"> mpi </a></td></tr>
+
+<tr><td> Server machine </td><td> : </td>
+<td> server01.example.org (Step 9.1) </td></tr>
+
+<tr><td> Client machine </td><td> : </td>
+<td> client.example.org (Step 9.2) </td></tr>
+</table>
+</center>
+
+<p>Move to the sample program directory before proceeding.</p>
+<pre>
+% cd mpi
+</pre>
+
+<h3> 9.1 Server setup </h3>
+
+<ol>
+<li> Modification of IDL file
+<p>The IDL file pi.idl used in Chapters 5-7 is modified
+to a form that uses MPI. (The modified source file is pi_mpi.idl)</p>
+
+<p>Edit pi_mpi.idl.</p>
+
+<p>
+<ul>
+<li> Major changes
+<ul>
+<li> mpicc is assigned for compiler and linker.
+<li> "MPI" is specified in Backend.
+<li> The function interface is modified (The number of arguments is reduced.)
+<li> The function of MPI is described in the computational function.
+<p>A code for exchanging the given arguments and computation results
+through MPI communication is added to carry out computation
+at each rank of MPI.</p>
+</ul>
+</ul>
+<p>
+
+<li> Compiling of IDL file
+<pre>
+% ng_gen pi_mpi.idl
+</pre>
+
+<li> Creation of Ninf-G Executable
+<pre>
+% make -f pi_mpi.mak
+</pre>
+</ol>
+
+<h3> 9.2 Client setup </h3>
+
+<ol>
+<li> Modification of client program file
+<p>pi_client_1server.c used as an example in Chapters 5
+is modified to a form that uses MPI for executing computation.
+(The source file obtained in the modification is pi_client_mpi.c)</p>
+
+<p>
+<ul>
+<li> Major changes
+<ul>
+<li> The name of the function to be called is modified.
+<li> The function argument is modified in <code>grpc_call_async()</code>.
+</ul>
+</ul>
+</p>
+
+<li> Compiling of client program
+<pre>
+% ng_cc -o pi_client_mpi pi_client_mpi.c
+</pre>
+
+<li> Copy of NRF file
+<p>The file "pi.server01.example.org.nrf" in the directory
+on server01.example.org, where Ninf-G Executable is compiled,
+should be copied to the client machine client.example.org.</p>
+
+<pre>
+% scp server01.example.org:/path/to/pi_mpi.server01.example.org.nrf .
+</pre>
+
+<li> Modification of configuration file
+<p>Edit client.conf file.</p>
+
+<ul>
+<li> Change "example.org" to "server01.example.org".
+<li> Set mpi_runNoOfCPUs to the number of CPU used.
+<li> Change "pi_mpi.example.org.nrf" to
+"pi_mpi.server01.example.org.nrf".
+<li> Enable one of Invoke Servers by removing first <code>#</code>.
+</ul>
+
+<p>If the Invoke Server SSH is used, detailed MPI configuration must
+be specified by the user, although it is configured by a system
+administrator for the Globus Toolkit WS GRAM and Pre-WS GRAM. For
+example, MPI command path, a command argument specifying the
+machine file must be specified by client configuration file.</p>
+
+<p>A sample Client Configuration file (mpi/client.conf) is for Invoke
+Server SSH and MPI configuration.
+See 4.4.3 Invoke Server SSH section on Ninf-G Users Manual
+for details.</p>
+
+<li> Execution of client program
+<pre>
+% ./pi_client_mpi 10000 server01.example.org
+</pre>
+
+<p>pi_client_mpi receives arguments of the number of dots
+and server hostname.
+The number of CPU used here is set in mpi_runNoOfCPUs
+in the section SERVER of the configuration file as described in (4).
+There are several other ways in Ninf-G to set the
+number of CPU for MPI. For details see the Ninf-G Users Manual.</p>
+</ol>
+
+<p>MPI is famous as a parallel programming model
+in existing parallel systems.
+It has the advantage that existing MPI programs
+can be executed on a Grid in their original forms
+with Grid-compatible MPI implementation such as MPICH-G2.
+On the other hand, it is difficult to ensure co-allocation
+in a Grid, i.e. to undertake simultaneous activation of
+all MPI processes at the start of the program execution,
+although MPI requires the co-allocation.
+Some functions such as process spawning may help the
+co-allocation to a certain extent,
+although in principle the processors and the number of
+processes MPI uses are determined statically and
+the dynamical property of the Grid is not entirely compatible with MPI.
+It is one of the most attractive features of Grids to carry out
+a large size application in a large-scale environment for a long time,
+while it is important to pay attention to what should be done
+in case of system failures, e.g. hardware failure of computation hosts.
+However with MPI, all program executions are terminated
+if an error occurs in a single process.
+In this sense, MPI is not completely fault-tolerant.</p>
+
+<p>GridRPC is a programming model that can circumvent the
+above problem.
+GridRPC does not always require the co-allocation,
+and resources can be rather easily added/released dynamically
+by the dynamical creation/destruction of function handles.
+Also, an error in a computational host has no influence on
+the computation executed in other hosts,
+and therefore one can easily deal with failures by terminating
+the troubled computation or by sending the request again.</p>
+
+<p>MPI is a popular programming model for parallel computation.
+Under the current circumstances, however,
+even the programs that are not suited for MPI are
+often written with MPI.
+The most suitable programming model should be selected according
+to the characteristics of the implemented application.
+To implement an application that executes more than one
+independent computation with distributed resources on Grid,
+GridRPC should be used. (At least MPI should not be used.)
+Both advantages of GridRPC and MPI can be utilized for
+the implementation of a large-scale application by combining
+them to use MPI for computation with frequent detailed
+communication and Ninf-G for computation
+with infrequent communication.</p>
+
+<hr>
+
+<h2><a name="FAQ_top">
+12. FAQ </a></h2>
+<p>Past questions and cautions are listed below.</p>
+
+
+<h3><a name="FAQ_Q1">
+Q1. Is the domain name necessary for the server's name? </a></h3>
+
+<p>Q. Creating a function handle with
+<code>grpc_function_handle_init()</code> API requires the server's name.
+Can I omit the domain name in the server's name,
+or do I have to use the domain name?</p>
+
+<p>A. The domain name is necessary.</p>
+
+<p>When creating a function handle and client configuration file,
+you have to use FQDN (Fully Qualified Domain Name) to set the
+server's name and cannot use "localhost".
+If the server's name is not properly specified with FQDN,
+Ninf-G API is terminated with an error.</p>
+
+<p>For example when you use a server of the domain name
+server.example.org, you cannot specify the server's name
+simply as "server" but have to use "server.example.org".</p>
+
+
+<h3><a name="FAQ_Q2">
+Q2. What causes the execution error and log output? </a></h3>
+
+<p>Q. I made and executed an Ninf-G based client program,
+but it hasn't executed properly.
+It seems the execution of Ninf-G API failed. What is the cause?</p>
+
+<p>A. Ninf-G has a customizable function for log output.</p>
+
+<p>By making log-related settings in the
+client configuration file and the server configuration file,
+you get the output of the information on the error
+in the execution of Ninf-G API as well as on debugging.
+The output can be set to a file.</p>
+
+<p>With this log function you can check the execution
+status of Ninf-G API and trace the cause of the failure
+in the execution of API.</p>
+
+<p>For details of log function settings, see Ninf-G Users Manual in
+the package or 
+<a href="http://ninf.apgrid.org/documents/">
+Web page.</a>
+
+<p>(Log output setting for client: Section 4.3.5)<br>
+(Log output setting for server: Section 3.3.2, 4.3.10)<br>
+(Log output setting for External Module: Section 4.3.5)<br>
+</p>
+
+<p>The log output messages will appear in the following order.</p>
+
+<p>"Date and time:Client/Server:Host name:Log level:
+ID of each data structure:Name of Ninf-G internal function:Log message"</p>
+
+<p>Every Ninf-G API returns the value of <code>grpc_error_t</code>
+that presents success or failure of the execution.
+User's programs should be written to include a function
+for checking these values.</p>
+
+<p>If the computation function executed with Ninf-G Executable results
+in Segmentation fault, the coreDumpSize attribute of the section
+&lt;SERVER&gt; in the client configuration file might be enabled.</p>
+
+<h3><a name="FAQ_Q3">
+Q3. What does the error message
+<code>"Request to Invoke Server XXX(0) failed"</code> mean?</a></h3>
+
+<p>Q. The function/object handle creation is terminated with an error. 
+What is the cause? In the error log, the following log message
+appeared.</p>
+
+<pre><code>
+"QueryFeatures: Request to Invoke Server XXX(0) failed" 
+</code></pre>
+
+<p>A. The Invoke Server XXX may exit immediately after the invocation 
+for some reason. To investigate this problem, set the 
+client configuration file invoke_server_log attribute on
+&lt;CLIENT&gt; section and run the Ninf-G Client again.</p>
+ 
+<p>The error reason might appear in the Invoke Server log file. 
+For example, Invoke Server GT2c will exit immediately if the 
+<code>grid-proxy-init</code> was not performed in advance.</p>
+
+<h3><a name="FAQ_Q4">
+Q4. What does the error message
+<code>"Unexpected job_done"</code> mean?</a></h3>
+
+<p>grpc_call() or grpc_call_async() terminated with an error. 
+What is the cause? In the error log, the following log message
+appeared.</p>
+
+<pre><code>
+...:Error: ... : Invoke Server XXX(0) Job failed. 
+...:Error: ... : Unexpected job_done was occurred. 
+</code></pre>
+
+<p>A. The error message <code>"Unexpected job_done"</code>
+indicates an error in Invoke Server XXX.
+To investigate this problem, set the  invoke_server_log attribute
+on &lt;CLIENT&gt; section and run the Ninf-G Client again.</p>
+ 
+</p>The error reason might appear in the Invoke Server log file. </p>
+
+<h3><a name="FAQ_Q5">
+Q5. The error about Information Services occur.</a></h3>
+
+<p>Q. The function/object handle creation terminated with an error.
+What is the cause? In the error log, the following log message
+appeared.</p>
+
+<p>...:Error: ... : Can't get information for
+hostname="..." classname="..." from the Information Services.</p>
+
+<p>A. The Information Service couldn't find the Ninf-G Executable 
+information. Setting loglevel to Warning may output more 
+detailed information. information_service_log attribute on 
+&lt;CLIENT&gt; section might be also effective.</p>
+ 
+<p>Check the following items.</p>
+ 
+<ul>
+<li>Do NRF files specified in the client configuration file 
+really exist? 
+
+<li>Is the hostname passed to grpc_function_handle_init() 
+really the same as you specified in the client configuration file? 
+
+<li>Does the hostname you specified in the client configuration file really 
+exist?
+</ul>
+
+<h3><a name="FAQ_Q6">
+Q6. What is the file ~/gram_job_mgr_[numerics].log
+on server's home directory? </a></h3>
+
+<p>Q. When I used Ninf-G, a file "gram_job_mgr_[numerics].log"
+was created in the server's home directory. What is this file?</p>
+
+<p>A. This file is a log file from GRAM,
+a job execution module of Globus Toolkit Ninf-G uses.</p>
+
+<p>GRAM activates jobmanager process in the same timing of job execution.
+The jobmanager process detects the completion and executes forced
+termination by monitoring the job.</p>
+
+<p>The jobmanager eliminates the log file if the job ends normally,
+but does not if any error occurs or the job execution is canceled.
+In the latter case, the log file of GRAM remains in the home directory.</p>
+
+<p>If Ninf-G client is terminated by e.g. ^C key
+after <code>grpc_function_handle_init()</code> API creates
+a function handle and before
+<code>grpc_function_handle_destruct()</code> destructs the handle,
+the job corresponding to the handle is cancelled.</p>
+
+<p>A file gram_job_mgr-[numerics].log remains in the
+home directory of the server as a result of such
+abnormal terminations.</p>
+
+<p>You may delete the file if you do not need to find
+the cause of the job termination.</p>
+
+<h3><a name="FAQ_Q7">
+Q7. Is a sample program for Ninf-G available? </a></h3>
+
+<p>Q. I would like to create a Ninf-G based program,
+I don't know how to write. Is a sample program available? </p>
+
+<p>A. Ninf-G based sample programs are available in the Ninf-G
+package.</p>
+
+
+<p>Ninf-G can be downloaded from the web page:</p>
+
+<p><a href="http://ninf.apgrid.org/packages/welcome.shtml">
+http://ninf.apgrid.org/packages/welcome.shtml</a></p>
+
+<p>Download Ninf-G package from the web page.</p>
+
+<p>The package contains sample programs.</p>
+
+<p>
+<center>
+<table>
+<tr><td> samples/pi </td><td> : </td>
+<td> Monte Carlo computation for obtaining circle ratio </td></tr>
+
+<tr><td> samples/add </td><td> : </td>
+<td> Addition of arrays </td></tr>
+
+<tr><td> samples/pi_wait_any </td><td> : </td>
+<td> Computation with the use of asynchronous GridRPC API. </td></tr>
+
+<tr><td> samples/pi_mpi </td><td> : </td>
+<td> Computation with the use of MPI </td></tr>
+
+<tr><td> diag </td><td> : </td>
+<td> Exhaustive test to check if Ninf-G can be used with no problem.
+</td></tr>
+</table>
+</center>
+</p>
+
+<h3><a name="FAQ_Q8">
+Q8. Computation time on the server is long. Is it OK? </a></h3>
+
+<p>Q. After making a function handle,
+I would like to use it for more than a few days.
+What should I be aware of?</p>
+
+<p>A. If you use Invoke Server GT4py or GT2c,
+pay attention to the valid term of the Globus temporary certificate.
+The command <code>grid-proxy-init</code> generates
+the temporary certificate with the valid term
+set to 12 hours unless given specifically.</p>
+
+<p>There are two ways to use function handles for more than 12
+hours.</p>
+
+<ol>
+<li> Use <code>-valid</code> option of <code>grid-proxy-init</code> command.
+<li> Use Refresh Credentials function of Ninf-G and
+continue the computation while creating proxy certificate
+periodically.
+</ol>
+
+<h3><a name="FAQ_Q9">
+Q9. How do I debug? </a></h3>
+
+<p>Q. It is difficult to debug Ninf-G Executable because
+it is activated remotely. Is there any convenient method of
+debugging?</p>
+
+<p>A. Ninf-G has a debugging function for Ninf-G Executable.</p>
+
+<p>Set debug_busyLoop, debug, and coreDumpSize in the
+section &lt;SERVER&gt; of the client configuration file.
+For details see the Users Manual.</p>
+
+<p>The log output function is enabled also in the debugging operation.
+Both client and Ninf-G Executable can output a log
+and can check every change in the operation status of Ninf-G API.</p>
+
+<h3><a name="FAQ_Q10">
+Q10. What does the heartbeat-related warning mean? </a></h3>
+
+<p>Q. The following message appeared in the log output
+in Ninf-G client. Is there any problem?</p>
+
+<p>
+<pre>
+"... heartbeat timeout warning (60 seconds) occurred ..."
+</pre>
+</p>
+
+<p>A. It does not always mean a problem.</p>
+
+<p>Heartbeat is a Ninf-G function to detect if the
+Ninf-G Executable process is running with no problems,
+if the system is not freezing, and if the network has any problems.</p>
+
+<p>Ninf-G Executable sends the heartbeat periodically to the client.
+If the network or Ninf-G Executable freezes,
+the heartbeat cannot be transferred from Ninf-G Executable
+to the client.</p>
+
+<p>If the heartbeat does not reach the Ninf-G client
+within a certain period of time,
+the client considers that the Ninf-G Executable (function handle)
+has a problem and cannot be used, and puts out an error.
+Then the function handle cannot be used any more.
+The RPC in execution returns with an error.</p>
+
+<p>For the sake of this function,
+the Ninf-G client can detect failure without freezing,
+and the users can make a trouble-resistant, fault-tolerant program.</p>
+
+<p>Suppose Ninf-G Executable transmits the heartbeat every 60 seconds.
+The warning of the heartbeat appears if the Ninf-G client does
+not receive the heartbeat for 60 seconds.
+So, the warning appears even when a slight delay of
+Ninf-G Executable processing causes the delay in
+periodic heartbeat transmission.
+It is therefore not certain that this warning status should be
+determined as a failure.</p>
+
+<p>In the default setting,
+the interval of the periodic heartbeat transmission is 60 seconds
+and the failure judgment is made after the client does not received
+the heartbeat for 60 seconds x 5 =300 seconds.
+(For details see the Users Manual.)</p>
+
+<p>If the following message is displayed after the heartbeat warning,
+it means the recovery of the heartbeat transmission.</p>
+
+<p>
+<pre>
+"... heartbeat revived again ..."
+</pre>
+</p>
+
+<h3><a name="FAQ_Q11">
+Q11. Is shared memory available for Ninf-G? </a></h3>
+
+<p>Q. I want to use Ninf-G.
+Is a shared memory function available in Ninf-G?
+Is it possible to share the variables in Ninf-G Executable?</p>
+
+<p>A. Ninf-G does not have a shared memory function.
+A variable sharing function for Ninf-G Executable is
+also not available.</p>
+
+<h3><a name="FAQ_Q12">
+Q12. Can I set the compiler and linker? </a></h3>
+
+<p>Q. Can I set the compiler and linker?</p>
+
+<p>A. Yes you can. Compiler, Linker and others are
+available in IDL file syntax.</p>
+
+<h3><a name="FAQ_Q13">
+Q13. Why are jobs not executed immediately? </a></h3>
+
+<p>Q. I made a function handle but the job is not executed
+immediately and <code>grpc_call()</code> API
+and <code>grpc_call_async()</code> API stop.
+How could this happen?</p>
+
+<p>A. It can happen.</p>
+
+<p>For example, if the cluster that the job goes to already
+has many users and other user's jobs are preferentially executed,
+your job has to wait until the other jobs end.
+So the execution of jobs does not always starts immediately.</p>
+
+<p>If you want to place a limit on the execution time for your job,
+set the job_startTimeout attribute in the
+section &lt;SERVER&gt; of the client configuration file.</p>
+
+<h3><a name="FAQ_Q14">
+Q14. What is the workDirectory? </a></h3>
+
+<p>Q. What is the workDirectory attribute
+that can be set in the client configuration file?</p>
+
+<p>A. workDirectory is used to specify the directory
+in which the Ninf-G Executable process operates.</p>
+
+<p>In default Ninf-G Executable operates in the directory
+in which the Ninf-G Executable program is installed.
+Use workDirectory to change this directory.</p>
+
+<p>If a relative file name is specified in an RPC function
+or computational function to open a file,
+the file is searched starting from the workDirectory and opened.</p>
+
+<p>In case of a Segmentation fault due to a
+computational function failure, a core file,
+which is a memory image at abnormal termination,
+is sometimes created.
+This core file also goes to the directory
+specified in the workDirectory.</p>
+
+<p>The absence of the specified workDirectory causes an error.
+So you need to be careful.</p>
+
+<p>You may need to be careful if the job submission node
+and the job execution computational node are different
+in the cluster system.
+Due to the restriction of Globus Toolkit,
+an error occurs if the workDirectory exists in
+the computational node but not in the job submission node.</p>
+
+<h3><a name="FAQ_Q15">
+Q15. Why aren't stdout and stderr are sent to the client? </a></h3>
+
+<p>Q. Character strings are put out from
+<code>printf()</code> or <code>fprintf()</code>
+in IDL files or computational functions,
+but the output result is not sent to the client.
+There is a setting "redirect_outerr true" in the section
+&lt;SERVER&gt; in the client configuration file.
+Why isn't it sent?</p>
+
+<p>A. Ninf-G uses the stdout/stderr transfer function
+provided by each Invoke Server
+(for example, Globus Toolkit GASS for Invoke Server GT2c)
+to send stdout and stderr of the computational functions.</p>
+
+<p>Output is sometimes not transferred when the job is cancelled.
+In case of Ninf-G, jobs are cancelled for safety
+if an error such as abnormal disconnection occurs
+in the connection to the corresponding handle.</p>
+
+<p>Output is also not transferred if Ninf-G client
+is terminated by e.g. <code>exit()</code> before
+the execution of <code>grpc_function_handle_destruct()</code>.</p>
+
+<h3><a name="FAQ_Q16">
+Q16. How can I create a NRF file? </a></h3>
+
+<p>Q. Login to the job submission node
+(e.g. server01.example.org), which is a designated host
+for the creation of function handles,
+is not permitted in my cluster system,
+and I cannot compile Ninf-G Executable in server01.example.org.
+So the NRF file for server01.example.org is not created.
+How can I make the file?</p>
+
+<p>A. NRF file is a text file and users can
+rewrite the content.</p>
+
+<p>For example, you can obtain a NRF file
+for server01.example.org in the following way.<p>
+
+<ul>
+<li>
+<p>First, compile the IDL file for RPC on a host
+(ex. client.example.org) other than server01.example.org.
+Then a NRF file for client.example.org is created.</p>
+
+<li>
+<p>Then, modify the obtained NRF file with a text editor.
+Modify all the lines in the NRF file that contain the host name.
+(Change client.example.org to server01.example.org.)</p>
+
+<li>
+<p>The file name of the NRF file also contains the host name,
+although it has no influence on the client execution.
+To prevent confusion, change the file name to server01.example.org.</p>
+</ul>
+
+<p>There is another way to create NRF files.
+If the compilation host and the target host share the same environment,
+(including executable path of the Ninf-G Executable directory),
+with the following steps you can create NRF files.
+This is because the Ninf-G tries to get the local hostname by NG_HOSTNAME
+environment variable, firstly.</p>
+
+<pre><code>
+% ng_gen target.idl
+% env NG_HOSTNAME=server01.example.org make -f target.mak
+</code></pre>
+
+<p>The NRF file created in the above steps
+should be specified in the Ninf-G client configuration file.</p>
+
+<p>Users are fully responsible for the modification of the NRF files.</p>
+
+<hr>
+last update : $Date: 2008/03/28 09:54:27 $
+
+</body>
+</html>

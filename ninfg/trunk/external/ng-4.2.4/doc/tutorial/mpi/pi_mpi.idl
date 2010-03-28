@@ -1,0 +1,47 @@
+/* This is sample server-side program for Ninf-G, calculate PI on MPI */
+
+Module pi_mpi;
+
+Compiler "/usr/local/mpich/bin/mpicc";
+Linker "/usr/local/mpich/bin/mpicc";
+
+Define pi_trial(IN long counter, OUT long *answer)
+Required "pi_trial.o"
+Backend "MPI"
+{
+    /* Prototype declaration */
+    extern long pi_trial(int, long);
+
+    int my_rank;
+    int tag = 0;
+    long times;
+    long result;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    if (my_rank != 0) {
+        int dest = 0;
+
+        MPI_Bcast(&times, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+        result = pi_trial(my_rank, times);
+        MPI_Send(&result, 1, MPI_LONG, dest, tag, MPI_COMM_WORLD);
+    } else {
+        int process_num;
+        int source;
+        long total;
+        MPI_Status recv_status;
+
+        MPI_Comm_size(MPI_COMM_WORLD, &process_num);
+        times = counter / process_num;
+        MPI_Bcast(&times, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+
+        times += counter % process_num;
+
+        total = pi_trial(my_rank, times);
+        for (source = 1; source < process_num; source++) {
+            MPI_Recv(&result, 1, MPI_LONG, source, tag, MPI_COMM_WORLD,
+                &recv_status);
+            total += result;
+        }
+        *answer = total;
+    }
+}

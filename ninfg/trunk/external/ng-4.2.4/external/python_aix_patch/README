@@ -1,0 +1,19 @@
+
+On AIX 5, Invoke Server GT4py fails by Python bug.
+This patch "python-aix-semaphores.patch" is to fix this problem.
+
+If the original Python is used,
+The error message below is appeared to the Invoke Server logfile.
+
+sem_wait: Permission denied
+
+If you want to use Invoke Server GT4py on AIX,
+Use the patched Python.
+
+Building Python:
+% cd Python-2.4.2
+% cat python-aix-semaphores.patch | patch -p1
+
+Building Ninf-G:
+% ./configure ... --with-python=/path/to/patched/python ...
+

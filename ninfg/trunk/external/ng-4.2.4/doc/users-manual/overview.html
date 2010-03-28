@@ -1,0 +1,906 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+<title>Overview</title>
+</head>
+
+<body bgcolor=white>
+
+<h2><a name="Overview">1 Overview</a></h2>
+
+<hr>
+<ul>
+<li><a href="#GridRPC">
+    1.1 GridRPC</a>
+<li><a href="#New_features_of_Ninf-G">
+    1.2 New features of Ninf-G Version 4</a>
+<li><a href="#Overview_of_Ninf-G">
+    1.3 Overview of Ninf-G</a>
+<ul>
+<li><a href="#Clients_and_servers">
+    1.3.1 Clients and servers</a>
+<li><a href="#Program_hierarchy">
+    1.3.2 Program hierarchy</a>
+<li><a href="#Operating_conditions">
+    1.3.3 Operating conditions</a>
+<li><a href="#Requirements_for_operation">
+    1.3.4 Requirements for operation</a>
+<li><a href="#Starting_up_a_Ninf-G_Executable">
+    1.3.5 Starting up a Ninf-G Executable </a>
+<li> <a href="#Registering_and_accessing_Ninf-G_Executable">
+    1.3.6 Registering and accessing Ninf-G Executable information </a>
+</ul>
+<li><a href="#Definition_of_terms">
+    1.4 Definition of terms</a>
+<li><a href="#Ninf-G_Design">
+    1.5 Ninf-G Design</a>
+<ul>
+<li><a href="#Design_function_handle">
+    1.5.1 Reducing Overhead for Initialization of Function Handles</a>
+<li><a href="#Design_data_transfer">
+    1.5.2 Making Data Transfers Efficient</a>
+<li><a href="#Design_unreliability">
+    1.5.3 Compensating for the Heterogeneity and Unreliability
+    of a Grid Environment</a>
+<li><a href="#Design_debug">
+    1.5.4 Supporting Debugging of Applications</a>
+</ul>
+<li><a href="#Compatibility_with_Ninf-G2">
+    1.6 Compatibility with Ninf-G2</a>
+<li><a href="#Assumed_environment_for_using_Ninf-G">
+    1.7 Assumed environment for using Ninf-G</a>
+
+<ul>
+<li><a href="#Prerequisites_for_installing_Ninf-G">
+    1.7.1 Prerequisites for installing Ninf-G</a>
+<li><a href="#Environment_variables">
+    1.7.2 Environment variables for installing / using Ninf-G</a>
+<li><a href="#Execution_Environment">
+    1.7.3 Execution Environment</a>
+</ul>
+</ul>
+<hr>
+
+<h3><a name="GridRPC">1.1 GridRPC</a></h3>
+
+<p>Ninf-G uses the Globus Toolkit to provide an operating
+environment for GridRPC.</p>
+
+<p>GridRPC is middleware that provides a model for access to
+remote libraries and parallel programming for tasks on a grid.
+Typical GridRPC middleware includes Ninf and Netsolve.</p>
+
+<p>GridRPC is considered effective for use in the following
+cases.</p>
+
+<ul>
+<li>
+<p>Commercial programs or libraries that use resources which are run
+on particular computers on the grid are sometimes provided only
+in binary format and cannot be executed on particular computers.
+There are also problems concerning licensing and
+source code compatibility.
+Furthermore, when using resources that can only be used with
+particular machines, such as video cameras, electron microscopes,
+telescopes and sensors, processing for the use of those resources
+on those machines is necessary.</p>
+
+<p>In such cases, an environment that allows the resources
+(including software) to be used on a particular computer is needed.</p>
+
+<li>
+<p>When there are many programs that execute routines that
+do a large amount of computation on broadband servers on the grid,
+it takes a lot of time just to run parts of the program.</p>
+
+<p>The time required to run the program can be shortened by
+off-loading such program parts to a broadband server.</p>
+
+<p>In cases when there are strong demands on memory and disk space
+on the client machine so that broadband computation cannot be done,
+it is desirable to be able to do easily-understood offloading
+with no consideration given to argument marshalling.</p>
+
+<li>
+<p>Execution of Parameter Sweep by multiple servers on the grid</p>
+
+<p>Parameter Sweep is a program that enables execution of
+computation on multiple servers
+in parallel, using some subset of the parameters.
+The respective servers run independently using different
+parameters, with virtually no dependence on other servers.</p>
+
+<p>There are surprisingly many programs like Parameter Sweep.</p>
+
+<p>The Monte Carlo method program is one of them.</p>
+
+<p>Although Parameter Sweep can also be implemented
+with a Message Passing Interface (MPI),
+programming is rather simple with GridRPC and
+Parameter Sweep can be executed to match the (dynamically changing) scale
+of the grid (execution by multiple clusters, taking resource
+management, security, etc., into account).</p>
+
+<li><p>Ordinary or large-scale task parallel programs on a grid</p>
+
+<p>Task arrangement programs are easy to write with GridRPC.
+An API that supports the synchronization of various
+task arrangements with mixed exchange among multiple clients
+and servers can be used.</p>
+
+<p>GridRPC not only provides an interface for easy mathematical
+computation and scheduling of tasks for parallel execution,
+but the execution of processing that matches the (dynamically changing)
+scale of the grid is possible, as in the case of Parameter Sweep.</p>
+</ul>
+
+<h3><a name="New_features_of_Ninf-G">
+1.2 New features of Ninf-G Version 4</a></h3>
+
+<p>New features and functions have been added
+to Ninf-G Version 4 (Ninf-G4).</p>
+
+<ul>
+<li> Globus Toolkit Version 4 support
+<p>Globus Toolkit Version 4 (GT4) provides a new framework and
+a new mechanism to provide job invocation (WS GRAM) and information
+services (Information Services: MDS4).
+Ninf-G4 supports the WS GRAM and MDS4 functions.
+The Ninf-G configuration file provides attributes
+to use these functions.</p>
+
+<li> Invoke Server
+<p>Ninf-G4 has a new module called Invoke Server.
+This module enables support of many type of job invocation for Ninf-G.
+(WS GRAM, Pre-WS GRAM, UNICORE, ...)</p>
+
+<p>Any job submission interfaces can be used for remote process
+invocation by implementing Ninf-G Invoke Server for the interface.
+The detailed information on how to develop Ninf-G Invoke Server
+is described in
+<a href="invoke_server-develop.html">
+Invoke Invoke Server Developer's Manual</a>.</p>
+
+<li> Cascading RPC
+<p>Ninf-G4 supports cascading RPC,
+which enables Ninf-G Executable to call GridRPC API.
+Cascading RPC implements hierarchical RPC which is
+a implementation technique to make applications scalable
+and to achieve high performance for
+fine-grained task parallel applications.
+Cascading RPC is available for Invoke Server GT4py
+by delegating full proxy certificates.
+The detailed information of this feature is available
+in <a href="client-side.html#InvokeServer_GT4py"> Section 4.4.1</a>.
+The other Invoke Servers such as Invoke Server SSH and
+Invoke Server Condor may be enabling cascading RPC,
+however they are not officially supported.</p>
+
+<li>Compatibility
+<p>Ninf-G4 supports source code compatibility with Ninf-G Version 2
+(Ninf-G2).  Source codes of IDL and client programs are compatible
+between Ninf-G2 and Ninf-G4.  Format of client configuration file in
+Ninf-G4 is expanded from Ninf-G2 and it is upper compatible with
+Ninf-G2.</p>
+
+<p>Ninf-G4 uses the same protocol with Ninf-G2 for communication between
+Ninf-G Client and Ninf-G Executable, thus mixed use of Ninf-G2 and
+Ninf-G4 is supported, i.e. Ninf-G2 client is able to call Ninf-G4
+server and vice versa.</p>
+
+<p>In addition, GT2 functions (Pre-WS GRAM, Pre-WS MDS: MDS2) which are
+used by Ninf-G2 can be used by Ninf-G4 as well.
+Basically, Ninf-G2 users do not need to worry about compatibility
+problems.  Only the user with interest in new Ninf-G4 features, must
+learn about the new capabilities of Ninf-G.</p>
+</ul>
+
+<h3><a name="Overview_of_Ninf-G">1.3 Overview of Ninf-G</a></h3>
+
+<p>Ninf-G is a set of library functions that provide an RPC
+capability in a Grid environment, based on the GridRPC API
+specifications.</p>
+
+<h4><a name="Clients_and_servers">1.3.1 Clients and servers</a></h4>
+
+<p>Ninf-G and the application programs that use Ninf-G consist
+of Ninf-G Executables that execute computation on
+server machines, and Ninf-G Clients that issue requests
+for computation to the Ninf-G Executables from client machines.</p>
+
+<p>The Ninf-G Executables consist of functions that perform
+calculations (calculation functions) and a Ninf-G stub program that
+calls the calculation functions.
+Communication between clients and servers is
+accomplished by TCP/IP using a proprietary Ninf-G protocol.</p>
+
+<p>The relationships between clients and servers are
+illustrated in Fig. 1.</p>
+
+<center>
+<img src="figure/composition-ClientServer.png"
+    alt="composition-ClientServer.png">
+<p>Figure 1: Clients and servers</p>
+</center>
+
+<h4><a name="Program_hierarchy">1.3.2 Program hierarchy</a></h4>
+
+<p>Ninf-G employs the capabilities provided by the Globus Toolkit
+(<a href="http://www.globus.org/">http://www.globus.org/</a>)
+for server machine authentication, information search,
+job start-up, communication and file transfer.
+The relations among applications, Ninf-G, the Globus Toolkit
+and the OS are illustrated in Fig. 2.</p>
+
+<center>
+<img src="figure/composition-ProgramHierarchy.png"
+    alt="composition-ProgramHierarchy.png">
+<p>Figure 2: Program hierarchy</p>
+</center>
+
+<p>Ninf-G Clients are comprised of the following elements.</p>
+
+<dl>
+<dt> Applications
+<dd> Programs written by Ninf-G users
+
+<dt> Ninf-G Client Library
+<dd> The set of API functions provided by Ninf-G for Ninf-G Clients
+
+<dt> Globus Toolkit
+<dd> The set of functions provided by the Globus Toolkit
+</dl>
+
+<p>Ninf-G Executables are comprised of the following elements.</p>
+
+<dl>
+<dt> Computation functions
+<dd> Programs written by Ninf-G users
+
+<dt> Ninf-G stub
+<dd> A stub program produced by the Ninf-G stub generator
+
+<dt> Ninf-G Executable Library
+<dd> The set of API functions provided by Ninf-G for Ninf-G Executables
+
+<dt> Globus Toolkit
+<dd> The set of functions provided by the Globus Toolkit
+</dl>
+
+
+<h4><a name="Operating_conditions">1.3.3 Operating conditions</a></h4>
+
+<p>Ninf-G is supplied to the user as a source package, which
+includes the library functions (API) and utility commands.
+The operating environment required for the library functions and
+utility commands are shown in Table 1.</p>
+
+<p>The usage of GT2 (implying the use of Pre-WS GRAM or MDS2) requires
+a GT2, GT3 or GT4 installation.
+Every Globus Toolkit has compatibility with GT2.</p>
+
+<p>The usage of GT4 (implying the use of WS GRAM or MDS4) requires
+a GT4 installation.</p>
+
+<center>
+<table border>
+<caption align="top"> Table1: Operating environment</caption>
+<tr>
+<td><b>Globus Toolkit</b></td>
+<td>2.2 or later (2.4, 3.2, 4.0) </td>
+</tr>
+
+<tr>
+<td><b>Python</b></td>
+<td>2.3 or later</td>
+</tr>
+
+<tr><td>-</td><td>-</td></tr>
+<tr>
+<td><b>Target machine</b></td>
+<td>SPARC</td>
+</tr>
+<tr>
+<td><b>Operating system</b></td>
+<td>Solaris 9 (SunOS 5.9)</td>
+</tr>
+<tr>
+<td><b>Compiler</b></td>
+<td>Sun Compiler or gcc 2.95</td>
+</tr>
+<tr>
+<td><b>Globus Toolkit flavor</b></td>
+<td>vendorcc32dbg, vendorcc32dbgpthr, gcc32dbg, gcc32dbgpthr</td>
+</tr>
+
+<tr><td>-</td><td>-</td></tr>
+<tr>
+<td><b>Target machine</b></td>
+<td>PC-AT compatible (x86, Opteron)</td>
+</tr>
+<tr>
+<td><b>Operating system</b></td>
+<td>Linux(*1)</td>
+</tr>
+<tr>
+<td><b>Compiler</b></td>
+<td>gcc 2.95, gcc 3.0, 3.1, 3.2, 3.3, 3.4(*2)</td>
+</tr>
+<tr>
+<td><b>Globus Toolkit flavor</b></td>
+<td>gcc32dbg, gcc32dbgpthr, gcc64dbg, gcc64dbgpthr</td>
+</tr>
+
+<tr><td>-</td><td>-</td></tr>
+<tr>
+<td><b>Target machine</b></td>
+<td>IBM Power4</td>
+</tr>
+<tr>
+<td><b>Operating system</b></td>
+<td>AIX 5.2</td>
+</tr>
+<tr>
+<td><b>Compiler</b></td>
+<td>C for AIX Compiler, Version 6</td>
+</tr>
+<tr>
+<td><b>Globus Toolkit flavor</b></td>
+<td>vendorcc32dbg or vendorcc32dbgpthr</td>
+</tr>
+
+<tr><td>-</td><td>-</td></tr>
+<tr>
+<td><b>Target machine</b></td>
+<td>Apple Mac (PowerPC)</td>
+</tr>
+<tr>
+<td><b>Operating system</b></td>
+<td>MacOS X</td>
+</tr>
+<tr>
+<td><b>Compiler</b></td>
+<td>gcc 4.0.0</td>
+</tr>
+<tr>
+<td><b>Globus Toolkit flavor</b></td>
+<td>gcc32dbg or gcc32dbgpthr</td>
+</tr>
+
+</table>
+</center>
+
+<p>(*1) We are checking operation with the following distributions.
+<ul>
+<li> RedHat 8.0
+<li> SuSE 8.1
+<li> RedHat Advanced Workstation 2.1 
+</ul>
+</p>
+
+<p>(*2) There are problems with gcc 2.96,
+so we recommend you use gcc 2.95.x or gcc 3.0, 3.1, 3.2, 3.3, 3.4.</p>
+
+
+<h4><a name="Requirements_for_operation">
+1.3.4 Requirements for operation</a></h4>
+
+<p>Ninf-G allows the definition of a single computation function
+(1) or multiple computation functions
+(2) for a Ninf-G Executable running on a server machine.
+The execution schemes for these are shown in Fig. 3.
+In either case, it is possible to execute
+just one computation function at a time on the Ninf-G Executable.
+To execute multiple computation functions at the same time,
+it is necessary to run multiple Ninf-G Executables. This is
+illustrated in Fig. 4.</p>
+
+<p>In Ninf-G, the second scheme (2) is referred to as
+"Ninf-G Executable objectification" and the calling
+of the computation is referred to as a "method call."</p>
+
+<center>
+<img src="figure/overview-stub.png" alt="overview-stub.png">
+<p>Figure 3: Overview of operation</p>
+</center>
+
+<center>
+<img src="figure/overview-parallel.png" alt="overview-parallel.png">
+<p>Figure 4: Parallel execution</p>
+</center>
+
+<p>Ninf-G provides handles for manipulating a Ninf-G Executable.
+Different handles are used for the two schemes, (1) and (2),
+described above.
+As shown in Table 2, two types of handles are provided,
+function handles and object handles.</p>
+
+<table border>
+<caption align=top> Table 2: Handles</caption>
+<tr>
+<td>Function handle</td>
+<td>Used for manipulation of a Ninf-G
+Executable for which a single function is defined
+</td>
+</tr>
+<tr>
+<td>Object handle</td>
+<td>Used for manipulation of a Ninf-G
+  Executable for which multiple functions are defined
+</td>
+</tr>
+</table>
+
+<h4><a name="Starting_up_a_Ninf-G_Executable">
+1.3.5 Starting up a Ninf-G Executable </a></h4>
+
+<p>Ninf-G Executables that run on server machines are started
+up from Ninf-G Clients, which run on client machines.
+A Ninf-G Executable is started up by performing the following
+procedure using the job control method provided by
+the Globus Toolkit or Invoke Server.</p>
+
+<p>When running a Ninf-G Client program, however, there is no
+particular need for the user to be aware of this mechanism.</p>
+
+<ul>
+<li> The case which uses a Globus Toolkit Pre-WS GRAM directly,
+where Invoke Server is not used.
+<p>
+<ol>
+<li>A start-up request is sent from a Ninf-G Client to the
+gatekeeper, by Pre-WS GRAM.
+<li>The gatekeeper starts up the jobmanager.
+<li>The jobmanager starts up the Ninf-G Executable.
+</ol>
+</p>
+
+<li> The cases which use Invoke Server
+<p>
+<ol>
+<li>If the appropriate Invoke Server is not started on the Client,
+the Invoke Server process is started first.
+<li>Ninf-G Client sends request to the Invoke Server to start the job.
+<li>The Invoke Server invokes the Ninf-G Executable on the remote
+machine, by each Invoke Server individually.
+</ol>
+</p>
+
+<p>For example, if the Invoke Server for Globus Toolkit WS-GRAM
+is selected for use, the Invoke Server requests the remote WS-GRAM to
+perform the invocation.
+The requested remote WS-GRAM invokes the jobmanager,
+and the jobmanager invokes the Ninf-G Executable.</p>
+</ul>
+
+<p>This process is shown in Fig. 5.</p>
+
+<center>
+<img src="figure/overview-startingOfStub.png"
+    alt="overview-startingOfStub.png">
+<p>Figure 5: Starting up a Ninf-G Executable</p>
+</center>
+
+
+<h4> <a name="Registering_and_accessing_Ninf-G_Executable">
+1.3.6 Registering and accessing Ninf-G Executable information </a></h4>
+
+<p>Starting up a Ninf-G Executable requires
+path information that specifies the location of
+the Ninf-G Executable on that server machine.
+Information on the functions that are called by
+the Ninf-G Executable is also required.
+That information is collectively referred to as
+the Ninf-G Executable information.
+Ninf-G provides the following methods of registering and
+accessing Ninf-G Executable information.</p>
+
+<p>When running a Ninf-G Client program, however, there is no
+particular need for the user to be aware of this mechanism.</p>
+
+<ul>
+<li>A file that contains the Ninf-G Executable information
+(a Local LDIF file) is placed on the client machine.
+The Ninf-G Client program obtains the Ninf-G Executable information
+from this Local LDIF file (Fig. 6). 
+
+<center>
+<img src="figure/overview-stubInformationLdif.png"
+    alt="overview-stubInformationLdif.png">
+<p>Figure 6: Local LDIF file</p>
+</center>
+
+<li>The path information is defined in the configuration file
+for the Ninf-G Client on the client machine.
+The Ninf-G Client program obtains the path information
+from the configuration file and uses it to start up
+the Ninf-G Executable on the server machine.
+The function information is obtained from
+the Ninf-G Executable when it is started up (Fig. 7).
+
+<center>
+<img src="figure/overview-stubInformationList.png"
+    alt="overview-stubInformationList.png">
+<p>Figure 7: Ninf-G Executable</p>
+</center>
+
+<li>The LDIF file is registered in the MDS(*) of the server machine.
+The Ninf-G Client program obtains the Ninf-G Executable information
+from the MDS (Fig. 8).
+<p>(*) The information search function provided by the Globus Toolkit.</p>
+
+<center>
+<img src="figure/overview-stubInformationMDS.png"
+    alt="overview-stubInformationMDS.png">
+<p>Figure 8: MDS</p>
+</center>
+
+</ul>
+
+<h3><a name="Definition_of_terms">1.4 Definition of terms</a></h3>
+
+<dl>
+<dt><b> Ninf-G Client </b>
+<dd>
+<p>This is a program written by a user for the purpose of
+controlling the execution of computation.
+It is obtained by linking a user-written application program to
+the Ninf-G Client Library (and Globus Toolkit).</p>
+
+<dt><b> Ninf-G Client Library </b>
+<dd>
+<p>The Ninf-G Client Library puts together the API used by
+application programs that run on client machines
+(Ninf-G Client API).</p>
+
+<dt><b> Ninf-G Executable </b>
+<dd>
+<p>This is a program written for the execution of user requests
+for computation to be performed on a remote computer.
+It is obtained by linking a user-written computation function
+to stub code and the Ninf-G Executable Library (and Globus Toolkit).
+The stub code is produced by the stub generator according to the interface
+specifications of the user-defined computation function. The interface
+specifications are written in the Ninf-G IDL (Interface Description Language)
+specified by Ninf-G.</p>
+
+<dt><b> Ninf-G Executable Library </b>
+<dd> <p>The Ninf-G Executable Library puts together the API
+(Ninf-G Executable API) used by a Ninf-G Executable.</p>
+
+<dt><b> Client (machine) </b>
+<dd>
+<p>A machine that is running a Ninf-G Client.</p>
+
+<dt><b> Server (machine) </b>
+<dd>
+<p>A machine that is running a Ninf-G Executable.</p>
+<br>
+
+<dt><b> Function handle </b>
+<dd>
+<p>
+A function handle is a data item whose type is grpc_function_handle_t.
+The function handle represents a mapping from a function name to an
+instance of that function on a particular server.
+</p>
+
+<dt><b> Object handle </b>
+<dd>
+<p>
+An object handle is a data item whose type is grpc_object_handle_t_np.
+The object handle represents a mapping from a class name to an instance of
+that class on a particular server.  The instance is called a Ninf-G
+remote object, and it is able to contain multiple methods.
+</p>
+
+<dt><b> Remote function </b>
+<dd>
+<p>A computational function written by the user.
+(It might be only a single computation function
+for a Ninf-G Executable)</p>
+
+<dt><b> Remote method </b>
+<dd>
+<p>A computational function written by the user.
+(It might be multiple computation functions for a
+Ninf-G Executable)</p>
+
+<dt><b> Session </b>
+<dd>
+<p>A session extends from the time an RPC is made to
+the time its execution is completed.</p>
+
+<p>In Ninf-G, a session extends</p>
+<ul>
+<li> from the time grpc_call() is called
+until the time it is completed (returns)
+<li> from the time grpc_invoke() is called
+until the time it is completed (returns)
+<li> from the time grpc_call_async()is called
+until the time grpc_wait*() is completed
+<li>from the time grpc_invoke_async() is called
+until the time grpc_wait*() is completed.
+</ul>
+
+<dt><b> GridRPC API </b>
+<dd>
+<p>This is the standard API that systems implementing
+GridRPC should have.
+For the GridRPC C language API, standardization by
+the GGF WG is currently still in process.</p>
+
+<dt><b> Ninf-G IDL </b>
+<dd>
+<p>IDL is the acronym for Interface Definition Language.
+It is a language for writing interfaces for the remote functions
+and remote methods defined by Ninf-G Executables.</p>
+
+<dt><b> Module name </b>
+<dd>
+<p>This is the identifier for Ninf-G Executables.
+The user may specify any character string in the Ninf-G IDL.</p>
+
+</dl>
+
+<h3><a name="Ninf-G_Design">
+1.5 Ninf-G Design</a></h3>
+
+<h4><a name="Design_function_handle">
+1.5.1 Reducing Overhead for Initialization of Function Handles</a></h4>
+
+<p>Ninf-G provides the following functionalities for reducing
+overhead for initialization of function handles.</p>
+
+<ul>
+<li>Creating multiple function handles via a single GRAM call and
+providing an API for utilizing the functionality.
+
+<p>A single GRAM call usually takes several seconds for GSI
+authentication and a process invocation via the Globus jobmanager.
+This indicates that it will take more than several minutes to tens of
+minutes for hundreds of GRAM calls on a large-scale cluster.  Also,
+many Globus jobmanager processes
+which will be launched on the front-end node will increase the load on
+the front-end node and cause the creation of additional overhead.</p>
+
+<p>Ninf-G implements a functionality which enables the creation of multiple
+function handles via a single GRAM call and provides an API for
+utilizing this functionality.  For example, 
+<code>grpc_function_handle_array_default_np()</code> takes three
+arguments, a pointer to an array of function handles, the number of
+function handles, and the name of the remote executable.  When 
+<code>grpc_function_handle_array_default_np()</code> is invoked, Ninf-G will
+construct an RSL in which the <code>count</code> attribute is specified as the
+number of function handles, and pass the RSL to the Globus GRAM.  This
+allows invocation of multiple remote executables, i.e. initialization of
+multiple function handles, via a single GRAM call.</p>
+
+<li>Bypass MDS lookup for information retrieval
+<p>Querying an MDS server for getting information on remote
+executables is a more difficult problem from a performance point of view,
+since it takes several minutes if the MDS server contains a large MDS
+tree.  Although a useful resource discovery mechanism is essential for
+the acceptance of grid computing, we need to provide a practical
+scheme for information retrieval.  Several approaches could be
+candidates for the implementation of information retrieval.  For
+example, in CORBA, both a client and servers generate stubs and share
+information statically.  Although this approach is straightforward
+and reduces the overhead for information retrieval, client programmers
+need to prepare IDL files for stub generation which constitutes a
+burden on client programmers.  Ninf-G implements a functionality
+which enables it to retrieve the necessary information not from an MDS
+server, but from Local LDIF files which are placed on the client machine in
+advance.  When Ninf-G Executables are generated on the server machine,
+the LDIF files are generated by the Ninf-G IDL compiler as well.  The
+LDIF files should be copied to the client machine and can be specified
+in the client configuration file which is passed to the application as
+the first argument.</p>
+</ul>
+
+<h4><a name="Design_data_transfer">
+1.5.2 Making Data Transfers Efficient</a></h4>
+
+<p>Ninf-G provides the following functionalities for efficient
+data transfers and elimination of redundant data transfers.</p>
+
+<ul>
+<li>Implementation of a Ninf-G remote object
+
+<p>Although the semantics of a remote executable is "stateless," it is
+desirable to provide a "stateful" remote executable since typical
+applications repeat computation for large data sets with different
+parameters.
+In the case of "stateless" executables, the executable needs to send the
+data in every remote library call, which would be a severe problem in a
+Grid environment.  Ninf-G provides a "stateful" remote executable as 
+a "Ninf-G remote object."  A Ninf-G remote object can hold a "state" and
+be used to eliminate redundant data transfers between a client and
+servers.  Ninf-G provides API functions such as 
+<code>grpc_object_handle_init_np()</code> and
+<code>grpc_invoke_np()</code> for
+utilizing Ninf-G remote objects.
+<code>grpc_object_handle_init_np()</code> initializes a Ninf-G remote object
+and creates an object handle which is represents a connection
+between the client and the Ninf-G remote object.
+<code> grpc_invoke_np()</code> calls methods of the Ninf-G remote object
+as described in the Ninf-G IDL.
+A Ninf-G remote object is an instance of a class which is defined in an
+IDL file using <code>DefClass</code> statement on the server side.
+Multiple methods, which can be invoked by a client using a client
+API such as <code>grpc_invoke_np()</code>, can be defined in
+a class using the <code>DefMethod</code> statement.
+</p>
+
+<li>Compression of transferred data
+
+<p>Ninf-G enables data transfers with compression.  A flag which
+specifies whether to enable or disable data compression, and a data size as
+the threshold for compressing data can be specified in the client
+configuration file.</p>
+
+</ul>
+
+<h4><a name="Design_unreliability">
+1.5.3 Compensating for the Heterogeneity and Unreliability
+of a Grid Environment</a></h4>
+
+<p>In order to compensate for the heterogeneity and unreliability of a Grid
+environment, Ninf-G provides the following functionalities:</p>
+
+<ul>
+<li>Client configuration formats for detailed description of server attributes
+
+<p>The GridRPC API specifies that the first argument of a client program must
+be a "client configuration file" in which information required for
+running applications is described.
+In order to compensate for the heterogeneity and unreliability
+of a Grid environment, Ninf-G provides client configuration formats
+for detailed description of server attributes
+such as the Globus jobmanager, and a protocol for data transfers, etc.</p>
+
+<li>Timeout value for initialization of a function handle and RPC
+
+<p>If a server machine is fully utilized, requests for initialization of
+function handles and remote library calls may be stuck in the queue
+and will not be launched for a long time, and this may cause deadlock of
+applications.  Ninf-G provides a functionality to specify a timeout
+value for initialization of function handles as well as remote library
+calls.  The timeout values can be specified in the client
+configuration file.</p>
+
+<li>Heartbeat
+
+<p>A remote executable reports a heartbeat message to the client at a
+pre-specified interval.  Ninf-G provides an API function for checking
+the heartbeat from the remote executable.  The interval can be
+specified in the client configuration file.</p>
+
+<li>Client Callbacks
+
+<p>Ninf-G provides a functionality called "client callbacks" by which
+a remote executable calls a function on the client machine.  The client
+callback can be used for sharing status between the server and the
+client.  For example, the client callback can be used for showing the
+interim status of computation at the client machine and in interactive
+processing.</p>
+
+<li>Cancellation of a session
+
+<p>Ninf-G provides a server-side API function named
+<code>grpc_is_canceled()</code> for checking the arrival of cancel requests
+from the client.  If the client calls a <code>grpc_cancel()</code> function,
+<code>grpc_is_canceled()</code> returns <code>1</code>.  In order to
+implement cancellation of a session, remote executables are required
+to call <code>grpc_is_canceled()</code> at an appropriate interval and
+return by itself, if <code>grpc_is_canceled()</code> returns
+<code>1</code>.</p>
+</ul>
+
+<h4><a name="Design_debug">
+1.5.4 Supporting Debugging of Applications</a></h4>
+
+<p>Ninf-G provides functionalities which are useful for debugging.
+Ninf-G enables redirection of stdout and stderr of remote executables to
+the client machine.  Log messages generated by Ninf-G and the Globus
+Toolkit can also be stored on the client machine.  Furthermore, Ninf-G
+enables the launch of "gdb" on the server machine when a remote executable
+is launched on the server.  These functionalities are made available by
+turning on the flags in the client configuration file.</p>
+
+<h3> <a name="Compatibility_with_Ninf-G2">
+1.6 Compatibility with Ninf-G2</a></h3>
+
+<ul>
+<li>Source code compatibility
+
+<p>The versions are source code compatible.
+Client-side application programs and server-side remote function
+programs that are used with Ninf-G2 can be used without modification.</p>
+
+<li>other compatibility
+<p>The environment variable name, utility command name, and
+configuration file attribute names have compatibility with Ninf-G2.</p>
+</ul>
+
+<h3><a name="Assumed_environment_for_using_Ninf-G">
+1.7 Assumed environment for using Ninf-G</a></h3>
+
+<h4><a name="Prerequisites_for_installing_Ninf-G">
+1.7.1 Prerequisites for installing Ninf-G</a></h4>
+
+<ul>
+<li> If GT4 is used:
+<ol>
+<li> GT4 Pre-WS MDS should be setup
+(using configure --enable-prewsmds option)
+if MDS2 is needed by the user.
+<li> GT4 Information Services C bindings
+should be setup if MDS4 on C Client is needed by the user.
+<li>  The globus_core must be installed, which is not installed
+by binary installer.  Source installer installs this module.
+</ol>
+
+<li> If GT2 is used:
+<ol>
+<li> All SDK bundles of the Globus Toolkit (resource, data, and
+information) must be built from source bundles.
+<li> All SDK bundles of the Globus Toolkit (resource, data, and
+information) must have a common flavor by which those bundles
+are built. The flavor should be specified as the Globus flavor
+when installing (configuring) Ninf-G except when the flavor is
+gcc32dbg.
+</ol>
+
+<li> Python 2.3 or later must be installed.
+</ul>
+
+
+<h4><a name="Environment_variables">
+1.7.2 Environment variables for installing / using Ninf-G</a></h4>
+
+<ul>
+<li> GPT_LOCATION must be set to the GPT installation directory
+(if GT3 or GT4 is used, GPT_LOCATION must be set as the same
+location as GLOBUS_LOCATION).
+<li> GLOBUS_LOCATION must be set to the Globus Toolkit installation directory.
+<li> Reading the user setting file for use by the Globus Toolkit,
+     read ${GLOBUS_LOCATION}/etc/globus-user-env.{sh,csh}.
+<li> NG_DIR must be set to the Ninf-G installation directory.
+<li> Reading the user use environment setting file for use by Ninf-G,
+     read ${NG_DIR}/etc/ninfg-user-env.{sh,csh}.
+<li> NG_LOG_LEVEL specifies the loglevel that controls the produced
+     error/warning messages during executions.
+     This variable is set to 2 (Error) by sourcing
+     ${NG_DIR}/etc/ninfg-user-env.{sh,csh}.
+     
+</ul>
+
+<h4><a name="Execution_Environment">1.7.3 Execution Environment</a></h4>
+
+<ul>
+<li> Ninf-G users must be capable of submitting jobs
+using the Globus Toolkit from a client machine on which
+Ninf-G Client programs will run to server machines on which
+the Globus gatekeeper is running and Ninf-G Executables will be
+launched by the Globus jobmanager.
+
+<li> The server machines must be IP-reachable for
+the client machine, that is, the server machines should be
+capable of establishing a connection from the server machines to
+the client machine.
+This implies that the private IP address nodes can be
+utilized by Ninf-G if
+(1) the Globus gatekeeper is running on a gateway node,
+(2) a Globus jobmanager such as jobmanager-pbs is available
+for launching jobs on backend nodes, and
+(3) NAT is available on the gateway node so that backend nodes
+can connect to the client machine.
+</ul>
+
+<hr>
+last update : $Date: 2008/09/29 03:21:51 $
+
+</body>
+</html>

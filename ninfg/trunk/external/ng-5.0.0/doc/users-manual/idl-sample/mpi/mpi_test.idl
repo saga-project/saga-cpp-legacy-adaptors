@@ -1,0 +1,321 @@
+Module mpi_test;
+
+Compiler "/path/to/mpicc";
+Linker "/path/to/mpicc";
+
+Define mpi_test_char(IN broadcast int n, IN broadcast char scalarIn, OUT allocate char *scalarOut, IN broadcast char arrayIn[n], OUT allocate char arrayOut[n])
+Backend "MPI"
+{
+    int my_rank;
+    int tag = 0;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    *scalarOut = scalarIn;
+    arrayOut[my_rank] = arrayIn[my_rank];
+
+    if (my_rank != 0) {
+      MPI_Send(arrayOut, n, MPI_CHAR, 0, tag, MPI_COMM_WORLD);
+    } else {
+      int i;
+      char *buffer;
+      buffer = (char *)malloc(sizeof(char) * n);
+
+      for (i = 1; i < n; i++) {
+        MPI_Status status;
+
+        memset (buffer, 0x0, sizeof(char) * n);
+        MPI_Recv(buffer, n, MPI_CHAR, i, tag, MPI_COMM_WORLD, &status);
+        arrayOut[i] = buffer[i];
+      }
+    }
+}
+
+Define mpi_test_short(IN broadcast int n, IN broadcast short scalarIn, OUT allocate short *scalarOut, IN broadcast short arrayIn[n], OUT allocate short arrayOut[n])
+Backend "MPI"
+{
+    int my_rank;
+    int tag = 0;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    *scalarOut = scalarIn;
+    arrayOut[my_rank] = arrayIn[my_rank];
+
+    if (my_rank != 0) {
+      MPI_Send(arrayOut, n, MPI_SHORT, 0, tag, MPI_COMM_WORLD);
+    } else {
+      int i;
+      short *buffer;
+      buffer = (short *)malloc(sizeof(short) * n);
+
+      for (i = 1; i < n; i++) {
+        MPI_Status status;
+
+        memset (buffer, 0x0, sizeof(short) * n);
+        MPI_Recv(buffer, n, MPI_SHORT, i, tag, MPI_COMM_WORLD, &status);
+        arrayOut[i] = buffer[i];
+      }
+    }
+}
+
+Define mpi_test_int(IN broadcast int n, IN broadcast int scalarIn, OUT allocate int *scalarOut, IN broadcast int arrayIn[n], OUT allocate int arrayOut[n])
+Backend "MPI"
+{
+    int my_rank;
+    int tag = 0;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    *scalarOut = scalarIn;
+    arrayOut[my_rank] = arrayIn[my_rank];
+
+    if (my_rank != 0) {
+      MPI_Send(arrayOut, n, MPI_INT, 0, tag, MPI_COMM_WORLD);
+    } else {
+      int i;
+      int *buffer;
+      buffer = (int *)malloc(sizeof(int) * n);
+
+      for (i = 1; i < n; i++) {
+        MPI_Status status;
+
+        memset (buffer, 0x0, sizeof(int) * n);
+        MPI_Recv(buffer, n, MPI_INT, i, tag, MPI_COMM_WORLD, &status);
+        arrayOut[i] = buffer[i];
+      }
+    }
+}
+
+Define mpi_test_long(IN broadcast int n, IN broadcast long scalarIn, OUT allocate long *scalarOut, IN broadcast long arrayIn[n], OUT allocate long arrayOut[n])
+Backend "MPI"
+{
+    int my_rank;
+    int tag = 0;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    *scalarOut = scalarIn;
+    arrayOut[my_rank] = arrayIn[my_rank];
+
+    if (my_rank != 0) {
+      MPI_Send(arrayOut, n, MPI_LONG, 0, tag, MPI_COMM_WORLD);
+    } else {
+      int i;
+      long *buffer;
+      buffer = (long *)malloc(sizeof(long) * n);
+
+      for (i = 1; i < n; i++) {
+        MPI_Status status;
+
+        memset (buffer, 0x0, sizeof(long) * n);
+        MPI_Recv(buffer, n, MPI_LONG, i, tag, MPI_COMM_WORLD, &status);
+        arrayOut[i] = buffer[i];
+      }
+    }
+}
+
+Define mpi_test_float(IN broadcast int n, IN broadcast float scalarIn, OUT allocate float *scalarOut, IN broadcast float arrayIn[n], OUT allocate float arrayOut[n])
+Backend "MPI"
+{
+    int my_rank;
+    int tag = 0;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    *scalarOut = scalarIn;
+    arrayOut[my_rank] = arrayIn[my_rank];
+
+    if (my_rank != 0) {
+      MPI_Send(arrayOut, n, MPI_FLOAT, 0, tag, MPI_COMM_WORLD);
+    } else {
+      int i;
+      float *buffer;
+      buffer = (float *)malloc(sizeof(float) * n);
+
+      for (i = 1; i < n; i++) {
+        MPI_Status status;
+
+        memset (buffer, 0x0, sizeof(float) * n);
+        MPI_Recv(buffer, n, MPI_FLOAT, i, tag, MPI_COMM_WORLD, &status);
+        arrayOut[i] = buffer[i];
+      }
+    }
+}
+
+Define mpi_test_double(IN broadcast int n, IN broadcast double scalarIn, OUT allocate double *scalarOut, IN broadcast double arrayIn[n], OUT allocate double arrayOut[n])
+Backend "MPI"
+{
+    int my_rank;
+    int tag = 0;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    *scalarOut = scalarIn;
+    arrayOut[my_rank] = arrayIn[my_rank];
+
+    if (my_rank != 0) {
+      MPI_Send(arrayOut, n, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
+    } else {
+      int i;
+      double *buffer;
+      buffer = (double *)malloc(sizeof(double) * n);
+
+      for (i = 1; i < n; i++) {
+        MPI_Status status;
+
+        memset (buffer, 0x0, sizeof(double) * n);
+        MPI_Recv(buffer, n, MPI_DOUBLE, i, tag, MPI_COMM_WORLD, &status);
+        arrayOut[i] = buffer[i];
+      }
+    }
+}
+
+Define mpi_test_scomplex(IN broadcast int n, IN broadcast scomplex scalarIn, OUT allocate scomplex *scalarOut, IN broadcast scomplex arrayIn[n], OUT allocate scomplex arrayOut[n])
+Backend "MPI"
+{
+    int my_rank;
+    int tag = 0;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    scalarOut->r = scalarIn.r;
+    scalarOut->i = scalarIn.i;
+    arrayOut[my_rank].r = arrayIn[my_rank].r;
+    arrayOut[my_rank].i = arrayIn[my_rank].i;
+
+    if (my_rank != 0) {
+      MPI_Send(arrayOut, n * 2, MPI_FLOAT, 0, tag, MPI_COMM_WORLD);
+    } else {
+      int i;
+      scomplex *buffer;
+      buffer = (scomplex *)malloc(sizeof(scomplex) * n);
+
+      for (i = 1; i < n; i++) {
+        MPI_Status status;
+
+        memset (buffer, 0x0, sizeof(scomplex) * n);
+        MPI_Recv(buffer, n * 2, MPI_FLOAT, i, tag, MPI_COMM_WORLD, &status);
+        arrayOut[i].r = buffer[i].r;
+        arrayOut[i].i = buffer[i].i;
+      }
+    }
+}
+
+Define mpi_test_dcomplex(IN broadcast int n, IN broadcast dcomplex scalarIn, OUT allocate dcomplex *scalarOut, IN broadcast dcomplex arrayIn[n], OUT allocate dcomplex arrayOut[n])
+Backend "MPI"
+{
+    int my_rank;
+    int tag = 0;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    scalarOut->r = scalarIn.r;
+    scalarOut->i = scalarIn.i;
+    arrayOut[my_rank].r = arrayIn[my_rank].r;
+    arrayOut[my_rank].i = arrayIn[my_rank].i;
+
+    if (my_rank != 0) {
+      MPI_Send(arrayOut, n * 2, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
+    } else {
+      int i;
+      dcomplex *buffer;
+      buffer = (dcomplex *)malloc(sizeof(dcomplex) * n);
+
+      for (i = 1; i < n; i++) {
+        MPI_Status status;
+
+        memset (buffer, 0x0, sizeof(dcomplex) * n);
+        MPI_Recv(buffer, n * 2, MPI_DOUBLE, i, tag, MPI_COMM_WORLD, &status);
+        arrayOut[i].r = buffer[i].r;
+        arrayOut[i].i = buffer[i].i;
+      }
+    }
+}
+
+Define mpi_test_string(IN broadcast int n, IN broadcast string scalarIn, OUT allocate string *scalarOut, IN broadcast string arrayIn[n], OUT allocate string arrayOut[n])
+Backend "MPI"
+{
+    int my_rank;
+    int tag = 0;
+    int i;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    *scalarOut = scalarIn;
+    arrayOut[my_rank] = arrayIn[my_rank];
+
+    if (my_rank != 0) {
+      int length = strlen(arrayOut[my_rank]);
+      MPI_Send(&length, 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
+      MPI_Send(arrayOut[my_rank], length, MPI_CHAR, 0, tag, MPI_COMM_WORLD);
+    } else {
+      int i;
+
+      for (i = 1; i < n; i++) {
+        int length;
+        MPI_Status status;
+
+        MPI_Recv(&length, 1, MPI_INT, i, tag, MPI_COMM_WORLD, &status);
+	arrayOut[i] = (char *)malloc(length + 1);
+        memset (arrayOut[i], 0x0, length + 1);
+        MPI_Recv(arrayOut[i], length, MPI_CHAR, i, tag, MPI_COMM_WORLD, &status);
+      }
+    }
+}
+
+Define mpi_test_exp(IN broadcast int n, IN broadcast long a[1 > 0 ? n : n-1+(n/n)][n == n2 ? n : n2][n >= n2 ? n2 : n], OUT allocate long b[n <= n2 ? n - n + n : n][n < n2 ? -n * -1 : n * n / n][n + 1 -1 + n % n2], IN broadcast int n2)
+Backend "MPI"
+{
+    int my_rank;
+    int tag = 0;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    if (my_rank != 0) {
+        long send_value;
+
+        *(b + (my_rank * n * n + my_rank * n + my_rank)) = 
+            *(a + (my_rank * n * n + my_rank * n + my_rank));
+        send_value = *(b + (my_rank * n * n + my_rank * n + my_rank));
+        MPI_Send(&send_value, 1, MPI_LONG, 0, tag, MPI_COMM_WORLD);
+    } else {
+        int i;
+        long recv_value;
+        MPI_Status recv_status;
+
+        for (i = 1; i < n; i++) {
+            MPI_Recv(&recv_value, 1, MPI_LONG, i, tag, MPI_COMM_WORLD,
+                &recv_status);
+            *(b + (i * n * n + i * n + i)) = recv_value;
+        }
+    }
+}
+
+Define mpi_test_skip(IN broadcast int n, IN broadcast long a[n2][n * n / n:n - n, n, 1][n], OUT allocate long b[n][n2][n * n / n: n - n, n , 1], IN broadcast int n2)
+Backend "MPI"
+{
+    int my_rank;
+    int tag = 0;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    if (my_rank != 0) {
+        long send_value;
+
+        *(b + (my_rank * n * n + my_rank * n + my_rank)) = 
+            *(a + (my_rank * n * n + my_rank * n + my_rank));
+        send_value = *(b + (my_rank * n * n + my_rank * n + my_rank));
+        MPI_Send(&send_value, 1, MPI_LONG, 0, tag, MPI_COMM_WORLD);
+    } else {
+        int i;
+        long recv_value;
+        MPI_Status recv_status;
+
+        for (i = 1; i < n; i++) {
+            MPI_Recv(&recv_value, 1, MPI_LONG, i, tag, MPI_COMM_WORLD,
+                &recv_status);
+            *(b + (i * n * n + i * n + i)) = recv_value;
+        }
+    }
+}

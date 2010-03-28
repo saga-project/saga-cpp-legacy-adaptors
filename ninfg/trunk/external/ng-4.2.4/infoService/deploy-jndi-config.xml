@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
+	<service name="org/apgrid/ninf/ng4/grpcinfo/GrpcInfoService">
+		<resource name="home" type="org.apgrid.ninf.ng4.grpcinfo.impl.GrpcInfoHome">
+			<resourceParams>
+				<parameter>
+					<name>factory</name>
+					<value>org.globus.wsrf.jndi.BeanFactory</value>
+				</parameter>
+				<parameter>
+					<name>hostName</name>
+					<value>example.org</value>
+				</parameter>
+				<parameter>
+					<name>mpiCpus</name>
+					<value>1</value>
+				</parameter>
+				<parameter>
+					<name>infoDirPath</name>
+					<value>/usr/local/gt4.0.0/var/gridrpc</value>
+				</parameter>
+			</resourceParams>
+		</resource>
+	</service>
+	<service name="org/apgrid/ninf/ng4/grpcinfo/GrpcInfoIndexService">
+		<resource name="home" type="org.globus.mds.aggregator.impl.SingletonAggregatorHome">
+			<resourceParams>
+				<parameter>
+					<name>factory</name>
+					<value>org.globus.wsrf.jndi.BeanFactory</value>
+				</parameter>
+				<parameter>
+					<name>resourceClass</name>
+					<value>org.globus.mds.index.impl.IndexResource</value>
+				</parameter>
+			</resourceParams>
+		</resource>
+		<resource name="configuration" type="org.globus.mds.aggregator.impl.AggregatorConfiguration">
+			<resourceParams>
+				<parameter>
+					<name>factory</name><value>org.globus.wsrf.jndi.BeanFactory</value>
+				</parameter>
+				<parameter>
+					<name>aggregatorSources</name>
+					<!--value>org.globus.mds.aggregator.impl.QueryAggregatorSource org.globus.mds.aggregator.impl.SubscriptionAggregatorSource org.globus.mds.aggregator.impl.ExecutionAggregatorSource</value-->
+					<value>org.globus.mds.aggregator.impl.SubscriptionAggregatorSource</value>
+				</parameter>
+			</resourceParams>
+		</resource>
+		<resourceLink name="groupHome" target="java:comp/env/services/org/apgrid/ninf/ng4/grpcinfo/GrpcInfoIndexService/home"/>
+		<resourceLink name="entryHome" target="java:comp/env/services/org/apgrid/ninf/ng4/grpcinfo/GrpcInfoIndexServiceEntry/home"/>
+	</service>
+	<service name="org/apgrid/ninf/ng4/grpcinfo/GrpcInfoIndexServiceEntry">
+		<resource name="home" type="org.globus.mds.index.impl.IndexEntryHome">
+			<resourceParams>
+				<parameter>
+					<name>factory</name>
+					<value>org.globus.wsrf.jndi.BeanFactory</value>
+				</parameter>
+			</resourceParams>
+		</resource>
+		<resourceLink name="groupHome" target="java:comp/env/services/org/apgrid/ninf/ng4/grpcinfo/GrpcInfoIndexService/home"/>
+		<resourceLink name="entryHome" target="java:comp/env/services/org/apgrid/ninf/ng4/grpcinfo/GrpcInfoIndexServiceEntry/home"/>
+		<resourceLink name="configuration" target="java:comp/env/services/org/apgrid/ninf/ng4/grpcinfo/GrpcInfoIndexService/configuration"/>
+	</service>
+</jndiConfig>

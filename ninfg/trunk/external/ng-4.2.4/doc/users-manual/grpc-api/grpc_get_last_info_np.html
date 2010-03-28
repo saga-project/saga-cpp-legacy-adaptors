@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>grpc_get_last_info_np</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>grpc_get_last_info_np</code> - Returns the information on the last session that was run.
+<h3>SYNOPSIS</h3>
+<code>
+  grpc_error_t grpc_get_last_info_np(grpc_exec_info_t_np *info,
+                                     int *status)
+
+</code>
+<h3>ARGUMENTS</h3>
+<dl>
+<dt><code>  grpc_exec_info_t_np *info</code></dt>
+<dd>	The session information</dd>
+<dt><code>  int *status</code></dt>
+<dd>	The session status</dd>
+</dl>
+<h3>DESCRIPTION</h3>
+  Not recommend. Use grpc_session_info_get_np() instead.<br>
+  The grpc_get_last_info_np() function returns the information on the last-executed session.<br>
+  If NULL is specified in info, only the status of the session is returned as the return value.<br>
+  See the manual of grpc_get_info_np() for details of info.<br>
+<br>
+Refer to the following for return status.<br>
+<br>
+    GRPC_SESSION_ARG_IS_NOT_TRANSMITTED<br>
+	Transmission of the arguments to the stub has not been completed.<br>
+<br>
+    GRPC_SESSION_EXECUTING<br>
+	The session is in progress.<br>
+<br>
+    GRPC_SESSION_DOWN<br>
+	The session is not being executed.<br>
+<br>
+    GRPC_SESSION_DONE<br>
+	The session has ended.<br>
+<br>
+    GRPC_SESSION_UNKNOWN_STATUS <br>
+        API was failed.<br>
+
+<p> This function is MT-safe. </p>
+
+<h3>RETURN VALUE</h3>
+  If successful, GRPC_NO_ERROR is returned. In the case of an error, Error code is returned.<br>
+<h3>ERRORS</h3>
+<dl>
+<dt><code>  GRPC_NOT_INITIALIZED</code></dt>
+<dd>	GRPC client is not initialized yet.</dd>
+<dt><code>  GRPC_OTHER_ERROR_CODE</code></dt>
+<dd>	Internal error detected.</dd>
+</dl>
+<hr>
+last update : $Date: 2005/07/11 07:11:24 $
+</body>
+</html>

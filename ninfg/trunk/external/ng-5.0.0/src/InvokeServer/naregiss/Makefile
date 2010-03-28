@@ -1,0 +1,121 @@
+# $RCSfile: Makefile.in,v $ $Revision: 1.7 $ $Date: 2008/03/28 08:47:44 $
+# $AIST_Release: 5.0.0 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+SHELL     = /bin/sh
+JAVA_HOME = 
+JAVAC     = 
+JAVA      = 
+JAR       = 
+ANT       = true
+TOPDIR    = /Users/merzky/links/saga/trunk/adaptors/ninfg/ninfg-adaptor-1112/external/ng-5.0.0
+INSTALL   = /Users/merzky/links/saga/trunk/adaptors/ninfg/ninfg-adaptor-1112/external/ng-5.0.0/utility/configure/aux/install-sh -c
+RM        = /bin/rm -f
+
+NAREGISS_IS     = ng_invoke_server.NAREGISS
+NAREGISS_IS_JAR = naregissIS.jar
+NAREGISS_IS_EXECUTE_SH = naregiss_is_execute.sh
+INVOKE_SERVER_JAR_INSTALLED = $(NG_DIR)/lib/ng_invoke_server.jar
+INVOKE_SERVER_JAR_BUILD     = ../javacommon/ng_invoke_server.jar
+
+NAREGI_JARS=
+
+GLOBUS_JARS = $(GLOBUS_LOCATION)/lib/addressing-1.0.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/addressing-1.0.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/axis.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/axis-url.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/cog-axis.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/cog-jglobus.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/cog-url.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/commonj.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/commons-beanutils.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/commons-collections-3.0.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/commons-digester.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/commons-discovery.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/commons-logging.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/concurrent.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/cryptix32.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/cryptix-asn1.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/cryptix.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/globus_delegation_service.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/globus_delegation_stubs.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/globus_wsrf_mds_aggregator_stubs.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/globus_wsrf_rendezvous_service.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/globus_wsrf_rendezvous_stubs.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/globus_wsrf_rft_stubs.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/gram-client.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/gram-stubs.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/gram-utils.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/jaxrpc.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/jce-jdk13-125.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/jgss.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/log4j-1.2.8.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/naming-common.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/naming-factory.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/naming-java.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/naming-resources.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/opensaml.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/puretls.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/saaj.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/servlet.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/wsdl4j.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/wsrf_common.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/wsrf_core.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/wsrf_core_stubs.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/wsrf_mds_usefulrp.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/wsrf_mds_usefulrp_schema_stubs.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/wsrf_provider_jce.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/wsrf_tools.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/wss4j.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/xalan.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/xercesImpl.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/xml-apis.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/xmlsec.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/cog-tomcat.jar
+GLOBUS_JARS := ${GLOBUS_JARS}:${GLOBUS_LOCATION}/lib/junit.jar
+
+CLASSPATH=.:$(GLOBUS_JARS):$(NAREGI_JARS):$(INVOKE_SERVER_JAR_BUILD)
+
+all: jar
+
+is: $(INVOKE_SERVER_JAR_BUILD)
+	$(JAVAC) -classpath $(CLASSPATH) org/apgrid/grpc/tools/invokeServer/naregiSS/*.java
+
+jar: is
+	$(JAR) cf $(NAREGISS_IS_JAR) org
+
+install: $(INVOKE_SERVER_JAR_INSTALLED) jar
+	$(INSTALL) $(NAREGISS_IS)            $(NG_DIR)/bin	
+	$(INSTALL) $(NAREGISS_IS_JAR)        $(NG_DIR)/lib	
+	$(INSTALL) $(NAREGISS_IS_EXECUTE_SH) $(NG_DIR)/lib
+	$(INSTALL) $(NAREGISS_IS_EXECUTE_SH) $(NG_DIR)/lib
+
+clean:
+	$(RM) org/apgrid/grpc/tools/invokeServer/naregiSS/*.class
+	$(RM) org/apgrid/grpc/tools/invokeServer/naregiSS/*~
+	$(RM) $(NAREGISS_IS_JAR)
+	cd ../javacommon && $(ANT) clean
+
+$(INVOKE_SERVER_JAR_BUILD):
+	cd ../javacommon && $(ANT) jar
+
+$(INVOKE_SERVER_JAR_INSTALLED):
+	test -n "${NG_DIR}"
+	cd ../javacommon && $(ANT) install
+

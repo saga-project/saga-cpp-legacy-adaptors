@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+		name="GrpcInfoService"
+		targetNamespace="http://ninf.apgrid.org/ng5/grpcinfo"
+		xmlns="http://schemas.xmlsoap.org/wsdl/"
+		xmlns:ng5gi="http://ninf.apgrid.org/ng5/grpcinfo"
+		xmlns:ng5gitypes="http://ninf.apgrid.org/ng5/grpcinfo/types"
+		xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+		xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
+		xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
+		xmlns:wsnt="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd"
+		xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"
+		xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor">
+	<import
+			namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
+			location="../wsrf/properties/WS-ResourceProperties.wsdl"/>
+	<import
+			namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"
+			location="../wsrf/notification/WS-BaseN.wsdl"/>
+	<types>
+		<xsd:schema targetNamespace="http://ninf.apgrid.org/ng5/grpcinfo/types"
+				xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<!-- Requests and responses -->
+			<xsd:complexType name="RescanRequestType"/>
+			<xsd:element name="rescan" type="ng5gitypes:RescanRequestType"/>
+			<xsd:complexType name="RescanResponseType"/>
+			<xsd:element name="rescanResponse" type="ng5gitypes:RescanResponseType"/>
+			<!-- Resource properties -->
+			<xsd:complexType name="GrpcInfoSetType">
+				<xsd:sequence>
+					<xsd:any namespace="##any" minOccurs="1" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="grpcInfoSet" type="ng5gitypes:GrpcInfoSetType"/>
+			<xsd:complexType name="GrpcInfoRPType">
+				<xsd:sequence>
+					<xsd:element ref="ng5gitypes:grpcInfoSet" minOccurs="1" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="grpcInfoRP" type="ng5gitypes:GrpcInfoRPType"/>
+		</xsd:schema>
+	</types>
+	<message name="RescanRequestMessage">
+		<part name="args" element="ng5gitypes:rescan"/>
+	</message>
+	<message name="RescanResponseMessage">
+		<part name="result" element="ng5gitypes:rescanResponse"/>
+	</message>
+	<portType
+			name="GrpcInfoPortType"
+			wsdlpp:extends="wsrpw:QueryResourceProperties wsntw:NotificationProducer"
+			wsrp:ResourceProperties="ng5gitypes:grpcInfoRP">
+		<operation name="rescan" parameterOrder="args">
+			<input
+					name="rescan"
+					message="ng5gi:RescanRequestMessage"
+					wsa:Action="http://ninf.apgrid.org/ng5/grpcinfo/GrpcInfoPortType/rescan"/>
+			<output
+					name="rescanResponse"
+					message="ng5gi:RescanResponseMessage"
+					wsa:Action="http://ninf.apgrid.org/ng5/grpcinfo/GrpcInfoPortType/rescanResponse"/>
+		</operation>
+	</portType>
+</definitions>

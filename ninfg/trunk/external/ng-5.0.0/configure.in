@@ -1,0 +1,1955 @@
+dnl $RCSfile: configure.in,v $ $Revision: 1.65 $ $Date: 2008/03/28 08:47:44 $
+dnl $AIST_Release: 5.0.0 $
+dnl $AIST_Copyright:
+dnl  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+dnl  National Institute of Advanced Industrial Science and Technology
+dnl  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+dnl  
+dnl  Licensed under the Apache License, Version 2.0 (the "License");
+dnl  you may not use this file except in compliance with the License.
+dnl  You may obtain a copy of the License at
+dnl  
+dnl      http://www.apache.org/licenses/LICENSE-2.0
+dnl  
+dnl  Unless required by applicable law or agreed to in writing, software
+dnl  distributed under the License is distributed on an "AS IS" BASIS,
+dnl  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+dnl  See the License for the specific language governing permissions and
+dnl  limitations under the License.
+dnl  $
+dnl
+dnl     This file is an input file used by the GNU "autoconf" program to
+dnl     generate the file "configure", which is run during installation
+dnl     to configure the system for the local environment.
+
+#
+# Initialize.
+#
+
+
+AC_INIT
+
+AC_PREREQ(2.59)
+AC_REVISION($Revision: 1.65 $)
+AC_CONFIG_SRCDIR(src/c/include/ng.h)
+AC_CONFIG_AUX_DIR([utility/configure/aux])
+AC_CONFIG_HEADERS([src/c/include/ngConfig.h])
+
+TOPDIR=`pwd`
+AC_SUBST(TOPDIR)
+
+# Installing modules. This will grow while configure run.
+INVOKE_SERVER_MODULES="templ"
+COMMUNICATION_PROXY_MODULES=""
+INFORMATION_SERVICE_MODULES=""
+
+# MODULES_ALL is for to make distclean.
+INVOKE_SERVER_MODULES_ALL="gt2c gt4py naregiss templ ssh"
+COMMUNICATION_PROXY_MODULES_ALL="ccommon GT"
+INFORMATION_SERVICE_MODULES_ALL="ccommon nrf"
+
+require_python="no"
+require_java15="no"
+require_ant="no"
+
+
+#
+# Check for configure arguments.
+#
+
+AC_MSG_CHECKING([for cc in option])
+AC_ARG_WITH(cc,
+    [  --with-cc=CC            C compiler])
+if test "x${with_cc}" = "x"; then
+    :
+elif test "x${with_cc}" = "xno"; then
+    AC_MSG_ERROR([no compiler.])
+else
+    CC=$with_cc
+fi
+
+if test "x${CC}" != "x"; then
+    AC_MSG_RESULT([$CC])
+else
+    AC_MSG_RESULT([unspecified])
+fi
+
+
+AC_MSG_CHECKING([for debug in option])
+# default : Use autoconf check result.
+use_debug="undefined"
+AC_ARG_ENABLE(debug,
+    [  --enable-debug          whether to use debug option or not])
+if test "x${enable_debug}" = "x"; then
+    :
+elif test "x${enable_debug}" = "xyes"; then
+    use_debug="yes"
+elif test "x${enable_debug}" = "xno"; then
+    use_debug="no"
+else
+    AC_MSG_ERROR([invalid debug value $enable_debug])
+fi
+
+if test "x${use_debug}" = "xundefined"; then
+    AC_MSG_RESULT([unspecified])
+elif test "x${use_debug}" = "xyes"; then
+    AC_MSG_RESULT([yes])
+elif test "x${use_debug}" = "xno"; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_ERROR([invalid debug value $use_debug])
+fi
+
+
+AC_MSG_CHECKING([for optimize in option])
+# default : Use autoconf check result.
+use_optimize="undefined"
+AC_ARG_ENABLE(optimize,
+    [  --enable-optimize       whether to use optimize option or not])
+if test "x${enable_optimize}" = "x"; then
+    :
+elif test "x${enable_optimize}" = "xyes"; then
+    use_optimize="yes"
+elif test "x${enable_optimize}" = "xno"; then
+    use_optimize="no"
+else
+    AC_MSG_ERROR([invalid optimize value $enable_optimize])
+fi
+
+if test "x${use_optimize}" = "xundefined"; then
+    AC_MSG_RESULT([unspecified])
+elif test "x${use_optimize}" = "xyes"; then
+    AC_MSG_RESULT([yes])
+elif test "x${use_optimize}" = "xno"; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_ERROR([invalid optimize value $use_optimize])
+fi
+
+
+AC_MSG_CHECKING([for pthread in option])
+use_pthread="yes"
+AC_ARG_WITH(pthread,
+    [  --with-pthread          use pthread or not, for non Pthreads environment])
+if test "x${with_pthread}" = "x"; then
+    :
+elif test "x${with_pthread}" = "xno"; then
+    use_pthread="no"
+else
+    use_pthread="yes"
+fi
+AC_MSG_RESULT([$use_pthread])
+
+
+AC_MSG_CHECKING([for poll in option])
+use_poll="undefined"
+AC_ARG_WITH(poll,
+    [  --with-poll             whether to use poll or not])
+if test "x${with_poll}" = "x"; then
+    :
+elif test "x${with_poll}" = "xno"; then
+    use_poll="no"
+else
+    use_poll="yes"
+fi
+
+poll_or_select="undefined"
+if test "x${use_poll}" = "xundefined"; then
+    AC_MSG_RESULT([unspecified])
+elif test "x${use_poll}" = "xyes"; then
+    poll_or_select="poll"
+    AC_MSG_RESULT([yes])
+elif test "x${use_poll}" = "xno"; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_ERROR([invalid poll value $use_poll])
+fi
+
+
+AC_MSG_CHECKING([for select in option])
+use_select="undefined"
+AC_ARG_WITH(select,
+    [  --with-select           whether to use select or not])
+if test "x${with_select}" = "x"; then
+    :
+elif test "x${with_select}" = "xno"; then
+    use_select="no"
+else
+    use_select="yes"
+fi
+
+if test "x${use_select}" = "xundefined"; then
+    AC_MSG_RESULT([unspecified])
+elif test "x${use_select}" = "xyes"; then
+    if test "x${use_poll}" = "xyes"; then
+        AC_MSG_ERROR([both poll and select are enabled])
+    fi
+    poll_or_select="select"
+    AC_MSG_RESULT([yes])
+elif test "x${use_select}" = "xno"; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_ERROR([invalid select value $use_select])
+fi
+
+
+AC_MSG_CHECKING([for zlib in option])
+use_zlib="undefined"
+AC_ARG_WITH(zlib,
+    [  --with-zlib             use zlib for compression])
+if test "x${with_zlib}" = "x"; then
+    :
+elif test "x${with_zlib}" = "xno"; then
+    use_zlib="no"
+else
+    use_zlib="yes"
+fi
+
+if test "x${use_zlib}" = "xundefined"; then
+    AC_MSG_RESULT([unspecified])
+elif test "x${use_zlib}" = "xyes"; then
+    AC_MSG_RESULT([yes])
+elif test "x${use_zlib}" = "xno"; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_ERROR([invalid zlib value $use_zlib])
+fi
+
+
+AC_MSG_CHECKING([for signal in option])
+use_signal="yes"
+AC_ARG_WITH(signal,
+    [  --with-signal           whether to use signal or not])
+if test "x${with_signal}" = "x"; then
+    :
+elif test "x${with_signal}" = "xno"; then
+    use_signal="no"
+else
+    use_signal="yes"
+fi
+AC_MSG_RESULT([$use_signal])
+
+
+AC_MSG_CHECKING([for python in option])
+use_python="undefined"
+python_com=""
+AC_ARG_WITH(python,
+    [  --with-python           specify python command path])
+if test "x${with_python}" = "x"; then
+    :
+elif test "x${with_python}" = "xyes"; then
+    use_python="yes"
+elif test "x${with_python}" = "xno"; then
+    use_python="no"
+else
+    use_python="yes"
+    python_com=$with_python
+fi
+
+if test "x${use_python}" = "xundefined"; then
+    AC_MSG_RESULT([unspecified])
+elif test "x${use_python}" = "xyes"; then
+    AC_MSG_RESULT([yes])
+    AC_MSG_CHECKING([for python path in option])
+    if test "x${python_com}" = "x"; then
+        AC_MSG_RESULT([unspecified])
+    else
+        AC_MSG_RESULT([$python_com])
+    fi
+elif test "x${use_python}" = "xno"; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_ERROR([invalid python value $use_python])
+fi
+
+
+use_globus="undefined"
+AC_ARG_WITH(globus,
+    [  --with-globus           Globus Toolkit])
+if test "x${with_globus}" = "x"; then
+    :
+elif test "x${with_globus}" = "xno"; then
+    use_globus="no"
+else
+    use_globus="yes"
+fi
+
+AC_MSG_CHECKING([for Globus Toolkit in option])
+if test "x${use_globus}" = "xyes"; then
+    AC_MSG_RESULT([yes])
+elif test "x${use_globus}" = "xno"; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([unspecified])
+fi
+
+# Check GLOBUS_LOCATION environment variable.
+if test "x${use_globus}" != "xno"; then
+    AC_MSG_CHECKING([for GLOBUS_LOCATION])
+
+    have_globus="yes"
+
+    if test "x${GLOBUS_LOCATION}" = "x"; then
+        if test "x${use_globus}" = "xyes"; then
+            AC_MSG_ERROR([no GLOBUS_LOCATION environment variable.])
+        else
+            have_globus="no"
+        fi
+    fi
+
+    if test ! -d $GLOBUS_LOCATION; then
+        if test "x${use_globus}" = "xyes"; then
+            AC_MSG_ERROR([no GLOBUS_LOCATION directory ($GLOBUS_LOCATION).])
+        else
+            have_globus="no"
+        fi
+    fi
+
+    if test "x${use_globus}" = "xundefined"; then
+        if test "x${have_globus}" = "xyes"; then
+            use_globus="yes"
+        else
+            use_globus="no"
+            GLOBUS_LOCATION=""
+        fi
+    fi
+
+    if test "x${use_globus}" = "xyes"; then
+        AC_MSG_RESULT([$GLOBUS_LOCATION])
+    else
+        AC_MSG_RESULT([no])
+    fi
+else
+    GLOBUS_LOCATION=""
+fi
+AC_SUBST(GLOBUS_LOCATION)
+
+use_prewsgram="no"
+use_wsgram="no"
+use_cpgt="no"
+
+if test "x${use_globus}" = "xyes"; then
+
+    AC_MSG_CHECKING([for Globus Toolkit flavor in option])
+    globus_flavor="gcc32dbgpthr"
+    AC_ARG_WITH(globusFlavor,
+        [  --with-globusFlavor     Globus Toolkit flavor (default: gcc32dbgpthr)],
+        [globus_flavor=$withval])
+    if test "x${globus_flavor}" = "xno"; then
+        AC_MSG_ERROR([no Globus Toolkit flavor.])
+    fi
+    AC_MSG_RESULT([$globus_flavor])
+
+
+    AC_MSG_CHECKING([for Pre-WS GRAM in option])
+    use_prewsgram="undefined"
+    AC_ARG_WITH(prewsgram,
+        [  --with-prewsgram        whether to use Pre-WS GRAM or not])
+    if test "x${with_prewsgram}" = "x"; then
+        :
+    elif test "x${with_prewsgram}" = "xno"; then
+        use_prewsgram="no"
+    else
+        use_prewsgram="yes"
+    fi
+
+    if test "x${use_prewsgram}" = "xundefined"; then
+        AC_MSG_RESULT([unspecified])
+    elif test "x${use_prewsgram}" = "xyes"; then
+        AC_MSG_RESULT([yes])
+    elif test "x${use_prewsgram}" = "xno"; then
+        AC_MSG_RESULT([no])
+    else
+        AC_MSG_ERROR([invalid prewsgram value $use_prewsgram])
+    fi
+
+    AC_MSG_CHECKING([for WS GRAM in option])
+    use_wsgram="yes"
+    AC_ARG_WITH(wsgram,
+        [  --with-wsgram           whether to use WS GRAM or not])
+    if test "x${with_wsgram}" = "x"; then
+        :
+    elif test "x${with_wsgram}" = "xno"; then
+        use_wsgram="no"
+    else
+        use_wsgram="yes"
+    fi
+    AC_MSG_RESULT([$use_wsgram])
+
+
+    AC_MSG_CHECKING([for Communication Proxy GT in option])
+    use_cpgt="undefined"
+    AC_ARG_WITH(cpgt,
+        [  --with-communicationProxyGT whether to use GT or not])
+    if test "x${with_communicationProxyGT}" = "x"; then
+        :
+    elif test "x${with_communicationProxyGT}" = "xno"; then
+        use_cpgt="no"
+    else
+        use_cpgt="yes"
+    fi
+
+    if test "x${use_cpgt}" = "xundefined"; then
+        AC_MSG_RESULT([unspecified])
+    elif test "x${use_cpgt}" = "xyes"; then
+        AC_MSG_RESULT([yes])
+    elif test "x${use_cpgt}" = "xno"; then
+        AC_MSG_RESULT([no])
+    else
+        AC_MSG_ERROR([invalid CommunicationProxy GT value $use_cpgt])
+    fi
+fi
+
+
+AC_MSG_CHECKING([for Invoke Server SSH in option])
+use_isssh="yes"
+AC_ARG_WITH(ssh,
+    [  --with-ssh              whether to use Invoke Server SSH or not])
+if test "x${with_ssh}" = "x"; then
+    :
+elif test "x${with_ssh}" = "xno"; then
+    use_isssh="no"
+else
+    use_isssh="yes"
+fi
+AC_MSG_RESULT([$use_isssh])
+
+if test "x${use_isssh}" = "xyes"; then
+    INVOKE_SERVER_MODULES="${INVOKE_SERVER_MODULES} ssh"
+fi
+
+
+AC_MSG_CHECKING([for using NAREGI SS])
+
+withNaregi=""
+AC_ARG_WITH(naregi,
+    [  --with-naregi           support invoking jobs via NAREGI SS],
+    [withNaregi=$withval], [withNaregi="no"])
+ 
+naregiDir=""
+AC_ARG_WITH(naregidir,
+    [  --with-naregidir=NAREGIDIR NAREGI Middleware is installed in NAREGIDIR[/usr/naregi]],
+    [naregiDir=$withval], [naregiDir="/usr/naregi"])
+
+naregiJars=""
+AC_ARG_WITH(naregi-jars,
+    [  --with-naregi-jars=JARS Jar files required by Invoke Server NAREGISS],
+    [naregiJars=$withval], [naregiJars=""])
+
+AC_MSG_RESULT([$withNaregi])
+
+NAREGI_JARS=""
+if test "x${withNaregi}" = "xyes"; then
+    if test "x${use_globus}" != "xyes"; then
+        AC_MSG_ERROR([Invoke Server NAREGISS requires Globus Toolkit.])
+    fi
+
+    NAREGI_JARS="${naregiJars}"
+    if test x"${NAREGI_JARS}" = x; then
+        # Default value
+        NAREGI_JARS="${naregiDir}/lib/jars/NAREGI/gridss-client-2.0.jar"
+        NAREGI_JARS="${naregiDir}/lib/jars/NAREGI/renewal-gridss-1.0.jar:${NAREGI_JARS}"
+        NAREGI_JARS="${naregiDir}/lib/jars/NAREGI/renewal-client-1.0.jar:${NAREGI_JARS}"
+    fi
+    AC_MSG_CHECKING([for jar files required by Invoke Server NAREGISS])
+    AC_MSG_RESULT(["${NAREGI_JARS}"])
+
+    INVOKE_SERVER_MODULES="${INVOKE_SERVER_MODULES} naregiss"
+    require_java15="yes"
+    require_ant="yes"
+fi
+AC_SUBST(NAREGI_JARS)
+
+AC_MSG_CHECKING([for Information Service NRF in option])
+use_isnrf="yes"
+AC_ARG_WITH(nrf,
+    [  --with-nrf              whether to use Information Service NRF or not])
+if test "x${with_nrf}" = "x"; then
+    :
+elif test "x${with_nrf}" = "xno"; then
+    use_isnrf="no"
+else
+    use_isnrf="yes"
+fi
+AC_MSG_RESULT([$use_isnrf])
+
+if test "x${use_isnrf}" = "xyes"; then
+    INFORMATION_SERVICE_MODULES="${INFORMATION_SERVICE_MODULES} nrf"
+fi
+
+# Print startup environment variables.
+
+# No environment variable CC print.
+
+AC_MSG_CHECKING([for environment variable CFLAGS])
+if test "x${CFLAGS}" != "x"; then
+    AC_MSG_RESULT([$CFLAGS])
+else
+    AC_MSG_RESULT([none])
+fi
+
+AC_MSG_CHECKING([for environment variable LDFLAGS])
+if test "x${LDFLAGS}" != "x"; then
+    AC_MSG_RESULT([$LDFLAGS])
+else
+    AC_MSG_RESULT([none])
+fi
+
+AC_MSG_CHECKING([for environment variable CPPFLAGS])
+if test "x${CPPFLAGS}" != "x"; then
+    AC_MSG_RESULT([$CPPFLAGS])
+else
+    AC_MSG_RESULT([none])
+fi
+
+AC_MSG_CHECKING([for environment variable CPP])
+if test "x${CPP}" != "x"; then
+    AC_MSG_RESULT([$CPP])
+else
+    AC_MSG_RESULT([none])
+fi
+
+
+#
+# globus-makefile-header
+#
+
+if test "x${use_globus}" = "xyes"; then
+    globus_version="${GLOBUS_LOCATION}/bin/globus-version"
+    globus_makefile_header="${GLOBUS_LOCATION}/bin/globus-makefile-header"
+    globus_makefile_odir="${TOPDIR}/utility/template"
+    globus_makefile_ofile="globus_makefile_header-result.txt"
+    globus_makefile_output="${globus_makefile_odir}/${globus_makefile_ofile}"
+    globus_modules="globus_common globus_io"
+    globus_modules="${globus_modules} globus_gass_server_ez"
+    globus_modules="${globus_modules} globus_gram_client"
+
+    # gpt-query is unnecessary and not called.
+
+    AC_MSG_CHECKING([for globus-version])
+    GLOBUS_VERSION=""
+    if test -x $globus_version; then
+        GLOBUS_VERSION=`${globus_version}`
+        if test $? -ne 0; then
+            AC_MSG_ERROR([failed to execute globus-version.])
+        fi
+        AC_MSG_RESULT([$GLOBUS_VERSION])
+    else
+        AC_MSG_RESULT([no])
+    fi
+    AC_SUBST(GLOBUS_VERSION)
+
+    AC_MSG_CHECKING([for globus-makefile-header])
+    if test ! -x $globus_makefile_header; then
+        AC_MSG_ERROR([no $globus_makefile_header executable.])
+    fi
+
+    if test -f $globus_makefile_output; then
+        rm -f $globus_makefile_output
+    fi
+
+    if test -f $globus_makefile_output; then
+        AC_MSG_ERROR([$globus_makefile_output exist.])
+    fi
+
+    $globus_makefile_header --flavor=$globus_flavor \
+        $globus_modules > $globus_makefile_output
+    if test $? -ne 0; then
+        rm -f $globus_makefile_output
+        AC_MSG_ERROR([globus-makefile-header was failed.])
+    fi
+
+    if test ! -f $globus_makefile_output; then
+        rm -f $globus_makefile_output
+        AC_MSG_ERROR([globus-makefile-header output was not created.])
+    fi
+
+    # Set Globus variables.
+    # To shorten the configure execution time, share result.
+    globus_client_output=$globus_makefile_output
+    globus_server_output=$globus_makefile_output
+    globus_var="${TOPDIR}/utility/configure/gtvariable.sh"
+    globus_variable_ok=1
+
+    get_globus_variable () {
+        output_file=$1
+        flag_name=$2
+
+        globus_variable_result=`${globus_var} ${output_file} ${flag_name}`
+        if test $? -ne 0; then
+            globus_variable_ok=0
+            globus_variable_result=""
+        fi
+    }
+
+    # Client.
+    get_globus_variable $globus_client_output GLOBUS_CC
+    NG_GT_CLIENT_CC=$globus_variable_result
+    AC_SUBST(NG_GT_CLIENT_CC)
+
+    get_globus_variable $globus_client_output GLOBUS_CPP
+    NG_GT_CLIENT_CPP=$globus_variable_result
+    AC_SUBST(NG_GT_CLIENT_CPP)
+
+    get_globus_variable $globus_client_output GLOBUS_CFLAGS
+    NG_GT_CLIENT_CFLAGS=$globus_variable_result
+    AC_SUBST(NG_GT_CLIENT_CFLAGS)
+
+    get_globus_variable $globus_client_output GLOBUS_INCLUDES
+    NG_GT_CLIENT_INCLUDES=$globus_variable_result
+    AC_SUBST(NG_GT_CLIENT_INCLUDES)
+
+    get_globus_variable $globus_client_output GLOBUS_LIBS
+    NG_GT_CLIENT_LIBS=$globus_variable_result
+    AC_SUBST(NG_GT_CLIENT_LIBS)
+
+    get_globus_variable $globus_client_output GLOBUS_LDFLAGS
+    NG_GT_CLIENT_LDFLAGS=$globus_variable_result
+    AC_SUBST(NG_GT_CLIENT_LDFLAGS)
+
+    get_globus_variable $globus_client_output GLOBUS_PKG_LIBS
+    NG_GT_CLIENT_PKG_LIBS=$globus_variable_result
+    AC_SUBST(NG_GT_CLIENT_PKG_LIBS)
+
+    get_globus_variable $globus_client_output GLOBUS_CPPFLAGS
+    NG_GT_CLIENT_CPPFLAGS=$globus_variable_result
+    AC_SUBST(NG_GT_CLIENT_CPPFLAGS)
+
+
+    # Server.
+    get_globus_variable $globus_server_output GLOBUS_CC
+    NG_GT_SERVER_CC=$globus_variable_result
+    AC_SUBST(NG_GT_SERVER_CC)
+
+    get_globus_variable $globus_server_output GLOBUS_CPP
+    NG_GT_SERVER_CPP=$globus_variable_result
+    AC_SUBST(NG_GT_SERVER_CPP)
+
+    get_globus_variable $globus_server_output GLOBUS_CFLAGS
+    NG_GT_SERVER_CFLAGS=$globus_variable_result
+    AC_SUBST(NG_GT_SERVER_CFLAGS)
+
+    get_globus_variable $globus_server_output GLOBUS_INCLUDES
+    NG_GT_SERVER_INCLUDES=$globus_variable_result
+    AC_SUBST(NG_GT_SERVER_INCLUDES)
+
+    get_globus_variable $globus_server_output GLOBUS_LIBS
+    NG_GT_SERVER_LIBS=$globus_variable_result
+    AC_SUBST(NG_GT_SERVER_LIBS)
+
+    get_globus_variable $globus_server_output GLOBUS_LDFLAGS
+    NG_GT_SERVER_LDFLAGS=$globus_variable_result
+    AC_SUBST(NG_GT_SERVER_LDFLAGS)
+
+    get_globus_variable $globus_server_output GLOBUS_PKG_LIBS
+    NG_GT_SERVER_PKG_LIBS=$globus_variable_result
+    AC_SUBST(NG_GT_SERVER_PKG_LIBS)
+
+    get_globus_variable $globus_server_output GLOBUS_CPPFLAGS
+    NG_GT_SERVER_CPPFLAGS=$globus_variable_result
+    AC_SUBST(NG_GT_SERVER_CPPFLAGS)
+
+
+    if test $globus_variable_ok -ne 1; then
+        rm -f $globus_client_output $globus_server_output
+        AC_MSG_ERROR([failed to get Globus variables.])
+    fi
+
+    AC_MSG_RESULT([ok])
+
+fi
+
+if test "x${use_globus}" = "xyes"; then
+
+    # Pre-WS GRAM requires thread.
+
+    if test "x${use_wsgram}" = "xyes"; then
+        INVOKE_SERVER_MODULES="${INVOKE_SERVER_MODULES} gt4py"
+
+        require_python="yes"
+    fi
+
+    # Communication Proxy GT requires thread.
+fi
+
+
+#
+# Check host.
+#
+
+
+AC_CANONICAL_HOST
+
+AC_MSG_CHECKING([for canonical host])
+AC_MSG_RESULT([$host])
+
+AC_MSG_CHECKING([for canonical host_cpu])
+AC_MSG_RESULT([$host_cpu])
+
+AC_MSG_CHECKING([for canonical host_vendor])
+AC_MSG_RESULT([$host_vendor])
+
+AC_MSG_CHECKING([for canonical host_os])
+AC_MSG_RESULT([$host_os])
+
+
+# UNIX domain socket
+use_unix_socket="no"
+case $host_os in
+    # Authentication can be supported only on Linux.
+    linux*)
+        use_unix_socket="yes"
+        ;;
+    *)
+        ;;
+esac
+
+
+#
+# Check for programs.
+#
+
+
+AC_PROG_CC
+AC_DEFINE_UNQUOTED(NGI_CC, "$CC", [Define CC.])
+
+
+# Check whether the compiler is GCC or not.  
+# Sometime, $GCC is not correct.
+    
+AC_MSG_CHECKING([for gcc compiler again])
+gcc_really="no" 
+AC_RUN_IFELSE([  
+    AC_LANG_PROGRAM(,[[  
+#ifdef __GNUC__  
+#ifndef __INTEL_COMPILER
+    return 0; /* GCC */
+#else
+    return 1; /* Intel Compiler */
+#endif  
+#else 
+    return 1; /* Other */ 
+#endif  
+]])],  
+    [gcc_really="yes"], [gcc_really="no"])
+
+if test "x${gcc_really}" = "xyes"; then
+    AC_MSG_RESULT([gcc])
+else
+    AC_MSG_RESULT([not gcc])
+fi
+
+cc_icc="no"
+if test "x${gcc_really}" = "xno"; then
+    AC_MSG_CHECKING([for Intel compiler])
+    cc_icc="no" 
+    AC_RUN_IFELSE([  
+        AC_LANG_PROGRAM(,[[  
+#ifdef __INTEL_COMPILER
+    return 0; /* Intel Compiler */
+#else 
+    return 1; /* Other */ 
+#endif  
+]])],  
+    [cc_icc="yes"], [cc_icc="no"])
+
+    if test "x${cc_icc}" = "xyes"; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+
+
+# Process debug option.
+# configure try to generates -g for any compiler.
+
+if test "x${use_debug}" != "xundefined"; then
+    old_cflags=$CFLAGS
+    new_cflags=""
+    have_debug="no"
+
+    # Remove debug.
+    for cflag_cur in $old_cflags; do
+        case $cflag_cur in
+            -g)
+                have_debug="yes"
+                if test "x${use_debug}" = "xno"; then
+                    : # Remove option
+                else
+                    new_cflags="${new_cflags} ${cflag_cur}"
+                fi
+                ;;
+            *)
+                new_cflags="${new_cflags} ${cflag_cur}"
+                ;;
+        esac
+    done
+
+    # Add debug.
+    if test "x${use_debug}" = "xyes"; then
+        if test "x${have_debug}" = "xno"; then
+            new_cflags="${new_cflags} -g"
+        fi
+    fi
+
+    CFLAGS=$new_cflags
+fi
+
+
+# Process optimize option.
+if test "x${use_optimize}" != "xundefined"; then
+    if test "x${gcc_really}" = "xyes"; then
+        old_cflags=$CFLAGS
+        new_cflags=""
+        have_optimize="no"
+
+        # Remove optimize.
+        for cflag_cur in $old_cflags; do
+            case $cflag_cur in
+                -O|-O?)
+                    have_optimize="yes"
+                    if test "x${use_optimize}" = "xno"; then
+                        : # Remove option
+                    else
+                        new_cflags="${new_cflags} ${cflag_cur}"
+                    fi
+                    ;;
+                *)
+                    new_cflags="${new_cflags} ${cflag_cur}"
+                    ;;
+                # Note: Autoconf generates only "-g -O2" for gcc.
+            esac
+        done
+
+        # Add optimize.
+        if test "x${use_optimize}" = "xyes"; then
+            if test "x${have_optimize}" = "xno"; then
+                # Ninf-G focus to disable optimize option.
+                # Thus, Optimize level cannot be specified.
+                new_cflags="${new_cflags} -O2"
+            fi
+        fi
+
+        CFLAGS=$new_cflags
+    else
+        AC_MSG_ERROR([non-gcc optimize are not supported. use CFLAGS.])
+    fi
+fi
+
+
+# Add warning option for gcc.
+if test "x${gcc_really}" = "xyes"; then
+    CFLAGS="${CFLAGS} -Wall"
+fi
+
+
+AC_PROG_CPP
+
+
+AC_MSG_CHECKING([for IDL cpp])
+IDL_CPP=$CPP
+if test "x${GCC}" = "xyes"; then
+    IDL_CPP="${CPP} -xc"
+fi
+AC_MSG_RESULT([$IDL_CPP])
+AC_SUBST(IDL_CPP)
+AC_DEFINE_UNQUOTED(NGI_IDL_CPP, "$IDL_CPP", [Define CPP for IDL.])
+
+AC_MSG_CHECKING([for IDL cpp accepts idl suffix])
+if test "x${TMPDIR}" = "x"; then
+    TMPDIR="/tmp"
+fi
+idl_cpp_no_warning="no"
+tmp_idl_file="${TMPDIR}/ngtmpfile-$$.idl"
+echo > $tmp_idl_file
+$IDL_CPP $tmp_idl_file >/dev/null 2>&1
+if test $? -eq 0; then
+    result_count=`(${IDL_CPP} ${tmp_idl_file} >/dev/null) 2>&1 | wc -l`
+    if test $result_count -eq 0; then
+        idl_cpp_no_warning="yes"
+    fi
+fi
+rm -f $tmp_idl_file
+
+if test "x${idl_cpp_no_warning}" = "xyes"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+    AC_DEFINE(NGI_NO_IDL_CPP_ACCEPT_IDL_FILE, 1,
+        [Define if the IDL cpp do not accepts idl suffix.])
+fi
+
+
+AC_PROG_RANLIB
+
+
+AR=""
+AC_PATH_PROG(AR, ar, no)
+if test "x${AR}" = "xno"; then
+    AC_MSG_ERROR([no ar command.])
+fi
+AR="${AR} cr"
+
+
+AC_PROG_YACC
+
+
+#
+# AC_PROG_INSTALL was not worked correctly,
+# because relative path to install-sh from utility/compile/defvar.mk
+# was not always true for each directory.
+#
+INSTALL="${TOPDIR}/utility/configure/aux/install-sh"
+if test ! -x $INSTALL; then
+    AC_MSG_ERROR([install-sh $INSTALL is not executable.])
+fi
+INSTALL="${INSTALL} -c"
+AC_SUBST(INSTALL)
+
+
+MKDIR=""
+AC_PATH_PROG(MKDIR, mkdir, no)
+if test "x${MKDIR}" = "xno"; then
+    AC_MSG_ERROR([no mkdir command.])
+fi
+MKDIR="${MKDIR} -p"
+
+
+TAR=""
+AC_PATH_PROG(TAR, tar, no)
+if test "x${TAR}" = "xno"; then
+    AC_MSG_ERROR([no tar command.])
+fi
+
+
+RM=""
+AC_PATH_PROG(RM, rm, no)
+if test "x${RM}" = "xno"; then
+    AC_MSG_ERROR([no rm command.])
+fi
+RM="${RM} -f"
+
+
+AC_MSG_CHECKING([for python request])
+PYTHON=""
+if test "x${require_python}" = "xyes"; then
+
+    if test "x${use_python}" = "xno"; then
+        AC_MSG_ERROR([python is required.])
+    fi
+
+    AC_MSG_RESULT([yes])
+
+    if test "x${python_com}" != "x"; then
+        PYTHON=$python_com
+
+        AC_MSG_CHECKING([for python])
+        AC_MSG_RESULT([$PYTHON])
+    else
+        
+        AC_PATH_PROG(PYTHON, python, no)
+        if test "x${PYTHON}" = "xno"; then
+            AC_MSG_ERROR([no python.])
+        fi
+    fi
+
+    AC_MSG_CHECKING([for python version])
+    python_var='import sys; sys.version >= "2.3" and sys.exit(0) or sys.exit(1)'
+    if $PYTHON -c "${python_var}"; then
+        AC_MSG_RESULT([>= 2.3])
+    else
+        AC_MSG_ERROR([python version must be 2.3 or later.])
+    fi
+
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(PYTHON)
+
+
+AC_MSG_CHECKING([for Java request])
+JAVA=""
+JAVAC=""
+JAR=""
+if test "x${require_java15}" = "xyes"; then
+    AC_MSG_RESULT([yes])
+
+    AC_MSG_CHECKING([for JAVA_HOME])
+    if test "x${JAVA_HOME}" = "x"; then
+        AC_MSG_ERROR([environment variable JAVA_HOME not set.])
+    fi
+    AC_MSG_RESULT([$JAVA_HOME])
+
+    AC_PATH_PROG(JAVA, java, no, ["${JAVA_HOME}/bin"])
+    if test "x${JAVA}" = "xno"; then
+        AC_MSG_ERROR([no java.])
+    fi
+
+    AC_PATH_PROG(JAVAC, javac, no ["${JAVA_HOME}/bin"])
+    if test "x${JAVAC}" = "xno"; then
+        AC_MSG_ERROR([no javac.])
+    fi
+
+    AC_PATH_PROG(JAR, jar, no ["${JAVA_HOME}/bin"])
+    if test "x${JAVAC}" = "xno"; then
+        AC_MSG_ERROR([no jar.])
+    fi
+
+    AC_MSG_CHECKING([for java version])
+    [str=`eval "${JAVA}" -version 2>&1 | sed -n '/java version/p'`]
+    [str=`echo ${str} | sed 's/^.*java version [ ]*"\([0-9._]*\)".*$/\1/'`]
+    java_version_string=$str
+
+    if test "x${java_version_string}" = "x"; then
+        AC_MSG_RESULT([failed])
+    else
+        AC_MSG_RESULT([$java_version_string])
+    fi
+
+    AC_MSG_CHECKING([for java version 1.5])
+    str=$java_version_string
+    [java_version_major=`echo ${str} | sed 's/^\([0-9]*\).*$/\1/'`]
+    [java_version_minor=`echo ${str} | sed 's/^[0-9]*\.\([0-9]*\).*$/\1/'`]
+
+    java_version_over_15="no"
+    if test "${java_version_major}" -gt 1; then
+        java_version_over_15="yes"
+    elif test "${java_version_major}" -eq 1; then
+        if test "${java_version_minor}" -ge 5; then
+            java_version_over_15="yes"
+        fi
+    fi
+
+    if test "x${java_version_over_15}" = "xyes"; then
+        AC_MSG_RESULT([yes])
+    else
+        # Currently, Java < 1.5 not stop.
+        # Because version check seems implementation depend.
+        AC_MSG_RESULT([no])
+        AC_MSG_WARN([Java must be 1.5.0 or later.])
+    fi
+else
+    AC_MSG_RESULT([no])
+    JAVA_HOME=""
+fi
+AC_SUBST(JAVA_HOME)
+AC_SUBST(JAVA)
+AC_SUBST(JAVAC)
+AC_SUBST(JAR)
+
+
+AC_MSG_CHECKING([for ant request])
+ANT=""
+if test "x${require_ant}" = "xyes"; then
+    AC_MSG_RESULT([yes])
+
+    AC_MSG_CHECKING([for ANT_HOME])
+    if test "x${ANT_HOME}" = "x"; then
+        AC_MSG_ERROR([environment variable ANT_HOME not set.])
+    fi
+    AC_MSG_RESULT([$ANT_HOME])
+
+    AC_PATH_PROG(ANT, ant, no, ["${ANT_HOME}/bin"])
+    if test "x${ANT}" = "xno"; then
+        AC_MSG_ERROR([no ant.])
+    fi
+else
+    AC_MSG_RESULT([no])
+
+    ANT="true" # to make clean from make distclean success.
+fi
+AC_SUBST(ANT)
+
+
+#
+# Check for libraries.
+#
+
+
+if test "x${use_pthread}" = "xyes"; then
+    have_pthread="no"
+    ACX_PTHREAD([have_pthread="yes"],[have_pthread="no"])
+
+    if test "x${have_pthread}" != "xyes"; then
+        AC_MSG_ERROR([no Pthreads library.])
+    fi
+
+    LIBS="$PTHREAD_LIBS $LIBS"
+    CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+    CC="$PTHREAD_CC"
+    AC_DEFINE(NG_PTHREAD, 1, [Define if the Ninf-G work by pthread.])
+
+    case $host_os in
+        solaris2*)
+            AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1,
+                [Define to use reentrant function on Solaris.])
+            ;;
+        *)
+            :;;
+    esac
+fi
+
+
+if test "x${use_zlib}" != "xno"; then
+    have_zlib_lib="no"
+    AC_CHECK_LIB(z, deflate, [have_zlib_lib="yes"], [have_zlib_lib="no"])
+
+    if test "x${use_zlib}" = "xyes"; then
+        if test "x${have_zlib_lib}" != "xyes"; then
+            AC_MSG_ERROR([no zlib library.])
+        fi
+    fi
+
+    # HAVE_LIBZ is defined after the header check.
+fi
+
+#
+# Check for header files.
+#
+
+
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_HEADER_TIME
+AC_HEADER_STDBOOL
+
+
+AC_CHECK_HEADERS(stdlib.h stdio.h stddef.h stdarg.h string.h)
+AC_CHECK_HEADERS(unistd.h ctype.h assert.h errno.h limits.h)
+AC_CHECK_HEADERS(fcntl.h pwd.h arpa/inet.h)
+AC_CHECK_HEADERS(endian.h machine/endian.h sys/endian.h)
+AC_CHECK_HEADERS(netdb.h netinet/in.h netinet/tcp.h)
+AC_CHECK_HEADERS(sys/resource.h sys/socket.h sys/stat.h sys/types.h)
+AC_CHECK_HEADERS(sys/uio.h sys/wait.h sys/time.h time.h)
+AC_CHECK_HEADERS(sys/cdefs.h)
+
+
+# XDR
+case $host_os in
+    # Add OS based rule if the warning happen on configure or compile.
+    solaris2*)
+        # Solaris 2 has conflicts for <rpc/rpc.h>.
+        AC_CHECK_HEADERS(rpc/types.h rpc/xdr.h)
+        ;;
+    darwin*|freebsd*)
+        # Mac OS X, FreeBSD has conflicts for <rpc/xdr.h>.
+        AC_CHECK_HEADERS(rpc/rpc.h)
+        ;;
+    *)
+        AC_CHECK_HEADERS(rpc/rpc.h)
+        AC_CHECK_HEADERS(rpc/types.h rpc/xdr.h)
+        ;;
+esac
+
+
+# Pthreads
+if test "x${use_pthread}" = "xyes"; then
+    case $host_os in
+    osf5*)
+        # OSF, Tru64 print warning on preprocessor.
+        AC_DEFINE(HAVE_PTHREAD_H, 1,
+            [Define to 1 if you have the <pthread.h> header file.])
+        ;;
+    *)
+        AC_CHECK_HEADERS(pthread.h)
+        ;;
+    esac
+
+    AC_CHECK_HEADERS(sched.h)
+fi
+
+
+# poll() or select().
+have_poll="no"
+have_select="no"
+case $host_os in
+    darwin*)
+        # Mac OS X have broken poll() implementation.
+        have_select="yes"
+        ;;
+    *)
+        have_poll="yes"
+        have_select="yes"
+        ;;
+esac
+
+if test "x${poll_or_select}" = "xundefined"; then
+    poll_or_select="none"
+    if test "x${use_select}" != "xno"; then
+        if test "x${have_select}" = "xyes"; then
+            poll_or_select="select"
+        fi
+    fi
+    # default is poll().
+    if test "x${use_poll}" != "xno"; then
+        if test "x${have_poll}" = "xyes"; then
+            poll_or_select="poll"
+        fi
+    fi
+fi
+
+AC_MSG_CHECKING([for poll or select])
+ 
+require_poll="no"
+require_select="no"
+if test "x${poll_or_select}" = "xpoll"; then
+    AC_MSG_RESULT([poll])
+    require_poll="yes"
+
+elif test "x${poll_or_select}" = "xselect"; then
+    AC_MSG_RESULT([select])
+    require_select="yes"
+
+elif test "x${poll_or_select}" = "xnone"; then
+    AC_MSG_RESULT([none])
+
+    # This may be Non POSIX environment.
+    :
+fi
+
+if test "x${use_isssh}" = "xyes"; then
+    AC_MSG_CHECKING([for select request])
+    if test "x${use_select}" = "xno"; then
+        AC_MSG_ERROR([no select() by option.])
+    fi
+    if test "x${have_select}" = "xno"; then
+        AC_MSG_ERROR([no select().])
+    fi
+    AC_MSG_RESULT([yes])
+    require_select="yes"
+fi
+
+if test "x${require_poll}" = "xyes"; then
+    if test "x${have_poll}" = "xno"; then
+        AC_MSG_ERROR([no poll().])
+    fi
+ 
+    AC_CHECK_HEADERS(poll.h sys/poll.h)
+    AC_DEFINE(NGI_POLL_ENABLED, 1,
+        [Define to 1 if you use poll().])
+fi
+
+if test "x${require_select}" = "xyes"; then
+    if test "x${have_select}" = "xno"; then
+        AC_MSG_ERROR([no select().])
+    fi
+
+    AC_CHECK_HEADERS(sys/select.h)
+    AC_DEFINE(NGI_SELECT_ENABLED, 1,
+        [Define to 1 if you use select().])
+fi
+
+
+# zlib
+if test "x${use_zlib}" != "xno"; then
+    have_zlib_header="no"
+    have_zlib_both="no"
+
+    if test "x${have_zlib_lib}" = "xyes"; then
+        have_zlib_header="no"
+        AC_CHECK_HEADER(zlib.h,
+            [have_zlib_header="yes"],
+            [have_zlib_header="no"])
+
+        if test "x${have_zlib_header}" = "xyes"; then
+            have_zlib_both="yes"
+        fi
+    fi
+
+    if test "x${use_zlib}" = "xyes"; then
+        if test "x${have_zlib_header}" != "xyes"; then
+            AC_MSG_ERROR([no zlib header.])
+        fi
+
+        # This won't happen.
+        if test "x${have_zlib_both}" != "xyes"; then
+            AC_MSG_ERROR([no zlib.])
+        fi
+    fi
+
+    if test "x${have_zlib_both}" = "xyes"; then
+        # Library.
+        AC_DEFINE(HAVE_LIBZ, 1,
+            [Define to 1 if you have the `z' library (-lz).])
+        LIBS="-lz $LIBS"
+
+        # Header.
+        AC_DEFINE(HAVE_ZLIB_H, 1,
+            [Define to 1 if you have the <zlib.h> header file.])
+
+        # The program must check the macro below.
+        AC_DEFINE(NGI_ZLIB_ENABLED, 1,
+            [Define to 1 if you use zlib on Ninf-G.])
+    fi
+fi
+
+
+# signal
+if test "x${use_signal}" = "xyes"; then
+    AC_CHECK_HEADERS(signal.h)
+
+    AC_DEFINE(NGI_SIGNAL_HANDLING_ENABLED, 1,
+        [Define to 1 if you use signal.])
+fi
+
+
+# UNIX domain socket
+if test "x${use_unix_socket}" = "xyes"; then
+    case $host_os in
+        linux*)
+            # linux/un.h and sys/un.h conflicts.
+            AC_CHECK_HEADERS(sys/un.h)
+            ;;
+        *)
+            AC_CHECK_HEADERS(sys/un.h)
+            ;;
+    esac
+fi
+
+
+#
+# Check for typedefs, structures, and compiler charasteristics.
+#
+
+
+AC_SYS_LARGEFILE
+
+
+if test "x${use_pthread}" = "xyes"; then
+    AC_MSG_CHECKING([for pthread_t castable to long])
+    castable_pthread="no"
+    AC_COMPILE_IFELSE([
+        AC_LANG_PROGRAM(
+            [[ #include <pthread.h> ]],
+            [[ pthread_t x; long y; y = (long)x; ]])],
+        [castable_pthread="yes"], [castable_pthread="no"])
+
+    if test "x${castable_pthread}" = "xyes"; then
+        AC_DEFINE(NGI_PTHREAD_T_CASTABLE_LONG, 1,
+            [Define to cast the pthread_t to long.])
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+
+
+if test "x${use_pthread}" = "xyes"; then
+    AC_MSG_CHECKING([for sigwait bug])
+    sigwait_bug="no"
+    AC_RUN_IFELSE([
+        AC_LANG_SOURCE([[
+#ifdef sun
+#define _POSIX_PTHREAD_SEMANTICS
+#endif
+#include <sys/types.h>
+#include <signal.h>
+#include <unistd.h>
+#include <sys/wait.h>
+int main(void)
+{   
+    sigset_t mask;
+    int result, sigNo, status;
+    pid_t pid, wpid;
+
+    pid = fork();
+    if (pid < 0) {
+        return 1;
+    }
+    if (pid == 0) {
+        result = sigemptyset(&mask);
+        if (result != 0) {
+            return 1;
+        }
+        result = sigaddset(&mask, SIGINT);
+        if (result != 0) {
+            return 1;
+        }
+        result = sigprocmask(SIG_BLOCK, &mask, NULL);
+        if (result != 0) {
+            return 1;
+        }
+        result = sigwait(&mask, &sigNo);
+        /* Continue if error occurred */
+        return 1;
+    }
+    sleep(1);
+    result = kill(pid, SIGUSR1);
+    /* Continue if error occurred */
+    sleep(1);
+    result = kill(pid, SIGKILL);
+    /* Continue if error occurred */
+    wpid = wait(&status);
+    if ((wpid > 0) &&
+        (WIFSIGNALED(status) != 0) &&
+        (WTERMSIG(status) == SIGUSR1)) {
+        return 0;
+    }
+    return 1;
+}
+]])],
+        [sigwait_bug="yes"], [sigwait_bug="no"])
+
+    if test "x${sigwait_bug}" = "xyes"; then
+        AC_MSG_RESULT([ok])
+    else
+        AC_DEFINE(NGI_SIGWAIT_HAS_BUG, 1,
+            [Define to avoid sigwait bug.])
+        AC_MSG_RESULT([bug])
+    fi
+fi
+
+
+AC_MSG_CHECKING([for usability of NULL for va_list])
+va_list_null="yes"
+AC_RUN_IFELSE([
+    AC_LANG_SOURCE([[
+#include <stdlib.h>
+#include <stdarg.h>
+
+int test_va_list(va_list va);
+
+int main(int argc, char *argv[])
+{
+    int result;
+    result = test_va_list(NULL);
+    if (result != 1) {
+        /* Error */
+        return 1;
+    }
+    /* Success */
+    return 0;
+}
+
+int test_va_list(va_list va)
+{
+    return 1;
+}
+]])],
+    [va_list_null="yes"], [va_list_null="no"])
+
+if test "x${va_list_null}" = "xyes"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_DEFINE(NGI_NO_VA_LIST_NULL, 1,
+        [Define to use NULL as va_list.])
+    AC_MSG_RESULT([no])
+fi
+
+
+AC_MSG_CHECKING([for va_arg accepts function pointer])
+va_arg_fp="yes"
+AC_RUN_IFELSE([
+    AC_LANG_SOURCE([[
+#include <stdlib.h>
+#include <stdarg.h>
+
+#if 0
+#define NGI_VA_ARG_FUNCTION_PTR_NOT_WORK
+#endif
+
+void test_va(int c, int n, ...);
+void test_va2(int c, int n, va_list va);
+void cb_increment();
+int counter = 0;
+
+int main(int argc, char *argv[])
+{
+#ifdef NGI_VA_ARG_FUNCTION_PTR_NOT_WORK
+    return 1;
+#else /* NGI_VA_ARG_FUNCTION_PTR_NOT_WORK */
+    test_va(3, 2, cb_increment, cb_increment);
+    if (counter != 6) {
+        return 1;
+    }
+
+    return 0;
+#endif /* NGI_VA_ARG_FUNCTION_PTR_NOT_WORK */
+}
+
+void test_va(int c, int n, ...)
+{   
+    va_list va;
+
+    va_start(va, n);
+    test_va2(c, n, va);
+    va_end(va);
+}
+
+void test_va2(int c, int n, va_list va)
+{   
+    void (*fp)();
+    int i, j;
+
+    for (i = 0; i < n; i++) {
+        fp = va_arg(va, void(*)());
+        for (j = 0; j < c; j++) {
+            (*fp)();
+        }
+    }
+}
+
+void cb_increment()
+{
+    counter++;
+}
+]])],
+    [va_arg_fp="yes"], [va_arg_fp="no"])
+
+if test "x${va_arg_fp}" = "xyes"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_DEFINE(NGI_NO_VA_ARG_FUNCTION_PTR, 1,
+        [Define to va_arg accepts function pointer.])
+    AC_MSG_RESULT([no])
+fi
+
+
+AC_MSG_CHECKING([for printf format check attribute])
+attribute_format_printf="no"
+AC_COMPILE_IFELSE([
+    AC_LANG_SOURCE([[
+void test_func(char *,...)
+    __attribute__((__format__(__printf__, 1, 2)));
+]])],
+    [attribute_format_printf="yes"],
+    [attribute_format_printf="no"])
+if test "x${attribute_format_printf}" = "xyes"; then
+    AC_DEFINE(NG_ATTRIBUTE_PRINTF_ENABLE, 1,
+        [compiler is able to check arguments of function like printf.])
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+
+
+# For Tru64 getsockname().
+AC_CHECK_TYPES(socklen_t,,, [#include <sys/socket.h>])
+
+
+# static char rcsid[] for CVS keywords.
+AC_MSG_CHECKING([for embed rcsid])
+embed_rcsid="no"
+case $host_os in
+##IRIX : Warning occur for rcsid[]. 
+#   irix*)
+#       embed_rcsid="no";
+#       ;;
+    *)
+        embed_rcsid="yes";
+        ;;
+esac
+
+if test "x${embed_rcsid}" = "xyes"; then
+    AC_DEFINE(NGI_RCSID_EMBEDABLE, 1,
+        [Define to embed static char rcsid array.])
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+
+
+# Check size_t non negative check causes Warning.
+AC_MSG_CHECKING([for size_t non negative check])
+sizet_check_negative="yes"
+case $host_os in
+##IRIX : Warning occur for non negative check. 
+#   irix*)
+#       sizet_check_negative="no";
+#       ;;
+    *)
+        ;;
+esac
+if test "x${cc_icc}" = "xyes"; then
+    sizet_check_negative="no"
+fi
+
+if test "x${sizet_check_negative}" = "xyes"; then
+    AC_DEFINE(NGI_SIZET_CHECK_NEGATIVE, 1,
+        [Define to check size_t non negative.])
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+
+
+# Globus LD_RUN_PATH
+if test "x${use_globus}" = "xyes"; then
+    AC_MSG_CHECKING([for embed LD_RUN_PATH for GT])
+
+    embed_ld_run_path=""
+    if test "x${gcc_really}" = "xyes"; then
+        case $host_os in
+        darwin*)
+            embed_ld_run_path="-Wl,-L${GLOBUS_LOCATION}/lib";;
+        *)
+            embed_ld_run_path="-Wl,-R${GLOBUS_LOCATION}/lib";;
+        esac
+    else
+        case $host_os in
+        solaris*)
+            embed_ld_run_path="-Wl,-R${GLOBUS_LOCATION}/lib";;
+        IRIX*)
+            embed_ld_run_path="-Wl,'-rpath ${GLOBUS_LOCATION}/lib'";;
+        osf*)
+            embed_ld_run_path="-Wl,-rpath,${GLOBUS_LOCATION}/lib";;
+        darwin*)
+            embed_ld_run_path="-Wl,-L${GLOBUS_LOCATION}/lib";;
+        esac
+    fi
+
+    NG_GT_EMBED_LD_RUN_PATH=$embed_ld_run_path
+    AC_SUBST(NG_GT_EMBED_LD_RUN_PATH)
+
+    AC_MSG_RESULT([$embed_ld_run_path])
+fi
+
+
+#
+# Check for functions.
+#
+
+
+have_gethostbyname="no"
+AC_CHECK_FUNC(gethostbyname,
+    [have_gethostbyname="yes"],
+    [have_gethostbyname="no"])
+if test "x${have_gethostbyname}" != "xyes"; then
+    case $host_os in
+        solaris2*)
+            AC_CHECK_LIB(nsl, gethostbyname)
+            ;;
+        *)
+            AC_MSG_ERROR([gethostbyname not found.])
+            ;;
+    esac
+fi
+
+have_socket="no"
+AC_CHECK_FUNC(socket, have_socket="yes", have_socket="no")
+if test "x${have_socket}" != "xyes"; then
+    case $host_os in
+        solaris2*)
+            AC_CHECK_LIB(socket, socket)
+            ;;
+        *)
+            AC_MSG_ERROR([socket not found.])
+            ;;
+    esac
+fi
+
+have_inet_aton="no"
+AC_CHECK_FUNC(inet_aton, [have_inet_aton="yes"], [have_inet_aton="no"])
+if test "x${have_inet_aton}" != "xyes"; then
+    case $host_os in
+        solaris2*)
+            # No description on Solaris manual.
+            AC_CHECK_LIB(resolv, inet_aton)
+            ;;
+        *)
+            AC_MSG_ERROR([inet_aton not found.])
+            ;;
+    esac
+fi
+
+if test "x${use_pthread}" = "xyes"; then
+    have_getpwuid_r="no"
+    AC_CHECK_FUNC(getpwuid_r, [have_getpwuid_r="yes"], [have_getpwuid_r="no"])
+    if test "x${have_getpwuid_r}" = "xyes"; then
+        AC_DEFINE(NGI_GETPWUID_R_ENABLE, 1, [Define to use getpwuid_r.])
+    fi
+fi
+
+AC_CHECK_FUNCS(sysconf)
+
+AC_CHECK_FUNCS(xdr_longlong_t)
+
+
+have_sched_yield="no"
+AC_CHECK_FUNC(sched_yield, [have_sched_yield="yes"], [have_sched_yield="no"])
+if test "x${have_sched_yield}" != "xyes"; then
+    case $host_os in
+        solaris2*)
+            AC_CHECK_LIB(rt, sched_yield)
+            ;;
+        *)
+            AC_MSG_ERROR([sched_yield not found.])
+            ;;
+    esac
+fi
+
+
+# waitpid() from Other thread.
+if test "x${use_pthread}" = "xyes"; then
+    AC_MSG_CHECKING([for waitpid from thread])
+    thread_waitpid_work="no"
+    AC_RUN_IFELSE([
+        AC_LANG_SOURCE([[
+#include <pthread.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+static void *waiter(void *arg);
+
+int main(int argc, char *argv[])
+{
+    pthread_t thread_waiter;
+    pid_t child;
+    int result;
+
+    child = fork();
+    if (child < 0) {
+        exit(1);
+    }
+    if (child == 0) {
+        /* child */
+        _exit(0);
+    }
+
+    /* parent */
+    result = pthread_create(&thread_waiter, NULL, waiter, &child);
+    if (result != 0) {
+        exit(2);
+    }
+
+    result = pthread_join(thread_waiter, NULL);
+    if (result != 0) {
+        exit(3);
+    }
+
+    return 0;
+}
+
+static void *waiter(void *arg)
+{
+    pid_t child, ret;
+    int exit_status;
+
+    child = *(pid_t *)arg;
+    
+    ret = waitpid(child, &exit_status, 0);
+    if (ret < 0) {
+        exit(4);
+    }
+
+    return NULL;
+}
+]])],
+    [thread_waitpid_work="yes"], [thread_waitpid_work="no"])
+
+    if test "x${thread_waitpid_work}" = "xyes"; then
+        AC_MSG_RESULT([ok])
+    else
+        AC_DEFINE(NGI_THREAD_WAITPID_HAS_BUG, 1,
+            [Define to avoid waitpid from thread bug.])
+        AC_MSG_RESULT([bug])
+    fi
+fi
+
+
+#
+# Other remaining checks and definitions.
+#
+
+
+# Globus Toolkit Pthreads programs.
+if test "x${use_prewsgram}" != "xno"; then
+
+    AC_MSG_CHECKING([for Pre-WS GRAM Invoke Server GT2c])
+    if test "x${use_prewsgram}" = "xyes"; then
+
+        # $use_globus is always "yes" if the $use_prewsgram is not "no".
+        if test "x${use_globus}" != "xyes"; then
+            AC_MSG_ERROR([Pre-WS GRAM requires Globus Toolkit.])
+        fi
+        if test "x${use_pthread}" != "xyes"; then
+            AC_MSG_ERROR([Pre-WS GRAM requires Pthreads.])
+        fi
+    fi
+
+    if test "x${use_globus}" = "xyes"; then
+        if test "x${use_pthread}" = "xyes"; then
+            INVOKE_SERVER_MODULES="${INVOKE_SERVER_MODULES} gt2c"
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_RESULT([no])
+        fi
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+
+if test "x${use_cpgt}" != "xno"; then
+
+    AC_MSG_CHECKING([for Communication Proxy GT])
+    if test "x${use_cpgt}" = "xyes"; then
+
+        # $use_globus is always "yes" if the $use_cpgt is not "no".
+        if test "x${use_globus}" != "xyes"; then
+            AC_MSG_ERROR([Communication Proxy GT requires Globus Toolkit.])
+        fi
+        if test "x${use_pthread}" != "xyes"; then
+            AC_MSG_ERROR([Communication Proxy GT requires Pthreads.])
+        fi
+    fi
+
+    if test "x${use_globus}" = "xyes"; then
+        if test "x${use_pthread}" = "xyes"; then
+            COMMUNICATION_PROXY_MODULES="${COMMUNICATION_PROXY_MODULES} GT"
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_RESULT([no])
+        fi
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+
+
+# Communication Proxy dependency.
+AC_MSG_CHECKING([for Communication Proxy dependency])
+if test "x${COMMUNICATION_PROXY_MODULES}" != "x"; then
+    COMMUNICATION_PROXY_MODULES="ccommon ${COMMUNICATION_PROXY_MODULES}"
+    AC_MSG_RESULT([ccommon])
+else
+    AC_MSG_RESULT([no])
+fi
+
+
+# Communication Proxy dependency.
+AC_MSG_CHECKING([for Information Service dependency])
+if test "x${INFORMATION_SERVICE_MODULES}" != "x"; then
+    INFORMATION_SERVICE_MODULES="ccommon ${INFORMATION_SERVICE_MODULES}"
+    AC_MSG_RESULT([ccommon])
+else
+    AC_MSG_RESULT([no])
+fi
+
+
+# UNIX domain socket
+AC_MSG_CHECKING([for UNIX domain socket])
+if test "x${use_unix_socket}" = "xyes"; then
+    AC_DEFINE(NGI_UNIX_SOCKET_ENABLED, 1,
+        [Define to use UNIX socket with authentication.])
+
+    AC_MSG_RESULT([yes])
+
+    AC_MSG_CHECKING([for UNIX domain socket path max])
+    unix_socket_path_max=0
+    case $host_os in
+        linux*|solaris2*)
+            unix_socket_path_max=108
+            ;;
+        *)
+            unix_socket_path_max=104
+            ;;
+    esac
+
+    AC_DEFINE_UNQUOTED(NGI_UNIX_SOCKET_PATH_MAX, $unix_socket_path_max,
+        [Define sockaddr_un sun.path size.])
+    AC_MSG_RESULT([$unix_socket_path_max])
+else
+    AC_MSG_RESULT([no])
+fi
+
+
+AC_DEFINE_UNQUOTED(NGI_NG_DIR, "$prefix",
+    [Define compile time NG_DIR.])
+
+
+AC_MSG_CHECKING([for Invoke Server modules])
+AC_MSG_RESULT([$INVOKE_SERVER_MODULES])
+AC_SUBST(INVOKE_SERVER_MODULES)
+
+AC_MSG_CHECKING([for Communication Proxy modules])
+AC_MSG_RESULT([$COMMUNICATION_PROXY_MODULES])
+AC_SUBST(COMMUNICATION_PROXY_MODULES)
+
+AC_MSG_CHECKING([for Information Service modules])
+AC_MSG_RESULT([$INFORMATION_SERVICE_MODULES])
+AC_SUBST(INFORMATION_SERVICE_MODULES)
+
+AC_SUBST(INVOKE_SERVER_MODULES_ALL)
+AC_SUBST(COMMUNICATION_PROXY_MODULES_ALL)
+AC_SUBST(INFORMATION_SERVICE_MODULES_ALL)
+
+
+INCLUDES='-I$(TOPDIR)/src/c/include'
+INCLUDES="${INCLUDES}"' -I$(TOPDIR)/src/lib/utility'
+INCLUDES="${INCLUDES}"' -I$(TOPDIR)/src/lib/queue'
+AC_SUBST(INCLUDES)
+
+
+MK_VARTMPL="${TOPDIR}/utility/compile/defvar.mk"
+MK_DEFRULE="${TOPDIR}/utility/compile/defrules.mk"
+
+AC_SUBST(MK_VARTMPL)
+AC_SUBST(MK_DEFRULE)
+
+
+AC_MSG_CHECKING([for archnum])
+archnum=`./utility/configure/getarchnumber ${TOPDIR}`
+if test $? -ne 0; then
+    AC_MSG_ERROR([failed to execute ./utility/configure/getarchnumber.])
+fi
+AC_DEFINE_UNQUOTED(NGI_ARCHITECTURE_ID, $archnum,
+    [Define architecture number.])
+AC_MSG_RESULT([$archnum])
+
+
+#
+# Output
+#
+
+
+AC_CONFIG_FILES(
+utility/compile/defvar.mk
+Makefile
+src/lib/utility/Makefile
+src/lib/utility/ngConfigureValue.mk
+src/lib/ExternalModule/Makefile
+src/lib/expat/Makefile
+src/lib/queue/Makefile
+src/c/include/Makefile
+src/c/client/Makefile
+src/c/executable/Makefile
+src/c/net/Makefile
+src/c/common/Makefile
+src/c/grpc/Makefile
+src/InvokeServer/Makefile
+src/InvokeServer/gt2c/Makefile
+src/InvokeServer/gt4py/Makefile
+src/InvokeServer/gt4py/ng_invoke_server.GT4py
+src/InvokeServer/gt4py/gt4invokeserverconfig.py
+src/InvokeServer/ssh/Makefile
+src/InvokeServer/templ/Makefile
+src/InvokeServer/Makefile.naregiss
+src/InvokeServer/naregiss/Makefile
+src/InvokeServer/naregiss/ng_invoke_server.NAREGISS
+src/CommunicationProxy/Makefile
+src/CommunicationProxy/ccommon/Makefile
+src/CommunicationProxy/ccommon/client/Makefile
+src/CommunicationProxy/ccommon/remote/Makefile
+src/CommunicationProxy/GT/Makefile
+src/CommunicationProxy/GT/client/Makefile
+src/CommunicationProxy/GT/common/Makefile
+src/CommunicationProxy/GT/remote/Makefile
+src/CommunicationProxy/GT/relay/Makefile
+src/InformationService/Makefile
+src/InformationService/ccommon/Makefile
+src/InformationService/nrf/Makefile
+utility/template/Makefile
+utility/template/template.mk
+utility/generator/Makefile
+utility/hostname/Makefile
+utility/version/Makefile
+utility/script/Makefile
+doc/Makefile
+)
+
+AC_OUTPUT
+
+

@@ -1,0 +1,89 @@
+# Generated automatically from Makefile.in by configure.
+# $RCSfile: Makefile.in,v $ $Revision: 1.10 $ $Date: 2007/07/10 05:19:42 $
+# $AIST_Release: 4.2.4 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+include /Users/merzky/links/saga/trunk/adaptors/ninfg/ninfg-adaptor-1112/external/ng-4.2.4/utility/compile/defvar.mk
+
+HDRS =	$(TOPDIR)/c/include/grpc.h \
+	$(TOPDIR)/c/include/grpc_error.h \
+	$(TOPDIR)/c/include/net.h \
+	$(TOPDIR)/c/include/ng.h \
+	$(TOPDIR)/c/include/ngClientInternal.h \
+	$(TOPDIR)/c/include/ngCommon.h \
+	$(TOPDIR)/c/include/ngConfig.h \
+	$(TOPDIR)/c/include/ngConfigFile.h \
+	$(TOPDIR)/c/include/ngEx.h \
+	$(TOPDIR)/c/include/ngExecutableInternal.h \
+	$(TOPDIR)/c/include/ngFunctionInformation.h \
+	$(TOPDIR)/c/include/ngInternal.h \
+	$(TOPDIR)/c/include/ngPlatform.h \
+	$(TOPDIR)/c/include/ngPlatform.h \
+	$(TOPDIR)/c/include/ngXML.h
+
+SRCS =	grpc_error.c \
+	ngArgumentConvert.c \
+	ngCommunication.c \
+	ngConfigFileToken.c \
+	ngGlobus.c \
+	ngNet.c \
+	ngProtocol.c \
+	ngProtocolBinary.c \
+	ngProtocolXML.c \
+	ngSessionInformation.c \
+	ngStream.c
+
+OBJS =	grpc_error.o \
+	ngArgumentConvert.o \
+	ngCommunication.o \
+	ngConfigFileToken.o \
+	ngGlobus.o \
+	ngNet.o \
+	ngProtocol.o \
+	ngProtocolBinary.o \
+	ngProtocolXML.o \
+	ngSessionInformation.o \
+	ngStream.o
+
+CPPFLAGS	=	$(CONF_CPPFLAGS) $(GLOBUS_INCDIR)
+TARGET		=	libngcommon.a
+LIB_TARGET	=	$(TARGET)
+
+all: $(TARGET)
+
+server: all
+
+client: all
+
+$(TARGET): $(OBJS)
+	$(RM) -f $@
+	$(AR) $@ $(OBJS)
+
+include /Users/merzky/links/saga/trunk/adaptors/ninfg/ninfg-adaptor-1112/external/ng-4.2.4/utility/compile/defrules.mk
+
+grpc_error.o: grpc_error.c $(HDRS)
+ngArgumentConvert.o: ngArgumentConvert.c $(HDRS)
+ngCommunication.o: ngCommunication.c $(HDRS)
+ngConfigFileToken.o: ngConfigFileToken.c $(HDRS)
+ngGlobus.o: ngGlobus.c $(HDRS)
+ngNet.o: ngNet.c $(HDRS)
+ngProtocol.o: ngProtocol.c $(HDRS)
+ngProtocolBinary.o: ngProtocolBinary.c $(HDRS)
+ngProtocolXML.o: ngProtocolXML.c $(HDRS)
+ngSessionInformation.o: ngSessionInformation.c $(HDRS)
+ngStream.o: ngStream.c $(HDRS)

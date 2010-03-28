@@ -1,0 +1,47 @@
+
+How to execute sample program (PI)
+
+1) Set environment variables
+   Set the following environment variables Before building sample program.
+
+   - JAVA_HOME : Java install path
+   - NG_DIR    : Ninf-G install path
+
+2) Build sample program
+   After setting environment variables, type following command.
+
+   % ant 
+
+3) Prepare Ninf-G Executable
+   Copy Ninf-G Executable files from "ng-5.X.X/samples/pi/".
+   And compile Ninf-G Executable.
+
+4) Modify properties for sample program 
+
+   - client.conf (Ninf-G Client Configuration file)
+     You may need to modify the following attributes.
+
+     + "hostname" in <SERVER> section
+       The hostname on which Ninf-G Executable will be run.
+
+     + "invoke_server" in <SERVER> section
+       Invoke Server type to use for the server.
+
+     + "filename" in <LOCAL_LDIF> section
+       Local LDIF file that contains Ninf-G Executable Information.
+
+   - build.xml (Build script for Ant)
+     You may need to modify the following properties.
+
+     + "hostnames"
+       Specifies servers of invoking jobs.
+
+     + "ng_print_info"
+       If you want to see information about sessions,
+       set "ng_print_info" as "on".
+
+5) Execute sample program
+   When you prepare settings, type following command.
+
+   % ant pi
+

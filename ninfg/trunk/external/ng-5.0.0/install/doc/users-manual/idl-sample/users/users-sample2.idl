@@ -1,0 +1,30 @@
+#include <include_file.h>
+Module idl_sample2;
+
+Define idl_sample2_func(
+              IN char     uplo,
+                IN int  n,
+                IN scomplex  t[ldt][n],
+                IN int  ldt,
+#ifdef HAVE_ABS              
+                OUT scomplex  x[1+(n-1)*abs(incx)],
+                IN int  incx,
+                IN scomplex  y[1+(n-1)*abs(incy)],
+                IN int  incy,
+                OUT scomplex w[1+(n-1)*abs(incw)],
+                IN int incw,
+                 IN scomplex z[1+(n-1)*abs(incz)],
+#else
+              OUT scomplex  x[1+(n-1)*(incx)],
+                IN int  incx,
+                IN scomplex  y[1+(n-1)*(incy)],
+                IN int  incy,
+                OUT scomplex w[1+(n-1)*(incw)],
+                IN int incw,
+                 IN scomplex z[1+(n-1)*(incz)],
+#endif
+                IN int  incz
+)
+Required "object.o"
+Calls "Fortran" func( uplo, n, t, ldt, x, incx, y, incy, w, incw, z, incz);
+

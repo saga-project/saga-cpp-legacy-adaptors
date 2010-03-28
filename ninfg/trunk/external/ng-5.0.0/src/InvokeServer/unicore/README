@@ -1,0 +1,40 @@
+Ninf-G4 Invoke Server UNICORE
+
+This is the "invoke server" for UNICORE.
+
+1. Prerequisite
+   - Java(JRE): 1.4 or later
+
+2. Set environment variables.
+
+   Before building "invoke server", set the following environment variables.
+
+     {sh}
+     % JAVA_HOME=/path/to/java_dir
+     % export JAVA_HOME
+     {csh}
+     % setenv JAVA_HOME /path/to/java_dir
+
+   $JAVA_HOME specifies the location of the Java.
+   It is used when building or running the "invoke server" for UNICORE.
+
+3. Run the following command in
+   ng-4.x.x/utility/invoke_server/unicore directory.
+
+     % make
+
+   This will compile the sources and build the "invoke server" for UNICORE.
+
+4. Install files.
+
+     % make install
+
+   This will copy a script file and a library file into $NG_DIR/{bin,lib}.
+
+Now you are able to use ng_invoke_server.UNICORE by specifying
+<SERVER> "invoke_server" to "UNICORE".
+
+In order to use the invoke server for UNICORE, you have to set your
+environment in the client configuration file.
+example/client.conf can be referred as an example of client configuration files.
+If you use "passphrase" file, it should be readable only owner.

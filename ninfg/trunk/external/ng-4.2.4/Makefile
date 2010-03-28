@@ -1,0 +1,104 @@
+# Generated automatically from Makefile.in by configure.
+# $RCSfile: Makefile.in,v $ $Revision: 1.16 $ $Date: 2008/08/19 10:53:28 $
+# $AIST_Release: 4.2.4 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+include /Users/merzky/links/saga/trunk/adaptors/ninfg/ninfg-adaptor-1112/external/ng-4.2.4/utility/compile/defvar.mk
+
+all:	makeAll
+
+DIRS =	./c/include \
+	./c/client \
+	./c/executable \
+	./c/net \
+	./c/common \
+	./c/utility \
+	./c/grpc \
+	./c/expat \
+	./etc \
+	./lib \
+	./utility/base64 \
+	./utility/generator \
+	./utility/version \
+	./utility/invoke_server \
+	./utility/script \
+	./doc
+
+DISTCLEAN_TARGET = \
+	./utility/compile/defvar.mk \
+	./utility/compile/defrules.mk \
+	./utility/script/getarchnumber \
+	./utility/script/globusflags \
+	./utility/script/del.del.del.in \
+	./utility/script/del.del.del \
+	./java/org/apgrid/grpc/ng/MDS4QueryClient.java
+
+makeAll:
+	for i in $(DIRS); do \
+		(cd $$i; $(MAKE)) || exit 1; \
+	done;
+
+server:
+	for i in $(DIRS); do \
+		(cd $$i; $(MAKE) server) || exit 1; \
+	done;
+
+client:
+	for i in $(DIRS); do \
+		(cd $$i; $(MAKE) client) || exit 1; \
+	done;
+
+forCores:
+	$(RM) -f .libs
+	find . -name '*.a' -a -type f -print > .libs
+	(cd lib; \
+		$(RM) -f *.a ; \
+		for i in `cat ../.libs` ; do \
+			ln -s ../$$i . ; \
+		done; )
+	$(RM) -f .libs
+
+install::
+	for i in $(DIRS); do \
+		(cd $$i; $(MAKE) install) || exit 1; \
+	done;
+
+install_server::
+	for i in $(DIRS); do \
+		(cd $$i; $(MAKE) install_server) || exit 1; \
+	done;
+
+install_client::
+	for i in $(DIRS); do \
+		(cd $$i; $(MAKE) install_client) || exit 1; \
+	done;
+
+clean::
+	for i in $(DIRS); do \
+		(cd $$i; $(MAKE) clean); \
+	done;
+	$(RM) core *.core *~
+
+distclean::
+	for i in $(DIRS); do \
+		(cd $$i; $(MAKE) distclean); \
+	done;
+	$(RM) Makefile config.* .depend* $(DISTCLEAN_TARGET)
+
+Makefile::
+	sh ./config.status

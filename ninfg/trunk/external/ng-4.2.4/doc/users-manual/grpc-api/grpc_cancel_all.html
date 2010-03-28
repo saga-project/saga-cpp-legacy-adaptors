@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>grpc_cancel_all</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>grpc_cancel_all</code> - Cancels all sessions.
+<h3>SYNOPSIS</h3>
+<code>
+  grpc_error_t grpc_cancel_all()
+
+</code>
+<h3>ARGUMENTS</h3>
+<dl>
+<dt><code>  None</code></dt>
+</dl>
+<h3>DESCRIPTION</h3>
+  The grpc_cancel_all() function cancels all of the executing sessions.<br>
+
+<p>
+grpc_cancel_all() is a non-blocking function.  It does not wait for the
+completion of the cancellation.
+</p>
+
+<p>
+A cancelled session should be taken care by a wait function such as
+grpc_wait() so that the allocated resources for the session can be
+released.
+</p>
+
+<p>
+Wait functions such as grpc_wait() return GRPC_SESSION_FAILED if those
+functions detect the cancelled session.  grpc_get_error(sessionID)
+returns GRPC_CANCELED_NP if the cancel was successfully completed.
+Otherwise, it returns an error.
+</p>
+
+<p> This function is MT-safe. </p>
+<br>
+<h3>RETURN VALUE</h3>
+  If successful, GRPC_NO_ERROR is returned. In the case of an error, Error code is returned.<br>
+<br>
+<h3>ERRORS</h3>
+<dl>
+<dt><code>  GRPC_NOT_INITIALIZED</code></dt>
+<dd>	GRPC client is not initialized yet.</dd>
+<dt><code>  GRPC_OTHER_ERROR_CODE</code></dt>
+<dd>	Internal error detected.</dd>
+</dl>
+<hr>
+last update : $Date: 2005/07/11 07:11:24 $
+</body>
+</html>

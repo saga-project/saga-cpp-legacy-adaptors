@@ -1,0 +1,115 @@
+Ninf-G Java Client API  Diagnostic programs
+
+  The files in this directory is developed for diagnostic.
+  This README file describes what each program performs and how to
+  execute it. 
+
+1) Set environment variables
+   Before building diagnostic programs, please make sure that a file
+   named "build.xml" is located in this directory.
+   Then set the following environment variables.
+
+   - JAVA_HOME		: java install path
+   - GLOBUS_LOCATION	: GT install path
+   - NG_DIR		: Ninf-G install path
+
+2) Build diagnostic programs
+   After setting environment variables, type the following command.
+
+   % ant 
+
+3) Modify properties for sample programs
+   Before executing diagnostic programs, please make sure that a file
+   named "client.conf" is located in this directory, and the following
+   properties are set to correct values in the file.
+
+   You may need to modify the following variables.
+
+   + hostname in <SERVER> section
+     The name of host on which Ninf-G Executable(stub) will be run.
+     
+   + filename in <LOCAL_LDIF> section
+     The name of localldif files from which Ninf-G client gets
+     information of Executable(stub).
+
+   (optional: If you use MDS to get information, you need the following steps)
+   + mds_hostname in <SERVER> section
+     The name of MDS server from which Ninf-G client gets information
+     of Executable(stub).
+
+4) Execute diagnostic programs
+   Eight diagnostic programs are provided.
+   These programs invoke Ninf-G executables on the server specified in 
+   1st <SERVER> section in a configuration file.
+   So you have to modify a configuration file to specify server.
+
+   - CallbackTest.java
+	A client program which invokes Ninf-G callbacks.
+
+    To run, type
+	% ant callback
+
+   - CancelTest.java
+	A client program which cancels sessions.
+
+   	To run, type
+	% ant cancel
+
+   - DataTest.java
+	A client program which invokes simple calculations on a
+    server side. This program uses char, short, int, long,
+	float, double, scomplex and dcomplex types of variables.
+
+    To run, type
+	% ant data
+
+   - FileTest.java
+	A client program which invokes file transfers.
+	This program examines 4 patterns of test.
+	< filetest test list >
+	1. transfer BINARY file, and output file already exists
+	2. transfer BINARY file, and output file doesn't exists
+	3. transfer TEXT file, and output file already exists
+	4. transfer TEXT file, and output file doesn't exists
+
+	After modifying build.xml, type
+	% ant file
+
+   - FileArrayTest.java
+	A client program which invokes transfers of an array of files.
+	This program examines 4 patterns of test.
+	< file_array_test test list >
+	1. transfer BINARY file, and output file already exists
+	2. transfer BINARY file, and output file doesn't exists
+	3. transfer TEXT file, and output file already exists
+	4. transfer TEXT file, and output file doesn't exists
+
+	After modifying build.xml, type
+	% ant filearray
+
+   - NullArgumentTest.java
+	A client program which uses null as arguments of
+	GrpcObjectHandle.invoke().
+	This program uses char, short, int, long, float, double,
+	scomplex, dcomplex and string types of variables.
+
+    To run, type
+	% ant null
+
+   - SkipTest.java
+	A client program which transfers arguments and results
+    data with shrinking. This program uses char, short, int,
+	long, float, double, scomplex and dcomplex types of variables.
+
+    To run, type
+	% ant skip
+
+   - ZeroElementTest.java
+	A client program which transfers arguments and results
+    data with no elements. This program uses char, short, int,
+	long, float, double, scomplex, dcomplex and string types
+	of variables.
+
+    To run, type
+	% ant zero
+

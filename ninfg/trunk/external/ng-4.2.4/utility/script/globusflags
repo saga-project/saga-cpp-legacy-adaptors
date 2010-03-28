@@ -1,0 +1,198 @@
+#!/bin/sh
+
+# $RCSfile: globusflags.in,v $ $Revision: 1.6 $ $Date: 2006/06/12 09:27:33 $
+# $AIST_Release: 4.2.4 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+me=`basename $0`
+
+stderr () {
+    echo $1 1>&2
+}
+
+error () {
+    stderr "$me: error: $1"
+}
+
+isNull () {
+    if test "X${1}" = "X"; then
+	return 1
+    else
+	return 0
+    fi
+}
+
+canonicLibs () {
+    ldFlags=''
+    libs=''
+
+    for i in / ${1}
+    do
+	case ${i} in
+	    /)	continue;;
+	    -L*)
+		ldFlags="${ldFlags} ${i}";;
+	    *)	continue;;
+	esac
+    done
+
+    for i in / ${2}
+    do
+	case ${i} in
+	    /)	continue;;
+	    -l*)
+		libs="${libs} ${i}";;
+	    *)	continue;;
+	esac
+    done
+
+    isNull ${libs}
+    if test $? -eq 1; then
+	return 0
+    fi
+
+    isNull ${ldFlags}
+    if test $? -eq 1; then
+	echo ${libs}
+	return 0
+    fi
+
+    lf=""
+    for i in ${libs}
+    do
+	found=0
+	l=`echo ${i} | sed 's:-l:lib:'`
+	for j in ${ldFlags}
+	do
+	    p=`echo ${j} | sed 's:-L::'`
+	    for k in / ${p}/${l}.*
+	    do
+		case ${k} in
+		    /)		continue;;
+		    *.la)	continue;;
+		    *)
+			if test -f ${k}; then
+			    found=1
+			    break
+			fi;;
+		esac
+	    done
+	    if test ${found} -eq 1; then
+		break
+	    fi
+	done
+    	if test ${found} -eq 1; then
+	    lf="${lf} ${j} ${i}"
+	else
+	    lf="${lf} ${i}"
+	fi
+    done
+    
+    echo ${lf}
+}
+
+
+isNull ${GLOBUS_LOCATION}
+if test $? -eq 1; then
+    error "GLOBUS_LOCATION not defined."
+    exit 1
+fi
+
+flags=''
+flavor=''
+noGlo=0
+client=1
+while	case "$1" in
+    -client)
+	client=1;;
+    -stub)
+	client=0;;
+    -ng)
+	noGlo=1;;
+    -f)
+	flavor=${2?'flavor expected'}
+	shift;;
+    *)
+	flags="${flags} $1"
+	isNull $2
+	if test $? -eq 1; then
+	    break
+	fi;;
+    esac
+do
+    shift
+done
+
+isNull ${flavor}
+if test $? -eq 1; then
+    flavor=gcc32dbg # am I wild?
+fi
+
+if test -d ${GLOBUS_LOCATION}/include/${flavor}; then
+    true
+else
+    error "Invalid flavor '${flavor}'"
+    exit 1
+fi
+
+x=`echo $flags | awk '{ print $1 }'`
+isNull "$x"
+if test $? -eq 1 -a $noGlo -ne 1; then
+    echo "-I${GLOBUS_LOCATION}/include -I${GLOBUS_LOCATION}/include/${flavor}"
+    echo "-I${GLOBUS_LOCATION}/include/${flavor}/wsrf/services"
+    echo "-L${GLOBUS_LOCATION}/lib"
+    exit 0
+fi
+
+
+gMakeHdr=${GLOBUS_LOCATION}/bin/globus-makefile-header
+
+tmpl=/tmp/.${me}.tmpl.$$
+mkf=/tmp/.${me}.mk.$$
+
+rm -f ${tmpl} ${mkf}
+
+${gMakeHdr} -flavor=${flavor} $flags > $tmpl
+if test $? -ne 0; then
+    error "${gMakeHdr} failed."
+    rm -f ${tmpl} ${mkf}
+    exit 1
+fi
+
+if test -f ${tmpl}; then
+    echo "include ${tmpl}" > ${mkf}
+    echo >> ${mkf}
+
+    echo "all:" >> ${mkf}
+    echo "	@echo -I${GLOBUS_LOCATION}/include -I${GLOBUS_LOCATION}/include/${flavor}" >> ${mkf}
+    echo "	@echo -I${GLOBUS_LOCATION}/include/${flavor}/wsrf/services" >> ${mkf}
+    echo '	@echo $(GLOBUS_CFLAGS)' >> ${mkf}
+    echo '	@echo $(GLOBUS_LDFLAGS)' >> ${mkf}
+    echo '	@echo $(GLOBUS_PKG_LIBS) $(GLOBUS_LIBS)' >> ${mkf}
+    echo >> ${mkf}
+
+    make -f ${mkf} 2>/dev/null
+    st=$?
+    rm -f ${tmpl} ${mkf}
+    exit $st
+else
+    error "can't generate makefile template."
+    rm -f ${tmpl} ${mkf}
+    exit 1
+fi

@@ -1,0 +1,14 @@
+# generate Ninf-G entries.  NINF-G-START
+dn: Mds-Software-deployment=GridRPC-Ninf-G, __ROOT_DN__
+objectclass: GlobusTop
+objectclass: GlobusActiveObject
+objectclass: GlobusActiveSearch
+type: exec
+path: __GLOBUS_LOCATION__/var/gridrpc
+base: catldif
+args: -devclassobj -devobjs -dn __ROOT_DN__ -validto-secs 900 -keepto-secs 900
+cachetime: 600
+timelimit: 180
+sizelimit: 1000
+# generate Ninf-G entries.  NINF-G-END
+

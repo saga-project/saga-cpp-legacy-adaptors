@@ -1,0 +1,125 @@
+<!--
+  $RCSfile: build.xml,v $ $Revision: 1.2 $ $Date: 2008/02/08 04:21:14 $
+  $AIST_Release: 5.0.0 $
+  $AIST_Copyright:
+   Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+   National Institute of Advanced Industrial Science and Technology
+   Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+   
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+   $
+ -->
+
+<!-- ======================================================= -->
+<!--         Ninf-G Java Client API                          -->
+<!-- ======================================================= -->
+<project name="Ninf-G5" default="compile" basedir=".">
+
+  <property environment="env"/>
+  <!-- ======================================================= -->
+  <!-- Modify the following variable to the appropriate        -->
+  <!-- directory which you wish to install                     --> 
+  <!-- ======================================================= -->
+  <property name="dist" value="${env.NG_DIR}" />
+
+  <!-- ======================================================= -->
+  <!-- set global properties for this build                    -->
+  <!-- ======================================================= -->
+  <property name="src" value="src/java/" />
+  <property name="build" value="build" />
+  <property name="dist.lib" value="${dist}/lib" />
+  <property name="javadoc.home" value="${build}/doc/users-manual/java-api" />
+
+  
+  <!-- ======================================================= -->
+  <!--             Message for help                            -->
+  <!-- ======================================================= -->
+  <target name="help">
+   <echo>
+   ******************************************************
+   *  Ninf-G Java Client API BUILD HELP                 *
+   ******************************************************
+   ant compile          : compile
+   ant install          : install 
+   ant clean            : delete jar files and class files 
+   ant javadoc          : generate documentation 
+   ant javadoc_clean    : clean documentation 
+   </echo>
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              Make Directories                           -->
+  <!-- ======================================================= -->
+  <target name="prepare">
+    <mkdir dir="${build}/ng" />
+    <mkdir dir="${dist.lib}" />
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              Compile Ninf-G Java sources                -->
+  <!-- ======================================================= -->
+  <target name="compile" depends="prepare">
+    <javac srcdir="${src}/" 
+      includes="org/apgrid/grpc/** org/gridforum/gridrpc/**"
+      excludes="org/apgrid/grpc/ng/TMP/**"
+      destdir="${build}/ng"
+      deprecation="on"
+      debug="on" />
+  </target>
+
+  <target name="install" depends="compile">
+    <jar jarfile="${dist.lib}/ng.jar" basedir="${build}/ng"
+         includes="**" />
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              JAVADOC                                    -->
+  <!-- ======================================================= -->
+  <target name="prepare_javadoc">
+    <tstamp/>
+    <mkdir dir="${javadoc.home}" />
+  </target>
+
+  <target name="javadoc" depends="prepare_javadoc" >
+    <!--<javadoc packagenames="org.gridforum.gridrpc, org.apgrid.grpc.ng, org.apgrid.grpc.util" -->
+    <javadoc packagenames="org.gridforum.gridrpc"
+             sourcepath="${src}"
+             doctitle="Ninf-G Java Client API" 
+             windowtitle="Ninf-G Java Client API"
+             overview="src/java/overview.html"
+             destdir="${javadoc.home}"
+             public="true"
+             use="true"
+             version="true"
+             author="false"/>
+  </target>
+
+  <!-- ======================================================= -->
+  <!--              CLEAN                                      -->
+  <!-- ======================================================= -->
+  <target name="jar_clean">
+    <delete file="${dist.lib}/ng.jar" />
+  </target>
+
+  <target name="clean">
+    <delete dir="${build}" />
+  </target>
+
+  <target name="javadoc_clean">
+    <delete dir="${javadoc.home}" />
+  </target>
+
+  <target name="dist_clean" depends="jar_clean, clean">
+  </target>
+
+</project>

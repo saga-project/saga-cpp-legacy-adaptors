@@ -1,0 +1,68 @@
+#!/bin/sh
+#
+# getarchnumber
+#
+# calls getarch string and returns the corresponding 
+# architecture number
+
+archstring="`/Users/merzky/links/saga/trunk/adaptors/ninfg/ninfg-adaptor-1112/external/ng-4.2.4/utility/script/getarchstring`"
+
+case "$archstring" in
+  AFX8)		archnum=11 ;;
+  BFLY)         archnum=11 ;;
+  CM2)    	archnum=11 ;; 
+  CM5)    	archnum=11 ;;
+  CNVX)    	archnum=11 ;; 
+  CRAYSMP)    	archnum=11 ;; 
+  CSPP)    	archnum=11 ;; 
+  DGAV)    	archnum=11 ;; 
+  E88K)    	archnum=11 ;;
+  HP300)    	archnum=11 ;; 
+  HPPA)     	archnum=11 ;; 
+  HPPAMP)     	archnum=11 ;; 
+  MIPS)     	archnum=11 ;; 
+  NEXT)     	archnum=11 ;;
+  RS6K)     	archnum=11 ;; 
+  RS6KMP)     	archnum=11 ;; 
+  POWER4)     	archnum=11 ;; 
+  RT)     	archnum=11 ;;
+  SGI)     	archnum=11 ;; 
+  SGI5)     	archnum=11 ;;
+  SGI64)     	archnum=11 ;; 
+  SGIMP64)     	archnum=11 ;;
+  SGIMP)     	archnum=11 ;; 
+  SUN3)     	archnum=11 ;; 
+  SUN4)     	archnum=11 ;; 
+  SUN4SOL2)     archnum=11 ;;
+  SUNMP)     	archnum=11 ;; 
+  TITN)     	archnum=11 ;;
+  BSD386)     	archnum=12 ;; 
+  IPSC2)     	archnum=12 ;; 
+  LINUX)     	archnum=12 ;; 
+  MASPAR)     	archnum=12 ;;
+  PMAX)     	archnum=12 ;; 
+  SCO)     	archnum=12 ;; 
+  SYMM)     	archnum=12 ;; 
+  WIN32)     	archnum=12 ;;
+  I860)     	archnum=13 ;; 
+  PGON)     	archnum=13 ;;
+  BAL)     	archnum=14 ;;
+  CNVXN)     	archnum=15 ;;
+  CRAY)     	archnum=16 ;; 
+  CRAY2)     	archnum=16 ;; 
+  T3E)     	archnum=16 ;; 
+  CRAYJ90)     	archnum=16 ;;
+  KSR1)     	archnum=17 ;;
+  UVAX)     	archnum=18 ;;
+  VCM2)     	archnum=19 ;;
+  ALPHA)     	archnum=20 ;; 
+  ALPHAMP)     	archnum=20 ;;
+  U370)     	archnum=21 ;; 
+  UXPM)     	archnum=21 ;;
+  SX3)     	archnum=22 ;;
+  LINUXIA64)	archnum=23 ;;
+  LINUXAMD64)	archnum=24 ;;
+  MACOSX)	archnum=25 ;;
+  *)		archnum=0 ;;
+esac
+echo $archnum;

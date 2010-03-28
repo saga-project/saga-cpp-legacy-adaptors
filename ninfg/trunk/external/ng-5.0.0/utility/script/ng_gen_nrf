@@ -1,0 +1,103 @@
+#! /bin/sh
+
+# $RCSfile: ng_gen_nrf,v $ $Revision: 1.6 $ $Date: 2007/11/27 02:27:43 $
+# $AIST_Release: 5.0.0 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+# ng_gen_nrf
+
+for i in $@
+do
+    case $i in
+    -h)
+        echo "Usage : ng_gen_dif Remote Executables ..." >&2
+        exit 1
+	;;
+    -*)  
+	echo "$i: Unknown option." >&2
+        exit 1
+	;;
+    esac
+done
+
+if [ "x${NG_DIR}" = "x" ]; then
+    echo "NG_DIR environment variable is not set. exit." >&2
+    exit 1
+fi
+
+if [ "x${1}" = "x" ]; then
+    echo "no argument. exit." >&2
+    exit 1
+fi
+
+hostname_command="${NG_DIR}/bin/ng_hostname"
+if [ ! -x $hostname_command ]; then
+    echo "${hostname_command} cannot execute. exit." >&2
+    exit 1
+fi
+
+hostname=`${hostname_command}`
+if [ "x${hostname}" = "x" ]; then
+    echo "hostname is empty. exit." >&2
+    exit 1
+fi
+
+PWD=`pwd`
+
+executable=$1
+inf_file=${executable}.inf
+modname=`grep '<.*:class [^>]*>' ${inf_file} | sed 's/.* name="\([^/]*\).*".*/\1/'`
+local_target="${modname}.${hostname}.nrf"
+
+exec 9> $local_target
+cat >&9 << EOF 
+<?xml version="1.0" encoding="us-ascii" ?>
+<nrf:NinfGRemoteInformation xmlns:nrf="http://ninf.apgrid.org/2006/12/NinfGRemoteInformation"
+                            xmlns:rei="http://ninf.apgrid.org/2006/12/RemoteExecutableInformation">
+EOF
+
+for executable in $*
+do 
+    inf_file="${executable}.inf"
+    if [ ! -r ${inf_file} ];then
+        echo ${inf_file}: No such file, or noreadable.
+        exit 1
+    fi
+
+cat >&9 << EOF 
+    <rei:RemoteExecutableInformation>
+      <rei:hostName>${hostname}</rei:hostName>
+      <rei:path>${PWD}/${executable}</rei:path>
+      <rei:ngdir>${NG_DIR}</rei:ngdir>
+EOF
+
+    sed -n '/class/,$p' ${inf_file} >&9 
+
+cat >&9 << EOF 
+
+    </rei:RemoteExecutableInformation>
+EOF
+done
+
+cat >&9 << EOF 
+</nrf:NinfGRemoteInformation>
+EOF
+    
+exit 0
+

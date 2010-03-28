@@ -1,0 +1,146 @@
+#!/bin/sh
+
+# $RCSfile: ng_cc,v $ $Revision: 1.1 $ $Date: 2007/01/29 07:53:24 $
+# $AIST_Release: 5.0.0 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+#
+# ng_cc: Compiler and Linker for Ninf-G Client.
+#
+
+if [ "x${NG_DIR}" = "x" ]; then
+    echo "NG_DIR environment variable is not set." >&2
+    exit 1
+fi
+
+make="make"
+# for emergency.
+if [ "x${NG_MAKE}" != "x" ]; then
+    make=$NG_MAKE
+fi
+
+# Get the information from template.mk.
+
+template="${NG_DIR}/lib/template-print.mk"
+
+get_flag () {
+    rule=$1
+    allow_empty=$2
+    expect=$3
+
+    # Note: The outputs are printed to stderr,
+    #       because make prints verbose messages on recursive run.
+    # Note: ${make_command} was not used for executing command,
+    #       because /bin/sh evaluation is needed.
+
+    make_command="${make} -f ${template} ${rule} 2>&1 >/dev/null"
+    make_result=`${make} -f ${template} ${rule} 2>&1 >/dev/null`
+    if [ $? -ne 0 ]; then
+        echo "${0}: make failed." >&2
+        echo "${0}: failed command: ${make_command}" >&2
+        echo "${0}: failed result: ${make_result}" >&2
+        exit 1
+    fi
+
+    if [ "x${allow_empty}" = "xno_empty" ]; then
+        if [ "x${make_result}" = "x" ]; then
+            echo "${0}: make failed." >&2
+            echo "${0}: make result was empty." >&2
+            echo "${0}: failed command: ${make_command}" >&2
+            echo "${0}: failed result: ${make_result}" >&2
+            exit 1
+        fi
+    fi
+
+    if [ "x${expect}" != "x" ]; then
+        if [ "x${make_result}" != "x${expect}" ]; then
+            echo "${0}: make failed." >&2
+            echo "${0}: make result was not \"${expect}\"." >&2
+            echo "${0}: failed command: ${make_command}" >&2
+            echo "${0}: failed result: ${make_result}" >&2
+            exit 1
+        fi
+    fi
+
+    result=$make_result
+}
+
+get_flag "print_TEST" "no_empty" "print_TEST_check_output"
+
+get_flag "print_NG_CLIENT_COMPILER" "no_empty"
+compiler=$result
+
+get_flag "print_NG_CLIENT_CFLAGS" "allow_empty"
+NG_CFLAGS=$result
+
+get_flag "print_NG_CLIENT_CPPFLAGS" "allow_empty"
+NG_CPPFLAGS=$result
+
+get_flag "print_NG_CLIENT_LIBS" "allow_empty"
+NG_LIBS=$result
+
+get_flag "print_NG_CLIENT_LDFLAGS" "allow_empty"
+NG_LDFLAGS=$result
+
+
+# Check and set the user defined compiler and linker.
+linker=$compiler
+
+if [ "x${NG_COMPILER}" != "x" ]; then
+    compiler=$NG_COMPILER
+    linker=$NG_COMPILER
+fi
+
+if [ "x${NG_LINKER}" != "x" ]; then
+    linker=$NG_LINKER
+fi
+
+# Check if the link is needed.
+do_link=1
+for i in "${1+$@}"; do
+    case $i in
+        -c|-E|-S)
+            do_link=0;;
+        *)
+            ;;
+    esac
+done
+
+# Execute the compile and link.
+
+if [ $do_link -eq 1 ]; then
+
+    echo $linker $NG_CFLAGS $NG_CPPFLAGS "${1+$@}" $NG_LDFLAGS $NG_LIBS
+    exec $linker $NG_CFLAGS $NG_CPPFLAGS "${1+$@}" $NG_LDFLAGS $NG_LIBS
+
+else
+
+    echo $compiler $NG_CFLAGS $NG_CPPFLAGS "${1+$@}"
+    exec $compiler $NG_CFLAGS $NG_CPPFLAGS "${1+$@}"
+
+fi
+
+# not reached.
+if [ $do_link -eq 1 ]; then
+    echo "failed to exec linker \"${linker}\"." >&2
+else
+    echo "failed to exec compiler \"${compiler}\"." >&2
+fi
+exit 1
+

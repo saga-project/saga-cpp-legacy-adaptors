@@ -1,0 +1,27 @@
+Known Issues
+
+---------------------
+Unavailable functions
+---------------------
+  The following functions are not supported/implemented and unavailable.
+    - Cancellation of an outstanding RPC which is executing a callback function
+    - Argument stack APIs
+    - Data transfer using XML protocol
+
+---------------
+Compile warning
+---------------
+  You may find some compiler warnings, but they are harmless.
+
+    - Ninf-G compile
+      + On Linux/gcc 2.95.3
+          Refer to "WARNING-Linux-gcc2.95.3.txt" for more details of warning.
+
+      + On Solaris/cc 7.0
+          Refer to "WARNING-Solaris-cc7.0.txt" for more details of warning.
+
+      + On Solaris/gcc 3.2.3
+          Refer to "WARNING-Solaris-gcc3.2.3.txt" for more details of warning.
+
+      + On Darwin/gcc 4.0.0
+          Refer to "WARNING-Darwin-gcc4.0.0.txt" for more details of warning.

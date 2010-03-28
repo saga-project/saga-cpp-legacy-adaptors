@@ -1,0 +1,118 @@
+Module data_types;
+Globals { #include "stdlib.h" }
+Globals { #include "string.h" }
+
+Define char_test(IN char N, IN char in[N], OUT char out[N])
+"Char facility Test"
+{
+    int i;
+
+    for (i = 0; i < N; i++) {
+        out[i] = in[i];
+    }
+}
+
+Define short_test(IN short N, IN short in[N], OUT short out[N])
+"Short facility Test"
+{
+    int i;
+
+    for (i = 0; i < N; i++) {
+        out[i] = in[i];
+    }
+}
+
+Define int_test(IN int N, IN int in[N], OUT int out[N])
+"Int facility Test"
+{
+    int i;
+
+    for (i = 0; i < N; i++) {
+        out[i] = in[i];
+    }
+}
+
+Define long_test(IN long N, IN long in[N], OUT long out[N])
+"Long facility Test"
+{
+    int i;
+
+    for (i = 0; i < N; i++) {
+        out[i] = in[i];
+    }
+}
+
+Define float_test(IN int N, IN float scalarIn, IN float in[N], OUT float *scalarOut, OUT float out[N])
+"Float facility Test"
+{
+    int i;
+
+    *scalarOut = scalarIn;
+
+    for (i = 0; i < N; i++) {
+        out[i] = in[i];
+    }
+}
+
+Define double_test(IN int N, IN double scalarIn, IN double in[N], OUT double *scalarOut, OUT double out[N])
+"Double facility Test"
+{
+    int i;
+
+    *scalarOut = scalarIn;
+
+    for (i = 0; i < N; i++) {
+        out[i] = in[i];
+    }
+}
+
+Define scomplex_test(IN int N, IN scomplex scalarIn, IN scomplex in[N], OUT scomplex *scalarOut, OUT scomplex out[N])
+"Scomplex facility Test"
+{
+    int i;
+
+    *scalarOut = scalarIn;
+
+    for (i = 0; i < N; i++) {
+        out[i].r = in[i].r;
+        out[i].i = in[i].i;
+    }
+}
+
+Define dcomplex_test(IN int N, IN dcomplex scalarIn, IN dcomplex in[N], OUT dcomplex *scalarOut, OUT dcomplex out[N])
+"Dcomplex facility Test"
+{
+    int i;
+
+    *scalarOut = scalarIn;
+
+    for (i = 0; i < N; i++) {
+        out[i].r = in[i].r;
+        out[i].i = in[i].i;
+    }
+}
+
+Define string_test(IN string i, OUT string o[])
+"This is a test for string facility"
+{
+    *o = i;
+}
+
+Define string_array_test(IN string in[5], OUT string out[3])
+"This is a test for array of string facility"
+{
+    out[0] = "Were all tests successful?";
+    out[1] = in[2];
+    out[2] = "Good morning";
+}
+
+Define work_test(IN int N, IN int in[N], WORK int work[N], OUT int out[N])
+{
+    int i;
+
+    for (i = 0; i < N; i++) {
+        work[i] = in[i];
+    }
+    memcpy(out, work, sizeof (out[0]) * N);
+}
+

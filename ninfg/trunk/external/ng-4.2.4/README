@@ -1,0 +1,13 @@
+                     Ninf-G Version 4.2.4
+                (Release ID: naregi-wp2-rpc-061006)
+
+Ninf-G is a GridRPC system built on the Globus Toolkit.
+
+Version 4.2.4 of the Ninf-G is available at
+  http://ninf.apgrid.org/packages/
+
+Instructions for installing the Ninf-G is included in the Ninf-G
+package and can be found in "doc" directory of the source tree.
+
+For any questions, comments, and bug reports, etc., please send email
+to ninf@apgrid.org .

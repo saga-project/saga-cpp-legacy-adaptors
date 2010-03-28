@@ -1,0 +1,7 @@
+Ninf-G Invoke Server Condor
+
+This is the Invoke Server for Condor written in java.
+
+1. Prerequisite
+   - Java(SDK): 5 or later
+

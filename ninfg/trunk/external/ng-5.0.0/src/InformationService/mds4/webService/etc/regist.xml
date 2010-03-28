@@ -1,0 +1,23 @@
+<ServiceGroupRegistrationParameters
+		xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+		xmlns="http://mds.globus.org/servicegroup/client">
+	<ServiceGroupEPR>
+		<wsa:Address>https://example.org:8443/wsrf/services/org/apgrid/ninf/ng5/grpcinfo/GrpcInfoIndexService</wsa:Address>
+	</ServiceGroupEPR>
+	<RegistrantEPR>
+		<wsa:Address>https://example.org:8443/wsrf/services/org/apgrid/ninf/ng5/grpcinfo/GrpcInfoService</wsa:Address>
+	</RegistrantEPR>
+	<RefreshIntervalSecs>61</RefreshIntervalSecs>
+	<Content
+			xsi:type="agg:AggregatorContent"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xmlns:agg="http://mds.globus.org/aggregator/types">
+		<agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
+			<agg:AggregatorSubscriptionType
+					xmlns:ng5gitypes="http://ninf.apgrid.org/ng5/grpcinfo/types">
+				<agg:TopicExpression Dialect="http://docs.oasis-open.org/wsn/2004/06/TopicExpression/Simple">ng5gitypes:grpcInfoSet</agg:TopicExpression>
+			</agg:AggregatorSubscriptionType>
+		</agg:AggregatorConfig>
+		<agg:AggregatorData/>
+	</Content>
+</ServiceGroupRegistrationParameters>

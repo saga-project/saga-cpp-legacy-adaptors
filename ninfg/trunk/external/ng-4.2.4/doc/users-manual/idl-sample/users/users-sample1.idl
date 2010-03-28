@@ -1,0 +1,17 @@
+Module idl_sample1;
+
+Library "-L/path/to/lib -lcxa -lCEPCF90 -lF90";
+
+DefClass idl_sample1_class
+Required "object1.o object2.o object3.o"
+{
+  DefMethod idl_sample1_method1( IN        filename fname,
+                                          IN        int NHamil,
+                                          IN        double dt )
+  Calls "C" c_function1( fname, NHamil, dt );
+
+  DefMethod idl_sample1_method2( IN           int len,
+                                       IN           double pot[len],
+                                       INOUT    dcomplex psi[len] )
+  Calls "C" c_function2( len, pot, psi );
+}

@@ -1,0 +1,328 @@
+#!/bin/sh
+
+# $RCSfile: file_test,v $ $Revision: 1.11 $ $Date: 2006/09/13 05:37:48 $
+# $AIST_Release: 4.2.4 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+
+PATH=/bin:/usr/bin:$PATH
+work=tmpDirForFileTest
+array_max=4
+filename_fmt="%s-%03d"
+text_file1=async_test.c
+text_file2=data_test.c
+text_file3=file_sub.c
+bin_file1=file_sub
+bin_file2=file_sub_array
+bin_file3=_stub_filename_test
+
+ret=0
+
+# set GLOBUS environment
+if [ "X${GLOBUS_LOCATION}" = "X" ]; then
+    echo "Please set GLOBUS_LOCATION environment variable"
+    exit 1
+fi
+. ${GLOBUS_LOCATION}/etc/globus-user-env.sh
+
+# Check the arguments.
+if [ $# -ne 1 ]
+then
+    echo "Usage: file_test config-file"
+    exit 1
+fi
+conf=$1
+if [ ! -f $1 ]
+then
+    echo "$1: No such file"
+    exit 1
+fi
+
+# Make the work directory.
+if [ -d $work ]
+then
+    echo "Directory $work exist"
+    exit 1
+fi
+mkdir $work
+if [ $? -ne 0 ]; then exit 1; fi
+
+trap "rm -rf $work; exit 1" INT TERM
+
+############################################################
+# Prepare test data.
+do_prepare()
+{
+    if [ $1 = "text" ]
+    then
+        # Prepare test data.
+        if [ -f $text_file1 ]
+        then
+            cp $text_file1 $work/in.orig
+        else
+            echo "${text_file1}: No such file"
+            exit 1
+        fi
+        if [ -f $text_file2 ]
+        then
+            cp $text_file2 $work/inout.orig
+        else
+            echo "${text_file2}: No such file"
+            exit 1
+        fi
+        if [ -f $text_file3 ]
+        then
+            cp $text_file3 $work/out.orig
+        else
+            echo "${text_file3}: No such file"
+            exit 1
+        fi
+    else
+        # Prepare test data.
+        if [ -f $bin_file1 ]
+        then
+            cp $bin_file1 $work/in.orig
+        else
+            echo "${bin_file1}: No such file"
+            exit 1
+        fi
+        if [ -f $bin_file2 ]
+        then
+            cp $bin_file2 $work/inout.orig
+        else
+            echo "${bin_file2}: No such file"
+            exit 1
+        fi
+        if [ -f $bin_file3 ]
+        then
+            cp $bin_file3 $work/out.orig
+        else
+            echo "${bin_file3}: No such file"
+            exit 1
+        fi
+    fi
+}
+
+############################################################
+# Do test.
+do_test()
+{
+    cp $work/in.orig    $work/in
+    cp $work/inout.orig $work/inout
+    if [ $1 -eq 0 ]
+    then 
+        rm -f $work/out
+        if [ $? -ne 0 ]
+        then
+            exit 1
+        fi
+    else
+        cp $work/out.orig $work/out
+    fi
+
+    ./file_sub $conf $work/in $work/inout $work/out
+
+    if [ $? -ne 0 ]; then
+        echo failed
+        return 1
+    fi
+
+    if cmp $work/in.orig     $work/in && \
+        cmp $work/in.orig     $work/inout && \
+        cmp $work/inout.orig  $work/out
+    then
+        echo OK
+    else
+        echo failed
+        return 1
+    fi
+    return 0
+}
+
+############################################################
+# Do array test.
+do_array_test()
+{
+    cp $work/in.orig    $work/in
+    cp $work/inout.orig $work/inout
+
+    if [ $1 -eq 0 ]
+    then 
+        rm -f $work/out
+    else
+        cp $work/out.orig $work/out
+    fi
+
+    # prepare array of files
+    prepare_files_prefix="in inout out"
+
+    for file in $prepare_files_prefix
+    do
+        i=0
+        while [ $i -lt $array_max ]
+        do
+            array_filename=`printf $filename_fmt $file $i`
+
+            rm -f $work/$array_filename
+
+            if [ -f $work/$file ]
+            then
+                cp $work/$file $work/$array_filename
+            fi
+
+            i=`expr $i + 1`
+        done
+    done
+
+    # test
+    ./file_sub_array $conf $array_max $work/in $work/inout $work/out
+
+    if [ $? -ne 0 ]; then
+        echo failed
+        return 1
+    fi
+
+    # check output files
+    i=0
+    while [ $i -lt $array_max ]
+    do
+        in_filename=`printf $filename_fmt in $i`
+        inout_filename=`printf $filename_fmt inout $i`
+        out_filename=`printf $filename_fmt out $i`
+
+        cmp $work/in.orig $work/$in_filename
+        if [ $? -ne 0 ]
+        then 
+            echo failed
+            return 1
+        fi
+
+        cmp $work/in.orig $work/$inout_filename
+        if [ $? -ne 0 ]
+        then 
+            echo failed
+            return 1
+        fi
+
+        cmp $work/inout.orig $work/$out_filename
+        if [ $? -ne 0 ]
+        then 
+            echo failed
+            return 1
+        fi
+
+        i=`expr $i + 1`
+    done
+
+    echo OK
+
+    return 0
+}
+
+
+############################################################
+# Transmission test of a text file.
+
+do_prepare text
+
+# The out-file does not exist.
+printf 'Text file (1)   testing:	'
+do_test 0
+if [ $? -ne 0 ]
+then
+    ret=1
+fi
+
+# The out-file exist.
+printf 'Text file (2)   testing:	'
+do_test 1
+if [ $? -ne 0 ]
+then
+    ret=1
+fi
+
+############################################################
+# Transmission test of a binary file.
+
+do_prepare binary
+
+# The out-file does not exist.
+printf 'Binary file (1) testing:	'
+do_test 0
+if [ $? -ne 0 ]
+then
+    ret=1
+fi
+
+# The out-file exist.
+printf 'Binary file (2) testing:	'
+do_test 1
+if [ $? -ne 0 ]
+then
+    ret=1
+fi
+
+
+############################################################
+# Transmission test of text files array.
+
+do_prepare text
+
+# The out-file does not exist.
+printf 'Text file array (1)   testing:	'
+do_array_test 0
+if [ $? -ne 0 ]
+then
+    ret=1
+fi
+
+# The out-file exist.
+printf 'Text file array (2)   testing:	'
+do_array_test 1
+if [ $? -ne 0 ]
+then
+    ret=1
+fi
+
+############################################################
+# Transmission test of binary files array.
+
+do_prepare binary
+
+# The out-file does not exist.
+printf 'Binary file array (1) testing:	'
+do_array_test 0
+if [ $? -ne 0 ]
+then
+    ret=1
+fi
+
+# The out-file exist.
+printf 'Binary file array (2) testing:	'
+do_array_test 1
+if [ $? -ne 0 ]
+then
+    ret=1
+fi
+
+############################################################
+# Delete the work directory.
+rm -rf $work
+
+exit $ret

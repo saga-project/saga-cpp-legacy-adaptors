@@ -1,0 +1,189 @@
+/*
+ * $RCSfile: file.idl,v $ $Revision: 1.1 $ $Date: 2006/12/18 08:29:43 $
+ * $AIST_Release: 5.0.0 $
+ * $AIST_Copyright:
+ *  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+ *  National Institute of Advanced Industrial Science and Technology
+ *  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+ *  
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  $
+ */
+Module file;
+
+Define filename_test(IN filename namein, INOUT filename nameinout,
+    OUT filename nameout)
+{
+    char buffer[100];
+    int items, result;
+    FILE * fin = NULL;
+    FILE * finout = NULL;
+    FILE * fout = NULL;
+
+    /* Ninf-G supports NULL filename */
+    assert(namein != NULL);
+    assert(nameinout != NULL);
+    assert(nameout != NULL);
+
+    /* 
+     * Copy from nameinout to nameout
+     */
+    finout = fopen(nameinout, "r");
+    if (finout == NULL) {
+        fprintf(stderr, "%s: fopen error\n", nameinout);
+        goto err;
+    }
+
+    fout = fopen(nameout, "w");
+    if (fout == NULL) {
+        fprintf(stderr, "%s: fopen error\n", nameout);
+        goto err;
+    }
+
+    while ((items = fread(buffer, 1, sizeof(buffer), finout)) > 0) {
+        result = fwrite(buffer, 1, items, fout);
+        if (result != items) {
+            fprintf(stderr, "%s: fwrite error\n", nameout);
+            goto err;
+        }
+    }
+
+    fclose(finout);
+    finout = NULL;
+    fclose(fout);
+    fout = NULL;
+
+    /*
+     * Copy from namein to nameinout
+     */
+    fin = fopen(namein, "r");
+    if (fin ==NULL) {
+        fprintf(stderr, "%s: fopen error\n", namein);
+        goto err;
+    }
+
+    finout  = fopen(nameinout, "w");
+    if (finout == NULL) {
+        fprintf(stderr, "%s: fopen error\n", nameinout);
+        goto err;
+    }
+
+    while ((items = fread(buffer, 1, sizeof(buffer), fin)) > 0) {
+        result = fwrite(buffer, 1, items, finout);
+        if (result != items) {
+            fprintf(stderr, "%s: fwrite error\n", nameinout);
+            goto err;
+        }
+    }
+
+    fclose(fin);
+    fin = NULL;
+    fclose(finout);
+    finout = NULL;
+
+err:
+    if (fin != NULL)
+        fclose(fin);
+    if (finout != NULL)
+        fclose(finout);
+    if (fout != NULL)
+        fclose(fout);
+}
+
+Define filename_array_test(
+    IN int n, IN filename namein[n], INOUT filename nameinout[n],
+    OUT filename nameout[n])
+{
+    char buffer[100];
+    int i, items, result;
+    FILE * fin = NULL;
+    FILE * finout = NULL;
+    FILE * fout = NULL;
+
+    /* Ninf-G supports NULL filename */
+    assert(namein != NULL);
+    assert(nameinout != NULL);
+    assert(nameout != NULL);
+
+    for (i = 0; i < n; i++) {
+
+        /* Ninf-G supports NULL filename */
+        assert(namein[i] != NULL);
+        assert(nameinout[i] != NULL);
+        assert(nameout[i] != NULL);
+
+        /* 
+         * Copy from nameinout to nameout
+         */
+        finout = fopen(nameinout[i], "r");
+        if (finout == NULL) {
+            fprintf(stderr, "%s: fopen error\n", nameinout[i]);
+            goto err;
+        }
+
+        fout = fopen(nameout[i], "w");
+        if (fout == NULL) {
+            fprintf(stderr, "%s: fopen error\n", nameout[i]);
+            goto err;
+        }
+
+        while ((items = fread(buffer, 1, sizeof(buffer), finout)) > 0) {
+            result = fwrite(buffer, 1, items, fout);
+            if (result != items) {
+                fprintf(stderr, "%s: fwrite error\n", nameout[i]);
+                goto err;
+            }
+        }
+
+        fclose(finout);
+        finout = NULL;
+        fclose(fout);
+        fout = NULL;
+
+        /*
+        * Copy from namein to nameinout
+        */
+        fin = fopen(namein[i], "r");
+        if (fin == NULL) {
+            fprintf(stderr, "%s: fopen error\n", namein[i]);
+            goto err;
+        }
+
+        finout  = fopen(nameinout[i], "w");
+        if (finout == NULL) {
+            fprintf(stderr, "%s: fopen error\n", nameinout[i]);
+            goto err;
+        }
+
+        while ((items = fread(buffer, 1, sizeof(buffer), fin)) > 0) {
+            result = fwrite(buffer, 1, items, finout);
+            if (result != items) {
+                fprintf(stderr, "%s: fwrite error\n", nameinout[i]);
+                goto err;
+            }
+        }
+    
+        fclose(fin);
+        fin = NULL;
+        fclose(finout);
+        finout = NULL;
+    }
+
+err:
+    if (fin != NULL)
+        fclose(fin);
+    if (finout != NULL)
+        fclose(finout);
+    if (fout != NULL)
+        fclose(fout);
+}

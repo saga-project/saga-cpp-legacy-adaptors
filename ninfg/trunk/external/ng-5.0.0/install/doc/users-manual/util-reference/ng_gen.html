@@ -1,0 +1,74 @@
+<!--
+  $RCSfile: ng_gen.html,v $ $Revision: 1.3 $ $Date: 2008/03/17 03:01:07 $
+  $AIST_Release: 5.0.0 $
+  $AIST_Copyright:
+   Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+   National Institute of Advanced Industrial Science and Technology
+   Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+   
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+   $
+ -->
+
+<html>
+<head>
+<title>ng_gen</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>ng_gen</code> -  ng_gen - Ninf-G stub generator
+<h3>SYNOPSIS</h3>
+<code>
+  ng_gen [-d] [--no-cpp] [--with-cpp=cpp_command] inputfile
+
+</code>
+<h3>DESCRIPTION</h3>
+<p>The ng_gen command interprets the Ninf-G IDL file and
+generates what is needed to create an Ninf-G Executable.
+The Ninf-G IDL is specified by the argument.</p>
+
+<p>The ng_gen command executes cpp to process the Ninf-G IDL file.
+If unsupported option strings(beginning with '-') are passed to ng_gen
+command, it handles them as options to cpp.</p>
+
+<p>The ng_gen command generates the following items.</p>
+
+<ul>
+<li>Ninf-G stub
+<li>Makefile for the Ninf-G Executable
+</ul>
+
+<br>
+<h3>OPTIONS</h3>
+<dl>
+<dt>-d</dt>
+<dd>Dump information about function.</dd>
+
+<dt>-h</dt>
+<dd>Print usage.</dd>
+
+<dt>--no-cpp</dt>
+<dd>Do not use cpp.</dd>
+
+<dt>--with-cpp=cpp_command</dt>
+<dd>Use the specified cpp instead of the default cpp.</dd>
+
+</dl>
+<br>
+<h3>ERRORS</h3>
+If the input Ninf-G IDL is incorrect, an error message is output and the process ends abnormally.
+<hr>
+last update : $Date: 2008/03/17 03:01:07 $
+</body>
+</html>

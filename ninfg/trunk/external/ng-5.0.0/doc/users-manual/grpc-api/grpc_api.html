@@ -1,0 +1,611 @@
+<!--
+  $RCSfile: grpc_api.html,v $ $Revision: 1.2 $ $Date: 2008/02/08 05:21:46 $
+  $AIST_Release: 5.0.0 $
+  $AIST_Copyright:
+   Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+   National Institute of Advanced Industrial Science and Technology
+   Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+   
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+   $
+ -->
+
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+<title>GridRPC API Reference Manual</title>
+</head>
+<body bgcolor=white>
+
+<h2><a name="api_reference"> 7. GridRPC API Reference Manual </a></h2>
+
+<p>
+This section lists and gives you information about all Ninf-G API.
+</p>
+
+<hr>
+
+API Index
+<ul>
+<li> <a href="#activation"> Initialization and finalization </a>
+<li> <a href="#handle"> Handle </a>
+<li> <a href="#invoke"> Session Invocation </a>
+<li> <a href="#argument_stack"> Argument Stack </a>
+<li> <a href="#wait"> Session Wait </a>
+<li> <a href="#session"> Session Control </a>
+<li> <a href="#errors"> Errors </a>
+<li> <a href="#other"> Others </a>
+<li> <a href="#server"> Server side </a>
+</ul>
+
+<hr>
+
+<h3>
+<a name="activation"> Ninf-G Client initialization and finalization API </a>
+</h3>
+<ul>
+<li><a href="grpc_initialize.html">grpc_initialize()</a>
+<li><a href="grpc_finalize.html">grpc_finalize()</a>
+<li><a href="grpc_config_file_read_np.html">grpc_config_file_read_np()</a>
+</ul>
+
+<h3>
+<a name="handle"> Ninf-G Handle API </a>
+</h3>
+
+<table border>
+<tr>
+<th>type</th><th>operation</th>
+    <th>array</th><th>default</th><th>attr</th><th>API</th>
+</tr>
+
+<tr>
+<td>function</td><td>initialize</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_function_handle_init.html">
+    grpc_function_handle_init()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>initialize</td><td></td><td></td><td>attr</td>
+<td>
+<a href="grpc_function_handle_init_with_attr_np.html">
+    grpc_function_handle_init_with_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>initialize</td><td></td><td>default</td><td></td>
+<td>
+<a href="grpc_function_handle_default.html">
+    grpc_function_handle_default()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>destruct</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_function_handle_destruct.html">
+    grpc_function_handle_destruct()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>initialize</td><td>array</td><td></td><td></td>
+<td>
+<a href="grpc_function_handle_array_init_np.html">
+    grpc_function_handle_array_init_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>initialize</td><td>array</td><td></td><td>attr</td>
+<td>
+<a href="grpc_function_handle_array_init_with_attr_np.html">
+    grpc_function_handle_array_init_with_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>initialize</td><td>array</td><td>default</td><td></td>
+<td>
+<a href="grpc_function_handle_array_default_np.html">
+    grpc_function_handle_array_default_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>destruct</td><td>array</td><td></td><td></td>
+<td>
+<a href="grpc_function_handle_array_destruct_np.html">
+    grpc_function_handle_array_destruct_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>get_attr</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_function_handle_get_attr_np.html">
+    grpc_function_handle_get_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>get_handle</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_function_handle_get_from_session_np.html">
+    grpc_function_handle_get_from_session_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>get_handle</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_get_handle.html">grpc_get_handle()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>perror</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_function_handle_perror_np.html">
+    grpc_function_handle_perror_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>get_error</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_function_handle_get_error_np.html">
+    grpc_function_handle_get_error_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>is_ready</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_function_handle_is_ready_np.html">
+    grpc_function_handle_is_ready_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>initialize</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_object_handle_init_np.html">
+    grpc_object_handle_init_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>initialize</td><td></td><td></td><td>attr</td>
+<td>
+<a href="grpc_object_handle_init_with_attr_np.html">
+    grpc_object_handle_init_with_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>initialize</td><td></td><td>default</td><td></td>
+<td>
+<a href="grpc_object_handle_default_np.html">
+    grpc_object_handle_default_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>destruct</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_object_handle_destruct_np.html">
+    grpc_object_handle_destruct_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>initialize</td><td>array</td><td></td><td></td>
+<td>
+<a href="grpc_object_handle_array_init_np.html">
+    grpc_object_handle_array_init_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>initialize</td><td>array</td><td></td><td>attr</td>
+<td>
+<a href="grpc_object_handle_array_init_with_attr_np.html">
+    grpc_object_handle_array_init_with_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>initialize</td><td>array</td><td>default</td><td></td>
+<td>
+<a href="grpc_object_handle_array_default_np.html">
+    grpc_object_handle_array_default_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>destruct</td><td>array</td><td></td><td></td>
+<td>
+<a href="grpc_object_handle_array_destruct_np.html">
+    grpc_object_handle_array_destruct_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>get_attr</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_object_handle_get_attr_np.html">
+    grpc_object_handle_get_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>get_handle</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_object_handle_get_from_session_np.html">
+    grpc_object_handle_get_from_session_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>perror</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_object_handle_perror_np.html">
+    grpc_object_handle_perror_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>get_error</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_object_handle_get_error_np.html">
+    grpc_object_handle_get_error_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>is_ready</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_object_handle_is_ready_np.html">
+    grpc_object_handle_is_ready_np()</a>
+</td>
+</tr>
+</table>
+
+<table border>
+<tr>
+<th>type</th><th>operation</th><th>API</th>
+</tr>
+
+<tr>
+<td>attribute</td><td>initialize</td>
+<td>
+<a href="grpc_handle_attr_initialize_np.html">
+    grpc_handle_attr_initialize_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>attribute</td><td>destruct</td>
+<td>
+<a href="grpc_handle_attr_destruct_np.html">
+    grpc_handle_attr_destruct_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>attribute</td><td>get</td>
+<td>
+<a href="grpc_handle_attr_get_np.html">
+    grpc_handle_attr_get_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>attribute</td><td>set</td>
+<td>
+<a href="grpc_handle_attr_set_np.html">
+    grpc_handle_attr_set_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>attribute</td><td>release</td>
+<td>
+<a href="grpc_handle_attr_release_np.html">
+    grpc_handle_attr_release_np()</a>
+</td>
+</tr>
+</table>
+
+<h3>
+<a name="invoke"> Ninf-G Session Invocation API </a>
+</h3>
+
+<table border>
+<tr>
+<th>type</th><th>attr</th><th>arg_stack</th><th>async</th><th>API</th>
+</tr>
+
+<tr>
+<td>function</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_call.html">
+    grpc_call()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td></td><td></td><td>async</td>
+<td>
+<a href="grpc_call_async.html">
+    grpc_call_async()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td></td><td>arg_stack</td><td></td>
+<td>
+<a href="grpc_call_arg_stack.html">
+    grpc_call_arg_stack()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td></td><td>arg_stack</td><td>async</td>
+<td>
+<a href="grpc_call_arg_stack_async.html">
+    grpc_call_arg_stack_async()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>attr</td><td></td><td></td>
+<td>
+<a href="grpc_call_with_attr_np.html">
+    grpc_call_with_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>attr</td><td></td><td>async</td>
+<td>
+<a href="grpc_call_async_with_attr_np.html">
+    grpc_call_async_with_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>attr</td><td>arg_stack</td><td></td>
+<td>
+<a href="grpc_call_arg_stack_with_attr_np.html">
+    grpc_call_arg_stack_with_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>function</td><td>attr</td><td>arg_stack</td><td>async</td>
+<td>
+<a href="grpc_call_arg_stack_async_with_attr_np.html">
+    grpc_call_arg_stack_async_with_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td></td><td></td><td></td>
+<td>
+<a href="grpc_invoke_np.html">
+    grpc_invoke_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td></td><td></td><td>async</td>
+<td>
+<a href="grpc_invoke_async_np.html">
+    grpc_invoke_async_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td></td><td>arg_stack</td><td></td>
+<td>
+<a href="grpc_invoke_arg_stack_np.html">
+    grpc_invoke_arg_stack_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td></td><td>arg_stack</td><td>async</td>
+<td>
+<a href="grpc_invoke_arg_stack_async_np.html">
+    grpc_invoke_arg_stack_async_np()</a>
+</td>
+</tr>
+<tr>
+<td>object</td><td>attr</td><td></td><td></td>
+<td>
+<a href="grpc_invoke_with_attr_np.html">
+    grpc_invoke_with_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>attr</td><td></td><td>async</td>
+<td>
+<a href="grpc_invoke_async_with_attr_np.html">
+    grpc_invoke_async_with_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>attr</td><td>arg_stack</td><td></td>
+<td>
+<a href="grpc_invoke_arg_stack_with_attr_np.html">
+    grpc_invoke_arg_stack_with_attr_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>object</td><td>attr</td><td>arg_stack</td><td>async</td>
+<td>
+<a href="grpc_invoke_arg_stack_async_with_attr_np.html">
+    grpc_invoke_arg_stack_async_with_attr_np()</a>
+</td>
+</tr>
+</table>
+
+<table border>
+<tr>
+<th>type</th><th>operation</th><th>API</th>
+</tr>
+
+<tr>
+<td>attribute</td><td>initialize</td>
+<td>
+<a href="grpc_session_attr_initialize_np.html">
+    grpc_session_attr_initialize_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>attribute</td><td>initialize</td>
+<td>
+<a href="grpc_session_attr_initialize_with_object_handle_np.html">
+    grpc_session_attr_initialize_with_object_handle_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>attribute</td><td>destruct</td>
+<td>
+<a href="grpc_session_attr_destruct_np.html">
+    grpc_session_attr_destruct_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>attribute</td><td>get</td>
+<td>
+<a href="grpc_session_attr_get_np.html">
+    grpc_session_attr_get_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>attribute</td><td>set</td>
+<td>
+<a href="grpc_session_attr_set_np.html">
+    grpc_session_attr_set_np()</a>
+</td>
+</tr>
+
+<tr>
+<td>attribute</td><td>release</td>
+<td>
+<a href="grpc_session_attr_release_np.html">
+    grpc_session_attr_release_np()</a>
+</td>
+</tr>
+</table>
+
+
+<h3>
+<a name="argument_stack"> Ninf-G Argument Stack API </a>
+</h3>
+
+<ul>
+<li><a href="grpc_arg_stack_new.html">grpc_arg_stack_new()</a>
+<li><a href="grpc_arg_stack_destruct.html">grpc_arg_stack_destruct()</a>
+<li><a href="grpc_arg_stack_push_arg.html">grpc_arg_stack_push_arg()</a>
+<li><a href="grpc_arg_stack_pop_arg.html">grpc_arg_stack_pop_arg()</a>
+</ul>
+
+<h3>
+<a name="wait"> Ninf-G Session Wait API </a>
+</h3>
+
+<ul>
+<li><a href="grpc_wait.html">grpc_wait()</a>
+<li><a href="grpc_wait_all.html">grpc_wait_all()</a>
+<li><a href="grpc_wait_any.html">grpc_wait_any()</a>
+<li><a href="grpc_wait_and.html">grpc_wait_and()</a>
+<li><a href="grpc_wait_or.html">grpc_wait_or()</a>
+</ul>
+
+<h3>
+<a name="session"> Ninf-G Session Control API </a>
+</h3>
+
+<ul>
+<li><a href="grpc_cancel.html">grpc_cancel()</a>
+<li><a href="grpc_cancel_all.html">grpc_cancel_all()</a>
+<li><a href="grpc_probe.html">grpc_probe()</a>
+<li><a href="grpc_probe_or.html">grpc_probe_or()</a>
+<li><a href="grpc_session_info_get_np.html">grpc_session_info_get_np()</a>
+<li><a href="grpc_session_info_release_np.html">
+    grpc_session_info_release_np()</a>
+<li><a href="grpc_session_info_set_threshold_np.html">
+    grpc_session_info_set_threshold_np()</a>
+<li><a href="grpc_session_info_remove_np.html">
+    grpc_session_info_remove_np()</a>
+<li><a href="grpc_get_error.html">grpc_get_error()</a>
+</ul>
+
+<h3>
+<a name="errors"> Ninf-G Errors API </a>
+</h3>
+
+<ul>
+<li><a href="grpc_error_string.html">grpc_error_string()</a>
+<li><a href="grpc_perror_np.html">grpc_perror_np()</a>
+<li><a href="grpc_get_failed_sessionid.html">grpc_get_failed_sessionid()</a>
+<li><a href="grpc_last_error_get_np.html">grpc_last_error_get_np()</a>
+</ul>
+
+<h3>
+<a name="other"> Ninf-G Others API </a>
+</h3>
+
+<ul>
+<li><a href="grpc_signal_handler_set_np.html">grpc_signal_handler_set_np()</a>
+</ul>
+
+
+<h3>
+<a name="server"> Ninf-G Server side API </a>
+</h3>
+
+<ul>
+<li><a href="grpc_is_canceled_np.html">grpc_is_canceled_np()</a>
+</ul>
+
+<h3>
+<a name="compatibility"> For Backward Compatibility API (Not recommend) </a>
+</h3>
+
+<ul>
+<li><a href="grpc_get_info_np.html">grpc_get_info_np()</a>
+<li><a href="grpc_get_last_info_np.html">grpc_get_last_info_np()</a>
+<li>grpc_get_last_error_np()
+</ul>
+
+<hr>
+last update : $Date: 2008/02/08 05:21:46 $
+
+</body>
+</html>
+

@@ -1,0 +1,11 @@
+Module cancel;
+
+Define cancel()
+{
+    while(1) {
+	if (grpc_is_canceled_np(&error) == 1)
+	    break;
+
+	sleep(1);
+    }
+}

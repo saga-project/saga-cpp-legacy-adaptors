@@ -1,0 +1,120 @@
+#!/bin/sh
+
+# $RCSfile: ng_cc.in,v $ $Revision: 1.14 $ $Date: 2006/06/12 11:10:41 $
+# $AIST_Release: 4.2.4 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+me=`basename $0`
+
+stderr () {
+    echo $1 1>&2
+}
+
+error () {
+    stderr "$me: error: $1"
+}
+
+isNull () {
+    if test "X${1}" = "X"; then
+	return 1
+    else
+	return 0
+    fi
+}
+
+
+isNull ${NG_DIR}
+if test $? -eq 1; then
+    NG_DIR='/Users/merzky/links/saga/svn/trunk/adaptors/ninfg/ninfg-adaptor-1112/external/ng-4.2.4/install'
+    export NG_DIR
+fi
+
+gCPPFLAGS=''
+gLDFLAGS=''
+gLIBS=''
+
+. ${NG_DIR}/lib/template.sh
+gFlags="${NG_CPPFLAGS} ${NG_CFLAGS} ${NG_LDFLAGS}"
+
+for i in ${gFlags}
+do
+    case $i in
+	-I*|-D*|-U)
+	    gCPPFLAGS="${gCPPFLAGS} $i";;
+	-L*|-l*|-brtl)
+	    gLDFLAGS="${gLDFLAGS} $i";;
+	*)
+	    true;;
+    esac
+done
+
+ngCPPFLAGS="-I${NG_DIR}/include ${gCPPFLAGS}"
+ngLIBS="${gLDFLAGS}   -lm"
+
+neC=0
+isNull ${NG_COMPILER}
+if test $? -eq 1; then
+    NG_COMPILER='cc  -Wall -O2 '
+    export NG_COMPILER
+    neC=1
+fi
+
+isNull ${NG_LINKER}
+if test $? -eq 1; then
+    if test $neC -eq 1; then
+	NG_LINKER='cc  -Wall -O2 '
+    else
+	NG_LINKER=${NG_COMPILER}
+    fi
+    export NG_LINKER
+fi
+
+doLink=1
+haveFiles=0
+for i in "${1+$@}"
+do
+    case "$i" in
+	-c|-E|-S)
+	    doLink=0;;
+	-*)
+	    true;;
+	*)
+	    isNull ${i}
+	    if test $? -eq 1; then
+		continue
+	    fi
+	    haveFiles=1;;
+    esac
+done
+
+if test $haveFiles -eq 0; then
+    error "no file(s) is specified."
+    exit 1
+fi
+
+if test $doLink -eq 1; then
+    echo ${NG_LINKER} ${ngCPPFLAGS} ${CPPFLAGS} ${NG_CFLAGS} ${CFLAGS} "${1+$@}" ${LDFLAGS} ${ngLIBS}
+    exec ${NG_LINKER} ${ngCPPFLAGS} ${CPPFLAGS} ${NG_CFLAGS} ${CFLAGS} "${1+$@}" ${LDFLAGS} ${ngLIBS}
+else
+    echo ${NG_COMPILER} ${ngCPPFLAGS} ${CPPFLAGS} ${NG_CFLAGS} ${CFLAGS} "${1+$@}"
+    exec ${NG_COMPILER} ${ngCPPFLAGS} ${CPPFLAGS} ${NG_CFLAGS} ${CFLAGS} "${1+$@}"
+fi
+
+# not reached.
+exit 1

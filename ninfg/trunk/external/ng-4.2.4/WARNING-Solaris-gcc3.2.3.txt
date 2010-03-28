@@ -1,0 +1,11 @@
+xmlwf/xmlfile.c: In function `processStream':
+xmlwf/xmlfile.c:149: warning: implicit declaration of function `close'
+xmlwf/xmlfile.c:153: warning: implicit declaration of function `read'
+
+/usr/ccs/bin/yacc -d nggenIdl.y
+conflicts: 12 shift/reduce
+
+/usr/ccs/bin/yaccpar:5: warning: ignoring #pragma ident
+/usr/ccs/bin/yaccpar: In function `yyparse':
+/usr/ccs/bin/yaccpar:374: warning: label `yyerrlab' defined but not used
+/usr/ccs/bin/yaccpar:164: warning: label `yynewstate' defined but not used

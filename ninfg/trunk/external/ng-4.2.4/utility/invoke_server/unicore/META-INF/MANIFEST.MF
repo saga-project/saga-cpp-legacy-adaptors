@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.6.1
+Created-By: 1.4.1_03-b02 (Sun Microsystems Inc.)
+
+Name: org/unicore/
+Specification-Title: Unicore AJO and UPL
+Specification-Version: 4.1.0
+Specification-Vendor: Unicore Forum
+Implementation-Title: Fujitsu Laboratories of Europe Implementation
+Implementation-Version: 1
+Implementation-Vendor: Fujitsu Laboratories of Europe
+

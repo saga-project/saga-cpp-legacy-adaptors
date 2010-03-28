@@ -1,0 +1,175 @@
+<!--
+  $RCSfile: grpc_get_info_np.html,v $ $Revision: 1.2 $ $Date: 2008/02/08 05:21:46 $
+  $AIST_Release: 5.0.0 $
+  $AIST_Copyright:
+   Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+   National Institute of Advanced Industrial Science and Technology
+   Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+   
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+   $
+ -->
+
+<html>
+<head>
+<title>grpc_get_info_np</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>grpc_get_info_np</code> - Returns session information.
+<h3>SYNOPSIS</h3>
+<code>
+  grpc_error_t grpc_get_info_np(grpc_sessionid_t session_id,
+                                grpc_exec_info_t_np *info,
+                                int *status)
+
+</code>
+<h3>ARGUMENTS</h3>
+<dl>
+<dt><code>  grpc_sessionid_t session_id</code></dt>
+<dd>	The session ID</dd>
+<dt><code>  grpc_exec_info_t_np *info</code></dt>
+<dd>	The session information</dd>
+<dt><code>  int *status</code></dt>
+<dd>	The session status</dd>
+</dl>
+<h3>DESCRIPTION</h3>
+  Not recommend. Use grpc_session_info_get_np() instead.<br>
+  The grpc_get_info_np() function returns information on the specified session.<br>
+  If NULL is specified in info, only the session status is returned as the return value.<br>
+  grpc_exec_info_t_np is defined in $NG_DIR/include/grpc.h.<br>
+   The time of compression is included in members of grpc_exec_info_t_np listed following.<br>
+
+<ul>
+  <li> transferArgumentRealTime
+  <li> transferArgumentCPUTime
+  <li> transferResultRealTime
+  <li> transferResultCPUTime
+  <li> callbackTransferArgumentRealTime
+  <li> callbackTransferArgumentCPUTime
+  <li> callbackTransferResultRealTime
+  <li> callbackTransferResultCPUTime
+</ul>
+
+<pre>
+  typedef struct grpc_exec_info_s_np {
+      struct {
+          /* Measured by the remote method */
+
+          /* Real time of the time concerning argument transmission */
+          struct timeval transferArgumentRealTime;
+          /* CPU time of the time concerning argument transmission */
+          struct timeval transferArgumentCpuTime;
+          /* Real time of Calculation time of executable */
+          struct timeval calculationRealTime;
+          /* CPU time of Calculation time of executable */
+          struct timeval calculationCpuTime;
+          /* Real time of the time concerning transmitting a result */
+          struct timeval transferResultRealTime;
+          /* CPU time of the time concerning transmitting a result */
+          struct timeval transferResultCpuTime;
+
+          /* Real time of the time concerning argument transmission of callback */
+          struct timeval callbackTransferArgumentRealTime;
+          /* CPU time of the time concerning argument transmission of callback */
+          struct timeval callbackTransferArgumentCpuTime;
+          /* Real time of time concerning callback */
+          struct timeval callbackCalculationRealTime;
+          /* CPU time of time concerning callback */
+          struct timeval callbackCalculationCpuTime;
+          /* Real time of the time concerning transmitting a result of callback */
+          struct timeval callbackTransferResultRealTime;
+          /* CPU time of the time concerning transmitting a result of callback */
+          struct timeval callbackTransferResultCpuTime;
+      } gei_measureExecutable;
+      struct {
+          /* Measured by the client */
+
+          /* Real time of the time concerning request remote machine information */
+          struct timeval remoteMachineInfoRequestRealTime;
+          /* CPU time of the time concerning request remote machine information */
+          struct timeval remoteMachineInfoRequestCpuTime;
+          /* Real time of the time concerning request remote class information */
+          struct timeval remoteClassInfoRequestRealTime;
+          /* CPU time of the time concerning request remote class information */
+          struct timeval remoteClassInfoRequestCpuTime;
+          /* Real time of the time concerning invoke GRAM */
+          struct timeval gramInvokeRealTime;
+          /* CPU time of the time concerning invoke GRAM */
+          struct timeval gramInvokeCpuTime;
+
+          /* Real time of the time concerning argument transmission */
+          struct timeval transferArgumentRealTime;
+          /* CPU time of the time concerning argument transmission */
+          struct timeval transferArgumentCpuTime;
+          /* Real time of Calculation time of client */
+          struct timeval calculationRealTime;
+          /* CPU time of Calculation time of client */
+          struct timeval calculationCpuTime;
+          /* Real time of the time concerning transmitting a result */
+          struct timeval transferResultRealTime;
+          /* CPU time of the time concerning transmitting a result */
+          struct timeval transferResultCpuTime;
+
+          /* Real time of the time concerning argument transmission of callback */
+          struct timeval callbackTransferArgumentRealTime;
+          /* CPU time of the time concerning argument transmission of callback */
+          struct timeval callbackTransferArgumentCpuTime;
+          /* Real time of time concerning calculation of callback */
+          struct timeval callbackCalculationRealTime;
+          /* CPU time of time concerning calculation of callback */
+          struct timeval callbackCalculationCpuTime;
+          /* Real time of the time concerning transmitting a result of callback */
+          struct timeval callbackTransferResultRealTime;
+          /* CPU time of the time concerning transmitting a result of callback */
+          struct timeval callbackTransferResultCpuTime;
+      } gei_measureClient;
+  } grpc_exec_info_t_np;
+</pre>
+<br>
+
+Refer to the following for return status.<br>
+<br>
+    GRPC_SESSION_ARG_IS_NOT_TRANSMITTED<br>
+	Transmission of the arguments to the stub has not been completed.<br>
+<br>
+    GRPC_SESSION_EXECUTING<br>
+	The session is in progress.<br>
+<br>
+    GRPC_SESSION_DOWN<br>
+	The session is not being executed.<br>
+<br>
+    GRPC_SESSION_DONE<br>
+	The session has ended.<br>
+<br>
+    GRPC_SESSION_UNKNOWN_STATUS <br>
+        API was failed.<br>
+
+<p> This function is MT-safe. </p>
+
+<h3>RETURN VALUE</h3>
+  If successful, GRPC_NO_ERROR is returned. In the case of an error, Error code is returned.<br>
+<h3>ERRORS</h3>
+<dl>
+<dt><code>  GRPC_NOT_INITIALIZED</code></dt>
+<dd>	GRPC client is not initialized yet.</dd>
+<dt><code>  GRPC_INVALID_SESSION_ID</code></dt>
+<dd>    Session ID is not valid.</dd>
+<dt><code>  GRPC_OTHER_ERROR_CODE</code></dt>
+<dd>	Internal error detected.</dd>
+</dl>
+<hr>
+last update : $Date: 2008/02/08 05:21:46 $
+</body>
+</html>

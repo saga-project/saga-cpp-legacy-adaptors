@@ -1,0 +1,107 @@
+#! /bin/sh
+
+# $RCSfile: ng_gen_dif,v $ $Revision: 1.8 $ $Date: 2004/12/08 10:46:14 $
+# $AIST_Release: 4.2.4 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+# ng_gen_dif
+
+hostname_from="globus"
+
+for i in $@
+do
+    case $i in
+    -h)
+        echo "Usage : ng_gen_dif Remote Executables ..." >&2
+        exit 1
+	;;
+    -*)  
+	echo "$i: Unknown option." >&2
+        exit 1
+	;;
+    esac
+done
+
+if [ "x${NG_DIR}" = "x" ]; then
+    echo "NG_DIR environment variable is not set. exit." >&2
+    exit 1
+fi
+
+if [ "x${hostname_from}" = "xglobus" ]; then
+    hostname=`globus-hostname`
+fi
+
+if [ "x${hostname}" = "x" ]; then
+    echo "hostname is empty. exit." >&2
+    exit 1
+fi
+
+if [ "x${1}" = "x" ]; then
+    echo "no argument. exit." >&2
+    exit 1
+fi
+
+PWD=`pwd`
+. $NG_DIR/etc/server.conf
+
+executable=$1
+inf_file="${executable}.inf"
+class_line=`grep 'class name' ${inf_file}`
+modname=`echo ${class_line} | sed 's/.*class\ name="\([^/]*\).*/\1/'`
+local_target="${modname}.${hostname}.ngdef"
+
+echo "HOST_INFO"                                     >  $local_target
+echo "GridRPC-Hostname: ${hostname}"                 >> $local_target
+echo "GridRPC-MpirunNoOfCPUs: ${MPIRUN_NO_OF_CPUS}"  >> $local_target
+echo ""                                              >> $local_target
+
+for executable in $*
+do 
+    inf_file="${executable}.inf"
+    class_line=`grep 'class name' ${inf_file}`
+    modname=`echo ${class_line} | sed 's/.*class\ name="\([^/]*\).*/\1/'`
+    entname=`echo ${class_line} | sed 's/.*class\ name=".*\/\([^"]*\).*/\1/'`
+    funcname="${modname}/${entname}"
+    encoded_funcname="${modname}::${entname}"
+    mds_target="${encoded_funcname}.ldif"
+
+    dn_suffix="Mds-Software-deployment=GridRPC-Ninf-G, __ROOT_DN__"
+    echo "dn: GridRPC-Funcname=${funcname}, ${dn_suffix}" >  $mds_target
+    echo "objectClass: GlobusSoftware"                    >> $mds_target
+    echo "objectClass: MdsSoftware"                       >> $mds_target
+    echo "objectClass: GridRPCEntry"                      >> $mds_target
+    echo "Mds-Software-deployment: GridRPC-Ninf-G"        >> $mds_target
+    echo "GridRPC-Funcname: ${funcname}"                  >> $mds_target
+    echo "GridRPC-Module: ${modname}"                     >> $mds_target
+    echo "GridRPC-Entry: ${entname}"                      >> $mds_target
+    echo "GridRPC-Path: ${PWD}/${executable}"             >> $mds_target
+    $NG_DIR/bin/base64encode "GridRPC-Stub"   < $inf_file >> $mds_target
+
+    echo "FUNCTION_INFO"                                  >> $local_target
+    echo "GridRPC-Hostname: ${hostname}"                  >> $local_target
+    echo "GridRPC-Funcname: ${funcname}"                  >> $local_target
+    echo "GridRPC-Module: ${modname}"                     >> $local_target
+    echo "GridRPC-Entry: ${entname}"                      >> $local_target
+    echo "GridRPC-Path: ${PWD}/${executable}"             >> $local_target
+    $NG_DIR/bin/base64encode "GridRPC-Stub"   < $inf_file >> $local_target
+    echo ""                                               >> $local_target
+done
+    
+exit 0
+

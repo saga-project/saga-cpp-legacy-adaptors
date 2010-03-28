@@ -1,0 +1,132 @@
+# $RCSfile: ngConfigureValue.mk.in,v $ $Revision: 1.4 $ $Date: 2008/02/06 07:16:36 $
+# $AIST_Release: 5.0.0 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+#
+# ngConfigureValue.mk: This file reflects configure result values.
+#
+# The line started by double sharp indicates empty line of output.
+# To keep output equivalent with source, do not include tab character.
+#
+
+build       = @build@
+host        = @host@
+
+##
+# TOPDIR is possibly no more exist.
+TOPDIR      = @TOPDIR@
+
+##
+PREFIX      = @prefix@
+prefix      = @prefix@
+exec_prefix = @exec_prefix@
+
+##
+BINDIR      = @bindir@
+LIBDIR      = @libdir@
+INCDIR      = @includedir@
+DOCDIR      = $(PREFIX)/doc
+ETCDIR      = $(PREFIX)/etc
+
+##
+CC        = @CC@
+CPP       = @CPP@
+IDL_CPP   = @IDL_CPP@
+
+RANLIB    = @RANLIB@
+AR        = @AR@
+
+YACC      = @YACC@
+
+# INSTALL refers $(TOPDIR).
+#INSTALL   = @INSTALL@
+MKDIR     = @MKDIR@
+TAR       = @TAR@
+RM        = @RM@
+
+PYTHON    = @PYTHON@
+JAVA_HOME = @JAVA_HOME@
+JAVA      = @JAVA@
+JAVAC     = @JAVAC@
+JAR       = @JAR@
+ANT       = @ANT@
+
+##
+NAREGI_SS_CLIENT_LIB_JAR = @NAREGI_SS_CLIENT_LIB_JAR@
+
+##
+CONF_CFLAGS    = @CFLAGS@
+CONF_CPPFLAGS  = @CPPFLAGS@
+CONF_DEFS      = @DEFS@
+#CONF_INCLUDES  = @INCLUDES@
+CONF_LDFLAGS   = @LDFLAGS@
+CONF_LIBS      = @LIBS@
+
+##
+INVOKE_SERVER_MODULES       = @INVOKE_SERVER_MODULES@
+COMMUNICATION_PROXY_MODULES = @COMMUNICATION_PROXY_MODULES@
+INFORMATION_SERVICE_MODULES = @INFORMATION_SERVICE_MODULES@
+
+#INVOKE_SERVER_MODULES_ALL       = @INVOKE_SERVER_MODULES_ALL@
+#COMMUNICATION_PROXY_MODULES_ALL = @COMMUNICATION_PROXY_MODULES_ALL@
+#INFORMATION_SERVICE_MODULES_ALL = @INFORMATION_SERVICE_MODULES_ALL@
+
+# ##
+#MK_VARTMPL    = @MK_VARTMPL@
+#MK_DEFRULE    = @MK_DEFRULE@
+
+#
+# Globus variables.
+#
+
+##
+GLOBUS_LOCATION  = @GLOBUS_LOCATION@
+GLOBUS_VERSION   = @GLOBUS_VERSION@
+
+# GLOBUS_EMBED_LD_RUN_PATH = @NG_GT_EMBED_LD_RUN_PATH@
+
+# Globus variables are not printed because they are many output.
+# and this information is not so important after the installation.
+
+# for client.
+
+# ##
+# GLOBUS_CLIENT_CC       = @NG_GT_CLIENT_CC@
+# GLOBUS_CLIENT_CPP      = @NG_GT_CLIENT_CPP@
+# GLOBUS_CLIENT_CFLAGS   = @NG_GT_CLIENT_CFLAGS@
+# GLOBUS_CLIENT_CPPFLAGS = @NG_GT_CLIENT_CPPFLAGS@
+# GLOBUS_CLIENT_INCLUDES = @NG_GT_CLIENT_INCLUDES@
+# GLOBUS_CLIENT_LIBS     = @NG_GT_CLIENT_LIBS@
+# GLOBUS_CLIENT_LDFLAGS  = @NG_GT_CLIENT_LDFLAGS@
+# GLOBUS_CLIENT_PKG_LIBS = @NG_GT_CLIENT_PKG_LIBS@
+
+# for server.
+
+# ##
+# GLOBUS_SERVER_CC       = @NG_GT_SERVER_CC@
+# GLOBUS_SERVER_CPP      = @NG_GT_SERVER_CPP@
+# GLOBUS_SERVER_CFLAGS   = @NG_GT_SERVER_CFLAGS@
+# GLOBUS_SERVER_CPPFLAGS = @NG_GT_SERVER_CPPFLAGS@
+# GLOBUS_SERVER_INCLUDES = @NG_GT_SERVER_INCLUDES@
+# GLOBUS_SERVER_LIBS     = @NG_GT_SERVER_LIBS@
+# GLOBUS_SERVER_LDFLAGS  = @NG_GT_SERVER_LDFLAGS@
+# GLOBUS_SERVER_PKG_LIBS = @NG_GT_SERVER_PKG_LIBS@
+
+# End.
+

@@ -1,0 +1,141 @@
+#!/bin/sh
+
+# $RCSfile: ng_delete_functions,v $ $Revision: 1.4 $ $Date: 2004/12/08 09:36:10 $
+# $AIST_Release: 4.2.4 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+#
+# ng_delete_functions
+#
+
+LANG=C
+PATH="/bin:/usr/bin"
+
+funcname="GridRPC-Funcname"
+modulename="GridRPC-Module"
+
+ldif_dir="${GLOBUS_LOCATION}/var/gridrpc"
+delete_mode="confirm"
+return_code=0
+
+# analyze options
+while [ "x${1}" != "x" ]; do
+    case $1 in
+    -f)
+        delete_mode="force";;
+    -*)
+        echo "$1: Unknown option." >&2
+        exit 1;;
+    *)
+        break;;
+    esac
+    shift
+done
+
+delete_items=$*
+
+if [ "X${delete_items}" = "X" ]; then
+    echo "Error: No Module or Module/Entry specified." >&2
+    exit 1
+fi
+
+for ditem in $delete_items ; do
+
+    # get $itemtype from $ditem
+    echo $ditem | \
+        grep '^[a-zA-Z0-9_$][a-zA-Z0-9_$]*/[a-zA-Z0-9_$][a-zA-Z0-9_$]*$' \
+            1>/dev/null 2>&1
+
+    if [ $? -eq 0 ]; then
+        itemtype="funcname"
+        itemname=$funcname
+        itemstr="Module/Entry"
+    else
+        echo $ditem | \
+            grep '^[a-zA-Z0-9_$][a-zA-Z0-9_$]*$' 1>/dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            itemtype="modulename"
+            itemname=$modulename
+            itemstr="Module"
+        else
+            echo "Error: Illegal Module or Module/Entry name \"${ditem}\"." >&2
+            return_code=1
+            continue
+        fi
+    fi
+
+    # get matching files.
+    dfiles=`grep -l "^${itemname}: *${ditem} *\$" ${ldif_dir}/*::*.ldif 2>/dev/null`
+
+    if [ $? -ne 0 -o "X${dfiles}" = "X" ]; then
+        echo "Error: No ldif file for ${itemstr} = \"${ditem}\"" >&2
+        return_code=1
+        continue
+    fi
+
+    for dfile in $dfiles ; do
+        if [ ! -w $dfile ]; then
+            echo "Error: File \"${dfile}\" cannot remove." >&2
+            return_code=1
+            continue
+        fi
+
+        if [ "X${itemtype}" = "Xmodulename" ]; then
+
+            # get Module/Entry name from $dfile, set to $funcstr
+            funcstr=`awk "/^${funcname}:/{print \\\$2 }" ${dfile}`
+
+            if [ $? -ne 0 -o "X${funcstr}" = "X" ]; then
+                echo "Error : ldif file format error in \"${dfile}\"." >&2
+                return_code=1
+                continue
+            fi
+        else
+            funcstr=$ditem
+        fi
+
+        if [ "X${delete_mode}" = "Xconfirm" ]; then
+            dfile_base=`basename ${dfile}`
+
+            confirm_string="remove ${funcstr} (${dfile_base}) [Y/N]: "
+            printf "${confirm_string}" >&2
+            read yn
+
+            case $yn in
+            [Yy] | [Yy][Ee][Ss])
+                : ;;
+            *)
+                continue ;;
+            esac
+        fi
+
+        rm $dfile 1>/dev/null 2>&1
+
+        if [ $? -ne 0 ]; then
+            echo "Error: Delete \"${dfile}\" failed." >&2
+            return_code=1
+            continue
+        fi
+
+        echo "${funcstr}"
+    done
+done
+
+exit $return_code
+

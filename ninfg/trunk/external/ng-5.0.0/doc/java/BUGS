@@ -1,0 +1,8 @@
+Ninf-G Java Client API Known problems
+
++ Building Ninf-G Java Client using java 5.0 causes the following warnings:
+    [javac] Note: Some input files use unchecked or unsafe operations.
+    [javac] Note: Recompile with -Xlint:unchecked for details.
+  Please ignore these warnings since a part of Ninf-G Java Client is written for java 1.4.
+
++ <CLIENT> "tmp_dir" or the system properties of "TMP_DIR" are not supported.

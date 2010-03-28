@@ -1,0 +1,89 @@
+# $RCSfile$ $Revision$ $Date$
+# $AIST_Release: 4.2.4 $
+# $AIST_Copyright:
+#  Copyright 2003, 2004, 2005, 2006 Grid Technology Research Center,
+#  National Institute of Advanced Industrial Science and Technology
+#  Copyright 2003, 2004, 2005, 2006 National Institute of Informatics
+#  
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#  
+#      http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  $
+
+CC                     = @CC@
+RM                     = rm -rf
+INSTALL                = @INSTALL@
+INSTALL_PROGRAM        = @INSTALL_PROGRAM@
+CONFIG_DISTCLEAN_FILES = Makefile config.h config.log config.status 
+BIN_DIR                = @NG_DIR@/bin
+CPPFLAGS               = @CPPFLAGS@ @DEFS@
+CFLAGS                 = @CFLAGS@
+LDFLAGS                = @LDFLAGS@
+
+TARGET=ng_invoke_server.SSH
+SRCS=ngInvokeServer.c ngInvokeServerSSH.c ngisCallbackManager.c \
+     ngisJobAttribute.c ngisLineBuffer.c ngisList.c ngisLog.c \
+     ngisOptions.c ngisProtocol.c ngisSSHPBS.c ngisSSHSGE.c \
+     ngisSSHattributes.c ngisSSHcreateCommand.c ngisSSHfileTransfer.c \
+     ngisSSHprepare.c ngisSSHscript.c ngisUtility.c
+FILES=${SRCS:.c=.@OBJEXT@}
+
+all: ${TARGET}
+
+${TARGET}: ${FILES}
+	${CC} -o $@ ${CFLAGS} ${LDFLAGS} ${LIBS} ${FILES}
+
+install: ${TARGET}
+	test -d ${BIN_DIR} && ${INSTALL_PROGRAM} -c ${TARGET} ${BIN_DIR}
+
+clean:
+	${RM} ${FILES} ${TARGET}
+
+distclean: clean
+	${RM} ${CONFIG_DISTCLEAN_FILES}
+
+.PHONY: all clean distinstall install
+
+# Depend
+# generates by "gcc -MM -MG ${SRCS}"
+ngInvokeServer.@OBJEXT@: ngInvokeServer.c ngisList.h ngisLog.h ngisUtility.h \
+  config.h ngInvokeServer.h
+ngInvokeServerSSH.@OBJEXT@: ngInvokeServerSSH.c ngisList.h ngisUtility.h \
+  config.h ngInvokeServer.h ngisLog.h ngInvokeServerSSH.h
+ngisCallbackManager.@OBJEXT@: ngisCallbackManager.c ngisList.h ngInvokeServer.h \
+  ngisLog.h ngisUtility.h config.h
+ngisJobAttribute.@OBJEXT@: ngisJobAttribute.c ngisUtility.h config.h \
+  ngInvokeServer.h ngisList.h ngisLog.h
+ngisLineBuffer.@OBJEXT@: ngisLineBuffer.c ngInvokeServer.h ngisList.h ngisLog.h \
+  ngisUtility.h config.h
+ngisList.@OBJEXT@: ngisList.c ngisList.h ngInvokeServer.h ngisLog.h \
+  ngisUtility.h config.h
+ngisLog.@OBJEXT@: ngisLog.c ngisLog.h ngisUtility.h config.h
+ngisOptions.@OBJEXT@: ngisOptions.c ngisUtility.h config.h ngInvokeServer.h \
+  ngisList.h ngisLog.h
+ngisProtocol.@OBJEXT@: ngisProtocol.c ngisUtility.h config.h ngInvokeServer.h \
+  ngisList.h ngisLog.h
+ngisSSHPBS.@OBJEXT@: ngisSSHPBS.c ngInvokeServerSSH.h ngInvokeServer.h \
+  ngisList.h ngisLog.h ngisUtility.h config.h
+ngisSSHSGE.@OBJEXT@: ngisSSHSGE.c ngInvokeServerSSH.h ngInvokeServer.h \
+  ngisList.h ngisLog.h ngisUtility.h config.h
+ngisSSHattributes.@OBJEXT@: ngisSSHattributes.c ngInvokeServerSSH.h \
+  ngInvokeServer.h ngisList.h ngisLog.h ngisUtility.h config.h
+ngisSSHcreateCommand.@OBJEXT@: ngisSSHcreateCommand.c ngInvokeServerSSH.h \
+  ngInvokeServer.h ngisList.h ngisLog.h ngisUtility.h config.h
+ngisSSHfileTransfer.@OBJEXT@: ngisSSHfileTransfer.c ngInvokeServerSSH.h \
+  ngInvokeServer.h ngisList.h ngisLog.h ngisUtility.h config.h
+ngisSSHprepare.@OBJEXT@: ngisSSHprepare.c ngInvokeServerSSH.h ngInvokeServer.h \
+  ngisList.h ngisLog.h ngisUtility.h config.h
+ngisSSHscript.@OBJEXT@: ngisSSHscript.c ngInvokeServerSSH.h ngInvokeServer.h \
+  ngisList.h ngisLog.h ngisUtility.h config.h
+ngisUtility.@OBJEXT@: ngisUtility.c ngisUtility.h config.h ngInvokeServer.h \
+  ngisList.h ngisLog.h

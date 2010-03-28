@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>ng_delete_functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>ng_delete_functions</code> - Deletes function information
+<h3>SYNOPSIS</h3>
+<code>
+  ng_delete_functions [-f] Module[/Entry] ...
+
+</code>
+<h3>DESCRIPTION</h3>
+  The ng_delete_functions command deletes the specified function information from the MDS, making that information unavailable from the MDS.<br>
+<br>
+ Specifying a list of "module name" or "module name/entry name" in the argument will result in the corresponding information being deleted from the MDS.<br>
+ If "module name/entry name" is specified, the corresponding information will be deleted. If "module name" only is specified, all of the function information that pertains to that module will be deleted.<br>
+<br>
+  When the information is deleted, a confirmation is performed for the deletion of each entry.<br>
+  If the -f option is specified, the deletion confirmations are not performed.<br>
+<br>
+  When the deletion operation is successful, a list of the deleted entry names is output.<br>
+<br>
+<h3>OPTIONS</h3>
+<dl>
+<dt>-f</dt>
+<dd>The delete confirmation is not performed.</dd>
+</dl>
+<br>
+<h3>ERRORS</h3>
+<p>
+If an attempt is made to delete an entry for which there is no delete permission, a message is output to inform of the lack of permission.
+<hr>
+last update : $Date: 2005/07/11 07:13:44 $
+</body>
+</html>

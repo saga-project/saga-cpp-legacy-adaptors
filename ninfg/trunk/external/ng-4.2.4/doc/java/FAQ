@@ -1,0 +1,67 @@
+Ninf-G Java Client API version4 FAQ
+
+Q1, Can I use Java CoG kit as GT library?
+A1, No.
+    Ninf-G Java Client API version4 requires GT4(Java WS Core).
+    Java CoG kit doesn't work with Ninf-G Java Client.
+
+Q2, Can I limit the port range to be used ? 
+A2, Yes, A client instantiates two objects, PortManager and GassServer.
+    They are created just once for one client.
+
+    Currently, the ports to be used by those objects are dynamically
+    assigned to any ports, but you can set the port range in 
+    $HOME/.globus/cog.properties like the following.   
+ 
+    # port range 
+      tcp.port.range = 64001,65000
+
+Q3, On Windows, Ninf-G client sometimes fails when it tries to handle
+    simultaneous multiple requests.
+A3, On Windows, ServerSocket sometimes fails to accept requests for connection
+    from Ninf-G Executables when there are many (about 10 or more)
+    simultaneous requests.
+    This problem does not appears on Linux or Solaris.
+    So Please use Linux or Solaris for large-scale client applications.
+
+Q4, On Windows, Ninf-G Executables can't connect back to Ninf-G Client.
+A4, Set "loglevel" of <CLIENT> section in your client configuration file to 5,
+    And check the RSL string of "arguments".
+    There is a "--client=..." in RSL string, it indicates where to connect
+    back from Ninf-G Executable.  Wrong location may be specified.
+    In order to avoid this, you can specify the location where to
+    connect back in "hostname" attribute in <CLIENT> section of your
+    client configuration file.  Following is an example of the description.
+
+    ===== example of client configuration file =====
+      <CLIENT>
+        hostname 10.0.0.1
+      </CLIENT>
+    ===== example of client configuration file =====
+
+Q5, Does Ninf-G Java Client library provide all functions which are
+    supported by C client library?
+A5, No.
+    Following functions are not supported on Ninf-G Java Client library.
+    + more than 31 arguments for NgGrpcFunctionHandle#call()
+      and NgGrpcObjectHandle#invoke().
+    + argument stack for NgGrpcFunctionHandle#call()
+      and NgGrpcObjectHandle#invoke().
+    + following attributes in configuration file will be ignored.
+      - "save_sessionInfo" in "<CLIENT>" section
+      - "refresh_credential" in "<CLIENT>" section
+      - "force_xdr" in "<SERVER>" section
+      - "argument_transfer" in "<SERVER>" section
+      - "server_timeout" in "<MDS_SERVER>" section
+
+Q6, Can null be specified as an argument of grpc_call() and grpc_invoke()?
+A6, Yes.  null can be specified as argument of grpc_call() and grpc_invoke().
+    But in this case, you have to specify the type of argument.
+    When you specify null as an argument, please see java/diag/NullArgumentTest.java.
+
+Q7, How can I use WS GRAM of GT4?
+A7, By default, Ninf-G Java Client uses PreWS GRAM to invoke jobs.
+    If you want to use WS GRAM, you have to set <SERVER> "invoke_server"
+    to "GT4py".  But "GT4py" does not work on Windows.  If you want to use
+    WS GRAM on Windows, you have to use invoke_server "GT4java".
+    See ng-4.x.x/utility/invoke_server/gt4java/README for more details.

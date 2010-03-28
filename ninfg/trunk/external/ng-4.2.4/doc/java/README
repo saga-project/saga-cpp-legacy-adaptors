@@ -1,0 +1,51 @@
+Ninf-G Java Client API version4
+
+This package includes the following documents.
+- README.java (This file)
+- INSTALL
+- FAQ
+- CHANGES
+- BUG
+(INSTALL, FAQ, CHANGES, BUG is in ng-4.x.x/doc/java directory)
+
+This package includes a set of Java client APIs for Ninf-G system
+allowing users to access remote libraries on Ninf-G servers via their
+Java program.  We have built the package with pure Java so that 
+you even access to Ninf-G servers from Windows machines. 
+
+Ninf-G is a GridRPC system which offers network-based
+numerical library functionality via the use of RPC technology.  Parts
+of applications making procedure calls can be replaced with
+high-performance, remote equivalents in a substantially transparent
+manner, usually only a small modification to the call itself, without
+any RPC data types, prologue/epilogues, IDL management, etc.
+
+We have used a variety of off-the-shelf technologies including Java CoG 
+Kit for accessing Globus services and Jakarta Ant for source code 
+management. 
+
+Requirement:
+  - Java(JRE): 1.4 or later
+    (http://java.sun.com/)
+
+  - GT       : 4.0.0 or later(Java WS Core)
+    (http://www.globus.org/)
+
+  - Ant      : 1.5 or later
+    (http://ant.apache.org/, It's called "Jakarta Ant" until version 1.5.)
+
+We tested Ninf-G Java Client API on the following environments.
+  - Fedora Core3(i386)
+  - Globus Toolkit 4.0.1
+  - J2SDK 1.4.2_08
+  - Ant 1.6.2
+
+Research papers and other documents are downloadable on the Ninf
+project web site at:
+ http://ninf.apgrid.org/
+
+Send all comments, questions, bugs, feature requests, etc to:
+
+ninf@apgrid.org
+
+Thanks for checking out/downloading the Ninf-G Java Client package.

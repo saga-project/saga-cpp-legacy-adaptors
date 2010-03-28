@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>grpc_handle_attr_release_np</title>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h3>NAME</h3>
+<code>grpc_handle_attr_release_np</code>
+    - frees memory for the handle attribute value.
+<h3>SYNOPSIS</h3>
+<code>
+  grpc_error_t grpc_handle_attr_release_np(void *value)
+
+</code>
+<h3>ARGUMENTS</h3>
+<dl>
+<dt><code>  void *value</code></dt>
+<dd>	Pointer to the value obtained by grpc_handle_attr_get_np()</dd>
+</dl>
+<h3>DESCRIPTION</h3>
+
+<p>The grpc_handle_attr_release_np() frees memory for the value obtained
+by grpc_handle_attr_get_np().</p>
+
+<p> This function is MT-safe. </p>
+<br>
+<h3>RETURN VALUE</h3>
+<p>If successful, GRPC_NO_ERROR is returned.
+In the case of an error, an error code is returned.</p>
+
+<h3>ERRORS</h3>
+<dl>
+<dt><code>  GRPC_NOT_INITIALIZED</code></dt>
+<dd>	GRPC client is not initialized yet.</dd>
+<dt><code>  GRPC_OTHER_ERROR_CODE</code></dt>
+<dd>	Internal error detected.</dd>
+</dl>
+<hr>
+last update : $Date: 2005/08/04 02:32:49 $
+</body>
+</html>
