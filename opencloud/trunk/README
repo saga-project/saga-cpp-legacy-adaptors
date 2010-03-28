@@ -1,0 +1,64 @@
+This adaptor implements the file functionality for the Sector distributed file system.
+For more information about the Sector file system and how to get it up and running, please read:
+trunk/adaptors/opencloud/codeblue2/docs/. 
+
+This adaptor is implemented and maintained by Saurabh Sehgal ( saurabh.r.s@gmail.com ). 
+
+Once the Sector/Sphere system is configured on the system, the adaptor can be used to perform 
+general file operations on Sector. The application needs to authenticate with the Sector system
+before it can execute these operations. 
+
+**** Building ****
+
+Note: The adaptor does not build automatically with the buildsystem. It must be manually built and installed. 
+To build the adaptor, make sure to do "make" in:
+    opencloud/opencloud_file/
+    opencloud/codeblue2/
+    opencloud/external/sectorsphere/
+
+and, "make install" in:
+    opencloud/external/sectorsphere/
+    opencloud/opencloud_file/
+
+
+****Authentication****
+
+1) You can encode all the information in the codeblue2/conf/client.conf file. 
+2) You can encode the information dynamically in the opencloud context attributes:
+     saga::attributes::context_userid 
+     saga::attributes::context_userpass
+     saga::attributes::context_server ( in the form hostname:port )
+     saga::attributes::context_usercert
+3) Or, you can encode all this information in the ini file. 
+
+The authentication logic will give precedence to a given authentication parameter in the following order:
+    1. Context
+    2. Ini File
+    3. Sector client.conf file
+
+**** File ****
+
+The opencloud_file adaptor supports all file operations except the ones listed below:
+
+1. Permissions. To change permissions for a particular user, change the settings in the master server installation directory: codeblue2/conf/users/<username> file. 
+2. Links are not implemented in Sector.  
+3. Async file operations are not supported. 
+
+Example code located in trunk/examples/misc/opencloudfile.cpp
+
+
+****Job ****
+
+The syntax for saga::job::attributes::description_arguments attributes is:
+       input_file_dir output_file_dir function_name num_rows param_address<optional> param_size<optional>
+where, 
+
+1. Input file directory can be a local directory or a directory already in Sector
+2. Output directory, if does not exist, is created on Sector and the results of the computation are stored here
+3. The function name is the name of the function in the supplied DLL to process the input files
+4. The number of rows to be processed at one time by the DLL function
+5. The param address is the address of the parameter you would like to pass to the DLL function in string format
+6. The param size is the size of the param stored in the memory address supplied in 5
+
+For a working example, please see trunk/examples/misc/opencloudjob.cpp
+
