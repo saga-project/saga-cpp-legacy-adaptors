@@ -23,7 +23,6 @@ SAGA_ADAPTOR_REQUIREMENTS = globus globus_gram globus_gass_copy
 SAGA_ADAPTOR_PACKAGES     = job
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.adaptor.mk 
--include $(SAGA_MAKE_INCLUDE_ROOT)/saga.doc.mk
 
 SAGA_LDFLAGS += -L$(SAGA_PWD)/../loader -lsaga_adaptor_globus_module_loader_util
 
