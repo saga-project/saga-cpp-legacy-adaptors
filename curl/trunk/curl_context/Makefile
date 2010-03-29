@@ -18,3 +18,6 @@ SAGA_ADAPTOR_PACKAGES =
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.adaptor.mk
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
 
+distclean::
+	@$(RM) $(SAGA_ADAPTOR_INI)
+

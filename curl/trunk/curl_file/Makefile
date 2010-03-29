@@ -18,3 +18,6 @@ SAGA_ADAPTOR_PACKAGES = filesystem namespace
 -include ../config/saga.config.curl.c.mk
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.adaptor.mk
 
+distclean::
+	@$(RM) $(SAGA_ADAPTOR_INI)
+
