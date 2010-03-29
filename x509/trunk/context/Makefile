@@ -17,3 +17,4 @@ SAGA_ADAPTOR_INI  = x509_context_adaptor.ini
 SAGA_ADAPTOR_OBJ  = $(SAGA_OBJ)
 
 -include $(SAGA_LOCATION)/share/saga/make/saga.adaptor.mk
+
