@@ -45,6 +45,3 @@ ifeq "x$(SAGA_HAVE_OPENSSL)" "xyes"
   SAGA_CPPDEFS   += -DWITH_OPENSSL -DWITH_COOKIES
 endif
 
-distclean::
-	@$(RM) $(SAGA_ADAPTOR_INI)
-
