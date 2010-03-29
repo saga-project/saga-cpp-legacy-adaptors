@@ -22,3 +22,6 @@ SAGA_ADAPTOR_PACKAGES = job
 
 include $(SAGA_MAKE_INCLUDE_ROOT)/saga.adaptor.mk
 
+distclean::
+	@$(RM) $(SAGA_ADAPTOR_INI)
+
