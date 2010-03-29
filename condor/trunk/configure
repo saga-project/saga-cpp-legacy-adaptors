@@ -1894,7 +1894,7 @@ fi
 # create output files
 ac_config_files="$ac_config_files config/make.cfg"
 
-ac_config_files="$ac_config_files job/condor_job_adaptor.ini"
+ac_config_files="$ac_config_files condor_job/condor_job_adaptor.ini"
 
 
 cat >confcache <<\_ACEOF
@@ -2465,7 +2465,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "config/make.cfg") CONFIG_FILES="$CONFIG_FILES config/make.cfg" ;;
-    "job/condor_job_adaptor.ini") CONFIG_FILES="$CONFIG_FILES job/condor_job_adaptor.ini" ;;
+    "condor_job/condor_job_adaptor.ini") CONFIG_FILES="$CONFIG_FILES condor_job/condor_job_adaptor.ini" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}

@@ -26,7 +26,7 @@ AC_SUBST([BUILD_ADAPTOR_JOB])
 
 # create output files
 AC_CONFIG_FILES([config/make.cfg])
-AC_CONFIG_FILES([job/condor_job_adaptor.ini])
+AC_CONFIG_FILES([condor_job/condor_job_adaptor.ini])
 
 AC_OUTPUT()
 
