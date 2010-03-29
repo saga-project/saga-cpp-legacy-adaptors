@@ -5,11 +5,11 @@
 #   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
 
-SAGA_ROOT               = ../../../../
+-include ../../config/make.cfg
 
 SAGA_TEST_RUN           = ./run_adaptor_tests.run
 
 SAGA_DONT_INSTALL       = yes
 
-include $(SAGA_ROOT)/make/saga.test.mk
+include $(SAGA_MAKE_INCLUDE_ROOT)/saga.test.mk
 

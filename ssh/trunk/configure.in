@@ -12,7 +12,7 @@ AC_INIT()
 
 AX_SAGA_CONFIG()
 
-if test "x$TMP_SAGA_INSTTYPE" == "source"; then
+if test "x$TMP_SAGA_INSTTYPE" == "xinstall"; then
   AC_CONFIG_AUX_DIR([$TMP_SAGA_LOCATION/share/saga/config/])
 else
   AC_CONFIG_AUX_DIR([$TMP_SAGA_LOCATION/config/])

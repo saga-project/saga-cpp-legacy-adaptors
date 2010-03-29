@@ -1773,7 +1773,7 @@ echo "${ECHO_T}$TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE)" >&6; }
 
 
 
-if test "x$TMP_SAGA_INSTTYPE" == "source"; then
+if test "x$TMP_SAGA_INSTTYPE" == "xinstall"; then
   ac_aux_dir=
 for ac_dir in $TMP_SAGA_LOCATION/share/saga/config/ "$srcdir"/$TMP_SAGA_LOCATION/share/saga/config/; do
   if test -f "$ac_dir/install-sh"; then
