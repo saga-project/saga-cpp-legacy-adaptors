@@ -26,7 +26,7 @@ AC_SUBST([BUILD_ADAPTOR_JOB])
 
 # create output files
 AC_CONFIG_FILES([config/make.cfg])
-AC_CONFIG_FILES([job/platform_lsf_job_adaptor.ini])
+AC_CONFIG_FILES([lsf_job/platform_lsf_job_adaptor.ini])
 
 AC_OUTPUT()
 
