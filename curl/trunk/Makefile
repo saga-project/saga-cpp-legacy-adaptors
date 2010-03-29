@@ -8,9 +8,9 @@ SAGA_SUBDIRS    = config test
 
 -include config/make.cfg
 
-# ifeq "x$(SAGA_BUILD_ADAPTOR_CONTEXT)" "xyes"
-#   SAGA_SUBDIRS += curl_context
-# endif
+ifeq "x$(SAGA_BUILD_ADAPTOR_CONTEXT)" "xyes"
+  SAGA_SUBDIRS += curl_context
+endif
 
 ifeq "x$(SAGA_BUILD_ADAPTOR_FILE)" "xyes"
   SAGA_SUBDIRS += curl_file

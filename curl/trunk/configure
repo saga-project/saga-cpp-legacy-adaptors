@@ -634,7 +634,7 @@ CURL_LDFLAGS
 CURL_S_LIBS
 CPP_HAVE_CURL
 BUILD_ADAPTOR_CONTEXT
-BUILD_ADAPTOR_FILE
+BUILD_ADAPTOR_FILESYSTEM
 LIBOBJS
 LTLIBOBJS'
 ac_subst_files=''
@@ -1790,7 +1790,7 @@ echo "${ECHO_T}$TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE)" >&6; }
 
 
 
-if test "x$TMP_SAGA_INSTTYPE" == "source"; then
+if test "x$TMP_SAGA_INSTTYPE" == "xinstall"; then
   ac_aux_dir=
 for ac_dir in $TMP_SAGA_LOCATION/share/saga/config/ "$srcdir"/$TMP_SAGA_LOCATION/share/saga/config/; do
   if test -f "$ac_dir/install-sh"; then
@@ -2635,7 +2635,7 @@ fi
 
 
 BUILD_ADAPTOR_CONTEXT=no
-BUILD_ADAPTOR_FILE=no
+BUILD_ADAPTOR_FILESYSTEM=no
 
 if test "x$HAVE_CURL" = "xyes"; then
 
@@ -2644,8 +2644,8 @@ if test "x$HAVE_CURL" = "xyes"; then
   fi
 
   if test "$HAVE_CURL" = "yes"; then
-    if test "x$SAGA_HAVE_ADAPTOR_FILE" = "xyes"; then
-      BUILD_ADAPTOR_FILE="yes"
+    if test "x$SAGA_HAVE_ADAPTOR_FILESYSTEM" = "xyes"; then
+      BUILD_ADAPTOR_FILESYSTEM="yes"
     fi
   fi
 
@@ -3349,7 +3349,7 @@ CURL_LDFLAGS!$CURL_LDFLAGS$ac_delim
 CURL_S_LIBS!$CURL_S_LIBS$ac_delim
 CPP_HAVE_CURL!$CPP_HAVE_CURL$ac_delim
 BUILD_ADAPTOR_CONTEXT!$BUILD_ADAPTOR_CONTEXT$ac_delim
-BUILD_ADAPTOR_FILE!$BUILD_ADAPTOR_FILE$ac_delim
+BUILD_ADAPTOR_FILESYSTEM!$BUILD_ADAPTOR_FILESYSTEM$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
@@ -3696,7 +3696,7 @@ echo "                                                                 " | $TEE 
 echo " CURL found            : $HAVE_CURL  ($CURL_LOCATION)            " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo " Context Adaptor       : $BUILD_ADAPTOR_CONTEXT                  " | $TEE $OUT
-echo " File    Adaptor       : $BUILD_ADAPTOR_FILE                     " | $TEE $OUT
+echo " File    Adaptor       : $BUILD_ADAPTOR_FILESYSTEM               " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo " --------------------------------------------------------        " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
