@@ -6,6 +6,7 @@
 
 SAGA_SUBDIRS    = config
 
+-include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 -include config/make.cfg
 
 ifeq "x$(SAGA_BUILD_ADAPTOR_FILESYSTEM)" "xyes"
@@ -29,6 +30,7 @@ endif
 
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
+-include $(SAGA_MAKE_INCLUDE_ROOT)/saga.dist.mk
 
 
 ifeq "x$(SAGA_BUILD_ADAPTOR_FILE)" "xyes"
