@@ -1,0 +1,21 @@
+
+PACKAGE:
+  saga-adaptors-condor
+
+DEPENDENCIES:
+  saga-core
+  condor
+
+DIRS:
+  config/
+  external/
+  condor_job/
+
+FILES:
+  VERSION
+  PACKAGE
+  README
+  Makefile
+  configure
+  configure.in
+

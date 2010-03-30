@@ -1,0 +1,25 @@
+
+PACKAGE:
+  saga-adaptors-aws
+
+DEPENDENCIES:
+  saga-core
+  aws
+
+DIRS:
+  config/
+  internal/
+  aws_context/
+  aws_job/
+  aws_suite/
+
+FILES:
+  VERSION
+  PACKAGE
+  Makefile
+  configure
+  configure.in
+  INSTALL
+  README
+  README.ec2_image_prep
+

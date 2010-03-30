@@ -1,0 +1,24 @@
+
+PACKAGE:
+  saga-adaptors-gridsam
+
+DEPENDENCIES:
+  saga-core
+  gridsam
+
+DIRS:
+  config/
+  gridsam_job/
+  project/
+  test/
+
+FILES:
+  VERSION
+  PACKAGE
+  INFO
+  INSTALL
+  README
+  Makefile
+  configure
+  configure.in
+

@@ -1,0 +1,23 @@
+
+PACKAGE:
+  saga-adaptors-opencloud
+
+DEPENDENCIES:
+  saga-core
+  opencloud
+
+DIRS:
+  config/
+  external/
+  opencloud_context/
+  opencloud_file/
+  opencloud_job/
+
+FILES:
+  VERSION
+  PACKAGE
+  README
+  Makefile
+  configure
+  configure.in
+

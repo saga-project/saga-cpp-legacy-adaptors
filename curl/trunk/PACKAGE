@@ -1,0 +1,23 @@
+
+PACKAGE:
+  saga-adaptors-curl
+
+DEPENDENCIES:
+  saga-core
+  curl
+
+DIRS:
+  config/
+  external/
+  curl_context/
+  curl_file/
+  project/
+  test/
+
+FILES:
+  VERSION
+  PACKAGE
+  Makefile
+  configure
+  configure.in
+

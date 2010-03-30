@@ -1,0 +1,18 @@
+
+PACKAGE:
+  saga-adaptors-x509
+
+DEPENDENCIES:
+  saga-core
+
+DIRS:
+  context/
+
+FILES:
+  VERSION
+  PACKAGE
+  LICENSE
+  Makefile
+  configure
+  configure.in
+
