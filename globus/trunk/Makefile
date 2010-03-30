@@ -5,9 +5,10 @@
 #  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
-SAGA_SUBDIRS   = config
-
+-include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 -include config/make.cfg 
+
+SAGA_SUBDIRS   = config
 
 ifeq "x$(SAGA_HAVE_GLOBUS)" "xyes"
   SAGA_SUBDIRS += loader
@@ -32,6 +33,7 @@ endif
 
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
+-include $(SAGA_MAKE_INCLUDE_ROOT)/saga.dist.mk
 
 # dir depenencies for parallel builds
 job:     loader
