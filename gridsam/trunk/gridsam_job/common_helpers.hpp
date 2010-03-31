@@ -115,7 +115,7 @@ get_omii_path(saga::ini::ini const& ini)
         if (prefs.has_entry("omii_client_root"))
             return prefs.get_entry("omii_client_root");
     }
-    char* env = saga::safe_getenv("OMIICLIENT");
+    char* env = saga::detail::safe_getenv("OMIICLIENT");
     return std::string(env ? env : "");
 }
 

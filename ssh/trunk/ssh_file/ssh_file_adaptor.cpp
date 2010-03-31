@@ -265,9 +265,11 @@ namespace ssh_filesystem_adaptor
     catch ( const saga::exception & e )
     {
       std::stringstream ss;
-      ss << "Cannot handle URL " << u 
+      std::cout << " === this? " << e.what () << std::endl;
+      ss << "Cannot handle URL 1" << u 
          << ": cannot mount/translate into local file system : \n"
          << e.what () << "\n";
+      std::cout << " === This? " << ss.str () << std::endl;
       SAGA_ADAPTOR_THROW_NO_CONTEXT (ss.str (), saga::NoSuccess);
     }
 
@@ -275,7 +277,7 @@ namespace ssh_filesystem_adaptor
     if ( ret == u )
     {
       std::stringstream ss;
-      ss << "Cannot handle URL " << u << ": cannot mount/translate into local file system";
+      ss << "Cannot handle URL 2" << u << ": cannot mount/translate into local file system";
       SAGA_ADAPTOR_THROW_NO_CONTEXT (ss.str (), saga::NoSuccess);
     }
 
@@ -293,10 +295,21 @@ namespace ssh_filesystem_adaptor
       sshfs_t sshfs = get_sshfs (s, u);
       return  sshfs->translate  (u);
     }
+    catch ( const saga::exception & e )
+    {
+      std::stringstream ss;
+      std::cout << " === this? " << e.what () << std::endl;
+      ss << "Cannot handle URL 1" << u 
+         << ": cannot mount/translate into local file system : \n"
+         << e.what () << "\n";
+      std::cout << " === This? " << ss.str () << std::endl;
+      // SAGA_ADAPTOR_THROW_NO_CONTEXT (ss.str (), saga::NoSuccess);
+    }
     catch ( ... )
     {
-      return u;
     }
+
+    return u;
   }
 
 
@@ -337,7 +350,7 @@ namespace ssh_filesystem_adaptor
 
     // std::cout << " mounted_.size(): trans 4 " << mounted_.size () << std::endl;
     // could not translate back it seems - throw
-    SAGA_ADAPTOR_THROW_NO_CONTEXT ((std::string ("Cannot handle URL: ") + err).c_str (), 
+    SAGA_ADAPTOR_THROW_NO_CONTEXT ((std::string ("Cannot handle URL 3: ") + err).c_str (), 
                                    saga::BadParameter);
 
     // keep compiler happy

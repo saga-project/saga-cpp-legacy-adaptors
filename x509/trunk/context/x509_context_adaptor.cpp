@@ -90,7 +90,7 @@ void context_cpi_impl::sync_set_defaults (saga::impl::void_t &)
       const char* _cert;
       std::string certfile;
       
-      if(!(_cert = saga::safe_getenv("X509_USER_PROXY"))) 
+      if(!(_cert = saga::detail::safe_getenv("X509_USER_PROXY"))) 
       {
         std::string tmp = "/tmp/x509up_u";
         certfile = (std::string&)tmp + boost::str( boost::format("%d") % ::getuid() );

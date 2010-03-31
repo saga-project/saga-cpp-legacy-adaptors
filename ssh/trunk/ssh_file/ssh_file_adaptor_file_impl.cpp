@@ -84,7 +84,7 @@ namespace ssh_filesystem_adaptor
     catch ( const saga:: exception & e )
     {
       std::stringstream ss;
-      ss << "Cannot handle URL: \n\t" << e.what () << "\n";
+      ss << "Cannot handle URL 5: \n\t" << e.what () << "\n";
 
       SSH_ADAPTOR_RETHROW (e, ss.str ().c_str (), saga::BadParameter);
     }

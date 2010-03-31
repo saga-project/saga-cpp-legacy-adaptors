@@ -10,6 +10,8 @@
 
 namespace saga {
 
+  namespace detail {
+
     // Not really safe.
     //
     // This is only useful to avoid linking the saga libs in the temporary
@@ -18,6 +20,8 @@ namespace saga {
     {
         return ::getenv(name);
     }
+
+  }
 
 } // saga
 

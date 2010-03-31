@@ -5,7 +5,7 @@
 
 #include "temporary.hpp"
 
-#include <saga/saga-defs.hpp> // safe_getenv
+#include <saga/saga/detail.hpp> // safe_getenv
 
 // Boost.Filesystem
 #include <saga/saga/adaptors/utils/filesystem.hpp>
@@ -25,7 +25,7 @@ namespace saga { namespace adaptors { namespace condor {
         if (0 == GetTempPathA (sizeof(tmpdir), tmpdir))
             strcpy(tmpdir, "C:/tmp");
 #else
-        char const * tmpdir = saga::safe_getenv("TMPDIR");
+        char const * tmpdir = saga::detail::safe_getenv("TMPDIR");
         // Use convention from Filesystem Hierarchy Standard
         if (!tmpdir)
             tmpdir = "/tmp";
