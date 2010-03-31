@@ -8,7 +8,6 @@ DEPENDENCIES:
 
 DIRS:
   config/
-  external/
   condor_job/
 
 FILES:
