@@ -6,6 +6,7 @@ DEPENDENCIES:
   saga-core
 
 DIRS:
+  config/
   context/
 
 FILES:

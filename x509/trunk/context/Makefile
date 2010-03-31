@@ -4,9 +4,7 @@
 #  (See accompanying file LICENSE or copy at 
 #  http://www.boost.org/LICENSE_1_0.txt)
 
-ifndef SAGA_LOCATION
- $(error "SAGA_LOCATION must be set for this Makefile to work")
-endif
+-include ../config/make.cfg
 
 SAGA_SRC          = $(wildcard *.cpp)
 SAGA_OBJ          = $(SAGA_SRC:%.cpp=%.o)
@@ -16,5 +14,5 @@ SAGA_ADAPTOR_NAME = x509_context
 SAGA_ADAPTOR_INI  = x509_context_adaptor.ini
 SAGA_ADAPTOR_OBJ  = $(SAGA_OBJ)
 
--include $(SAGA_LOCATION)/share/saga/make/saga.adaptor.mk
+-include $(SAGA_MAKE_INCLUDE_ROOT)/saga.adaptor.mk
 
