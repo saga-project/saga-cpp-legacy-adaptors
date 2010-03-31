@@ -634,9 +634,10 @@ GLOBUS_CFLAGS
 GLOBUS_LDFLAGS
 GLOBUS_INCLUDES
 GLOBUS_LIBS
-BUILD_ADAPTOR_REPLICA
-BUILD_ADAPTOR_FILE
 BUILD_ADAPTOR_JOB
+BUILD_ADAPTOR_FILE
+BUILD_ADAPTOR_REPLICA
+BUILD_ADAPTOR_LOADER
 LIBOBJS
 LTLIBOBJS'
 ac_subst_files=''
@@ -1790,9 +1791,10 @@ echo "${ECHO_T}$TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE)" >&6; }
 
 
 
-BUILD_ADAPTOR_REPLICA=no
-BUILD_ADAPTOR_FILE=no
 BUILD_ADAPTOR_JOB=no
+BUILD_ADAPTOR_FILE=no
+BUILD_ADAPTOR_REPLICA=no
+BUILD_ADAPTOR_LOADER=no
 SAGA_HAVE_ADAPTOR_X509=yes
 
 # first make sure that the x509 context adaptor is installed
@@ -1802,9 +1804,10 @@ if ! test -f $TMP_SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini; then
   SAGA_HAVE_ADAPTOR_X509="no: needs to be installed for the globus adaptors to function"
   { echo "$as_me:$LINENO: result:  missing" >&5
 echo "${ECHO_T} missing" >&6; }
-  BUILD_ADAPTOR_REPLICA="no (x509 adaptor missing)"
-  BUILD_ADAPTOR_FILE="no (x509 adaptor missing)"
   BUILD_ADAPTOR_JOB="no (x509 adaptor missing)"
+  BUILD_ADAPTOR_FILE="no (x509 adaptor missing)"
+  BUILD_ADAPTOR_REPLICA="no (x509 adaptor missing)"
+  BUILD_ADAPTOR_LOADER="no (x509 adaptor missing)"
 else
   { echo "$as_me:$LINENO: result:  ok ($TMP_SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini)" >&5
 echo "${ECHO_T} ok ($TMP_SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini)" >&6; }
@@ -2217,12 +2220,11 @@ _ACEOF
 
 
 
-echo "here: $SAGA_HAVE_ADAPTOR_X509"
-
 if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
   if test "x$SAGA_HAVE_ADAPTOR_REPLICA" = "xyes"; then
     BUILD_ADAPTOR_REPLICA="yes"
   fi
+
   if test "x$SAGA_HAVE_ADAPTOR_FILESYSTEM" = "xyes"; then
     BUILD_ADAPTOR_FILE="yes"
   fi
@@ -2230,18 +2232,24 @@ if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
     BUILD_ADAPTOR_JOB="yes"
   fi
 
-  if test "$GLOBUS_HAVE_RLS" != "yes" ; then
-    BUILD_ADAPTOR_REPLICA="no (RLS client libs missing)"
+  if test "$GLOBUS_HAVE_GRAM" != "yes" ; then
+    BUILD_ADAPTOR_JOB="no (GRAM client libs missing)"
   fi
 
   if test "$GLOBUS_HAVE_GRIDFTP" != "yes" ; then
     BUILD_ADAPTOR_FILE="no (GridFTP client libs missing)"
   fi
 
-  if test "$GLOBUS_HAVE_GRAM" != "yes" ; then
-    BUILD_ADAPTOR_JOB="no (GRAM client libs missing)"
+  if test "$GLOBUS_HAVE_RLS" != "yes" ; then
+    BUILD_ADAPTOR_REPLICA="no (RLS client libs missing)"
   fi
+
+  if test "x$SAGA_HAVE_GLOBUS" = "xyes"; then
+    BUILD_ADAPTOR_LOADER="yes"
+  fi
+
 fi
+
 
 
 
@@ -2943,14 +2951,15 @@ GLOBUS_CFLAGS!$GLOBUS_CFLAGS$ac_delim
 GLOBUS_LDFLAGS!$GLOBUS_LDFLAGS$ac_delim
 GLOBUS_INCLUDES!$GLOBUS_INCLUDES$ac_delim
 GLOBUS_LIBS!$GLOBUS_LIBS$ac_delim
-BUILD_ADAPTOR_REPLICA!$BUILD_ADAPTOR_REPLICA$ac_delim
-BUILD_ADAPTOR_FILE!$BUILD_ADAPTOR_FILE$ac_delim
 BUILD_ADAPTOR_JOB!$BUILD_ADAPTOR_JOB$ac_delim
+BUILD_ADAPTOR_FILE!$BUILD_ADAPTOR_FILE$ac_delim
+BUILD_ADAPTOR_REPLICA!$BUILD_ADAPTOR_REPLICA$ac_delim
+BUILD_ADAPTOR_LOADER!$BUILD_ADAPTOR_LOADER$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 63; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 64; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -3399,6 +3408,7 @@ echo " Globus RLS Client        : $GLOBUS_HAVE_RLS ($GLOBUS_RLS_CLIENT_VERSION) 
 echo " Globus GSSAPI GSI Client : $GLOBUS_HAVE_GSI ($GLOBUS_GSI_CLIENT_VERSION)            " >> $OUT
 echo "                                                                   " >> $OUT
 echo "                                                                   " >> $OUT
+echo " Globus Loader            : $BUILD_ADAPTOR_LOADER                  " >> $OUT
 echo " Job     Adaptor          : $BUILD_ADAPTOR_JOB                     " >> $OUT
 echo " File    Adaptor          : $BUILD_ADAPTOR_FILE                    " >> $OUT
 echo " Replica Adaptor          : $BUILD_ADAPTOR_REPLICA                 " >> $OUT

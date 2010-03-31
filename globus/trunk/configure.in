@@ -14,9 +14,10 @@ AC_INIT()
 
 AX_SAGA_CONFIG()
 
-BUILD_ADAPTOR_REPLICA=no
-BUILD_ADAPTOR_FILE=no
 BUILD_ADAPTOR_JOB=no
+BUILD_ADAPTOR_FILE=no
+BUILD_ADAPTOR_REPLICA=no
+BUILD_ADAPTOR_LOADER=no
 SAGA_HAVE_ADAPTOR_X509=yes
 
 # first make sure that the x509 context adaptor is installed
@@ -24,21 +25,21 @@ AC_MSG_CHECKING([for x509 adaptor])
 if ! test -f $TMP_SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini; then
   SAGA_HAVE_ADAPTOR_X509="no: needs to be installed for the globus adaptors to function"
   AC_MSG_RESULT([ missing])
-  BUILD_ADAPTOR_REPLICA="no (x509 adaptor missing)"
-  BUILD_ADAPTOR_FILE="no (x509 adaptor missing)"
   BUILD_ADAPTOR_JOB="no (x509 adaptor missing)"
+  BUILD_ADAPTOR_FILE="no (x509 adaptor missing)"
+  BUILD_ADAPTOR_REPLICA="no (x509 adaptor missing)"
+  BUILD_ADAPTOR_LOADER="no (x509 adaptor missing)"
 else
   AC_MSG_RESULT([ ok ($TMP_SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini)])
 fi
 
 AX_SAGA_GLOBUS()
 
-echo "here: $SAGA_HAVE_ADAPTOR_X509"
-
 if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
   if test "x$SAGA_HAVE_ADAPTOR_REPLICA" = "xyes"; then
     BUILD_ADAPTOR_REPLICA="yes"
   fi
+
   if test "x$SAGA_HAVE_ADAPTOR_FILESYSTEM" = "xyes"; then
     BUILD_ADAPTOR_FILE="yes"
   fi
@@ -46,22 +47,28 @@ if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
     BUILD_ADAPTOR_JOB="yes"
   fi
   
-  if test "$GLOBUS_HAVE_RLS" != "yes" ; then
-    BUILD_ADAPTOR_REPLICA="no (RLS client libs missing)"
+  if test "$GLOBUS_HAVE_GRAM" != "yes" ; then
+    BUILD_ADAPTOR_JOB="no (GRAM client libs missing)"
   fi
-  
+
   if test "$GLOBUS_HAVE_GRIDFTP" != "yes" ; then
     BUILD_ADAPTOR_FILE="no (GridFTP client libs missing)"
   fi
   
-  if test "$GLOBUS_HAVE_GRAM" != "yes" ; then
-    BUILD_ADAPTOR_JOB="no (GRAM client libs missing)"
+  if test "$GLOBUS_HAVE_RLS" != "yes" ; then
+    BUILD_ADAPTOR_REPLICA="no (RLS client libs missing)"
   fi
+  
+  if test "x$SAGA_HAVE_GLOBUS" = "xyes"; then
+    BUILD_ADAPTOR_LOADER="yes"
+  fi
+
 fi
 
-AC_SUBST([BUILD_ADAPTOR_REPLICA])
-AC_SUBST([BUILD_ADAPTOR_FILE])
 AC_SUBST([BUILD_ADAPTOR_JOB])
+AC_SUBST([BUILD_ADAPTOR_FILE])
+AC_SUBST([BUILD_ADAPTOR_REPLICA])
+AC_SUBST([BUILD_ADAPTOR_LOADER])
 
 AC_CONFIG_HEADERS([config/saga-globus-config.hpp])
 AC_CONFIG_FILES([config/make.cfg])
@@ -98,6 +105,7 @@ echo " Globus RLS Client        : $GLOBUS_HAVE_RLS ($GLOBUS_RLS_CLIENT_VERSION) 
 echo " Globus GSSAPI GSI Client : $GLOBUS_HAVE_GSI ($GLOBUS_GSI_CLIENT_VERSION)            " >> $OUT
 echo "                                                                   " >> $OUT
 echo "                                                                   " >> $OUT
+echo " Globus Loader            : $BUILD_ADAPTOR_LOADER                  " >> $OUT
 echo " Job     Adaptor          : $BUILD_ADAPTOR_JOB                     " >> $OUT
 echo " File    Adaptor          : $BUILD_ADAPTOR_FILE                    " >> $OUT
 echo " Replica Adaptor          : $BUILD_ADAPTOR_REPLICA                 " >> $OUT

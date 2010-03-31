@@ -10,7 +10,7 @@
 
 SAGA_SUBDIRS   = config
 
-ifeq "x$(SAGA_HAVE_GLOBUS)" "xyes"
+ifeq "x$(SAGA_HAVE_ADAPTOR_LOADER)" "xyes"
   SAGA_SUBDIRS += loader
 endif
 
