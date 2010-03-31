@@ -36,7 +36,7 @@ endif
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.dist.mk
 
 # dir depenencies for parallel builds
-job::     loader
-file::    loader
-replica:: loader
+job:     loader
+file:    loader
+replica: loader
 

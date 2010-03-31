@@ -309,8 +309,10 @@ namespace ssh_filesystem_adaptor
   // callers should try to handle exceptions gracefully.
 
   saga::url filesystem_adaptor::translate_back (const saga::session & s, 
-                                          const saga::url     & u)
+                                                const saga::url     & u)
   {
+    std::string err;
+
     // std::cout << " mounted_.size(): trans 1 " << mounted_.size () << std::endl;
     std::map <std::string, TR1::shared_ptr <sshfs> > :: iterator begin = mounted_.begin ();
     std::map <std::string, TR1::shared_ptr <sshfs> > :: iterator end   = mounted_.end   ();
@@ -323,17 +325,20 @@ namespace ssh_filesystem_adaptor
         // std::cout << " mounted_.size(): trans 2 " << mounted_.size () << std::endl;
         return (*it).second->translate_back (u);
       }
-      catch ( const saga::exception & /*e*/ )
+      catch ( const saga::exception & e )
       {
         // try next one
         // std::cout << " mounted_.size(): trans 3 " << mounted_.size () << std::endl;
+        err += e.get_message ();
+
         continue;
       }
     }
 
     // std::cout << " mounted_.size(): trans 4 " << mounted_.size () << std::endl;
     // could not translate back it seems - throw
-    SAGA_ADAPTOR_THROW_NO_CONTEXT ("Cannot handle URL", saga::BadParameter);
+    SAGA_ADAPTOR_THROW_NO_CONTEXT ((std::string ("Cannot handle URL: ") + err).c_str (), 
+                                   saga::BadParameter);
 
     // keep compiler happy
     return "";
@@ -341,7 +346,7 @@ namespace ssh_filesystem_adaptor
 
   // as translate_back, but simply returns the original url on failure
   saga::url filesystem_adaptor::try_translate_back (const saga::session & s, 
-                                              const saga::url     & u)
+                                                    const saga::url     & u)
   {
     try
     {
