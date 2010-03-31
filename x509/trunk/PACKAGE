@@ -1,6 +1,6 @@
 
-PACKAGE:
-  saga-adaptors-x509
+PACKAGE: saga-adaptors-x509
+VERSION: 0.9.0
 
 DEPENDENCIES:
   saga-core
@@ -9,7 +9,6 @@ DIRS:
   context/
 
 FILES:
-  VERSION
   PACKAGE
   LICENSE
   Makefile

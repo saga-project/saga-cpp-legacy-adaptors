@@ -1,6 +1,6 @@
 
-PACKAGE:
-  saga-adaptors-ssh
+PACKAGE: saga-adaptors-ssh
+VERSION: 0.9.0
 
 DEPENDENCIES:
   saga-core
@@ -16,7 +16,6 @@ DIRS:
   ssh_suite/
 
 FILES:
-  VERSION
   PACKAGE
   Makefile
   configure

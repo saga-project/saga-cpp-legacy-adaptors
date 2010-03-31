@@ -1,6 +1,6 @@
 
-PACKAGE:
-  saga-adaptors-globus
+PACKAGE: saga-adaptors-globus
+VERSION: 0.9.0
 
 DEPENDENCIES:
   saga-core
@@ -18,7 +18,6 @@ DIRS:
   project/
 
 FILES:
-  VERSION
   PACKAGE
   INSTALL
   Makefile
