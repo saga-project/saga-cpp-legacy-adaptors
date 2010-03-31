@@ -101,7 +101,6 @@ namespace ssh_filesystem_adaptor
     }
 
     // no mount - flag error
-    std::cout << "complain about failed mount, with " << err << std::endl;
     SAGA_ADAPTOR_THROW_NO_CONTEXT (err.c_str (), saga::NoSuccess);
   }
 
@@ -112,13 +111,11 @@ namespace ssh_filesystem_adaptor
          ( ini_["keepalive"] == "yes"  ||
            ini_["keepalive"] == "true" )        )
     {
-      std::cout << " === keeping SSHFS filesystem mounted at " << mount_.c_str () << std::endl;
       SAGA_LOG_WARN ("keeping SSHFS filesystem mounted at ");
       SAGA_LOG_WARN (mount_.c_str ());
     }
     else
     {
-      std::cout << " === umounting SSHFS filesystem at " << mount_.c_str () << std::endl;
       SAGA_LOG_WARN ("umounting SSHFS filesystem at ");
       SAGA_LOG_WARN (mount_.c_str ());
 
@@ -267,12 +264,9 @@ namespace ssh_filesystem_adaptor
     {
       // we can't really do much about that error.
       // Lets at least warn the user!
-      std::cout << "Cannot umount sshfs filesystem: " << proc.get_err_s () << std::endl; 
       SAGA_LOG_CRITICAL ("Could not umount SSHFS filesystem at ");
       SAGA_LOG_CRITICAL (mount_.c_str ());
     }
-
-    std::cout << "umount for " << mount_ << " done" << std::endl;
   }
 
 

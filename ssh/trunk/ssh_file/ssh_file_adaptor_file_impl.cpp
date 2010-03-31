@@ -58,7 +58,6 @@ namespace ssh_filesystem_adaptor
     adaptor_instance_data_t adata (this);
     file_instance_data_t    idata (this);
 
-
     if ( idata->location_.get_scheme () != "ssh" &&
          idata->location_.get_scheme () != "any" )
     {
@@ -68,25 +67,57 @@ namespace ssh_filesystem_adaptor
       std::stringstream ss;
       ss << "Cannot handle URL scheme " << idata->location_.get_scheme ()
          << " - can only handle schemas 'ssh' or 'any'." << std::endl;
-
       SAGA_ADAPTOR_THROW_NO_CONTEXT (ss.str ().c_str (), 
                                      saga::adaptors::AdaptorDeclined);
     }
 
 
     // create a new api object from the changed instance data.
+    bool            success = false;
+    saga::exception ex ("", saga::NoSuccess);
+    saga::url       new_url;
+
     try
     {
-      f_ = saga::filesystem::file (adata->strip_session (s_),
-                                   adata->try_translate (s_, idata->location_), 
-                                   idata->mode_);
+      new_url = adata->translate (s_, idata->location_);
+      success = true;
     }
-    catch ( const saga:: exception & e )
+    catch ( const saga::exception & e )
     {
-      std::stringstream ss;
-      ss << "Cannot handle URL 5: \n\t" << e.what () << "\n";
+      ex = e;
+    }
 
-      SSH_ADAPTOR_RETHROW (e, ss.str ().c_str (), saga::BadParameter);
+    if ( success )
+    {
+      try
+      {
+        f_ = saga::filesystem::file (adata->strip_session (s_),
+                                     new_url,
+                                     idata->mode_);
+      }
+      catch ( const saga::exception & e )
+      {
+        std::stringstream ss;
+        ss << "Cannot handle URL 5: \n\t" << e.what () << "\n";
+        SSH_ADAPTOR_RETHROW (e, ss.str ().c_str (), saga::BadParameter);
+      }
+    }
+    else
+    {
+      try
+      {
+        new_url = adata->try_translate (s_, idata->location_);
+        f_ = saga::filesystem::file (adata->strip_session (s_),
+                                     new_url,
+                                     idata->mode_);
+      }
+      catch ( const saga::exception & e )
+      {
+        // FIXME: shouldn't we merge e and ex?
+        std::stringstream ss;
+        ss << "Cannot handle URL 6: \n\t" << ex.what () << "\n";
+        SSH_ADAPTOR_RETHROW (ex, ss.str ().c_str (), saga::BadParameter);
+      }
     }
   }
 

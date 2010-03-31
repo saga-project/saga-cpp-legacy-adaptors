@@ -134,9 +134,9 @@ namespace ssh_filesystem_adaptor
     saga::url   tgt = u;
     std::string id  = get_sshfs_id (u);
     
-    std::cout << " mounted_        mount  :  " << this             << std::endl;
-    std::cout << " mounted_.size() mount 1:  " << mounted_.size () << std::endl;
-    std::cout << " tested__.size() mount 1:  " << tested__.size () << std::endl;
+    // std::cout << " mounted_        mount  :  " << this             << std::endl;
+    // std::cout << " mounted_.size() mount 1:  " << mounted_.size () << std::endl;
+    // std::cout << " tested__.size() mount 1:  " << tested__.size () << std::endl;
 
     // check if we have that mounted already
     if ( mounted_.find (id) != mounted_.end () )
@@ -179,8 +179,8 @@ namespace ssh_filesystem_adaptor
                                      saga::NoSuccess);
     }
 
-    std::cout << " mounted_.size() mount 2:  " << mounted_.size () << std::endl;
-    std::cout << " tested__.size() mount 2:  " << tested__.size () << std::endl;
+    // std::cout << " mounted_.size() mount 2:  " << mounted_.size () << std::endl;
+    // std::cout << " tested__.size() mount 2:  " << tested__.size () << std::endl;
 
     // got the fs mounted - register it, and return the ptr
     mounted_[id] = ptr;
@@ -188,9 +188,9 @@ namespace ssh_filesystem_adaptor
     SAGA_LOG_ALWAYS ("register mounted sshfs");
     SAGA_LOG_ALWAYS (id.c_str ());
 
-    std::cout << " === register mounted sshfs: " << id << std::endl;
-    std::cout << " mounted_.size() mount 3:  " << mounted_.size () << std::endl;
-    std::cout << " tested__.size() mount 3:  " << tested__.size () << std::endl;
+    // std::cout << " === register mounted sshfs: " << id << std::endl;
+    // std::cout << " mounted_.size() mount 3:  " << mounted_.size () << std::endl;
+    // std::cout << " tested__.size() mount 3:  " << tested__.size () << std::endl;
 
     return ptr;
   }
@@ -265,11 +265,9 @@ namespace ssh_filesystem_adaptor
     catch ( const saga::exception & e )
     {
       std::stringstream ss;
-      std::cout << " === this? " << e.what () << std::endl;
       ss << "Cannot handle URL 1" << u 
          << ": cannot mount/translate into local file system : \n"
          << e.what () << "\n";
-      std::cout << " === This? " << ss.str () << std::endl;
       SAGA_ADAPTOR_THROW_NO_CONTEXT (ss.str (), saga::NoSuccess);
     }
 
@@ -298,11 +296,9 @@ namespace ssh_filesystem_adaptor
     catch ( const saga::exception & e )
     {
       std::stringstream ss;
-      std::cout << " === this? " << e.what () << std::endl;
       ss << "Cannot handle URL 1" << u 
          << ": cannot mount/translate into local file system : \n"
          << e.what () << "\n";
-      std::cout << " === This? " << ss.str () << std::endl;
       // SAGA_ADAPTOR_THROW_NO_CONTEXT (ss.str (), saga::NoSuccess);
     }
     catch ( ... )
