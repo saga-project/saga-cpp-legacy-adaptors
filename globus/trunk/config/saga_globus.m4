@@ -18,15 +18,6 @@
 #
 AC_DEFUN([AX_SAGA_GLOBUS],
 [
-
-  # first make sure that the x509 context adaptor is installed
-  AC_MSG_CHECKING([for x509 adaptor])
-  if ! test -f $TMP_SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini; then
-    AC_MSG_RESULT([ missing])
-    AC_MSG_ERROR([The X.509 context adaptor needs to be installed for the globus adaptor to function])
-  fi
-  AC_MSG_RESULT([ ok])
-
   FAILED=0;
 
   GLOBUS_SUBSYSTEM=$1

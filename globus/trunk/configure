@@ -1791,19 +1791,17 @@ echo "${ECHO_T}$TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE)" >&6; }
 
 
 
-
-  # first make sure that the x509 context adaptor is installed
-  { echo "$as_me:$LINENO: checking for x509 adaptor" >&5
+# first make sure that the x509 context adaptor is installed
+{ echo "$as_me:$LINENO: checking for x509 adaptor" >&5
 echo $ECHO_N "checking for x509 adaptor... $ECHO_C" >&6; }
-  if ! test -f $TMP_SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini; then
-    { echo "$as_me:$LINENO: result:  missing" >&5
+if ! test -f $TMP_SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini; then
+  { echo "$as_me:$LINENO: result:  missing" >&5
 echo "${ECHO_T} missing" >&6; }
-    { { echo "$as_me:$LINENO: error: The X.509 context adaptor needs to be installed for the globus adaptor to function" >&5
-echo "$as_me: error: The X.509 context adaptor needs to be installed for the globus adaptor to function" >&2;}
-   { (exit 1); exit 1; }; }
-  fi
-  { echo "$as_me:$LINENO: result:  ok" >&5
+fi
+{ echo "$as_me:$LINENO: result:  ok" >&5
 echo "${ECHO_T} ok" >&6; }
+
+
 
   FAILED=0;
 

@@ -13,6 +13,15 @@ m4_include([config/saga_globus.m4])
 AC_INIT()
 
 AX_SAGA_CONFIG()
+
+# first make sure that the x509 context adaptor is installed
+AC_MSG_CHECKING([for x509 adaptor])
+if ! test -f $TMP_SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini; then
+  AC_MSG_RESULT([ missing])
+fi
+AC_MSG_RESULT([ ok])
+
+
 AX_SAGA_GLOBUS()
 
 BUILD_ADAPTOR_REPLICA=no
