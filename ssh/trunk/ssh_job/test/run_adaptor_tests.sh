@@ -26,65 +26,98 @@ fi
 EXIT_FAILURE=0
 SUBMIT_FAILURE=0
 
-# Create a dummy temporary file location
-FILE=/tmp/saga.adaptor.ssh.test.$$
-
-# Test out saga-job run
+# dummy temporary file location
+FILE=tmp.saga.adaptor.ssh.test.$$
 
 
+echo "======================================================================="
+
+
+# test saga-job run
 STRING=testing_ssh_job_run
-echo "Running: saga-job run ssh://$REMOTEHOST/ echo $STRING > $FILE"
-$SAGA_LOCATION/bin/saga-job run ssh://$REMOTEHOST/ "echo $STRING > $FILE"
-RESULT=`$SAGA_LOCATION/bin/saga-job run ssh://$REMOTEHOST/ cat $FILE`
+COMMAND="'echo $STRING' > $FILE"
 
-if test "$RESULT" != "testing_ssh_job_run"
-then
-   echo "Failed: $RESULT"
-   EXIT_FAILURE=1
+echo               saga-job run "  " ssh://$REMOTEHOST/ /bin/sh -c \"$COMMAND\"
+$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ /bin/sh -c  "$COMMAND"
+
+COMMAND="'cat $FILE'"
+echo                       saga-job run "  " ssh://$REMOTEHOST/ /bin/sh -c \"$COMMAND\"
+RESULT=`$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ /bin/sh -c  "$COMMAND"`
+
+if test "$RESULT" = "$STRING"; then
+  echo "OK"
+else
+  echo "Failed: '$RESULT' != '$STRING'"
+  EXIT_FAILURE=1
 fi
+
+
+echo "======================================================================="
+
 
 # Test saga-job submit
 STRING=testing_ssh_job_submit
-echo "Running: saga-job submit ssh://$REMOTEHOST echo $STRING > $FILE && sleep 300"
-JOB_ID=`$SAGA_LOCATION/bin/saga-job submit ssh://$REMOTEHOST/ "echo $STRING > $FILE && sleep 300"`
+COMMAND="'echo $STRING' > $FILE && sleep 60"
 
-sleep 1 # wait a second in case the submit is delayed at all
+       echo               saga-job submit   ssh://$REMOTEHOST/ /bin/sh -c \"$COMMAND\"
+JOBID=`$SAGA_LOCATION/bin/saga-job submit   ssh://$REMOTEHOST/ /bin/sh -c  "$COMMAND" | head -1`
 
-# Went ahead and used the SSH command as opposed to the saga-file run to keep their testing separate
-RESULT=`ssh $REMOTEHOST cat $FILE`
+sleep 1 # wait for submitted job
 
-if test "$RESULT" != "testing_ssh_job_submit"
-then
-   echo "Failed: $RESULT"
-   SUBMIT_FAILURE=1
-   EXIT_FAILURE=1
+COMMAND="'cat $FILE'"
+echo                       saga-job run "  " ssh://$REMOTEHOST/ /bin/sh -c \"$COMMAND\"
+RESULT=`$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ /bin/sh -c  "$COMMAND"`
+
+
+if test "$RESULT" = "$STRING"; then
+  echo "OK"
+else
+  echo "Failed: '$RESULT' != '$STRING'"
+  SUBMIT_FAILURE=1
+  EXIT_FAILURE=1
 fi
 
+
+echo "======================================================================="
+
+
 # Test saga-job state (relies on saga-job submit succeeding, obviously)
-
-# grab the job id from the previous submit command
-JOB_ID=`echo $JOB_ID | sed s/Job\ ID:\ //`
-
-if [ $SUBMIT_FAILURE = 1 ]
-then
-  echo "Omitting saga-job state testing -- submission failed, so we have no job to check the state of."
-  EXIT_FAILURE=1
+if [ $SUBMIT_FAILURE = 1 ]; then
+  echo "Omitting saga-job state testing after failed submit."
 else
-  echo "Running: saga-job state ssh://$REMOTEHOST $JOB_ID"
-  RESULT=`$SAGA_LOCATION/bin/saga-job state ssh://$REMOTEHOST $JOB_ID`
-  if test "$RESULT" != "$JOB_ID: Running"
-  then
-    echo "Failed: $RESULT"
+  # grab the job id from the previous submit command
+  JOBID=`echo $JOBID | sed s/Job\ ID\ :\ //`
+  
+  echo             "         saga-job state ssh://$REMOTEHOST $JOBID"
+  RESULT=`$SAGA_LOCATION/bin/saga-job state ssh://$REMOTEHOST $JOBID`
+
+  if test "$RESULT" = "$JOBID: Running"; then
+    echo "OK"
+  else
+    echo "Failed: '$RESULT' != '$JOBID: Running'"
     EXIT_FAILURE=1
   fi
 fi
 
-echo "Omitting saga-job suspend and saga-job resume as they are not currently supported by the SSH adaptor."
+
+echo "======================================================================="
+
+
+COMMAND="'/bin/rm -f $FILE'"
+
+echo               saga-job run "  " ssh://$REMOTEHOST/ /bin/sh -c \"$COMMAND\"
+$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ /bin/sh -c  "$COMMAND" && echo "OK" || echo "NOK"
+
+
+echo "======================================================================="
+
 
 if [ $EXIT_FAILURE = 1 ]
 then
-   echo "Some tests have failed!"
-   exit 1
+  echo "Some tests have failed"
+  exit 1
 else
-   exit 0
+  echo "all tests succeeded"
+  exit 0
 fi
+
