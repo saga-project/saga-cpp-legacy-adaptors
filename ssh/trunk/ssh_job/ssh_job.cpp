@@ -350,7 +350,7 @@ namespace ssh_job
           if ( ! proc.done () )
           {
             std::stringstream ss;
-            ss << "Cannot find executeale " << old_exe_ << " on remote host (" << proc.get_err_s () << ")";
+            ss << "Cannot find executable " << old_exe_ << " on remote host (" << proc.get_err_s () << ")";
             SAGA_ADAPTOR_THROW (ss.str (), saga::BadParameter);
           }
         }
@@ -547,8 +547,9 @@ namespace ssh_job
     ssh_args_ = new_args;
 
     // we create a command as separate string, and give that as single
-    // argument to ssh
-    std::string cmd;
+    // argument to ssh.  In fact, our remote command has always the form
+    // "/bin/sh -c 'orginal --comand --with=args'"
+    std::string cmd ("/bin/sh -c '");
 
     // if the js contains a working directory, we first execute a remote cd
     // to that directory, before running the job
@@ -587,6 +588,9 @@ namespace ssh_job
     {
       cmd += old_args[i] + " ";
     }
+
+    // close command off with '
+    cmd += "'";
 
     new_args.push_back (cmd);
 

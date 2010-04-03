@@ -35,14 +35,14 @@ echo "======================================================================="
 
 # test saga-job run
 STRING=testing_ssh_job_run
-COMMAND="'echo $STRING' > $FILE"
+COMMAND="echo $STRING > $FILE"
 
-echo               saga-job run "  " ssh://$REMOTEHOST/ /bin/sh -c \"$COMMAND\"
-$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ /bin/sh -c  "$COMMAND"
+echo              "saga-job run      ssh://$REMOTEHOST/ $COMMAND"
+$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ $COMMAND
 
-COMMAND="'cat $FILE'"
-echo                       saga-job run "  " ssh://$REMOTEHOST/ /bin/sh -c \"$COMMAND\"
-RESULT=`$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ /bin/sh -c  "$COMMAND"`
+COMMAND="cat $FILE"
+echo                      "saga-job run      ssh://$REMOTEHOST/ $COMMAND"
+RESULT=`$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ $COMMAND`
 
 if test "$RESULT" = "$STRING"; then
   echo "OK"
@@ -57,16 +57,16 @@ echo "======================================================================="
 
 # Test saga-job submit
 STRING=testing_ssh_job_submit
-COMMAND="'echo $STRING' > $FILE && sleep 60"
+COMMAND="echo $STRING > $FILE && sleep 60"
 
-       echo               saga-job submit   ssh://$REMOTEHOST/ /bin/sh -c \"$COMMAND\"
-JOBID=`$SAGA_LOCATION/bin/saga-job submit   ssh://$REMOTEHOST/ /bin/sh -c  "$COMMAND" | head -1`
+       echo              "saga-job submit   ssh://$REMOTEHOST/ $COMMAND"
+JOBID=`$SAGA_LOCATION/bin/saga-job submit   ssh://$REMOTEHOST/ $COMMAND | head -1`
 
 sleep 1 # wait for submitted job
 
-COMMAND="'cat $FILE'"
-echo                       saga-job run "  " ssh://$REMOTEHOST/ /bin/sh -c \"$COMMAND\"
-RESULT=`$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ /bin/sh -c  "$COMMAND"`
+COMMAND="cat $FILE"
+echo                      "saga-job run      ssh://$REMOTEHOST/ $COMMAND"
+RESULT=`$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ $COMMAND`
 
 
 if test "$RESULT" = "$STRING"; then
@@ -88,7 +88,7 @@ else
   # grab the job id from the previous submit command
   JOBID=`echo $JOBID | sed s/Job\ ID\ :\ //`
   
-  echo             "         saga-job state ssh://$REMOTEHOST $JOBID"
+  echo                      "saga-job state ssh://$REMOTEHOST $JOBID"
   RESULT=`$SAGA_LOCATION/bin/saga-job state ssh://$REMOTEHOST $JOBID`
 
   if test "$RESULT" = "$JOBID: Running"; then
@@ -103,10 +103,10 @@ fi
 echo "======================================================================="
 
 
-COMMAND="'/bin/rm -f $FILE'"
+COMMAND="/bin/rm -f $FILE"
 
-echo               saga-job run "  " ssh://$REMOTEHOST/ /bin/sh -c \"$COMMAND\"
-$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ /bin/sh -c  "$COMMAND" && echo "OK" || echo "NOK"
+echo              "saga-job run      ssh://$REMOTEHOST/ $COMMAND"
+$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ $COMMAND && echo "OK" || echo "NOK"
 
 
 echo "======================================================================="
