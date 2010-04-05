@@ -24,10 +24,6 @@ ifdef BUILD_SOMETHING
 # SAGA_SUBDIRS += ssh_suite
 endif
 
-ifdef SAGA_IS_CLEANING
-  SAGA_SUBDIRS += ssh_file ssh_job
-endif
-
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.dist.mk
