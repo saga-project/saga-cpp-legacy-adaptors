@@ -2244,7 +2244,7 @@ if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
     BUILD_ADAPTOR_REPLICA="no (RLS client libs missing)"
   fi
 
-  if test "x$SAGA_HAVE_GLOBUS" = "xyes"; then
+  if test "x$HAVE_GLOBUS" = "xyes"; then
     BUILD_ADAPTOR_LOADER="yes"
   fi
 

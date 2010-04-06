@@ -10,7 +10,7 @@
 
 SAGA_SUBDIRS   = config
 
-ifeq "x$(SAGA_HAVE_ADAPTOR_LOADER)" "xyes"
+ifeq "x$(SAGA_BUILD_ADAPTOR_LOADER)" "xyes"
   SAGA_SUBDIRS += loader
 endif
 
@@ -24,11 +24,6 @@ endif
 
 ifeq "x$(SAGA_BUILD_ADAPTOR_JOB)" "xyes"
   SAGA_SUBDIRS += job
-endif
-
-
-ifdef SAGA_IS_CLEANING
-  SAGA_SUBDIRS += replica file job 
 endif
 
 
