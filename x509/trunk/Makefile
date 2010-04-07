@@ -13,10 +13,6 @@ ifeq "x$(SAGA_BUILD_ADAPTOR_CONTEXT)" "xyes"
   SAGA_SUBDIRS += context
 endif
 
-ifdef SAGA_IS_CLEANING
-  SAGA_SUBDIRS += context
-endif
-
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.dist.mk
 
