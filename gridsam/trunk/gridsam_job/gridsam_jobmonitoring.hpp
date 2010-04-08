@@ -354,3 +354,4 @@ state_from_gridsam(saga::impl::v1_0::cpi* cpi,
 }
 
 #endif
+

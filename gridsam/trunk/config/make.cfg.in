@@ -22,9 +22,9 @@ endif
 
        
 SAGA_HAVE_OPENSSL        = @HAVE_OPENSSL@
-
 SAGA_BUILD_ADAPTOR_JOB   = @BUILD_ADAPTOR_JOB@
 
+include $(SAGA_MAKE_INCLUDE_ROOT)/saga.util.mk
 
 endif # guard
 

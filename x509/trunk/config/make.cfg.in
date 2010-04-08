@@ -21,6 +21,7 @@ else
   SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/share/saga/make
 endif
 
+include $(SAGA_MAKE_INCLUDE_ROOT)/saga.util.mk
 
 endif # guard
 

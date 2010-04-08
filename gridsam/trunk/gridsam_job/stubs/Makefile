@@ -38,7 +38,7 @@ ifeq "$(SAGA_HAVE_OPENSSL)" "yes"
 endif
 
 # make sure stubs are generated before dependency check!
-subdirs_before:: $(STUBS)
+subdirs_before: $(STUBS)
 
 $(STUBS):
 	@$(ECHO) "     running       generate.sh"

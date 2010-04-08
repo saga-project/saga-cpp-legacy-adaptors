@@ -35,7 +35,7 @@ ifndef SAGA_ADAPTOR_SUITE
   SAGA_LDFLAGS  += -L../aws_suite -lsaga_adaptor_aws_suite
 endif
 
--include $(SAGA_MAKE_INCLUDE_ROOT)/saga.util.mk
+include $(SAGA_MAKE_INCLUDE_ROOT)/saga.util.mk
 
 endif # guard
 

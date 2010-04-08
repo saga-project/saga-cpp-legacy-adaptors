@@ -51,22 +51,25 @@ BUILD_ADAPTOR_FILESYSTEM=no
 BUILD_ADAPTOR_JOB=no
 
 if test "x$HAVE_SSH" = "xyes"; then
-
   if test "x$SAGA_HAVE_ADAPTOR_CONTEXT" = "xyes"; then
     BUILD_ADAPTOR_CONTEXT="yes"
   fi
+fi
 
+if test "x$HAVE_SSH" = "xyes"; then
   if test "x$SAGA_HAVE_ADAPTOR_JOB" = "xyes"; then
     BUILD_ADAPTOR_JOB="yes"
+    BUILD_ADAPTOR_CONTEXT="yes"
   fi
-
-  if test "$HAVE_SSHFS-$HAVE_SCP" = "yes-yes"; then
-    if test "x$SAGA_HAVE_ADAPTOR_FILESYSTEM" = "xyes"; then
-      BUILD_ADAPTOR_FILESYSTEM="yes"
-    fi
-  fi
-
 fi
+
+if test "$HAVE_SSHFS-$HAVE_SCP" = "yes-yes"; then
+  if test "x$SAGA_HAVE_ADAPTOR_FILESYSTEM" = "xyes"; then
+    BUILD_ADAPTOR_FILESYSTEM="yes"
+    BUILD_ADAPTOR_CONTEXT="yes"
+  fi
+fi
+
 
 if test "x$HAVE_SSH" = "xyes"; then
   SAGA_SSH_S="($SAGA_SSH)"

@@ -35,5 +35,7 @@ SAGA_CONDOR_BIN_RM       = @CONDOR_BIN_RM@
 
 SAGA_BUILD_ADAPTOR_JOB   = @BUILD_ADAPTOR_JOB@
 
+include $(SAGA_MAKE_INCLUDE_ROOT)/saga.util.mk
+
 endif # guard
 

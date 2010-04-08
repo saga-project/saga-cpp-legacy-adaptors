@@ -36,5 +36,7 @@ SAGA_LSF_BIN_BJOBS    = @LSF_BIN_BJOBS@
 
 SAGA_BUILD_ADAPTOR_JOB   = @BUILD_ADAPTOR_JOB@
 
+include $(SAGA_MAKE_INCLUDE_ROOT)/saga.util.mk
+
 endif # guard
 

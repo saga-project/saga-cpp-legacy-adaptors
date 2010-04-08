@@ -4,10 +4,9 @@
 #  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
--include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 -include config/make.cfg
 
-SAGA_SUBDIRS    = config
+SAGA_SUBDIRS       = config
 
 ifeq "x$(SAGA_BUILD_ADAPTOR_FILESYSTEM)" "xyes"
   SAGA_SUBDIRS    += ssh_file
@@ -15,29 +14,32 @@ ifeq "x$(SAGA_BUILD_ADAPTOR_FILESYSTEM)" "xyes"
 endif
 
 ifeq "x$(SAGA_BUILD_ADAPTOR_JOB)" "xyes"
-  SAGA_SUBDIRS += ssh_job
+  SAGA_SUBDIRS    += ssh_job
   BUILD_SOMETHING  = yes
 endif
 
-ifdef BUILD_SOMETHING
-  SAGA_SUBDIRS += ssh_context
-# SAGA_SUBDIRS += ssh_suite
+ifeq "x$(SAGA_BUILD_ADAPTOR_CONTEXT)" "xyes"
+  SAGA_SUBDIRS    += ssh_context
+# SAGA_SUBDIRS    += ssh_suite
 endif
+
+
+all:: config.summary
+
+config.summary:
+	@echo ""
+	@echo " ================================= "
+	@echo "  you need to run configure first  "
+	@echo " ================================= "
+	@echo ""
+	@false
 
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.dist.mk
 
 
-ifeq "x$(SAGA_BUILD_ADAPTOR_FILE)" "xyes"
 ssh_file:    ssh_context
-endif
-
-ifeq "x$(SAGA_BUILD_ADAPTOR_JOB)" "xyes"
 ssh_job:     ssh_context
-endif
-
-ifdef BUILD_SOMETHING
 # ssh_context: ssh_suite 
-endif
 
