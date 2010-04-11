@@ -6,12 +6,12 @@
 
 -include ../../config/make.cfg
 
-SAGA_SRC         = $(wildcard *.cpp)
-SAGA_OBJ         = $(SAGA_SRC:%.cpp=%.o)
-SAGA_BIN         = $(SAGA_SRC:%.cpp=%)
+SAGA_SRC           = $(wildcard *.cpp)
+SAGA_OBJ           = $(SAGA_SRC:%.cpp=%.o)
+SAGA_BIN           = $(SAGA_SRC:%.cpp=%)
 
-SAGA_TEST_RUN           = ./run_adaptor_tests.sh.run
-SAGA_DONT_INSTALL       = yes
+SAGA_TEST_RUN      = ./run_adaptor_tests.sh
+SAGA_DONT_INSTALL  = yes
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.test.mk
 
