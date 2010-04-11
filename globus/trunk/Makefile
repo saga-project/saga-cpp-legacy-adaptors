@@ -37,7 +37,7 @@ config.summary:
 
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
--include $(SAGA_MAKE_INCLUDE_ROOT)/saga.dist.mk
+-include $(SAGA_LOCATION)/share/saga/make/saga.dist.mk
 
 # dir depenencies for parallel builds
 job:     loader
