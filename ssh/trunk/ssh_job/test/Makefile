@@ -7,6 +7,7 @@
 
 -include ../../config/make.cfg
 
+SAGA_TEST_CACHE    = yes
 SAGA_TEST_RUN      = ./run_adaptor_tests.sh
 SAGA_DONT_INSTALL  = yes
 
