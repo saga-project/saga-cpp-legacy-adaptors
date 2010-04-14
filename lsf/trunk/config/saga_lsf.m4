@@ -90,12 +90,13 @@ AC_DEFUN([AX_SAGA_CHECK_LSF],
     
     packages=`ls /usr/local/package/lsf-* 2>>/dev/null`
 
-    paths="$lsf_location /usr /usr/local /opt $packages"
-    paths="$paths /usr/lsf /usr/local/lsf /opt/lsf"
+    if test "$tmp_location-$LSF_LOCATION" = "-"; then
+      paths="/usr/lsf /usr/local/lsf /opt/lsf /usr /usr/local /opt /sw $packages"
+    else
+      paths="$tmp_location $LSF_LOCATION"
+    fi
 
-    # echo "paths: $paths"
-
-    for tmp_path in $tmp_location $paths ; do
+    for tmp_path in $paths; do
       
       AC_MSG_CHECKING(for lsf in $tmp_path)
     

@@ -60,8 +60,14 @@ AC_DEFUN([AX_SAGA_CHECK_CURL],
   if test "x$want_curl" = "xyes"; then
     
     packages=`ls /usr/local/package/curl-* 2>>/dev/null`
+
+    if test "$tmp_location-$CURL_LOCATION" = "-"; then
+      paths="/usr /usr/local /opt /sw $packages"
+    else
+      paths="$tmp_location $CURL_LOCATION"
+    fi
     
-    for tmp_path in $tmp_location $CURL_LOCATION /usr /usr/local /opt $packages; do
+    for tmp_path in $paths; do
       
       AC_MSG_CHECKING(for curl in $tmp_path)
 

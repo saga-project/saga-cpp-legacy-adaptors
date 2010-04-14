@@ -2412,7 +2412,13 @@ fi
 
     packages=`ls /usr/local/package/openssl-* 2>>/dev/null`
 
-    for tmp_path in $tmp_location $OPENSSL_LOCATION /usr /usr/local /opt $packages; do
+    if test "$tmp_location-$OPENSSL_LOCATION" = "-"; then
+      paths="/usr /usr/local /opt /sw $packages"
+    else
+      paths="$tmp_location $OPENSSL_LOCATION"
+    fi
+
+    for tmp_path in $paths; do
 
       { echo "$as_me:$LINENO: checking for openssl in $tmp_path" >&5
 echo $ECHO_N "checking for openssl in $tmp_path... $ECHO_C" >&6; }

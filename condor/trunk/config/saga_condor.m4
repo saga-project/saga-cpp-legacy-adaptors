@@ -72,12 +72,13 @@ AC_DEFUN([AX_SAGA_CHECK_CONDOR],
     
     packages=`ls /usr/local/package/condor-* 2>>/dev/null`
 
-    paths="$CONDOR_LOCATION $condor_config_root /usr /usr/local /opt $packages"
-    paths="$paths /usr/condor /usr/local/condor /opt/condor"
+    if test "$tmp_location-$CONDOR_LOCATION-$condor_config_root" = "--"; then
+      paths="/usr /usr/local /opt /sw $packages /usr/condor /usr/local/condor /opt/condor"
+    else
+      paths="$tmp_location $CONDOR_LOCATION $condor_config_root"
+    fi
 
-    echo "paths: $paths"
-
-    for tmp_path in $tmp_location $paths ; do
+    for tmp_path in $paths; do
       
       AC_MSG_CHECKING(for condor in $tmp_path)
     

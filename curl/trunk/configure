@@ -2481,7 +2481,13 @@ fi
 
     packages=`ls /usr/local/package/curl-* 2>>/dev/null`
 
-    for tmp_path in $tmp_location $CURL_LOCATION /usr /usr/local /opt $packages; do
+    if test "$tmp_location-$CURL_LOCATION" = "-"; then
+      paths="/usr /usr/local /opt /sw $packages"
+    else
+      paths="$tmp_location $CURL_LOCATION"
+    fi
+
+    for tmp_path in $paths; do
 
       { echo "$as_me:$LINENO: checking for curl in $tmp_path" >&5
 echo $ECHO_N "checking for curl in $tmp_path... $ECHO_C" >&6; }

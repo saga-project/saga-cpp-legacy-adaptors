@@ -1863,7 +1863,13 @@ fi
 
     packages=`ls /usr/local/package/java-* 2>>/dev/null`
 
-    for tmp_path in $tmp_location $JAVA_HOME /usr /usr/java /usr/local /usr/local/java /opt /opt/java $packages; do
+    if test "$tmp_location-$JAVA_HOME" = "-"; then
+      paths="/usr /usr/java /usr/local /usr/local/java /opt /opt/java /sw /sw/java $packages"
+    else
+      paths="$tmp_location $JAVA_HOME"
+    fi
+
+    for tmp_path in $paths; do
 
       { echo "$as_me:$LINENO: checking for java in $tmp_path" >&5
 echo $ECHO_N "checking for java in $tmp_path... $ECHO_C" >&6; }
@@ -1947,7 +1953,13 @@ fi
 
       packages=`ls /usr/local/package/aws-* 2>>/dev/null`
 
-      for tmp_path in $tmp_location $EC2_HOME /usr /usr/local /opt $packages; do
+      if test "$tmp_location-$EC2_HOME" = "-"; then
+        paths="/usr /usr/local /opt /sw $packages"
+      else
+        paths="$tmp_location $EC2_HOME"
+      fi
+
+      for tmp_path in $paths; do
 
         { echo "$as_me:$LINENO: checking for aws in $tmp_path" >&5
 echo $ECHO_N "checking for aws in $tmp_path... $ECHO_C" >&6; }

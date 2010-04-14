@@ -66,8 +66,14 @@ AC_DEFUN([AX_SAGA_CHECK_AWS],
     if test "x$want_aws" = "xyes"; then
       
       packages=`ls /usr/local/package/aws-* 2>>/dev/null`
+
+      if test "$tmp_location-$EC2_HOME" = "-"; then
+        paths="/usr /usr/local /opt /sw $packages"
+      else
+        paths="$tmp_location $EC2_HOME"
+      fi
       
-      for tmp_path in $tmp_location $EC2_HOME /usr /usr/local /opt $packages; do
+      for tmp_path in $paths; do
         
         AC_MSG_CHECKING(for aws in $tmp_path)
 

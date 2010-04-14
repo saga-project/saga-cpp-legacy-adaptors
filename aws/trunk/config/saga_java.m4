@@ -60,7 +60,13 @@ AC_DEFUN([AX_SAGA_CHECK_JAVA],
     
     packages=`ls /usr/local/package/java-* 2>>/dev/null`
     
-    for tmp_path in $tmp_location $JAVA_HOME /usr /usr/java /usr/local /usr/local/java /opt /opt/java $packages; do
+    if test "$tmp_location-$JAVA_HOME" = "-"; then
+      paths="/usr /usr/java /usr/local /usr/local/java /opt /opt/java /sw /sw/java $packages"
+    else
+      paths="$tmp_location $JAVA_HOME"
+    fi
+
+    for tmp_path in $paths; do
       
       AC_MSG_CHECKING(for java in $tmp_path)
 

@@ -60,7 +60,13 @@ AC_DEFUN([AX_SAGA_CHECK_OPENSSL],
     
     packages=`ls /usr/local/package/openssl-* 2>>/dev/null`
     
-    for tmp_path in $tmp_location $OPENSSL_LOCATION /usr /usr/local /opt $packages; do
+    if test "$tmp_location-$OPENSSL_LOCATION" = "-"; then
+      paths="/usr /usr/local /opt /sw $packages"
+    else
+      paths="$tmp_location $OPENSSL_LOCATION"
+    fi
+
+    for tmp_path in $paths; do
       
       AC_MSG_CHECKING(for openssl in $tmp_path)
 
