@@ -13,6 +13,8 @@ DIRS:
 FILES:
   PACKAGE
   README
+  INSTALL
+  LICENSE
   Makefile
   configure
   configure.in
