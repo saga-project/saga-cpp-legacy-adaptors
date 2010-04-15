@@ -12,6 +12,8 @@ DIRS:
   project/
 
 FILES:
+  INSTALL
+  LICENSE
   PACKAGE
   Makefile
   configure
