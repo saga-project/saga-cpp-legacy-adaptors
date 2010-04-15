@@ -12,6 +12,7 @@ DIRS:
 FILES:
   PACKAGE
   LICENSE
+  INSTALL
   Makefile
   configure
   configure.in
