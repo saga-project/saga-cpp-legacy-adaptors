@@ -15,6 +15,10 @@
     You have to install the SAGA Core Components before you can install the
     Python Bindings. The Core Components are available on the SAGA website.
 
+  o SAGA X.509 Adaptor
+    The Globus Adaptors require the SAGA X.509 adaptor to manage the
+    certificates. It is available in the download section of the SAGA website.
+
   o Boost C++ Libraries >= 1.33
     You need to have the Boost C++ libraries installed on your system. Many
     systems already provide binary packages for them. If your system doesn't 
