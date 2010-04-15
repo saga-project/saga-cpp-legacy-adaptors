@@ -1,0 +1,1562 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		7B6DA6890B9A2DA100168752 /* All Adaptors */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7B6DA69F0B9A2DC300168752 /* Build configuration list for PBXAggregateTarget "All Adaptors" */;
+			buildPhases = (
+			);
+			dependencies = (
+				7B50CD420FC5EE0A00B7CD44 /* PBXTargetDependency */,
+				7B43D8EE0D295104003D49BD /* PBXTargetDependency */,
+				7B9FBA090BB1D18600E9EA8D /* PBXTargetDependency */,
+				7B6DA68D0B9A2DA900168752 /* PBXTargetDependency */,
+			);
+			name = "All Adaptors";
+			productName = ALL;
+		};
+		7BF7D4F2110F7A2B00A37260 /* All Tests */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7BF7D504110F7ADE00A37260 /* Build configuration list for PBXAggregateTarget "All Tests" */;
+			buildPhases = (
+			);
+			dependencies = (
+				7BF7D4F6110F7A3F00A37260 /* PBXTargetDependency */,
+			);
+			name = "All Tests";
+			productName = "All Tests";
+		};
+		7BF7D4F7110F7A5600A37260 /* Everything */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7BF7D505110F7ADE00A37260 /* Build configuration list for PBXAggregateTarget "Everything" */;
+			buildPhases = (
+			);
+			dependencies = (
+				7BF7D4FD110F7A5C00A37260 /* PBXTargetDependency */,
+				7BF7D4FB110F7A5C00A37260 /* PBXTargetDependency */,
+			);
+			name = Everything;
+			productName = Everything;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		7B1821DD0BD680E3007F5036 /* globus_gram_job_adaptor_gass_server_ez.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B1821D90BD680E2007F5036 /* globus_gram_job_adaptor_gass_server_ez.c */; };
+		7B1821DF0BD680E3007F5036 /* saga_gass_server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B1821DB0BD680E2007F5036 /* saga_gass_server.cpp */; };
+		7B2A15800D5A768100832C20 /* globus_gridftp_file_adaptor_file_nsentry_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B2A157E0D5A768100832C20 /* globus_gridftp_file_adaptor_file_nsentry_impl.cpp */; };
+		7B2A158D0D5A779E00832C20 /* globus_gridftp_file_adaptor_file_perm_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B2A158C0D5A779E00832C20 /* globus_gridftp_file_adaptor_file_perm_impl.cpp */; };
+		7B2A15D80D5A797B00832C20 /* globus_gridftp_file_adaptor_dir_nsentry_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B2A15D70D5A797B00832C20 /* globus_gridftp_file_adaptor_dir_nsentry_impl.cpp */; };
+		7B2A15DA0D5A79C200832C20 /* globus_gridftp_file_adaptor_dir_nsdir_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B2A15D90D5A79C200832C20 /* globus_gridftp_file_adaptor_dir_nsdir_impl.cpp */; };
+		7B2A160E0D5A7A2200832C20 /* globus_gridftp_file_adaptor_dir_perm_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B2A160D0D5A7A2200832C20 /* globus_gridftp_file_adaptor_dir_perm_impl.cpp */; };
+		7B330F830D2CE3CB006F7ED0 /* globus_rls_replica_adaptor_connection.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7B330F810D2CE3CB006F7ED0 /* globus_rls_replica_adaptor_connection.hpp */; };
+		7B330F840D2CE3CB006F7ED0 /* globus_rls_replica_adaptor_connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B330F820D2CE3CB006F7ED0 /* globus_rls_replica_adaptor_connection.cpp */; };
+		7B3312420D2D2207006F7ED0 /* globus_rls_logical_file_adaptor.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7BC285500D241834002C51F7 /* globus_rls_logical_file_adaptor.ini */; };
+		7B43D8E80D294EDB003D49BD /* globus_rls_replica_adaptor_logicalfile_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BC285530D241834002C51F7 /* globus_rls_replica_adaptor_logicalfile_impl.cpp */; };
+		7B43D8F20D295754003D49BD /* globus_rls_replica_adaptor_logicaldirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BC285510D241834002C51F7 /* globus_rls_replica_adaptor_logicaldirectory.cpp */; };
+		7B50CD270FC5EB9C00B7CD44 /* globus_global_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B50CD0C0FC5EB4E00B7CD44 /* globus_global_loader.cpp */; };
+		7B50CD470FC5EE5000B7CD44 /* libsaga_adaptor_globus_module_loader.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B50CD250FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader.dylib */; };
+		7B50CD480FC5EE7000B7CD44 /* libsaga_adaptor_globus_module_loader.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B50CD250FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader.dylib */; };
+		7B50CD490FC5EE7E00B7CD44 /* libsaga_adaptor_globus_module_loader.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B50CD250FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader.dylib */; };
+		7B570C230BC427800080A234 /* globus_gram_job_adaptor_connector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B570C150BC424440080A234 /* globus_gram_job_adaptor_connector.cpp */; };
+		7B86DCE50D60C2D000D78FC1 /* globus_rls_replica_adaptor_logicalfile_nsentry_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B86DCE40D60C2D000D78FC1 /* globus_rls_replica_adaptor_logicalfile_nsentry_impl.cpp */; };
+		7B86DD410D60D7EF00D78FC1 /* globus_rls_replica_adaptor_logicalfile_attr_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B86DD400D60D7EF00D78FC1 /* globus_rls_replica_adaptor_logicalfile_attr_impl.cpp */; };
+		7B9BEBBD0D5A6ACE000DF7CB /* globus_gridftp_file_adaptor_connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */; };
+		7B9BEBBE0D5A6ACE000DF7CB /* globus_gridftp_file_adaptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B9FB9000BB1BA2400E9EA8D /* globus_gridftp_file_adaptor.cpp */; };
+		7B9BEBBF0D5A6ACE000DF7CB /* globus_gridftp_file_adaptor_file_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B9FB9050BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_file_impl.cpp */; };
+		7B9BEBC20D5A6ACE000DF7CB /* globus_gridftp_file_adaptor_dir_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B9FB9030BB1BA2400E9EA8D /* globus_gridftp_file_adaptor_dir_impl.cpp */; };
+		7B9FB94C0BB1C29100E9EA8D /* globus_gram_job_adaptor_job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B9FB9160BB1BA5000E9EA8D /* globus_gram_job_adaptor_job.cpp */; };
+		7B9FB94D0BB1C29100E9EA8D /* globus_gram_job_adaptor_service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B9FB91B0BB1BA5000E9EA8D /* globus_gram_job_adaptor_service.cpp */; };
+		7B9FB94E0BB1C29100E9EA8D /* globus_gram_job_adaptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B9FB9120BB1BA5000E9EA8D /* globus_gram_job_adaptor.cpp */; };
+		7BA984790BB1DF3700403F63 /* globus_gram_job_adaptor_errorhandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BA984770BB1DF3700403F63 /* globus_gram_job_adaptor_errorhandler.cpp */; };
+		7BB1B7DE111381B600C607F3 /* globus_gram_job_adaptor.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7B7AB6600BB318F1003C4CBE /* globus_gram_job_adaptor.ini */; };
+		7BC285730D241CED002C51F7 /* globus_rls_replica_adaptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BC2854E0D241834002C51F7 /* globus_rls_replica_adaptor.cpp */; };
+		7BC2AB670BC3371C00DEFB5C /* globus_gridftp_file_adaptor.ini in Copy .ini Files */ = {isa = PBXBuildFile; fileRef = 7BC2AB5B0BC336A000DEFB5C /* globus_gridftp_file_adaptor.ini */; };
+		7BF3D41A1113632200E5BBAE /* libsaga_engine.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D4011113622100E5BBAE /* libsaga_engine.dylib */; };
+		7BF3D4211113635B00E5BBAE /* libsaga_engine.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D4011113622100E5BBAE /* libsaga_engine.dylib */; };
+		7BF3D4221113635B00E5BBAE /* libsaga_package_namespace.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D4031113622100E5BBAE /* libsaga_package_namespace.dylib */; };
+		7BF3D4231113635B00E5BBAE /* libsaga_package_file.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D4051113622100E5BBAE /* libsaga_package_file.dylib */; };
+		7BF3D4241113636500E5BBAE /* libsaga_engine.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D4011113622100E5BBAE /* libsaga_engine.dylib */; };
+		7BF3D4251113636500E5BBAE /* libsaga_package_namespace.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D4031113622100E5BBAE /* libsaga_package_namespace.dylib */; };
+		7BF3D4261113636500E5BBAE /* libsaga_package_replica.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D4091113622100E5BBAE /* libsaga_package_replica.dylib */; };
+		7BF3D42C1113638A00E5BBAE /* libsaga_engine.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D4011113622100E5BBAE /* libsaga_engine.dylib */; };
+		7BF3D42D1113638A00E5BBAE /* libsaga_package_job.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D40B1113622100E5BBAE /* libsaga_package_job.dylib */; };
+		7BF3D44D1113641100E5BBAE /* libsaga_engine.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D4011113622100E5BBAE /* libsaga_engine.dylib */; };
+		7BF3D44E1113641100E5BBAE /* libsaga_package_namespace.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D4031113622100E5BBAE /* libsaga_package_namespace.dylib */; };
+		7BF3D44F1113641100E5BBAE /* libsaga_package_file.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D4051113622100E5BBAE /* libsaga_package_file.dylib */; };
+		7BF7D4DD110F795E00A37260 /* test_535.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BF7D4D2110F78F600A37260 /* test_535.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7B2615DB1014D4AF00498BF3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B50CD0E0FC5EB5700B7CD44;
+			remoteInfo = libsaga_adaptor_globus_module_loader;
+		};
+		7B2615DE1014D4E400498BF3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B50CD0E0FC5EB5700B7CD44;
+			remoteInfo = libsaga_adaptor_globus_module_loader;
+		};
+		7B2615E21014D4F800498BF3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B50CD0E0FC5EB5700B7CD44;
+			remoteInfo = libsaga_adaptor_globus_module_loader;
+		};
+		7B43D8ED0D295104003D49BD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BC285560D241C55002C51F7;
+			remoteInfo = libsaga_adaptor_globus_rls_replica;
+		};
+		7B50CD410FC5EE0A00B7CD44 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B50CD0E0FC5EB5700B7CD44;
+			remoteInfo = libsaga_adaptor_globus_module_loader;
+		};
+		7B6DA68C0B9A2DA900168752 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B2A409C0B996DB200E47329;
+			remoteInfo = saga_package_file;
+		};
+		7B9FBA080BB1D18600E9EA8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF50DFA0B9A9AF90073E20C;
+			remoteInfo = globus_gram_job_adaptor;
+		};
+		7BF3D4001113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFDDC0B9973DF00F9AF14;
+			remoteInfo = saga_engine;
+		};
+		7BF3D4021113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFE1F0B99759300F9AF14;
+			remoteInfo = saga_package_namespace;
+		};
+		7BF3D4041113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFDDD0B9973DF00F9AF14;
+			remoteInfo = saga_package_file;
+		};
+		7BF3D4061113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFE590B99771C00F9AF14;
+			remoteInfo = saga_package_advert;
+		};
+		7BF3D4081113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B6DA62A0B9A206900168752;
+			remoteInfo = saga_package_replica;
+		};
+		7BF3D40A1113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFE820B9977EA00F9AF14;
+			remoteInfo = saga_package_job;
+		};
+		7BF3D40C1113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B6DA6590B9A29A100168752;
+			remoteInfo = saga_package_rpc;
+		};
+		7BF3D40E1113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B6DA67C0B9A2C8900168752;
+			remoteInfo = saga_package_stream;
+		};
+		7BF3D4101113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B9BEA040D5A5000000DF7CB;
+			remoteInfo = saga_package_sd;
+		};
+		7BF3D41B1113632A00E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5552270B97C34000616724;
+			remoteInfo = saga_engine;
+		};
+		7BF3D43A111363E300E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5552270B97C34000616724;
+			remoteInfo = saga_engine;
+		};
+		7BF3D43C111363E300E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5AFE0A0B99759300F9AF14;
+			remoteInfo = saga_package_namespace;
+		};
+		7BF3D43E111363E300E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B2A409C0B996DB200E47329;
+			remoteInfo = saga_package_file;
+		};
+		7BF3D440111363EC00E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5552270B97C34000616724;
+			remoteInfo = saga_engine;
+		};
+		7BF3D442111363EC00E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5AFE6A0B9977EA00F9AF14;
+			remoteInfo = saga_package_job;
+		};
+		7BF3D444111363F500E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5552270B97C34000616724;
+			remoteInfo = saga_engine;
+		};
+		7BF3D446111363F500E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5AFE0A0B99759300F9AF14;
+			remoteInfo = saga_package_namespace;
+		};
+		7BF3D448111363F500E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B6DA6120B9A206900168752;
+			remoteInfo = saga_package_replica;
+		};
+		7BF3D47F1113648200E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7BEE45770C39BDEA003D8E05;
+			remoteInfo = libsaga_adaptor_globus_gram_job;
+		};
+		7BF3D4CD111365FF00E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF50DFA0B9A9AF90073E20C;
+			remoteInfo = libsaga_adaptor_x509_context;
+		};
+		7BF3D4CF1113660500E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF50DFA0B9A9AF90073E20C;
+			remoteInfo = libsaga_adaptor_x509_context;
+		};
+		7BF3D4D11113660B00E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF50DFA0B9A9AF90073E20C;
+			remoteInfo = libsaga_adaptor_x509_context;
+		};
+		7BF3D4D31113661100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF50DFA0B9A9AF90073E20C;
+			remoteInfo = libsaga_adaptor_x509_context;
+		};
+		7BF7D4DB110F794400A37260 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B2A409C0B996DB200E47329;
+			remoteInfo = libsaga_adaptor_globus_gridftp_file;
+		};
+		7BF7D4F5110F7A3F00A37260 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF7D4D6110F793700A37260;
+			remoteInfo = file_test_535;
+		};
+		7BF7D4FA110F7A5C00A37260 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF7D4F2110F7A2B00A37260;
+			remoteInfo = "All Tests";
+		};
+		7BF7D4FC110F7A5C00A37260 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B6DA6890B9A2DA100168752;
+			remoteInfo = "All Adaptors";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7B50CD200FC5EB5700B7CD44 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(BUILD_DIR)/$(CONFIGURATION)/share/saga/";
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BB1B7EE111381B900C607F3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(BUILD_DIR)/$(CONFIGURATION)/share/saga";
+			dstSubfolderSpec = 0;
+			files = (
+				7BB1B7DE111381B600C607F3 /* globus_gram_job_adaptor.ini in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BC2856C0D241C55002C51F7 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(BUILD_DIR)/$(CONFIGURATION)/share/saga/";
+			dstSubfolderSpec = 0;
+			files = (
+				7B3312420D2D2207006F7ED0 /* globus_rls_logical_file_adaptor.ini in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BC2AB650BC3370D00DEFB5C /* Copy .ini Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(BUILD_DIR)/$(CONFIGURATION)/share/saga/";
+			dstSubfolderSpec = 0;
+			files = (
+				7BC2AB670BC3371C00DEFB5C /* globus_gridftp_file_adaptor.ini in Copy .ini Files */,
+			);
+			name = "Copy .ini Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7B1821D90BD680E2007F5036 /* globus_gram_job_adaptor_gass_server_ez.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = globus_gram_job_adaptor_gass_server_ez.c; path = saga_gass_server/globus_gram_job_adaptor_gass_server_ez.c; sourceTree = "<group>"; };
+		7B1821DA0BD680E2007F5036 /* globus_gram_job_adaptor_gass_server_ez.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = globus_gram_job_adaptor_gass_server_ez.h; path = saga_gass_server/globus_gram_job_adaptor_gass_server_ez.h; sourceTree = "<group>"; };
+		7B1821DB0BD680E2007F5036 /* saga_gass_server.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = saga_gass_server.cpp; path = saga_gass_server/saga_gass_server.cpp; sourceTree = "<group>"; };
+		7B1821DC0BD680E2007F5036 /* saga_gass_server.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = saga_gass_server.hpp; path = saga_gass_server/saga_gass_server.hpp; sourceTree = "<group>"; };
+		7B2A157E0D5A768100832C20 /* globus_gridftp_file_adaptor_file_nsentry_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gridftp_file_adaptor_file_nsentry_impl.cpp; sourceTree = "<group>"; };
+		7B2A158C0D5A779E00832C20 /* globus_gridftp_file_adaptor_file_perm_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gridftp_file_adaptor_file_perm_impl.cpp; sourceTree = "<group>"; };
+		7B2A15D70D5A797B00832C20 /* globus_gridftp_file_adaptor_dir_nsentry_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gridftp_file_adaptor_dir_nsentry_impl.cpp; sourceTree = "<group>"; };
+		7B2A15D90D5A79C200832C20 /* globus_gridftp_file_adaptor_dir_nsdir_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gridftp_file_adaptor_dir_nsdir_impl.cpp; sourceTree = "<group>"; };
+		7B2A160D0D5A7A2200832C20 /* globus_gridftp_file_adaptor_dir_perm_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gridftp_file_adaptor_dir_perm_impl.cpp; sourceTree = "<group>"; };
+		7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = saga_engine.leopard.xcodeproj; path = ../../../project/XCode/saga_engine.leopard.xcodeproj; sourceTree = SOURCE_ROOT; };
+		7B330F810D2CE3CB006F7ED0 /* globus_rls_replica_adaptor_connection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = globus_rls_replica_adaptor_connection.hpp; sourceTree = "<group>"; };
+		7B330F820D2CE3CB006F7ED0 /* globus_rls_replica_adaptor_connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_rls_replica_adaptor_connection.cpp; sourceTree = "<group>"; };
+		7B50CD0C0FC5EB4E00B7CD44 /* globus_global_loader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_global_loader.cpp; sourceTree = "<group>"; };
+		7B50CD0D0FC5EB4E00B7CD44 /* globus_global_loader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = globus_global_loader.hpp; sourceTree = "<group>"; };
+		7B50CD250FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libsaga_adaptor_globus_module_loader.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B570C140BC424440080A234 /* globus_gram_job_adaptor_connector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = globus_gram_job_adaptor_connector.hpp; sourceTree = "<group>"; };
+		7B570C150BC424440080A234 /* globus_gram_job_adaptor_connector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gram_job_adaptor_connector.cpp; sourceTree = "<group>"; };
+		7B7AB6600BB318F1003C4CBE /* globus_gram_job_adaptor.ini */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = globus_gram_job_adaptor.ini; sourceTree = "<group>"; };
+		7B86DCE40D60C2D000D78FC1 /* globus_rls_replica_adaptor_logicalfile_nsentry_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_rls_replica_adaptor_logicalfile_nsentry_impl.cpp; sourceTree = "<group>"; };
+		7B86DD400D60D7EF00D78FC1 /* globus_rls_replica_adaptor_logicalfile_attr_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_rls_replica_adaptor_logicalfile_attr_impl.cpp; sourceTree = "<group>"; };
+		7B9FB9000BB1BA2400E9EA8D /* globus_gridftp_file_adaptor.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gridftp_file_adaptor.cpp; sourceTree = "<group>"; };
+		7B9FB9010BB1BA2400E9EA8D /* globus_gridftp_file_adaptor.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = globus_gridftp_file_adaptor.hpp; sourceTree = "<group>"; };
+		7B9FB9030BB1BA2400E9EA8D /* globus_gridftp_file_adaptor_dir_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gridftp_file_adaptor_dir_impl.cpp; sourceTree = "<group>"; };
+		7B9FB9040BB1BA2400E9EA8D /* globus_gridftp_file_adaptor_dir.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = globus_gridftp_file_adaptor_dir.hpp; sourceTree = "<group>"; };
+		7B9FB9050BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_file_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gridftp_file_adaptor_file_impl.cpp; sourceTree = "<group>"; };
+		7B9FB9060BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_file.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = globus_gridftp_file_adaptor_file.hpp; sourceTree = "<group>"; };
+		7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gridftp_file_adaptor_connection.cpp; sourceTree = "<group>"; };
+		7B9FB90C0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = globus_gridftp_file_adaptor_connection.hpp; sourceTree = "<group>"; };
+		7B9FB9120BB1BA5000E9EA8D /* globus_gram_job_adaptor.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gram_job_adaptor.cpp; sourceTree = "<group>"; };
+		7B9FB9130BB1BA5000E9EA8D /* globus_gram_job_adaptor.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = globus_gram_job_adaptor.hpp; sourceTree = "<group>"; };
+		7B9FB9150BB1BA5000E9EA8D /* globus_gram_job_adaptor_istream.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = globus_gram_job_adaptor_istream.hpp; sourceTree = "<group>"; };
+		7B9FB9160BB1BA5000E9EA8D /* globus_gram_job_adaptor_job.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gram_job_adaptor_job.cpp; sourceTree = "<group>"; };
+		7B9FB9170BB1BA5000E9EA8D /* globus_gram_job_adaptor_job.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = globus_gram_job_adaptor_job.hpp; sourceTree = "<group>"; };
+		7B9FB91A0BB1BA5000E9EA8D /* globus_gram_job_adaptor_ostream.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = globus_gram_job_adaptor_ostream.hpp; sourceTree = "<group>"; };
+		7B9FB91B0BB1BA5000E9EA8D /* globus_gram_job_adaptor_service.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gram_job_adaptor_service.cpp; sourceTree = "<group>"; };
+		7B9FB91C0BB1BA5000E9EA8D /* globus_gram_job_adaptor_service.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = globus_gram_job_adaptor_service.hpp; sourceTree = "<group>"; };
+		7B9FB91D0BB1BA5000E9EA8D /* globus_gram_job_adaptor_stream.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = globus_gram_job_adaptor_stream.hpp; sourceTree = "<group>"; };
+		7BA984760BB1DF3700403F63 /* globus_gram_job_adaptor_errorhandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = globus_gram_job_adaptor_errorhandler.hpp; sourceTree = "<group>"; };
+		7BA984770BB1DF3700403F63 /* globus_gram_job_adaptor_errorhandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_gram_job_adaptor_errorhandler.cpp; sourceTree = "<group>"; };
+		7BC2854E0D241834002C51F7 /* globus_rls_replica_adaptor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_rls_replica_adaptor.cpp; sourceTree = "<group>"; };
+		7BC2854F0D241834002C51F7 /* globus_rls_replica_adaptor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = globus_rls_replica_adaptor.hpp; sourceTree = "<group>"; };
+		7BC285500D241834002C51F7 /* globus_rls_logical_file_adaptor.ini */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = globus_rls_logical_file_adaptor.ini; sourceTree = "<group>"; };
+		7BC285510D241834002C51F7 /* globus_rls_replica_adaptor_logicaldirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_rls_replica_adaptor_logicaldirectory.cpp; sourceTree = "<group>"; };
+		7BC285520D241834002C51F7 /* globus_rls_replica_adaptor_logicaldirectory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = globus_rls_replica_adaptor_logicaldirectory.hpp; sourceTree = "<group>"; };
+		7BC285530D241834002C51F7 /* globus_rls_replica_adaptor_logicalfile_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globus_rls_replica_adaptor_logicalfile_impl.cpp; sourceTree = "<group>"; };
+		7BC285540D241834002C51F7 /* globus_rls_replica_adaptor_logicalfile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = globus_rls_replica_adaptor_logicalfile.hpp; sourceTree = "<group>"; };
+		7BC285710D241C55002C51F7 /* libsaga_adaptor_globus_rls_replica.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libsaga_adaptor_globus_rls_replica.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7BC2AB5B0BC336A000DEFB5C /* globus_gridftp_file_adaptor.ini */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = globus_gridftp_file_adaptor.ini; sourceTree = "<group>"; };
+		7BEE45770C39BDEA003D8E05 /* libsaga_adaptor_globus_gram_job.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libsaga_adaptor_globus_gram_job.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7BEE45780C39BDEA003D8E05 /* libsaga_adaptor_globus_gridftp_file.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libsaga_adaptor_globus_gridftp_file.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = saga_x509_adaptor.xcodeproj; path = ../../x509/project/saga_x509_adaptor.xcodeproj; sourceTree = SOURCE_ROOT; };
+		7BF7D4CF110F78F600A37260 /* test_528.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_528.cpp; sourceTree = "<group>"; };
+		7BF7D4D0110F78F600A37260 /* test_531.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_531.cpp; sourceTree = "<group>"; };
+		7BF7D4D1110F78F600A37260 /* test_534.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_534.cpp; sourceTree = "<group>"; };
+		7BF7D4D2110F78F600A37260 /* test_535.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_535.cpp; sourceTree = "<group>"; };
+		7BF7D4D3110F78F600A37260 /* test_546.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_546.cpp; sourceTree = "<group>"; };
+		7BF7D4D7110F793700A37260 /* libfile_test_535 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = libfile_test_535; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7B2A40CB0B996DB200E47329 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BF3D4211113635B00E5BBAE /* libsaga_engine.dylib in Frameworks */,
+				7BF3D4221113635B00E5BBAE /* libsaga_package_namespace.dylib in Frameworks */,
+				7BF3D4231113635B00E5BBAE /* libsaga_package_file.dylib in Frameworks */,
+				7B50CD480FC5EE7000B7CD44 /* libsaga_adaptor_globus_module_loader.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B50CD1C0FC5EB5700B7CD44 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BF3D41A1113632200E5BBAE /* libsaga_engine.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BC285660D241C55002C51F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BF3D4241113636500E5BBAE /* libsaga_engine.dylib in Frameworks */,
+				7BF3D4251113636500E5BBAE /* libsaga_package_namespace.dylib in Frameworks */,
+				7BF3D4261113636500E5BBAE /* libsaga_package_replica.dylib in Frameworks */,
+				7B50CD470FC5EE5000B7CD44 /* libsaga_adaptor_globus_module_loader.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BF50E010B9A9AF90073E20C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BF3D42C1113638A00E5BBAE /* libsaga_engine.dylib in Frameworks */,
+				7BF3D42D1113638A00E5BBAE /* libsaga_package_job.dylib in Frameworks */,
+				7B50CD490FC5EE7E00B7CD44 /* libsaga_adaptor_globus_module_loader.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BF7D4D5110F793700A37260 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BF3D44D1113641100E5BBAE /* libsaga_engine.dylib in Frameworks */,
+				7BF3D44E1113641100E5BBAE /* libsaga_package_namespace.dylib in Frameworks */,
+				7BF3D44F1113641100E5BBAE /* libsaga_package_file.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0867D691FE84028FC02AAC07 /* saga_engine */ = {
+			isa = PBXGroup;
+			children = (
+				7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */,
+				7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */,
+				7B23DF110B978DCD00054F67 /* Source */,
+				7BEE45770C39BDEA003D8E05 /* libsaga_adaptor_globus_gram_job.dylib */,
+				7BEE45780C39BDEA003D8E05 /* libsaga_adaptor_globus_gridftp_file.dylib */,
+				7BC285710D241C55002C51F7 /* libsaga_adaptor_globus_rls_replica.dylib */,
+				7B50CD250FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader.dylib */,
+				7BF7D4D7110F793700A37260 /* libfile_test_535 */,
+			);
+			comments = "  - GLOBUS_LOCATION     (default: /usr/local/globus-4.0.3)\n    This variable must point to the root directory of you Globus Toolkit 4 \n    installation.\n    \n  - GLOBUS_FLAVOR       (default: gcc32dbg)\n    This variable must contain the name of the installed Globus flavor you \n    want to use (look in GLOBUS_LOCATION/include for installed flavors).";
+			name = saga_engine;
+			sourceTree = "<group>";
+		};
+		7B1821D60BD680B0007F5036 /* saga_gass_server */ = {
+			isa = PBXGroup;
+			children = (
+				7B1821DC0BD680E2007F5036 /* saga_gass_server.hpp */,
+				7B1821DB0BD680E2007F5036 /* saga_gass_server.cpp */,
+				7B1821DA0BD680E2007F5036 /* globus_gram_job_adaptor_gass_server_ez.h */,
+				7B1821D90BD680E2007F5036 /* globus_gram_job_adaptor_gass_server_ez.c */,
+			);
+			name = saga_gass_server;
+			sourceTree = "<group>";
+		};
+		7B23DF110B978DCD00054F67 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				7B50CD0B0FC5EB4E00B7CD44 /* loader */,
+				7BC2854D0D241834002C51F7 /* replica */,
+				7B9FB8FF0BB1BA2400E9EA8D /* file */,
+				7B9FB9110BB1BA5000E9EA8D /* job */,
+			);
+			indentWidth = 4;
+			name = Source;
+			sourceTree = SOURCE_ROOT;
+			tabWidth = 4;
+		};
+		7B50CD0B0FC5EB4E00B7CD44 /* loader */ = {
+			isa = PBXGroup;
+			children = (
+				7B50CD0C0FC5EB4E00B7CD44 /* globus_global_loader.cpp */,
+				7B50CD0D0FC5EB4E00B7CD44 /* globus_global_loader.hpp */,
+			);
+			name = loader;
+			path = ../loader;
+			sourceTree = SOURCE_ROOT;
+		};
+		7B9FB8FF0BB1BA2400E9EA8D /* file */ = {
+			isa = PBXGroup;
+			children = (
+				7BF7D4CC110F78F600A37260 /* test */,
+				7B9FB9000BB1BA2400E9EA8D /* globus_gridftp_file_adaptor.cpp */,
+				7B9FB9010BB1BA2400E9EA8D /* globus_gridftp_file_adaptor.hpp */,
+				7B9FB9060BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_file.hpp */,
+				7B9FB9050BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_file_impl.cpp */,
+				7B2A157E0D5A768100832C20 /* globus_gridftp_file_adaptor_file_nsentry_impl.cpp */,
+				7B2A158C0D5A779E00832C20 /* globus_gridftp_file_adaptor_file_perm_impl.cpp */,
+				7B9FB9040BB1BA2400E9EA8D /* globus_gridftp_file_adaptor_dir.hpp */,
+				7B9FB9030BB1BA2400E9EA8D /* globus_gridftp_file_adaptor_dir_impl.cpp */,
+				7B2A15D70D5A797B00832C20 /* globus_gridftp_file_adaptor_dir_nsentry_impl.cpp */,
+				7B2A15D90D5A79C200832C20 /* globus_gridftp_file_adaptor_dir_nsdir_impl.cpp */,
+				7B2A160D0D5A7A2200832C20 /* globus_gridftp_file_adaptor_dir_perm_impl.cpp */,
+				7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */,
+				7B9FB90C0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.hpp */,
+				7BC2AB5B0BC336A000DEFB5C /* globus_gridftp_file_adaptor.ini */,
+			);
+			name = file;
+			path = ../file;
+			sourceTree = SOURCE_ROOT;
+		};
+		7B9FB9110BB1BA5000E9EA8D /* job */ = {
+			isa = PBXGroup;
+			children = (
+				7B1821D60BD680B0007F5036 /* saga_gass_server */,
+				7B9FB9120BB1BA5000E9EA8D /* globus_gram_job_adaptor.cpp */,
+				7B9FB9130BB1BA5000E9EA8D /* globus_gram_job_adaptor.hpp */,
+				7B9FB9150BB1BA5000E9EA8D /* globus_gram_job_adaptor_istream.hpp */,
+				7B9FB91A0BB1BA5000E9EA8D /* globus_gram_job_adaptor_ostream.hpp */,
+				7B9FB9160BB1BA5000E9EA8D /* globus_gram_job_adaptor_job.cpp */,
+				7B9FB9170BB1BA5000E9EA8D /* globus_gram_job_adaptor_job.hpp */,
+				7B9FB91B0BB1BA5000E9EA8D /* globus_gram_job_adaptor_service.cpp */,
+				7B9FB91C0BB1BA5000E9EA8D /* globus_gram_job_adaptor_service.hpp */,
+				7B9FB91D0BB1BA5000E9EA8D /* globus_gram_job_adaptor_stream.hpp */,
+				7BA984760BB1DF3700403F63 /* globus_gram_job_adaptor_errorhandler.hpp */,
+				7BA984770BB1DF3700403F63 /* globus_gram_job_adaptor_errorhandler.cpp */,
+				7B570C140BC424440080A234 /* globus_gram_job_adaptor_connector.hpp */,
+				7B570C150BC424440080A234 /* globus_gram_job_adaptor_connector.cpp */,
+				7B7AB6600BB318F1003C4CBE /* globus_gram_job_adaptor.ini */,
+			);
+			name = job;
+			path = ../job;
+			sourceTree = SOURCE_ROOT;
+		};
+		7BC2854D0D241834002C51F7 /* replica */ = {
+			isa = PBXGroup;
+			children = (
+				7BC2854E0D241834002C51F7 /* globus_rls_replica_adaptor.cpp */,
+				7BC2854F0D241834002C51F7 /* globus_rls_replica_adaptor.hpp */,
+				7B330F820D2CE3CB006F7ED0 /* globus_rls_replica_adaptor_connection.cpp */,
+				7B330F810D2CE3CB006F7ED0 /* globus_rls_replica_adaptor_connection.hpp */,
+				7BC285540D241834002C51F7 /* globus_rls_replica_adaptor_logicalfile.hpp */,
+				7BC285530D241834002C51F7 /* globus_rls_replica_adaptor_logicalfile_impl.cpp */,
+				7B86DD400D60D7EF00D78FC1 /* globus_rls_replica_adaptor_logicalfile_attr_impl.cpp */,
+				7B86DCE40D60C2D000D78FC1 /* globus_rls_replica_adaptor_logicalfile_nsentry_impl.cpp */,
+				7BC285520D241834002C51F7 /* globus_rls_replica_adaptor_logicaldirectory.hpp */,
+				7BC285510D241834002C51F7 /* globus_rls_replica_adaptor_logicaldirectory.cpp */,
+				7BC285500D241834002C51F7 /* globus_rls_logical_file_adaptor.ini */,
+			);
+			name = replica;
+			path = ../replica;
+			sourceTree = SOURCE_ROOT;
+		};
+		7BF3D3F21113622100E5BBAE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7BF3D4011113622100E5BBAE /* libsaga_engine.dylib */,
+				7BF3D4031113622100E5BBAE /* libsaga_package_namespace.dylib */,
+				7BF3D4051113622100E5BBAE /* libsaga_package_file.dylib */,
+				7BF3D4071113622100E5BBAE /* libsaga_package_advert.dylib */,
+				7BF3D4091113622100E5BBAE /* libsaga_package_replica.dylib */,
+				7BF3D40B1113622100E5BBAE /* libsaga_package_job.dylib */,
+				7BF3D40D1113622100E5BBAE /* libsaga_package_rpc.dylib */,
+				7BF3D40F1113622100E5BBAE /* libsaga_package_stream.dylib */,
+				7BF3D4111113622100E5BBAE /* libsaga_package_sd.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7BF3D4751113648200E5BBAE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7BF3D4801113648200E5BBAE /* libsaga_adaptor_x509_context.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7BF7D4CC110F78F600A37260 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				7BF7D4CF110F78F600A37260 /* test_528.cpp */,
+				7BF7D4D0110F78F600A37260 /* test_531.cpp */,
+				7BF7D4D1110F78F600A37260 /* test_534.cpp */,
+				7BF7D4D2110F78F600A37260 /* test_535.cpp */,
+				7BF7D4D3110F78F600A37260 /* test_546.cpp */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7B50CD130FC5EB5700B7CD44 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BC2855D0D241C55002C51F7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B330F830D2CE3CB006F7ED0 /* globus_rls_replica_adaptor_connection.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BF50DFB0B9A9AF90073E20C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		7B2A409C0B996DB200E47329 /* libsaga_adaptor_globus_gridftp_file */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B2A40D00B996DB200E47329 /* Build configuration list for PBXNativeTarget "libsaga_adaptor_globus_gridftp_file" */;
+			buildPhases = (
+				7BC2AB650BC3370D00DEFB5C /* Copy .ini Files */,
+				7B2A409E0B996DB200E47329 /* Sources */,
+				7B2A40CB0B996DB200E47329 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7B2615DF1014D4E400498BF3 /* PBXTargetDependency */,
+				7BF3D43B111363E300E5BBAE /* PBXTargetDependency */,
+				7BF3D43D111363E300E5BBAE /* PBXTargetDependency */,
+				7BF3D43F111363E300E5BBAE /* PBXTargetDependency */,
+				7BF3D4D01113660500E5BBAE /* PBXTargetDependency */,
+			);
+			name = libsaga_adaptor_globus_gridftp_file;
+			productName = Untitled;
+			productReference = 7BEE45780C39BDEA003D8E05 /* libsaga_adaptor_globus_gridftp_file.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		7B50CD0E0FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B50CD220FC5EB5700B7CD44 /* Build configuration list for PBXNativeTarget "libsaga_adaptor_globus_module_loader" */;
+			buildPhases = (
+				7B50CD130FC5EB5700B7CD44 /* Headers */,
+				7B50CD140FC5EB5700B7CD44 /* Sources */,
+				7B50CD1C0FC5EB5700B7CD44 /* Frameworks */,
+				7B50CD200FC5EB5700B7CD44 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7BF3D41C1113632A00E5BBAE /* PBXTargetDependency */,
+				7BF3D4D41113661100E5BBAE /* PBXTargetDependency */,
+			);
+			name = libsaga_adaptor_globus_module_loader;
+			productName = Untitled;
+			productReference = 7B50CD250FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		7BC285560D241C55002C51F7 /* libsaga_adaptor_globus_rls_replica */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7BC2856E0D241C55002C51F7 /* Build configuration list for PBXNativeTarget "libsaga_adaptor_globus_rls_replica" */;
+			buildPhases = (
+				7BC2855D0D241C55002C51F7 /* Headers */,
+				7BC2855E0D241C55002C51F7 /* Sources */,
+				7BC285660D241C55002C51F7 /* Frameworks */,
+				7BC2856C0D241C55002C51F7 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7B2615E31014D4F800498BF3 /* PBXTargetDependency */,
+				7BF3D445111363F500E5BBAE /* PBXTargetDependency */,
+				7BF3D447111363F500E5BBAE /* PBXTargetDependency */,
+				7BF3D449111363F500E5BBAE /* PBXTargetDependency */,
+				7BF3D4D21113660B00E5BBAE /* PBXTargetDependency */,
+			);
+			name = libsaga_adaptor_globus_rls_replica;
+			productName = Untitled;
+			productReference = 7BC285710D241C55002C51F7 /* libsaga_adaptor_globus_rls_replica.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_globus_gram_job */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7BF50E070B9A9AF90073E20C /* Build configuration list for PBXNativeTarget "libsaga_adaptor_globus_gram_job" */;
+			buildPhases = (
+				7BF50DFB0B9A9AF90073E20C /* Headers */,
+				7BF50DFC0B9A9AF90073E20C /* Sources */,
+				7BF50E010B9A9AF90073E20C /* Frameworks */,
+				7BB1B7EE111381B900C607F3 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7B2615DC1014D4AF00498BF3 /* PBXTargetDependency */,
+				7BF3D441111363EC00E5BBAE /* PBXTargetDependency */,
+				7BF3D443111363EC00E5BBAE /* PBXTargetDependency */,
+				7BF3D4CE111365FF00E5BBAE /* PBXTargetDependency */,
+			);
+			name = libsaga_adaptor_globus_gram_job;
+			productName = Untitled;
+			productReference = 7BEE45770C39BDEA003D8E05 /* libsaga_adaptor_globus_gram_job.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		7BF7D4D6110F793700A37260 /* file_test_535 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7BF7D4ED110F79B200A37260 /* Build configuration list for PBXNativeTarget "file_test_535" */;
+			buildPhases = (
+				7BF7D4D4110F793700A37260 /* Sources */,
+				7BF7D4D5110F793700A37260 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7BF7D4DC110F794400A37260 /* PBXTargetDependency */,
+			);
+			name = file_test_535;
+			productName = file_test_535;
+			productReference = 7BF7D4D7110F793700A37260 /* libfile_test_535 */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB916408733D950010E9CD /* Build configuration list for PBXProject "saga_globus_adaptors" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* saga_engine */;
+			productRefGroup = 0867D691FE84028FC02AAC07 /* saga_engine */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7BF3D3F21113622100E5BBAE /* Products */;
+					ProjectRef = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+				},
+				{
+					ProductGroup = 7BF3D4751113648200E5BBAE /* Products */;
+					ProjectRef = 7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				7BF7D4F7110F7A5600A37260 /* Everything */,
+				7B6DA6890B9A2DA100168752 /* All Adaptors */,
+				7BF7D4F2110F7A2B00A37260 /* All Tests */,
+				7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_globus_gram_job */,
+				7B2A409C0B996DB200E47329 /* libsaga_adaptor_globus_gridftp_file */,
+				7BC285560D241C55002C51F7 /* libsaga_adaptor_globus_rls_replica */,
+				7B50CD0E0FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader */,
+				7BF7D4D6110F793700A37260 /* file_test_535 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		7BF3D4011113622100E5BBAE /* libsaga_engine.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_engine.dylib;
+			remoteRef = 7BF3D4001113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D4031113622100E5BBAE /* libsaga_package_namespace.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_namespace.dylib;
+			remoteRef = 7BF3D4021113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D4051113622100E5BBAE /* libsaga_package_file.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_file.dylib;
+			remoteRef = 7BF3D4041113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D4071113622100E5BBAE /* libsaga_package_advert.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_advert.dylib;
+			remoteRef = 7BF3D4061113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D4091113622100E5BBAE /* libsaga_package_replica.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_replica.dylib;
+			remoteRef = 7BF3D4081113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D40B1113622100E5BBAE /* libsaga_package_job.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_job.dylib;
+			remoteRef = 7BF3D40A1113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D40D1113622100E5BBAE /* libsaga_package_rpc.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_rpc.dylib;
+			remoteRef = 7BF3D40C1113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D40F1113622100E5BBAE /* libsaga_package_stream.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_stream.dylib;
+			remoteRef = 7BF3D40E1113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D4111113622100E5BBAE /* libsaga_package_sd.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_sd.dylib;
+			remoteRef = 7BF3D4101113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D4801113648200E5BBAE /* libsaga_adaptor_x509_context.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_adaptor_x509_context.dylib;
+			remoteRef = 7BF3D47F1113648200E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7B2A409E0B996DB200E47329 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B9BEBBD0D5A6ACE000DF7CB /* globus_gridftp_file_adaptor_connection.cpp in Sources */,
+				7B9BEBBE0D5A6ACE000DF7CB /* globus_gridftp_file_adaptor.cpp in Sources */,
+				7B9BEBBF0D5A6ACE000DF7CB /* globus_gridftp_file_adaptor_file_impl.cpp in Sources */,
+				7B2A15800D5A768100832C20 /* globus_gridftp_file_adaptor_file_nsentry_impl.cpp in Sources */,
+				7B2A158D0D5A779E00832C20 /* globus_gridftp_file_adaptor_file_perm_impl.cpp in Sources */,
+				7B9BEBC20D5A6ACE000DF7CB /* globus_gridftp_file_adaptor_dir_impl.cpp in Sources */,
+				7B2A15D80D5A797B00832C20 /* globus_gridftp_file_adaptor_dir_nsentry_impl.cpp in Sources */,
+				7B2A15DA0D5A79C200832C20 /* globus_gridftp_file_adaptor_dir_nsdir_impl.cpp in Sources */,
+				7B2A160E0D5A7A2200832C20 /* globus_gridftp_file_adaptor_dir_perm_impl.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B50CD140FC5EB5700B7CD44 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B50CD270FC5EB9C00B7CD44 /* globus_global_loader.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BC2855E0D241C55002C51F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B43D8F20D295754003D49BD /* globus_rls_replica_adaptor_logicaldirectory.cpp in Sources */,
+				7B43D8E80D294EDB003D49BD /* globus_rls_replica_adaptor_logicalfile_impl.cpp in Sources */,
+				7BC285730D241CED002C51F7 /* globus_rls_replica_adaptor.cpp in Sources */,
+				7B330F840D2CE3CB006F7ED0 /* globus_rls_replica_adaptor_connection.cpp in Sources */,
+				7B86DCE50D60C2D000D78FC1 /* globus_rls_replica_adaptor_logicalfile_nsentry_impl.cpp in Sources */,
+				7B86DD410D60D7EF00D78FC1 /* globus_rls_replica_adaptor_logicalfile_attr_impl.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BF50DFC0B9A9AF90073E20C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B1821DD0BD680E3007F5036 /* globus_gram_job_adaptor_gass_server_ez.c in Sources */,
+				7B570C230BC427800080A234 /* globus_gram_job_adaptor_connector.cpp in Sources */,
+				7B9FB94D0BB1C29100E9EA8D /* globus_gram_job_adaptor_service.cpp in Sources */,
+				7B1821DF0BD680E3007F5036 /* saga_gass_server.cpp in Sources */,
+				7B9FB94E0BB1C29100E9EA8D /* globus_gram_job_adaptor.cpp in Sources */,
+				7B9FB94C0BB1C29100E9EA8D /* globus_gram_job_adaptor_job.cpp in Sources */,
+				7BA984790BB1DF3700403F63 /* globus_gram_job_adaptor_errorhandler.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BF7D4D4110F793700A37260 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BF7D4DD110F795E00A37260 /* test_535.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7B2615DC1014D4AF00498BF3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B50CD0E0FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader */;
+			targetProxy = 7B2615DB1014D4AF00498BF3 /* PBXContainerItemProxy */;
+		};
+		7B2615DF1014D4E400498BF3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B50CD0E0FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader */;
+			targetProxy = 7B2615DE1014D4E400498BF3 /* PBXContainerItemProxy */;
+		};
+		7B2615E31014D4F800498BF3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B50CD0E0FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader */;
+			targetProxy = 7B2615E21014D4F800498BF3 /* PBXContainerItemProxy */;
+		};
+		7B43D8EE0D295104003D49BD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BC285560D241C55002C51F7 /* libsaga_adaptor_globus_rls_replica */;
+			targetProxy = 7B43D8ED0D295104003D49BD /* PBXContainerItemProxy */;
+		};
+		7B50CD420FC5EE0A00B7CD44 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B50CD0E0FC5EB5700B7CD44 /* libsaga_adaptor_globus_module_loader */;
+			targetProxy = 7B50CD410FC5EE0A00B7CD44 /* PBXContainerItemProxy */;
+		};
+		7B6DA68D0B9A2DA900168752 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B2A409C0B996DB200E47329 /* libsaga_adaptor_globus_gridftp_file */;
+			targetProxy = 7B6DA68C0B9A2DA900168752 /* PBXContainerItemProxy */;
+		};
+		7B9FBA090BB1D18600E9EA8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_globus_gram_job */;
+			targetProxy = 7B9FBA080BB1D18600E9EA8D /* PBXContainerItemProxy */;
+		};
+		7BF3D41C1113632A00E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_engine;
+			targetProxy = 7BF3D41B1113632A00E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D43B111363E300E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_engine;
+			targetProxy = 7BF3D43A111363E300E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D43D111363E300E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_package_namespace;
+			targetProxy = 7BF3D43C111363E300E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D43F111363E300E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_package_file;
+			targetProxy = 7BF3D43E111363E300E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D441111363EC00E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_engine;
+			targetProxy = 7BF3D440111363EC00E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D443111363EC00E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_package_job;
+			targetProxy = 7BF3D442111363EC00E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D445111363F500E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_engine;
+			targetProxy = 7BF3D444111363F500E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D447111363F500E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_package_namespace;
+			targetProxy = 7BF3D446111363F500E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D449111363F500E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_package_replica;
+			targetProxy = 7BF3D448111363F500E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D4CE111365FF00E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libsaga_adaptor_x509_context;
+			targetProxy = 7BF3D4CD111365FF00E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D4D01113660500E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libsaga_adaptor_x509_context;
+			targetProxy = 7BF3D4CF1113660500E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D4D21113660B00E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libsaga_adaptor_x509_context;
+			targetProxy = 7BF3D4D11113660B00E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D4D41113661100E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libsaga_adaptor_x509_context;
+			targetProxy = 7BF3D4D31113661100E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF7D4DC110F794400A37260 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B2A409C0B996DB200E47329 /* libsaga_adaptor_globus_gridftp_file */;
+			targetProxy = 7BF7D4DB110F794400A37260 /* PBXContainerItemProxy */;
+		};
+		7BF7D4F6110F7A3F00A37260 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BF7D4D6110F793700A37260 /* file_test_535 */;
+			targetProxy = 7BF7D4F5110F7A3F00A37260 /* PBXContainerItemProxy */;
+		};
+		7BF7D4FB110F7A5C00A37260 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BF7D4F2110F7A2B00A37260 /* All Tests */;
+			targetProxy = 7BF7D4FA110F7A5C00A37260 /* PBXContainerItemProxy */;
+		};
+		7BF7D4FD110F7A5C00A37260 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B6DA6890B9A2DA100168752 /* All Adaptors */;
+			targetProxy = 7BF7D4FC110F7A5C00A37260 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB916508733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_64_BIT_PRE_XCODE_3_1 = x86_64;
+				BOOST_LOCATION = "/usr/local/boost-1.40.0/";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)/lib/";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 05;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				GLOBUS_FLAVOR = gcc32dbgpthr;
+				GLOBUS_LOCATION = "/usr/local/globus-4.2.0";
+				HEADER_SEARCH_PATHS = (
+					"$(BOOST_LOCATION)/include/",
+					"$(GLOBUS_LOCATION)/include/$(GLOBUS_FLAVOR)",
+					"$(HEADER_SEARCH_PATHS_SAGA)",
+					"$(HEADER_SEARCH_PATHS_BOOST_FUTURES)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PLUGIN)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PROCESS)",
+					"$(HEADER_SEARCH_PATHS_BOOST_SPIRIT)",
+				);
+				HEADER_SEARCH_PATHS_BOOST_ASIO = "\"$(PROJECT_DIR)/../../../external/boost/asio/\"";
+				HEADER_SEARCH_PATHS_BOOST_FUTURES = "\"$(PROJECT_DIR)/../../../external/boost/futures/\"";
+				HEADER_SEARCH_PATHS_BOOST_PLUGIN = "\"$(PROJECT_DIR)/../../../external/boost/plugin/\"";
+				HEADER_SEARCH_PATHS_BOOST_PROCESS = "\"$(PROJECT_DIR)/../../../external/boost/process/\"";
+				HEADER_SEARCH_PATHS_BOOST_PYTHON = "\"$(PROJECT_DIR)/../../../external/boost/python/\"";
+				HEADER_SEARCH_PATHS_BOOST_SPIRIT = "\"$(PROJECT_DIR)/../../../external/boost/spirit/\"";
+				HEADER_SEARCH_PATHS_BOOST_SYSTEM = "\"$(PROJECT_DIR)/../../../external/boost/system/\"";
+				HEADER_SEARCH_PATHS_SAGA = "\"$(PROJECT_DIR)/../../../\"";
+				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BOOST_LOCATION)/lib/",
+					"$(GLOBUS_LOCATION)/lib",
+				);
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
+				OTHER_CFLAGS = "-Wall";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fvisibility=default",
+					"-DSAGA_GCC_HAVE_VISIBILITY=1",
+					"-DSAGA_HAVE_PACKAGE_JOB=1",
+					"$(OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_1)",
+				);
+				OTHER_LDFLAGS = (
+					"-lcrypto",
+					"-lboost_thread",
+					"-lboost_serialization",
+					"-lboost_filesystem",
+					"-lboost_regex",
+					"-lboost_iostreams",
+					"-lboost_system",
+					"-lglobus_openssl_$(GLOBUS_FLAVOR)",
+					"-lglobus_gsi_proxy_core_$(GLOBUS_FLAVOR)",
+					"-lglobus_gsi_sysconfig_$(GLOBUS_FLAVOR)",
+					"-lglobus_gsi_credential_$(GLOBUS_FLAVOR)",
+				);
+				SYMROOT = ../../../../build;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		1DEB916608733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_64_BIT_PRE_XCODE_3_1 = x86_64;
+				BOOST_LOCATION = "/usr/local/boost-1.40.0/";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)/lib/";
+				CURRENT_PROJECT_VERSION = 05;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EXECUTABLE_PREFIX = lib;
+				GLOBUS_FLAVOR = gcc32dbgpthr;
+				GLOBUS_LOCATION = "/usr/local/globus-4.2.0";
+				HEADER_SEARCH_PATHS = (
+					"$(BOOST_LOCATION)/include/",
+					"$(GLOBUS_LOCATION)/include/$(GLOBUS_FLAVOR)",
+					"$(HEADER_SEARCH_PATHS_SAGA)",
+					"$(HEADER_SEARCH_PATHS_BOOST_FUTURES)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PLUGIN)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PROCESS)",
+					"$(HEADER_SEARCH_PATHS_BOOST_SPIRIT)",
+				);
+				HEADER_SEARCH_PATHS_BOOST_ASIO = "\"$(PROJECT_DIR)/../../../external/boost/asio/\"";
+				HEADER_SEARCH_PATHS_BOOST_FUTURES = "\"$(PROJECT_DIR)/../../../external/boost/futures/\"";
+				HEADER_SEARCH_PATHS_BOOST_PLUGIN = "\"$(PROJECT_DIR)/../../../external/boost/plugin/\"";
+				HEADER_SEARCH_PATHS_BOOST_PROCESS = "\"$(PROJECT_DIR)/../../../external/boost/process/\"";
+				HEADER_SEARCH_PATHS_BOOST_PYTHON = "\"$(PROJECT_DIR)/../../../external/boost/python/\"";
+				HEADER_SEARCH_PATHS_BOOST_SPIRIT = "\"$(PROJECT_DIR)/../../../external/boost/spirit/\"";
+				HEADER_SEARCH_PATHS_BOOST_SYSTEM = "\"$(PROJECT_DIR)/../../../external/boost/system/\"";
+				HEADER_SEARCH_PATHS_SAGA = "\"$(PROJECT_DIR)/../../../\"";
+				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BOOST_LOCATION)/lib/",
+					"$(GLOBUS_LOCATION)/lib",
+				);
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
+				OTHER_CFLAGS = "-Wall";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fvisibility=default",
+					"-DSAGA_GCC_HAVE_VISIBILITY=1",
+					"-DSAGA_HAVE_PACKAGE_JOB=1",
+					"$(OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_1)",
+				);
+				OTHER_LDFLAGS = (
+					"-lcrypto",
+					"-lboost_thread",
+					"-lboost_serialization",
+					"-lboost_filesystem",
+					"-lboost_regex",
+					"-lboost_iostreams",
+					"-lboost_system",
+					"-lglobus_openssl_$(GLOBUS_FLAVOR)",
+					"-lglobus_gsi_proxy_core_$(GLOBUS_FLAVOR)",
+					"-lglobus_gsi_sysconfig_$(GLOBUS_FLAVOR)",
+					"-lglobus_gsi_credential_$(GLOBUS_FLAVOR)",
+				);
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
+				SEPARATE_STRIP = YES;
+				SYMROOT = ../../../../build;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		7B2A40D10B996DB200E47329 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DSAGA_ADAPTOR_LIB_NAME=libsaga_adaptor_globus_gridftp_file",
+					"-DSAGA_ADAPTOR_NAME=libsaga_adaptor_globus_gridftp_file",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lglobus_ftp_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_gass_copy_$(GLOBUS_FLAVOR)",
+					"-lglobus_common_$(GLOBUS_FLAVOR)",
+					"-lglobus_xio_$(GLOBUS_FLAVOR)",
+					"-lgssapi_error_$(GLOBUS_FLAVOR)",
+				);
+				PRODUCT_NAME = saga_adaptor_globus_gridftp_file;
+			};
+			name = Debug;
+		};
+		7B2A40D20B996DB200E47329 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DSAGA_ADAPTOR_LIB_NAME=libsaga_adaptor_globus_gridftp_file",
+					"-DSAGA_ADAPTOR_NAME=libsaga_adaptor_globus_gridftp_file",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lglobus_ftp_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_gass_copy_$(GLOBUS_FLAVOR)",
+					"-lglobus_common_$(GLOBUS_FLAVOR)",
+					"-lglobus_xio_$(GLOBUS_FLAVOR)",
+					"-lgssapi_error_$(GLOBUS_FLAVOR)",
+				);
+				PRODUCT_NAME = saga_adaptor_globus_gridftp_file;
+			};
+			name = Release;
+		};
+		7B50CD230FC5EB5700B7CD44 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DSAGA_ADAPTOR_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+					"-DSAGA_ADAPTOR_LIB_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lglobus_gass_transfer_$(GLOBUS_FLAVOR)",
+					"-lglobus_gram_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_common_$(GLOBUS_FLAVOR)",
+					"-lglobus_gass_copy_$(GLOBUS_FLAVOR)",
+					"-lglobus_ftp_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_gssapi_gsi_$(GLOBUS_FLAVOR)",
+					"-lglobus_gram_protocol_$(GLOBUS_FLAVOR)",
+					"-lglobus_rls_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_common_$(GLOBUS_FLAVOR)",
+					"-lglobus_io_$(GLOBUS_FLAVOR)",
+					"-lglobus_xio_$(GLOBUS_FLAVOR)",
+					"-lgssapi_error_$(GLOBUS_FLAVOR)",
+					"-lglobus_gss_assist_$(GLOBUS_FLAVOR)",
+				);
+				PRODUCT_NAME = saga_adaptor_globus_module_loader;
+			};
+			name = Debug;
+		};
+		7B50CD240FC5EB5700B7CD44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DSAGA_ADAPTOR_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+					"-DSAGA_ADAPTOR_LIB_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lglobus_gass_transfer_$(GLOBUS_FLAVOR)",
+					"-lglobus_gram_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_common_$(GLOBUS_FLAVOR)",
+					"-lglobus_gass_copy_$(GLOBUS_FLAVOR)",
+					"-lglobus_ftp_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_gssapi_gsi_$(GLOBUS_FLAVOR)",
+					"-lglobus_gram_protocol_$(GLOBUS_FLAVOR)",
+					"-lglobus_rls_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_common_$(GLOBUS_FLAVOR)",
+					"-lglobus_io_$(GLOBUS_FLAVOR)",
+					"-lglobus_xio_$(GLOBUS_FLAVOR)",
+					"-lgssapi_error_$(GLOBUS_FLAVOR)",
+					"-lglobus_gss_assist_$(GLOBUS_FLAVOR)",
+				);
+				PRODUCT_NAME = saga_adaptor_globus_module_loader;
+			};
+			name = Release;
+		};
+		7B6DA6A00B9A2DC300168752 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = ALL;
+			};
+			name = Debug;
+		};
+		7B6DA6A10B9A2DC300168752 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				PRODUCT_NAME = ALL;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7BC2856F0D241C55002C51F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DSAGA_ADAPTOR_LIB_NAME=libsaga_adaptor_globus_rls_replica",
+					"-DSAGA_ADAPTOR_NAME=globus_rls_replica",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lglobus_rls_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_common_$(GLOBUS_FLAVOR)",
+					"-lglobus_io_$(GLOBUS_FLAVOR)",
+					"-lglobus_xio_$(GLOBUS_FLAVOR)",
+					"-lgssapi_error_$(GLOBUS_FLAVOR)",
+				);
+				PRODUCT_NAME = saga_adaptor_globus_rls_replica;
+			};
+			name = Debug;
+		};
+		7BC285700D241C55002C51F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DSAGA_ADAPTOR_LIB_NAME=libsaga_adaptor_globus_rls_replica",
+					"-DSAGA_ADAPTOR_NAME=globus_rls_replica",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lglobus_rls_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_common_$(GLOBUS_FLAVOR)",
+					"-lglobus_io_$(GLOBUS_FLAVOR)",
+					"-lglobus_xio_$(GLOBUS_FLAVOR)",
+					"-lgssapi_error_$(GLOBUS_FLAVOR)",
+				);
+				PRODUCT_NAME = saga_adaptor_globus_rls_replica;
+			};
+			name = Release;
+		};
+		7BF50E080B9A9AF90073E20C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DSAGA_ADAPTOR_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+					"-DSAGA_ADAPTOR_LIB_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lglobus_gass_transfer_$(GLOBUS_FLAVOR)",
+					"-lglobus_gram_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_common_$(GLOBUS_FLAVOR)",
+					"-lglobus_gssapi_gsi_$(GLOBUS_FLAVOR)",
+					"-lglobus_gram_protocol_$(GLOBUS_FLAVOR)",
+				);
+				PRODUCT_NAME = saga_adaptor_globus_gram_job;
+			};
+			name = Debug;
+		};
+		7BF50E090B9A9AF90073E20C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DSAGA_ADAPTOR_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+					"-DSAGA_ADAPTOR_LIB_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lglobus_gass_transfer_$(GLOBUS_FLAVOR)",
+					"-lglobus_gram_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_common_$(GLOBUS_FLAVOR)",
+					"-lglobus_gssapi_gsi_$(GLOBUS_FLAVOR)",
+					"-lglobus_gram_protocol_$(GLOBUS_FLAVOR)",
+				);
+				PRODUCT_NAME = saga_adaptor_globus_gram_job;
+			};
+			name = Release;
+		};
+		7BF7D4D9110F793800A37260 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)/bin/";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = file_test_535;
+				SYMROOT = ../../../build;
+			};
+			name = Debug;
+		};
+		7BF7D4DA110F793800A37260 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)/bin/";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = file_test_535;
+				SYMROOT = ../../../build;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7BF7D4F3110F7A2B00A37260 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "All Tests";
+			};
+			name = Debug;
+		};
+		7BF7D4F4110F7A2B00A37260 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "All Tests";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7BF7D4F8110F7A5600A37260 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = Everything;
+			};
+			name = Debug;
+		};
+		7BF7D4F9110F7A5600A37260 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = Everything;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB916408733D950010E9CD /* Build configuration list for PBXProject "saga_globus_adaptors" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916508733D950010E9CD /* Debug */,
+				1DEB916608733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B2A40D00B996DB200E47329 /* Build configuration list for PBXNativeTarget "libsaga_adaptor_globus_gridftp_file" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B2A40D10B996DB200E47329 /* Debug */,
+				7B2A40D20B996DB200E47329 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B50CD220FC5EB5700B7CD44 /* Build configuration list for PBXNativeTarget "libsaga_adaptor_globus_module_loader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B50CD230FC5EB5700B7CD44 /* Debug */,
+				7B50CD240FC5EB5700B7CD44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B6DA69F0B9A2DC300168752 /* Build configuration list for PBXAggregateTarget "All Adaptors" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B6DA6A00B9A2DC300168752 /* Debug */,
+				7B6DA6A10B9A2DC300168752 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BC2856E0D241C55002C51F7 /* Build configuration list for PBXNativeTarget "libsaga_adaptor_globus_rls_replica" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BC2856F0D241C55002C51F7 /* Debug */,
+				7BC285700D241C55002C51F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BF50E070B9A9AF90073E20C /* Build configuration list for PBXNativeTarget "libsaga_adaptor_globus_gram_job" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BF50E080B9A9AF90073E20C /* Debug */,
+				7BF50E090B9A9AF90073E20C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BF7D4ED110F79B200A37260 /* Build configuration list for PBXNativeTarget "file_test_535" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BF7D4D9110F793800A37260 /* Debug */,
+				7BF7D4DA110F793800A37260 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BF7D504110F7ADE00A37260 /* Build configuration list for PBXAggregateTarget "All Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BF7D4F3110F7A2B00A37260 /* Debug */,
+				7BF7D4F4110F7A2B00A37260 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BF7D505110F7ADE00A37260 /* Build configuration list for PBXAggregateTarget "Everything" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BF7D4F8110F7A5600A37260 /* Debug */,
+				7BF7D4F9110F7A5600A37260 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}
