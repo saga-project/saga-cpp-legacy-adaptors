@@ -615,7 +615,6 @@ host_alias
 target_alias
 CONFPWD
 CONFDIR
-SAGA_ROOT
 SAGA_LOCATION
 SAGA_CONFIG
 TMP_SAGA_LOCATION
@@ -638,7 +637,6 @@ ac_subst_files=''
       ac_precious_vars='build_alias
 host_alias
 target_alias
-SAGA_ROOT
 SAGA_LOCATION'
 
 
@@ -1213,7 +1211,6 @@ Optional Packages:
   --with-sshfs            path to sshfs binary [default=check]
 
 Some influential environment variables:
-  SAGA_ROOT   SAGA source tree root
   SAGA_LOCATION
               SAGA installation root
 
@@ -1650,7 +1647,6 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
   CONFPWD=`pwd`
   CONFDIR=`pwd`/config/
-
 
 
 
@@ -2794,7 +2790,6 @@ host_alias!$host_alias$ac_delim
 target_alias!$target_alias$ac_delim
 CONFPWD!$CONFPWD$ac_delim
 CONFDIR!$CONFDIR$ac_delim
-SAGA_ROOT!$SAGA_ROOT$ac_delim
 SAGA_LOCATION!$SAGA_LOCATION$ac_delim
 SAGA_CONFIG!$SAGA_CONFIG$ac_delim
 TMP_SAGA_LOCATION!$TMP_SAGA_LOCATION$ac_delim
@@ -2815,7 +2810,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 58; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 57; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
