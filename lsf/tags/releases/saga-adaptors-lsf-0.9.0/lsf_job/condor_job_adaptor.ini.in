@@ -1,0 +1,31 @@
+#
+# Default configuration file for the LSF Job Adaptor
+#
+#
+# This file documents available configuration options, and provides a sensible
+# initial configuration.
+#
+# Unless otherwise noted, commented settings are the default settings hard-coded
+# in the adaptor. Where default values are not hard-coded in the adaptor
+# itself, reasonable initial settings are provided here.
+#
+
+[saga.lsf.defaults]
+# The settings in this section are provided as a convenience for the user and
+# are only used in defining other settins, below. The adaptor itself ignores it.
+
+  # The root of the LSF installation
+  location = @LSF_LOCATION@
+
+  # Path to LSF binaries
+  binary_path = @LSF_PATH@
+
+[saga.adaptors.lsf_job]
+  name = lsf_job
+
+  ## Path to load the adaptor from. Automatically configured, by default
+  # path = $[saga.location]/lib
+
+  ## Uncomment to disable the adaptor
+  # enabled = false
+

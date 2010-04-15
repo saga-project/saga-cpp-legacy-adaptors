@@ -1,0 +1,56 @@
+                    
+                      SAGA LSF Adaptor - Installation
+                  <http://saga.cct.lsu.edu/software/python>
+
+
+  For detailed informations on how to install SAGA, please refer 
+  to the documentation section on our website:
+
+    http://saga.cct.lsu.edu/software/python/documentation 
+
+
+  PREREQUISISTES:
+  
+  o SAGA Core Components
+    You have to install the SAGA Core Components before you can install the
+    LSF Adaptor. The Core Components are available on the SAGA website.
+
+  o Boost C++ Libraries >= 1.33
+    You need to have the Boost C++ libraries installed on your system. Many
+    systems already provide binary packages for them. If your system doesn't 
+    you can download the source from http://www.boost.org and build it yourself.
+    
+ 
+  BUILDING AND INSTALLING THE LSF ADAPTOR
+ 
+  The LSF Adaptor comes with a configure/make-based buildsystem. There are 
+  two useful options for ./configure:
+
+    --boost-location= The location of your Boost installation
+                      (e.g. /usr/local/packages/boost-1.42). You only
+                      need this option if boost is *not* installed in
+                      the default path (/usr/ or /usr/local
+    --with-lsf=       The location of your LSF installation. You 
+                      only need this option if boost is *not* installed 
+                      in the defaul path (/usr/ or /usr/local)
+
+  For a complete list of configure options, you can typ
+
+    ./configure --help
+ 
+
+  To configure, build and install the LSF Adaptor, make sure that 
+  $SAGA_LOCATION points to your SAGA Core Components installation and
+  then run ./configure and make:
+
+    $> export SAGA_LOCATION=/PATH/TO/SAGA_CORE_INSTALLATION
+    $> ./configure --with-boost=/BOOST/DIR/ --with-lsf=/LSF/DIR
+    $> make
+    $> make install
+
+
+
+  Please help us to improve the quality of SAGA and file a bug report if you 
+  have encountered any problems with the build system. Our bug-tracking system 
+  can be found at: http://saga.cct.lsu.edu/software/cpp/dev/ 
+

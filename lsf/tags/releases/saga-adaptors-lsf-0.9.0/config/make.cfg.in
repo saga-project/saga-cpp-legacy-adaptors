@@ -1,0 +1,42 @@
+#  Copyright (c) 2005-2007 Andre Merzky (andre@merzky.net)
+#
+#  Distributed under the Boost Software License, Version 1.0.
+#  (See accompanying file LICENSE.txt or copy at
+#   http://www.boost.org/LICENSE_1_0.txt)
+
+# vim: ft=make
+
+ifndef SAGA_ADAPTORS_LSF_MAKE_CFG_IN
+       SAGA_ADAPTORS_LSF_MAKE_CFG_IN=yes
+
+
+TMP_SAGA_LOCATION = @TMP_SAGA_LOCATION@
+TMP_SAGA_INSTTYPE = @TMP_SAGA_INSTTYPE@
+
+ifeq "$(TMP_SAGA_INSTTYPE)" "source"
+  SAGA_ROOT              = $(TMP_SAGA_LOCATION)
+  SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/make
+else
+  SAGA_LOCATION          = $(TMP_SAGA_LOCATION)
+  SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/share/saga/make
+endif
+
+
+SAGA_HAVE_LSF         = @SAGA_HAVE_LSF@
+SAGA_LSF_LOCATION     = @LSF_LOCATION@
+SAGA_LSF_VERSION      = @LSF_VERSION@
+SAGA_LSF_PATH         = @LSF_PATH@
+SAGA_LSF_BIN_LSINFO   = @LSF_BIN_LSINFO@
+SAGA_LSF_BIN_BSUB     = @LSF_BIN_BSUB@
+SAGA_LSF_BIN_BSTOP    = @LSF_BIN_BSTOP@
+SAGA_LSF_BIN_BRESUME  = @LSF_BIN_BRESUME@
+SAGA_LSF_BIN_BKILL    = @LSF_BIN_BKILL@
+SAGA_LSF_BIN_BJOBS    = @LSF_BIN_BJOBS@
+
+
+SAGA_BUILD_ADAPTOR_JOB   = @BUILD_ADAPTOR_JOB@
+
+include $(SAGA_MAKE_INCLUDE_ROOT)/saga.util.mk
+
+endif # guard
+

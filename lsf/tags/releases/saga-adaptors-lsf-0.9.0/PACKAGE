@@ -1,0 +1,21 @@
+
+PACKAGE: saga-adaptors-lsf
+VERSION: 0.9.0
+
+DEPENDENCIES:
+  saga-core
+  lsf
+
+DIRS:
+  config/
+  lsf_job/
+  project/
+
+FILES:
+  INSTALL
+  LICENSE
+  PACKAGE
+  Makefile
+  configure
+  configure.in
+
