@@ -15,6 +15,7 @@ FILES:
   README
   INSTALL
   LICENSE
+  CHANGES
   Makefile
   configure
   configure.in
