@@ -66,7 +66,7 @@ job_cpi_impl::job_cpi_impl (proxy                * p,
             strm << "Could not initialize job for [" << inst_data->rm_ << "]. " 
             << "URL doesn't define a hostname.";
             SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), 
-                               saga::BadParameter); 
+                               saga::AdaptorDeclined); 
         }
     }
     else 
@@ -75,7 +75,7 @@ job_cpi_impl::job_cpi_impl (proxy                * p,
         strm << "Could not initialize job for [" << inst_data->rm_ << "]. " 
         << "Resource manager URL seems to be empty.";
         SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), 
-                           saga::BadParameter);         
+                           saga::AdaptorDeclined);         
     }
 
     
