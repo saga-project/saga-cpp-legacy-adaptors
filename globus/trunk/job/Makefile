@@ -19,8 +19,8 @@ SAGA_ADAPTOR_INI   = globus_gram_job_adaptor.ini
 SAGA_ADAPTOR_OBJ   = $(SAGA_OBJ)
 SAGA_ADAPTOR_OBJC  = $(SAGA_OBJC)
 
-SAGA_ADAPTOR_REQUIREMENTS = globus globus_gram globus_gass_copy
-SAGA_ADAPTOR_PACKAGES     = job
+SAGA_ADAPTOR_REQUIREMENTS = globus globus_gram globus_gass_copy package_filesystem
+SAGA_ADAPTOR_PACKAGES     = job 
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.adaptor.mk 
 

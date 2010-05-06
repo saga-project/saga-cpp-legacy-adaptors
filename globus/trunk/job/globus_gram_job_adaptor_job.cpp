@@ -69,6 +69,15 @@ job_cpi_impl::job_cpi_impl (proxy                * p,
                                saga::BadParameter); 
         }
     }
+    else 
+    {
+        SAGA_OSSTREAM strm;
+        strm << "Could not initialize job for [" << inst_data->rm_ << "]. " 
+        << "Resource manager URL seems to be empty.";
+        SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), 
+                           saga::BadParameter);         
+    }
+
     
     pipe_to_gass_stderr_[0] = -1;
     pipe_to_gass_stderr_[1] = -1;
@@ -604,7 +613,11 @@ job_cpi_impl::do_pre_staging (saga::job::description jd)
         }
         
         if (copy_local_remote == mode) {
-            // copy the file
+            //copy the file
+            //SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
+            //  std::cerr << "globus GRAM Adaptor: X.509 context found pointing to user proxy at " 
+            //        << userproxy << std::endl;
+
             //saga::filesystem::file f(left_url);
             //f.copy(right_url, saga::filesystem::Overwrite);
         }

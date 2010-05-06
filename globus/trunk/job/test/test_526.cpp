@@ -19,7 +19,8 @@ try
     jd.set_attribute(saga::job::attributes::description_output, "myjob.out");
 
     vector<string> ft;
-    ft.push_back("myjob.out < myjob.out");
+    //ft.push_back("myjob.out < myjob.out");
+    ft.push_back("data.in > data.in");
     jd.set_vector_attribute(saga::job::attributes::description_file_transfer, ft);
 
     saga::job::job j = js.create_job(jd);
