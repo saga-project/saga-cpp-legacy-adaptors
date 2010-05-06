@@ -350,7 +350,7 @@ namespace ssh_job
           if ( ! proc.done () )
           {
             std::stringstream ss;
-            ss << "Cannot find executable " << old_exe_ << " on remote host (" << proc.get_err_s () << ")";
+            ss << "Cannot find executable " << old_exe_ << " on remote host:" << proc.get_err_s ();
             SAGA_ADAPTOR_THROW (ss.str (), saga::BadParameter);
           }
         }
