@@ -67,9 +67,12 @@ AC_DEFUN([AX_SAGA_GLOBUS],
     eval "$globus_query_cmd $globus_query_flags > globus_defines"
 
     if test $? != 0; then
+
+      globus_flavors=`cd $GLOBUS_LOCATION/include/ && echo *`
       AC_MSG_WARN([error running globus-makefile-header ($globus_query_cmd $globus_query_flags > globus_defines), 
                     maybe invalid GLOBUS_FLAVOR $MY_GLOBUS_FLAVOR, 
-                    use --with-globus-flavor=<flavor>])
+                    use --with-globus-flavor=<flavor>.
+                    Available flavors: $globus_flavors])
     fi
 	  
   fi # ! FAILED
@@ -96,9 +99,11 @@ AC_DEFUN([AX_SAGA_GLOBUS],
       GLOBUS_VERSION=`$globus_version_cmd`
     
       if test $? != 0; then
-        AC_MSG_WARN([error running globus-version ($globus_version_cmd), 
+        globus_flavors=`cd $GLOBUS_LOCATION/include/ && echo *`
+        AC_MSG_ERROR([error running globus-version ($globus_version_cmd), 
                       maybe invalid GLOBUS_FLAVOR $MY_GLOBUS_FLAVOR, 
-                      use --with-globus-flavor=<flavor>])
+                      use --with-globus-flavor=<flavor>.
+                      Available flavors: $globus_flavors])
       fi
     
     fi  # have globus-version
