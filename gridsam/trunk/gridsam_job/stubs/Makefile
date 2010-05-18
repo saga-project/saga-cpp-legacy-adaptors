@@ -24,7 +24,7 @@ STUBS            += bes/besBESSOAPBindingProxy.h
 STUBS            += bes/besC.cpp
 STUBS            += bes/besStub.h
 
-# FIXME: this should be moved into SAGA_ROOT/config!
+# FIXME: this should be moved into configure!
 SOAP_CXX          = soapcpp2
 SOAP_CXXFLAGS     = -C -i -I./gsoap-2.7.11/import
 
