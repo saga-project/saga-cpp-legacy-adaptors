@@ -31,37 +31,37 @@ error_default_redirect(
     switch (e.get_error()) 
     {
         case( FileExists ):
-            ep.error_text.append("URL already exists: " 
-                                 + locationURL.get_url() + detailed_error);
+            ep.error_text.append("URL already exists " 
+                                 + locationURL.get_url() + ": "+ detailed_error);
             ep.saga_error = saga::AlreadyExists;
             break;
             
         case( DoesNotExist ):
-            ep.error_text.append("URL does not exists: " 
-                                 + locationURL.get_url() + detailed_error);
+            ep.error_text.append("URL does not exists " 
+                                 + locationURL.get_url() + ": " + detailed_error);
             ep.saga_error = saga::DoesNotExist;
             break;
             
         case( PermissionDenied ):
-            ep.error_text.append("Permission denied for: " 
-                                 + locationURL.get_url() + detailed_error);
+            ep.error_text.append("Permission denied for " 
+                                 + locationURL.get_url() + ": " + detailed_error);
             ep.saga_error = saga::PermissionDenied;
             break;
 
         case( NotASymlink ):
-            ep.error_text.append("URL is not a (sym-)link: " 
-                                 + locationURL.get_url() + detailed_error);
+            ep.error_text.append("URL is not a (sym-)link " 
+                                 + locationURL.get_url() + ": "+ detailed_error);
             ep.saga_error = saga::BadParameter;
             break;
             
         case ( GSS_Error ):
-            ep.error_text.append("Authentication failed for host: " 
-                                 + locationURL.get_host()  + detailed_error);
+            ep.error_text.append("Authentication failed for host " 
+                                 + locationURL.get_host() + ": "+ detailed_error);
             ep.saga_error = saga::AuthenticationFailed;            
             break;
 		case (ConnectionRefused):
-            ep.error_text.append("Connection refused for: " 
-                                 + locationURL.get_host()  + detailed_error);
+            ep.error_text.append("Connection refused for " 
+                                 + locationURL.get_host() + ": " + detailed_error);
             ep.saga_error = saga::Timeout;            
             break;
             
@@ -71,8 +71,8 @@ error_default_redirect(
             break;
             
         default:
-            ep.error_text.append("Unexpected error: " 
-                                 + locationURL.get_host()  + detailed_error);
+            ep.error_text.append("Unexpected error " 
+                                 + locationURL.get_host() + ": " + detailed_error);
             ep.saga_error = saga::NoSuccess;  
             break;
     }

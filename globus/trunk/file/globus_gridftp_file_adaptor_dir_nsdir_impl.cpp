@@ -505,9 +505,9 @@ void dir_cpi_impl::sync_remove (saga::impl::void_t & ret, saga::url url, int fla
 void dir_cpi_impl::sync_copy_wildcard (saga::impl::void_t & ret, std::string source, 
                                        saga::url dest, int flags)
 {
-	//FIXME - no wildcards implemented...
-	//not sure how to do that on top of Globus
-	sync_copy(ret, saga::url(source), saga::url(dest), flags);
+    SAGA_OSSTREAM strm;
+    strm << "Detected wildcard in pathname. Wildcards are not supported by GridFTP.";
+    SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter);    
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -515,9 +515,9 @@ void dir_cpi_impl::sync_copy_wildcard (saga::impl::void_t & ret, std::string sou
 void dir_cpi_impl::sync_link_wildcard (saga::impl::void_t & ret, std::string source, 
                                        saga::url dest, int flags)
 {
-	//FIXME - no wildcards implemented...
-	//not sure how to do that on top of Globus
-	sync_link(ret, saga::url(source), saga::url(dest), flags);
+    SAGA_OSSTREAM strm;
+    strm << "Detected wildcard in pathname. Wildcards are not supported by GridFTP.";
+    SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter);    
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -525,9 +525,9 @@ void dir_cpi_impl::sync_link_wildcard (saga::impl::void_t & ret, std::string sou
 void dir_cpi_impl::sync_move_wildcard (saga::impl::void_t & ret, std::string source, 
                                        saga::url dest, int flags)
 {
-	//FIXME - no wildcards implemented...
-	//not sure how to do that on top of Globus
-	sync_move(ret, saga::url(source), saga::url(dest), flags);
+    SAGA_OSSTREAM strm;
+    strm << "Detected wildcard in pathname. Wildcards are not supported by GridFTP.";
+    SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -535,9 +535,9 @@ void dir_cpi_impl::sync_move_wildcard (saga::impl::void_t & ret, std::string sou
 void dir_cpi_impl::sync_remove_wildcard (saga::impl::void_t & ret, std::string url, 
                                          int flags)
 {
-	//FIXME - no wildcards implemented...
-	//not sure how to do that on top of Globus
-	sync_remove(ret, saga::url(url), flags);
+    SAGA_OSSTREAM strm;
+    strm << "Detected wildcard in pathname. Wildcards are not supported by GridFTP.";
+    SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
