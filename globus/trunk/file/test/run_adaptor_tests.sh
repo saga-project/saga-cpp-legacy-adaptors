@@ -29,16 +29,16 @@ STRING=saga_was_here
 
 # SAGA CALL NUMBER 1
 echo 'Running a remote echo test and put result in tmp file'
-`$SAGA_LOCATION/bin/saga-file copy file://localhost/$FILE.src ssh://$REMOTEHOST/$FILE.tgt`
+`$SAGA_LOCATION/bin/saga-file copy file://localhost/$FILE.src gridftp://$REMOTEHOST/$FILE.tgt`
 
 # SAGA CALL NUMBER 2
 echo 'Try to cat the file using ssh'
-RESULT=`$SAGA_LOCATION/bin/saga-file cat ssh://$REMOTEHOST/$FILE.tgt`
+RESULT=`$SAGA_LOCATION/bin/saga-file cat gridftp://$REMOTEHOST/$FILE.tgt`
 
 # SAGA CALL NUMBER 3
 echo 'Clean up temporaries'
 rm -f $FILE.src
-`$SAGA_LOCATION/bin/saga-file remove ssh://$REMOTEHOST/$FILE.tgt`
+`$SAGA_LOCATION/bin/saga-file remove gridftp://$REMOTEHOST/$FILE.tgt`
 
 # CHECK RESULT
 if test "$RESULT" != "$STRING"
