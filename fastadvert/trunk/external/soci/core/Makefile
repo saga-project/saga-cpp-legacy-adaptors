@@ -12,7 +12,7 @@ ifeq "$(SAGA_HAVE_INTERNAL_SOCI)" "yes"
   SAGA_HDR_DIR    = /soci/
 
 # SAGA_LIB        = soci_core-3.0.0
-  SAGA_ARC        = soci_core-3.0.0
+  SAGA_ARC        = soci_core
   SAGA_HDR        = $(wildcard *.h)
   SAGA_SRC        = $(wildcard *.cpp)
   SAGA_LIB_OBJ    = $(SAGA_SRC:%.cpp=%.o)
