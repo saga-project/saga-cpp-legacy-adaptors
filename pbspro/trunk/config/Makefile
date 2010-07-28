@@ -6,6 +6,10 @@
 
 -include make.cfg 
 
+.PHONY: all
+all::
+	@true
+
 distclean::
 	$(RM) make.cfg
 
