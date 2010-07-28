@@ -16,7 +16,8 @@
  * limitations under the License.
  */
 
-#include <saga/impl/packages/job/split_commandline.hpp>
+//#include <saga/impl/packages/job/split_commandline.hpp>
+#include <saga/saga/adaptors/utils/utils.hpp>
 
 #include "pbspro_helper.hpp"
 
@@ -160,7 +161,7 @@ namespace pbspro_job { namespace helper {
 			  std::string& executable,
 			  std::vector<std::string>& arguments)
   {
-    std::vector<std::string> elems = saga::impl::split_commandline(cmd);
+    std::vector<std::string> elems = saga::adaptors::utils::split_commandline(cmd);
     if (elems.empty()) {
       return false;
     }
