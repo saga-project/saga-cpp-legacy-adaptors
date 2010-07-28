@@ -464,6 +464,17 @@ GridFTPConnection::GridFTPConnection( const saga::url &  server )
     globus_ftp_client_operationattr_init(&attr);
     globus_ftp_client_operationattr_set_mode( &attr, GLOBUS_FTP_CONTROL_MODE_STREAM);
     
+    // this makes *all* url path components relative... not quite desirable. 
+    //globus_result_t result = globus_ftp_client_handleattr_set_rfc1738_url(
+    //                                                      &handle_attr, GLOBUS_TRUE);
+    //if(result != GLOBUS_SUCCESS)
+    //{
+    //    fprintf(stderr, _GASCSL("Error: Unable to set rfc1738 support %s\n"),
+    //            globus_error_print_friendly(globus_error_peek(result)));
+    //}
+    
+    
+    
     globus_ftp_client_handle_init( &handle, &handle_attr );
     
     globus_ftp_client_handle_cache_url_state( &handle, saga_to_gridftp_url(server.get_string()).c_str());

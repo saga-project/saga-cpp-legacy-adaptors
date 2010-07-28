@@ -168,19 +168,23 @@ void file_cpi_impl::sync_copy (saga::impl::void_t & ret,
     adaptor_data_t AdaptorData(this);
     file_instance_data_t InstanceData (this); 
 	
-    if(dst.get_scheme().empty() && dst.get_host().empty())
+    saga::url tmp_dst(dst);
+    
+    if(tmp_dst.get_scheme().empty() && tmp_dst.get_host().empty())
     {
-        SAGA_OSSTREAM strm;
-        strm << "Could not copy [" << InstanceData->location_ << " -> " << dst
-        << "]. Please specify scheme and/or hostname.";
-        SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);                                     
+        tmp_dst.set_scheme("file");
+        tmp_dst.set_host("localhost");
+        //SAGA_OSSTREAM strm;
+        //strm << "Could not copy [" << InstanceData->location_ << " -> " << dst
+        //<< "]. Please specify scheme and/or hostname.";
+        //SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);                                     
     }
     
-    if(dst.get_scheme() == "file")
+    if(tmp_dst.get_scheme() == "file")
     {
-    	if(dst.get_host() != "localhost") {
+    	if(tmp_dst.get_host() != "localhost") {
             SAGA_OSSTREAM strm;
-            strm << "Could not copy [" << InstanceData->location_ << " -> " << dst
+            strm << "Could not copy [" << InstanceData->location_ << " -> " << tmp_dst
             << "]. If target URL scheme is 'file://', only 'localhost' is accepted as host.";
            SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter);   
         }
@@ -198,10 +202,10 @@ void file_cpi_impl::sync_copy (saga::impl::void_t & ret,
     }
     else
     {
-        if(dst.get_scheme() != "gridftp" && dst.get_scheme() != "gsiftp" )
+        if(tmp_dst.get_scheme() != "gridftp" && tmp_dst.get_scheme() != "gsiftp" )
         {
             SAGA_OSSTREAM strm;
-            strm << "Could not copy [" << InstanceData->location_ << " -> " << dst
+            strm << "Could not copy [" << InstanceData->location_ << " -> " << tmp_dst
             << "]. Only gridftp:// and gsiftp:// and file:// schemes are supported for target urls.";
             SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter);         
         }
@@ -211,9 +215,9 @@ void file_cpi_impl::sync_copy (saga::impl::void_t & ret,
     this->check_if_open ("file_cpi_impl::sync_copy", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(InstanceData->location_);
+        AdaptorData->getConnectionHandleForURL(InstanceData->location_);
     
-	saga::url target = merge_urls(InstanceData->location_.get_url(), dst);	
+	saga::url target = merge_urls(InstanceData->location_.get_url(), tmp_dst);	
 	
     try {
 		if((target.get_host().empty()) || (target.get_host() == ("localhost")))
@@ -231,7 +235,7 @@ void file_cpi_impl::sync_copy (saga::impl::void_t & ret,
 				}
 			}
 		}
-        
+                
         ConnectionHandle->copy_url(InstanceData->location_.get_url(), target.get_url());
         
     }

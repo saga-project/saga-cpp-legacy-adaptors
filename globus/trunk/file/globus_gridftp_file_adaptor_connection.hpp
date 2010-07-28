@@ -89,22 +89,20 @@ namespace globus_gridftp_file_adaptor
     /*
      * translates a SAGA URL to a GridFTP URL
      */
-    inline std::string saga_to_gridftp_url(std::string const & url, std::string target_scheme="gsiftp" )
+    inline std::string saga_to_gridftp_url(saga::url const & url, std::string target_scheme="gsiftp" )
     {
+
         saga::url saga_url(url);
-        //if(saga_url.get_scheme() != "file") // for local <-> remote copies
         saga_url.set_scheme(target_scheme);
-        
+
         std::string path = saga_url.get_path();
-        if( path.find("./") == 0 )
+
+        // Expand realtive paths
+        if(saga_url.get_scheme() == "file")
         {
-            path.replace(0, 2, "~/");
-            saga_url.set_path(path);
-        }
-        else if( path.find("../") == 0 )
-        {
-            path.replace(0, 3, "~/../");
-            saga_url.set_path(path);
+            boost::filesystem::path full_path( boost::filesystem::initial_path<boost::filesystem::path>() );
+            full_path = boost::filesystem::system_complete( boost::filesystem::path( path ) );
+            saga_url.set_path(full_path.string());
         }
         
         // we don't understand /. at the end of a directory URL
