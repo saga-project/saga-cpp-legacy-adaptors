@@ -279,7 +279,8 @@ namespace ssh_filesystem_adaptor
     if ( ( u.get_host   () != host_ )  ||
          ( u.get_port   () != port_ &&
            u.get_port   () != -1    )  ||
-         ( u.get_scheme () != "ssh" )  )
+         ( u.get_scheme () != "ssh" &&
+           u.get_scheme () != "any" )  )
     {
       // nothing to do here
       return u;

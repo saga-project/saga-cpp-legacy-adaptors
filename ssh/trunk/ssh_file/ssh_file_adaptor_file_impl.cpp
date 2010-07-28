@@ -106,7 +106,7 @@ namespace ssh_filesystem_adaptor
     {
       try
       {
-        new_url = adata->try_translate (s_, idata->location_);
+        new_url = adata->translate (s_, idata->location_);
         f_ = saga::filesystem::file (adata->strip_session (s_),
                                      new_url,
                                      idata->mode_);

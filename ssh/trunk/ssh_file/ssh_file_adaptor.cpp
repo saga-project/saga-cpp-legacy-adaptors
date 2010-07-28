@@ -130,9 +130,16 @@ namespace ssh_filesystem_adaptor
 
   sshfs_t filesystem_adaptor::mount_sshfs (const saga::session & s, const saga::url & u )
   {
-    // if url is any:// based, convert to ssh:// as expected by sshfs
     saga::url   tgt = u;
-    std::string id  = get_sshfs_id (u);
+
+    // if url is any:// based, convert to ssh:// as expected by sshfs
+    if ( tgt.get_scheme () == "any" )
+    {
+      tgt.set_scheme ("ssh");
+    }
+
+    std::string id  = get_sshfs_id (tgt);
+
     
     // std::cout << " mounted_        mount  :  " << this             << std::endl;
     // std::cout << " mounted_.size() mount 1:  " << mounted_.size () << std::endl;
@@ -147,16 +154,11 @@ namespace ssh_filesystem_adaptor
       return mounted_[id];
     }
 
-    if ( tgt.get_scheme () == "any" )
-    {
-      tgt.set_scheme ("ssh");
-    }
-
     // is not mounted, yet - try to mount it, store a new shared pointer, and
     // return it.
     SAGA_LOG_ALWAYS ("to mount new sshfs");
     SAGA_LOG_ALWAYS (id.c_str ());
-    SAGA_LOG_ALWAYS (u.get_string ().c_str ());
+    SAGA_LOG_ALWAYS (tgt.get_string ().c_str ());
 
     TR1::shared_ptr <sshfs> ptr;
     try 
@@ -300,9 +302,6 @@ namespace ssh_filesystem_adaptor
          << ": cannot mount/translate into local file system : \n"
          << e.what () << "\n";
       // SAGA_ADAPTOR_THROW_NO_CONTEXT (ss.str (), saga::NoSuccess);
-    }
-    catch ( ... )
-    {
     }
 
     return u;
