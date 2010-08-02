@@ -49,9 +49,3 @@
   hostname validity and executable existence.  These tests SHOULD be enabled,
   but are time consuming -- so this flag allows to disable them.
 
-  - |ssh_spread_keys|  (default=false)\\ The flag causes the ssh adaptor to
-  spread the public *and* *private* ssh keys to the remote machine.  This is
-  potentially *dangerous*, but allows to bootstrap an ssh based interconnection
-  network on otherwise empty machines (like on fresh ec2 instances).  *ONLY USE
-  WHEN YOU KNOW WHAT YOU ARE DOING!*
-

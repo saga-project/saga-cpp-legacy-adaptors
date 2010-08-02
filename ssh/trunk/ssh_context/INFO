@@ -83,8 +83,6 @@
   |   sshfs_mnt       = ${HOME}/.saga/adaptors/ssh/ssh_file/mnt/                   |\\
   |   sshfs_keepalive = yes                                                        |\\
   |   sshfs_ondemand  = yes                                                        |\\
-  |                                                                                |\\
-  |   ssh_spread_keys = no                                                         |\\
 
   The |transform_symlinks| option to sshfs is strongly recommended,
   as otherwise the resolution of remote symlinks may be incorrectly
@@ -96,29 +94,13 @@
   If set to |false|, it will attempt to unmount those sshfs file
   systems which have been mounted during the session.
 
-  |ssh_spread_keys| allows the SAGA job adaptor to copy both the
-  public and the private key of the active ssh context to the remote
-  site which is hosting you ssh job.  That remote job will thus be
-  able to use the same ssh credentials as the original job, and can
-  thus, for example, spawn other jobs.  The option also allows SAGA
-  to append the public idendoty to the '~/.ssh/authorized_keys'
-  file, to enable passwordless login.
-
-  |ssh_spread_keys| is a potentially dangerous option - please use
-  with care, and only if you fully understand why this is dangerous,
-  and accept the implications.  
-
   Note that, by default, the option '|StrictHostKeyChecking=no|' is
   passed to ssh.  This is a potential security gap - please refer to
   the ssh manpage for the implications.
 
-  Both of the above security related points (|ssh_spread_keys| and
-  |StrictHostKeyChecking=no|') have been implemented for the sake of
-  the SAGA aws adaptors, which use the ssh adaptor for job management
-  and file access, but which have to handle freshly instantiated
-  virtual machines with incomplete ssh key setup.  For that tightly
-  controlled and non-persistent environment, distributing your keys is
-  acceptable (and neccessary for a number of our use cases).  However,
-  I don't think it is a viable option for other use cases.
-
+  The above security related point (|StrictHostKeyChecking=no|') has
+  been implemented for the sake of the SAGA aws adaptors, which use
+  the ssh adaptor for job management and file access, but which have
+  to handle freshly instantiated virtual machines with incomplete ssh
+  key setup.  
 

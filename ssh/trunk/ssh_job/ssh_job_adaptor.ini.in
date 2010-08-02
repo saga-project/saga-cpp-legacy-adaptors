@@ -13,5 +13,4 @@
   sshfs_opt       = -o StrictHostKeyChecking=no -o NumberOfPasswordPrompts=0 -o workaround=nonodelay -o transform_symlinks
 
   ssh_test_remote = true
-  ssh_spread_keys = false
 

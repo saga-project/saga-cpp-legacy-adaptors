@@ -16,6 +16,8 @@ DIRS:
   ssh_suite/
 
 FILES:
+  INSTALL
+  LICENSE
   PACKAGE
   CHANGES
   INSTALL
