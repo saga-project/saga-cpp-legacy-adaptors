@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 
 # Copyright (c) 2009 Chris Miceli (cmicel1@cct.lsu.edu), Ashley Zebrowski (azebrowski@cct.lsu.edu)
 # Distributed under the Boost Software License, Version 1.0. (See accompanying 
@@ -11,6 +11,7 @@
 #            tested and works with both localhost and qb.loni.org set as REMOTEHOST.
 #            Suspend and resume are not tested for, as they are not implemented for the SSH adaptor.
 #            Please let me know if this gives you any problems.  (Ashley, 11/20/09)
+
 while getopts h arg
 do
    case $arg in
@@ -35,12 +36,12 @@ echo "======================================================================="
 
 # test saga-job run
 STRING=testing_ssh_job_run
-COMMAND="echo $STRING > $FILE"
+COMMAND="/bin/sh -c \"echo $STRING > $FILE\""
 
 echo              "saga-job run      ssh://$REMOTEHOST/ $COMMAND"
 $SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ $COMMAND
 
-COMMAND="cat $FILE"
+COMMAND="/bin/sh -c \"cat $FILE\""
 echo                      "saga-job run      ssh://$REMOTEHOST/ $COMMAND"
 RESULT=`$SAGA_LOCATION/bin/saga-job run      ssh://$REMOTEHOST/ $COMMAND`
 
@@ -53,6 +54,7 @@ fi
 
 
 echo "======================================================================="
+exit $EXIT_FAILURE;
 
 
 # Test saga-job submit

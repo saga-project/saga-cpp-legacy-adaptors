@@ -438,11 +438,12 @@ namespace ssh_job
     scp_opt_   = saga::adaptors::utils::split (ini_["scp_opt"], ' ');
 
 
-    // set sensible default options
-    if ( ini_.find ("ssh_spread_keys") == ini_.end () )
-    {
-      ini_["ssh_spread_keys"] = "false";
-    }
+    // NOTE: ssh_spread_keys is disabled - see trac
+    // // set sensible default options
+    // if ( ini_.find ("ssh_spread_keys") == ini_.end () )
+    // {
+    //   ini_["ssh_spread_keys"] = "false";
+    // }
 
     if ( ini_.find ("ssh_test_remote") == ini_.end () )
     {

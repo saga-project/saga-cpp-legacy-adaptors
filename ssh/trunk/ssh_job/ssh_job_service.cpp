@@ -210,149 +210,151 @@ namespace ssh_job
       // prepare the remote host
       saga::adaptors::utils::process proc;
 
-      // FIXME: spread keys does not work if no host is given, and
-      // candidate_hosts is used instead.  This code should thus be reused when
-      // running the job, but one needs to keep track of hosts we already copied
-      // to, for performance reasons.
-      if ( ini_["ssh_spread_keys"] == "yes"  ||
-           ini_["ssh_spread_keys"] == "true" )
-      {
+      // NOTE: ssh_spread_keys is disabled - see trac
+      // // FIXME: spread keys does not work if no host is given, and
+      // // candidate_hosts is used instead.  This code should thus be reused when
+      // // running the job, but one needs to keep track of hosts we already copied
+      // // to, for performance reasons.
+      // if ( ini_["ssh_spread_keys"] == "yes"  ||
+      //      ini_["ssh_spread_keys"] == "true" )
+      // {
 
-        // we don't spread keys to localhost, or if host is not known
-        if ( ! host_.empty () && 
-             ! saga::adaptors::utils::is_local_address (host_) )
-        {
-          env_.push_back (std::string ("SAGA_PARENT_JOBID") + "=" + parent_id_);
-          env_.push_back (std::string ("SAGA_SSH_KEY")      + "=" + rem_ssh_key_priv_);
-          env_.push_back (std::string ("SAGA_SSH_PUB")      + "=" + rem_ssh_key_pub_);
-          env_.push_back (std::string ("SAGA_SSH_USER")     + "=" + local_user_);
-
-
-          {
-            // first copy private key
-            SAGA_LOG_DEBUG (" copying private key");
-
-            proc.set_cmd  (scp_bin_);
-            proc.set_args (scp_opt_);
-
-            // FIXME: ensure that context is complete
-            proc.add_args ("-i", loc_ssh_key_priv_);
-
-            // file to stage
-            // FIXME: ensure that context is complete
-            // FIXME: we silently assume that the .ssh dirctory exists
-            // FIXME: the target below SHOULD not exist *aehem*
-            proc.add_arg (loc_ssh_key_priv_);
-            proc.add_arg (user_ + "@" + host_ + ":" + rem_ssh_key_priv_);
-
-            (void) proc.run_sync ();
-
-            if ( ! proc.done () )
-            {
-              SAGA_ADAPTOR_THROW ("Could not copy private key", saga::NoSuccess);
-            }
-          }
-
-          {
-            // set private key readable only by user
-            SAGA_LOG_DEBUG (" chmod on private key");
-
-            proc.set_cmd  (ssh_bin_);
-            proc.set_args (ssh_opt_);
-
-            // FIXME: ensure that context is complete
-            proc.add_args ("-i", loc_ssh_key_priv_);
-
-            proc.add_arg (user_ + "@" + host_);
-            proc.add_args ("chmod", "0600" );
-            proc.add_arg  (rem_ssh_key_priv_);
-
-            (void) proc.run_sync ();
-
-            if ( ! proc.done () )
-            {
-              SAGA_ADAPTOR_THROW ("Could not chmod on private key", saga::NoSuccess);
-            }
-          }
-
-          {
-            SAGA_LOG_DEBUG (" copying public key");
-
-            // if ok, copy public key
-            proc.set_cmd  (scp_bin_);
-            proc.set_args (scp_opt_);
-
-            // FIXME: ensure that context is complete
-            proc.add_args ("-i", loc_ssh_key_priv_);
-
-            // file to stage
-            // FIXME: ensure that context is complete
-            // FIXME: we silently assume that the .ssh dirctory exists
-            // FIXME: the target below SHOULD not exist *aehem*
-            proc.add_arg (loc_ssh_key_pub_);
-            proc.add_arg (user_ + "@" + host_ + ":" + rem_ssh_key_pub_);
-
-            (void) proc.run_sync ();
-
-            if ( ! proc.done () )
-            {
-              SAGA_ADAPTOR_THROW ("Could not copy public key", saga::NoSuccess);
-            }
-          }
-
-          {
-            SAGA_LOG_DEBUG (" register public key");
-
-            // append public key to local authorized_keys file, so that
-            // application can call back home.  A key is exactly one line:
-            // so we append the key, and then do a sort|uniq on the
-            // authorized_keys file, to avoid duplicates.
-
-            char* home_tmp = ::getenv ("HOME");
-
-            if ( home_tmp == NULL )
-            {
-              SAGA_ADAPTOR_THROW ("Could not determine home directory", saga::NoSuccess);
-            }
-            
-            std::string home = home_tmp;
+      //   // we don't spread keys to localhost, or if host is not known
+      //   if ( ! host_.empty () && 
+      //        ! saga::adaptors::utils::is_local_address (host_) )
+      //   {
+      //     env_.push_back (std::string ("SAGA_PARENT_JOBID") + "=" + parent_id_);
+      //     env_.push_back (std::string ("SAGA_SSH_KEY")      + "=" + rem_ssh_key_priv_);
+      //     env_.push_back (std::string ("SAGA_SSH_PUB")      + "=" + rem_ssh_key_pub_);
+      //     env_.push_back (std::string ("SAGA_SSH_USER")     + "=" + local_user_);
 
 
-            // FIXME: use better name
-            std::fstream cmd;
-            cmd.open ("/tmp/saga_tmp_cmd", std::fstream::out);
+      //     {
+      //       // first copy private key
+      //       SAGA_LOG_DEBUG (" copying private key");
 
-            cmd << " cat " << loc_ssh_key_pub_ 
-                << " "     << home << "/.ssh/authorized_keys"
-                << " | sort | uniq > /tmp/saga_keys_tmp" 
-                << std::endl
-                << "  mv /tmp/saga_keys_tmp " 
-                << home << "/.ssh/authorized_keys" 
-                << std::endl;
+      //       proc.set_cmd  (scp_bin_);
+      //       proc.set_args (scp_opt_);
 
-            cmd.close();
+      //       // FIXME: ensure that context is complete
+      //       proc.add_args ("-i", loc_ssh_key_priv_);
 
-            ::chmod ("/tmp/saga_tmp_cmd", S_IRWXU);
+      //       // file to stage
+      //       // FIXME: ensure that context is complete
+      //       // FIXME: we silently assume that the .ssh dirctory exists
+      //       // FIXME: the target below SHOULD not exist *aehem*
+      //       proc.add_arg (loc_ssh_key_priv_);
+      //       proc.add_arg (user_ + "@" + host_ + ":" + rem_ssh_key_priv_);
 
-            proc.set_cmd     ("/bin/sh");
-            proc.clear_args  ();
-            proc.add_args    ("-c", "/tmp/saga_tmp_cmd");
+      //       (void) proc.run_sync ();
 
-            (void) proc.run_sync ();
+      //       if ( ! proc.done () )
+      //       {
+      //         SAGA_ADAPTOR_THROW ("Could not copy private key", saga::NoSuccess);
+      //       }
+      //     }
 
-            if ( ! proc.done () )
-            {
-              SAGA_ADAPTOR_THROW ("Could not register public key", saga::NoSuccess);
-            }
+      //     {
+      //       // set private key readable only by user
+      //       SAGA_LOG_DEBUG (" chmod on private key");
 
-            // remove temporary script
-            ::unlink ("/tmp/saga_tmp_cmd");
+      //       proc.set_cmd  (ssh_bin_);
+      //       proc.set_args (ssh_opt_);
 
-          }
-        } // empty or local host_
-      }
-      else if ( ini_["ssh_test_remote"] == "yes"  ||
-                ini_["ssh_test_remote"] == "true" )
+      //       // FIXME: ensure that context is complete
+      //       proc.add_args ("-i", loc_ssh_key_priv_);
+
+      //       proc.add_arg (user_ + "@" + host_);
+      //       proc.add_args ("chmod", "0600" );
+      //       proc.add_arg  (rem_ssh_key_priv_);
+
+      //       (void) proc.run_sync ();
+
+      //       if ( ! proc.done () )
+      //       {
+      //         SAGA_ADAPTOR_THROW ("Could not chmod on private key", saga::NoSuccess);
+      //       }
+      //     }
+
+      //     {
+      //       SAGA_LOG_DEBUG (" copying public key");
+
+      //       // if ok, copy public key
+      //       proc.set_cmd  (scp_bin_);
+      //       proc.set_args (scp_opt_);
+
+      //       // FIXME: ensure that context is complete
+      //       proc.add_args ("-i", loc_ssh_key_priv_);
+
+      //       // file to stage
+      //       // FIXME: ensure that context is complete
+      //       // FIXME: we silently assume that the .ssh dirctory exists
+      //       // FIXME: the target below SHOULD not exist *aehem*
+      //       proc.add_arg (loc_ssh_key_pub_);
+      //       proc.add_arg (user_ + "@" + host_ + ":" + rem_ssh_key_pub_);
+
+      //       (void) proc.run_sync ();
+
+      //       if ( ! proc.done () )
+      //       {
+      //         SAGA_ADAPTOR_THROW ("Could not copy public key", saga::NoSuccess);
+      //       }
+      //     }
+
+      //     {
+      //       SAGA_LOG_DEBUG (" register public key");
+
+      //       // append public key to local authorized_keys file, so that
+      //       // application can call back home.  A key is exactly one line:
+      //       // so we append the key, and then do a sort|uniq on the
+      //       // authorized_keys file, to avoid duplicates.
+
+      //       char* home_tmp = ::getenv ("HOME");
+
+      //       if ( home_tmp == NULL )
+      //       {
+      //         SAGA_ADAPTOR_THROW ("Could not determine home directory", saga::NoSuccess);
+      //       }
+      //       
+      //       std::string home = home_tmp;
+
+
+      //       // FIXME: use better name
+      //       std::fstream cmd;
+      //       cmd.open ("/tmp/saga_tmp_cmd", std::fstream::out);
+
+      //       cmd << " cat " << loc_ssh_key_pub_ 
+      //           << " "     << home << "/.ssh/authorized_keys"
+      //           << " | sort | uniq > /tmp/saga_keys_tmp" 
+      //           << std::endl
+      //           << "  mv /tmp/saga_keys_tmp " 
+      //           << home << "/.ssh/authorized_keys" 
+      //           << std::endl;
+
+      //       cmd.close();
+
+      //       ::chmod ("/tmp/saga_tmp_cmd", S_IRWXU);
+
+      //       proc.set_cmd     ("/bin/sh");
+      //       proc.clear_args  ();
+      //       proc.add_args    ("-c", "/tmp/saga_tmp_cmd");
+
+      //       (void) proc.run_sync ();
+
+      //       if ( ! proc.done () )
+      //       {
+      //         SAGA_ADAPTOR_THROW ("Could not register public key", saga::NoSuccess);
+      //       }
+
+      //       // remove temporary script
+      //       ::unlink ("/tmp/saga_tmp_cmd");
+
+      //     }
+      //   } // empty or local host_
+      // }
+      // else
+      if ( ini_["ssh_test_remote"] == "yes"  ||
+           ini_["ssh_test_remote"] == "true" )
       {
         // we don't test if host is not known
         if ( ! host_.empty () )
@@ -539,11 +541,12 @@ namespace ssh_job
     scp_opt_   = saga::adaptors::utils::split (ini_["scp_opt"], ' ');
 
 
-    // set sensible default options
-    if ( ini_.find ("ssh_spread_keys") == ini_.end () )
-    {
-      ini_["ssh_spread_keys"] = "false";
-    }
+    // NOTE: ssh_spread_keys is disabled - see trac
+    // // set sensible default options
+    // if ( ini_.find ("ssh_spread_keys") == ini_.end () )
+    // {
+    //   ini_["ssh_spread_keys"] = "false";
+    // }
 
     if ( ini_.find ("ssh_test_remote") == ini_.end () )
     {
