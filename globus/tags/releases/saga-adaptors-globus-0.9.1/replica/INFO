@@ -1,0 +1,60 @@
+
+::SAGA DOCUMENTATION FILE::
+
+:ADAPTOR NAME:
+
+  Globus RLS Replica Adaptor
+  
+:AUTHORS:
+
+  Copyright (c) 2006-2008 Ole Weidner (oweidner@cct.lsu.edu)
+
+:LICENSE:
+
+  Distributed under the Boost Software License, Version 1.0.
+  
+:ADAPTOR LIBRARY NAME:
+  
+  globus_rls_replica_adaptor.so (dylib)
+
+:IMPLEMENTS PACKAGE:
+ 
+  - saga_package_replica
+  - saga_package_namespace
+
+:DESCRIPTION:
+
+  The adaptor allows interaction with (remote) replica services using the Globus
+  Replica Location Service (RLS) protocol. 
+
+:URL SCHEMES:
+
+  - rls://
+
+:REQUIRES:
+
+  In order to build and use the adaptor, the Globus Toolkit including the 
+  development headers/libraries must be installed.
+
+:CONFIGURE OPTIONS:
+
+  | 
+  | --with-globus-location=<dir>  use globus at <dir> (default=auto)         |\\
+  | --with-gpt-location=<dir>     use gpt at <dir> (default=auto)            |\\
+  | --with-globus-flavor=<flavor> use globus flavor <flavor> (default=auto)  |\\
+  |                                                                          |\\
+  |  GLOBUS_LOCATION              Globus installation directory              |\\
+  |  GPT_LOCATION                 GPT installation directory                 |\\
+  |  GLOBUS_FLAVOR                Globus installation flavor                 |\\
+
+:INI FILE:
+
+  globus_gram_job_adaptor.ini
+
+:INI OPTIONS:
+
+  none
+
+:KNOWN ISSUES:
+
+  - Doesn't implement replica directories - only files.
