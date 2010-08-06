@@ -1,0 +1,28 @@
+
+PACKAGE: saga-adaptors-globus
+VERSION: 0.9.1
+
+DEPENDENCIES:
+  saga-core
+  globus-gram
+  globus-gridftp
+
+DIRS:
+  config/
+  loader/
+  job/
+  file/
+  replica/
+  shared/
+  tests/
+  project/
+
+FILES:
+  PACKAGE
+  INSTALL
+  LICENSE
+  CHANGES
+  Makefile
+  configure
+  configure.in
+

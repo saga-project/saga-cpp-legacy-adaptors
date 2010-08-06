@@ -1,0 +1,16 @@
+                           SAGA Globus Adaptors
+                 <http://saga.cct.lsu.edu/software/cpp>
+                           - Release Changelog -
+
+
+  Changes with SAGA Globus Adaptors Version 0.9.1             06. August 2010
+  ---------------------------------------------------------------------------
+
+  o Fixed two bugs related to relative URLS
+    - http://faust.cct.lsu.edu/trac/saga/ticket/489 
+    - http://faust.cct.lsu.edu/trac/saga/ticket/486
+  
+  Changes with SAGA Globus Adaptors Version 0.9.0              18. April 2010
+  ---------------------------------------------------------------------------
+
+  o Initital release after repository split-up
