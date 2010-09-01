@@ -9,7 +9,7 @@
   name               = aws_job
 
 [saga.adaptors.aws_job.preferences]
-  cloud_names        = ec2 eucalyptus nimbus
+  cloud_names        = ec2 eucalyptus nimbus fgeuca
   java_home          = @JAVA_LOCATION@
   ec2_home           = @AWS_LOCATION@
   ec2_keystore       = ${HOME}/.ec2_keys/
@@ -38,4 +38,13 @@
   ec2_keypair        = ec2-saga-keypair-nimbus
   ec2_ssh_pubkey     = ssh-dss AAAAB3NzaC1kc3MAAACBAIk50fKUNQqx877qjmmVAhhLMcAq9nVrfsJktzdw5WkO8XGSOiVY15GF1k0tT95f49YlR/0mpXkDjsRo1nrwewQhyoJFf1U39p29vURoUXf8IVZr7NT2rVfs2Vf2xV06VBUl16UsbpeneeOP2bI9Xvmo3p3AZmSK8NGfudxdptA7AAAAFQCCzPteeRS2jrDtiY/HaOdgL0Gd1wAAAIAjnCR5ZVUPB5WH8JxRoaiUMzRkFNWa0kSeN4sNXk2RlvXzRkrS0xx98oO1ERMTIs3nb1nFkvXD3mRHMDAQXdOMxoHW4lOvrWa/t1nzOyyw+a2OlUWyXGznUrAll17JvAKv001wuEG9zIwR06n8Grj9fiB1IVdY/i06gSaTCyIGJwAAAIA/8KBo1x0CdUKAcDomI1wHbRCkAXwJYBwFzcoOB8ulvKJ13KIq3jpXDVXi61XMkl6RXuPdxTMAY3bh54GWyzcGuYs7YmCUNbEDDAytPmNKGq+8INQjc77bnRl6OkC6g69Sq/W4q7ieuT0/duDGasnqyhbK45fwDFoyuBpxOebLyA== bzfmerzk@cocos
   ec2_image_id       = hello-cloud
+
+[saga.adaptors.aws_job.preferences.fgeuca]
+  ec2_proxy          = ${HOME}/.ec2_keys/saga.aws_private_fgeuca.pem
+  ec2_key            = $[saga.adaptors.aws_context.preferences.ec2_keystore]/fg-eucalyptus-merzky-key.pem
+  ec2_cert           = $[saga.adaptors.aws_context.preferences.ec2_keystore]/fg-eucalyptus-merzky-cert.pem
+  ec2_url            = http://149.165.146.135:8773/services/Eucalyptus
+  ec2_keypair        = ec2-saga-keypair-fg-eucalyptus
+  ec2_image_id       = emi-164C11BB
+  
 

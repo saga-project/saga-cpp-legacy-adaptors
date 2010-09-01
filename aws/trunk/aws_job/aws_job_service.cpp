@@ -26,7 +26,6 @@
 
 // adaptor includes
 #include "aws_job_service.hpp"
-#include "aws_helper.hpp"
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -48,17 +47,21 @@ namespace aws_job
 
     std::string scheme = idata->rm_.get_scheme ();
     std::string type;
-    bool        ok = false;
+    bool ok = false;
 
     std::vector <std::string> types = saga::adaptors::utils::split (adata->ini_["defaults"]["cloud_names"], ' ');
 
     std::vector <saga::context> contexts = p->get_session ().list_contexts ();
 
+    std::string schemes = "";
+
     for ( unsigned int i = 0; i < types.size () && ! ok; i++ )
     {
-      if ( scheme == types[i] ||
-           scheme == "any"    ||
-           scheme == "" )
+      schemes += "'" + types[i] + "', ";
+
+      // FIXME: we do not accept any at the moment, as we don't know what
+      // context to use, and cycling over contexts is likely too costly.
+      if ( scheme == types[i] )
       {
         // check if we have a context for that type
         std::vector <saga::context> :: iterator it;
@@ -76,12 +79,13 @@ namespace aws_job
       }
     }
 
+
     if ( ! ok )
     {
       // FIXME
-      SAGA_ADAPTOR_THROW_NO_CONTEXT ((std::string ("Adaptor only supports 'aws' and 'any' URL schemes, not ")
-                                      + scheme).c_str (),
-                                     saga::BadParameter);
+      SAGA_ADAPTOR_THROW_NO_CONTEXT ((std::string ("Adaptor only supports the schemes ") 
+                                      + schemes +  ", and 'any', but not " + scheme).c_str (),
+                                     saga::adaptors::AdaptorDeclined);
     }
 
     user_      = ctx_.get_attribute (saga::attributes::context_userid);
@@ -94,7 +98,7 @@ namespace aws_job
     env_["EC2_CERT"]        = ini_["ec2_cert"];
     env_["EC2_URL"]         = ini_["ec2_url"];
 
-    aws_job::process proc (env_);
+    saga::adaptors::utils::process proc (env_);
 
     SAGA_LOG_INFO (" ========== logging aws job service rm");
     SAGA_LOG_INFO (idata->rm_.get_string ().c_str ());
@@ -156,7 +160,6 @@ namespace aws_job
         }
 
         state = out_words[5];
-        // std::cout << state << std::endl;
       }
 
 
@@ -167,36 +170,61 @@ namespace aws_job
         SAGA_ADAPTOR_THROW ("Cannot run vm instance", saga::NoSuccess);
       }
 
-      std::cout << "id: " << vm_id_ << std::endl;
-      std::cout << "ip: " << vm_ip_ << std::endl;
+      SAGA_LOG_INFO ((std::string ("vm id: ") + vm_id_).c_str ());
+      SAGA_LOG_INFO ((std::string ("vm ip: ") + vm_ip_).c_str ());
 
       idata->rm_.set_host (      vm_ip_);
       idata->rm_.set_path ("/" + vm_id_);
 
-      std::cout << "rm: " << idata->rm_ << " === " << std::endl;
+
+      // enable remote ssh access
+      {
+        proc.set_cmd    (ini_["ec2_scripts"] + "/ec2-authorize");
+        proc.clear_args ();
+        proc.add_args   ("-P", "tcp");
+        proc.add_args   ("-p", "22");
+        proc.add_args   ("-s", "0.0.0.0/0");
+        proc.add_arg    ("default");
+
+        (void) proc.run_sync ();
+
+        // we ignore errors, which occur for example if ssh access was enabled
+        // already
+        //
+        // if ( proc.fail () )
+        // {
+        //   SAGA_ADAPTOR_THROW ("cannot enable ssh access for running instance", 
+        //                       saga::NoSuccess);
+        // }
+      }
+
+
+      // test ssh access
+      proc.set_cmd ("/usr/bin/ssh");
+
+      proc.clear_args ();
+
+      proc.add_args ("-o", "StrictHostKeyChecking=no");
+      proc.add_args ("-i", ini_["ec2_proxy"]);
+      proc.add_arg (user_ + "@" + vm_ip_);
+      proc.add_arg ("/bin/true");
+
 
       // need some time for ssh to fire up
-      int count = 0;
-      while ( true )
+      int  count  = 0;
+      bool ssh_ok = false;
+
+      while ( ! ssh_ok )
       {
-        proc.set_cmd ("/usr/bin/ssh");
-
-        proc.clear_args ();
-
-        proc.add_args ("-o", "StrictHostKeyChecking=no");
-        proc.add_args ("-i", ini_["ec2_proxy"]);
-        proc.add_arg (user_ + "@" + vm_ip_);
-        proc.add_arg ("/bin/true");
-
         (void) proc.run_sync (false);
 
         if ( proc.done () )
         {
-          break;
+          ssh_ok = true;
         }
         else
         {
-          SAGA_LOG_ALWAYS ("trying ssh failed");
+          SAGA_LOG_DEBUG ("trying ssh failed");
           ::sleep (1);
         }
 
@@ -206,7 +234,7 @@ namespace aws_job
         }
       }
 
-      SAGA_LOG_ALWAYS ("trying ssh ok");
+      SAGA_LOG_DEBUG ("trying ssh ok");
 
       instance_started = true;
 
@@ -223,7 +251,7 @@ namespace aws_job
       {
         // host is an instance id, and we need to get the hostname
 
-        SAGA_LOG_ALWAYS ("found id");
+        SAGA_LOG_DEBUG ("found id");
 
         std::string vm_id_ = host;
 
@@ -250,10 +278,6 @@ namespace aws_job
 
         std::string state  = out_words[5];
 
-        std::cout << "id: " << vm_id_ << std::endl;
-        std::cout << "ip: " << vm_ip_ << std::endl;
-        std::cout << "st: " << state  << std::endl;
-
 
         if ( state != "running" )
         {
@@ -263,12 +287,12 @@ namespace aws_job
         idata->rm_.set_host (      vm_ip_);
         idata->rm_.set_path ("/" + vm_id_);
 
-        SAGA_LOG_ALWAYS (idata->rm_.get_string ().c_str ());
+        SAGA_LOG_DEBUG (idata->rm_.get_string ().c_str ());
       }
       else
       {
         // host is indeed a host, and we need to get the instance id
-        SAGA_LOG_ALWAYS ("found host");
+        SAGA_LOG_DEBUG ("found host");
 
         std::string vm_ip_ = host;
 
@@ -290,7 +314,7 @@ namespace aws_job
           SAGA_ADAPTOR_THROW ("contact does not point to a running VM instance", saga::NoSuccess);
         }
 
-        SAGA_LOG_ALWAYS (out[0].c_str ());
+        SAGA_LOG_DEBUG (out[0].c_str ());
 
         std::vector <std::string> out_words = saga::adaptors::utils::split (out[0]);
 
@@ -303,10 +327,6 @@ namespace aws_job
 
         std::string state  = out_words[5];
 
-        std::cout << "id: " << vm_id_ << std::endl;
-        std::cout << "ip: " << vm_ip_ << std::endl;
-        std::cout << "st: " << state  << std::endl;
-
 
         if ( state != "running" )
         {
@@ -317,52 +337,6 @@ namespace aws_job
       }
     }
 
-
-    // we do have a job service instance, either new started or old and running.
-    // we used a valid private key for that, so that is ok.  What we miss is the
-    // public key of the pair.  So, if our context does not have such a public
-    // key, we grab it from the ~/.ssh/authorized_keys file on the remote host,
-    // store it locally, and 'fix' (aka complete) the context.
-
-    if ( !     ctx_.attribute_exists (saga::attributes::context_usercert) ||
-         "" == ctx_.get_attribute    (saga::attributes::context_usercert) )
-    {
-      SAGA_LOG_ALWAYS ("retrieving public key");
-
-      proc.set_cmd ("/usr/bin/ssh");
-
-      proc.clear_args ();
-      proc.clear_out  ();
-      proc.add_args ("-o", "StrictHostKeyChecking=no");
-      proc.add_args ("-i", userkey_);
-      proc.add_arg  (user_ + "@" + vm_ip_);
-
-      // we run a grep for the 
-      proc.add_args ("grep", ini_["ec2_keypair"]);
-
-      // file to search
-      proc.add_arg (".ssh/authorized_keys");
-
-      (void) proc.run_sync (true);
-
-      if ( proc.fail () )
-      {
-        SAGA_LOG_ALWAYS ("could not retrieve public ssh key");
-        throw;
-      }
-
-      std::string out = proc.get_out_s ();
-      std::string pub = ctx_.get_attribute (saga::attributes::context_userkey) + ".pub";
-
-      std::fstream pub_fs;
-
-      pub_fs.open (pub.c_str (), std::fstream::out);
-      pub_fs << out;
-      pub_fs.close ();
-
-      std::cout << "setting usercert " << pub << "\n";
-      ctx_.set_attribute (saga::attributes::context_usercert, pub);
-    }
 
     usercert_  = ctx_.get_attribute (saga::attributes::context_usercert);
 
@@ -385,7 +359,7 @@ namespace aws_job
     // if needed
     if ( instance_started && ini_["ec2_image_prep"] != "" )
     {
-      SAGA_LOG_ALWAYS ("preparing image");
+      SAGA_LOG_DEBUG ("preparing image");
 
       // stage the prep script to the VM
       proc.set_cmd ("/usr/bin/scp");
@@ -439,7 +413,7 @@ namespace aws_job
 
       if ( proc.done () )
       {
-        SAGA_LOG_ALWAYS ("image prep succeeded");
+        SAGA_LOG_DEBUG ("image prep succeeded");
       }
       else
       {
@@ -464,17 +438,17 @@ namespace aws_job
     if ( ini_["ec2_keepalive"] == "yes"  ||
          ini_["ec2_keepalive"] == "true" )
     {
-      SAGA_LOG_ALWAYS ("ec2_keepalive: true"); 
+      SAGA_LOG_DEBUG ("ec2_keepalive: true"); 
     }
     else
     {
-      SAGA_LOG_ALWAYS ("ec2_keepalive: !true"); 
+      SAGA_LOG_DEBUG ("ec2_keepalive: !true"); 
 
       std::string msg ("Shut down VM instance ");
       msg += vm_id_;
-      SAGA_LOG_ALWAYS (msg.c_str ()); 
+      SAGA_LOG_DEBUG (msg.c_str ()); 
 
-      aws_job::process proc (ini_["ec2_scripts"] + "/ec2-terminate-instances", env_);
+      saga::adaptors::utils::process proc (ini_["ec2_scripts"] + "/ec2-terminate-instances", env_);
       proc.add_arg (vm_id_);
 
       (void) proc.run_sync (false);

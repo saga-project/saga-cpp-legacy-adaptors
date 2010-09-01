@@ -62,6 +62,14 @@ namespace aws_context_adaptor
         s->add_proto_context (entries);
       }
 
+
+      {
+        std::vector <std::pair <std::string, std::string> > entries;
+        std::pair <std::string, std::string> entry (saga::attributes::context_type, "fgeuca");
+        entries.push_back (entry);
+        s->add_proto_context (entries);
+      }
+
       // {
       //   std::vector <std::pair <std::string, std::string> > entries;
       //   std::pair <std::string, std::string> entry (saga::attributes::context_type, "eucalyptus");
@@ -207,6 +215,12 @@ namespace aws_context_adaptor
     adaptor_data adata (this);
 
     saga::adaptors::utils::process proc (env_);    
+
+    SAGA_LOG_DEBUG ("getting cert info for");
+    SAGA_LOG_DEBUG (ini_["ec2_keypair"]);
+
+    SAGA_LOG_DEBUG ("checking proxy at");
+    SAGA_LOG_DEBUG (ini_["ec2_proxy"]);
 
     // check if file is not yet present
     struct stat buf;
