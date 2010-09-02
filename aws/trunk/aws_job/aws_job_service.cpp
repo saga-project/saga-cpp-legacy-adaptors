@@ -499,6 +499,13 @@ namespace aws_job
     SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
 
+  void job_service_cpi_impl::sync_get_url (saga::url & ret)
+  {
+    instance_data idata (this);
+
+    ret = idata->rm_;
+  }
+
   void job_service_cpi_impl::dump_context (saga::context c)
   {
     std::cout << " --------------------------------------\n";

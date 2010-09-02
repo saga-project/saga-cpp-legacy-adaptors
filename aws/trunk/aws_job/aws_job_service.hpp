@@ -88,6 +88,7 @@ namespace aws_job
       void sync_get_job    (saga::job::job            & ret,
                             std::string                 jobid);
       void sync_get_self   (saga::job::self           & ret);
+      void sync_get_url    (saga::url                 & ret);
 
 
 
