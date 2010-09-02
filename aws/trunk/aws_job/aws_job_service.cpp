@@ -100,7 +100,7 @@ namespace aws_job
 
     saga::adaptors::utils::process proc (env_);
 
-    SAGA_LOG_INFO (" ========== logging aws job service rm");
+    SAGA_LOG_INFO ("aws job service rm");
     SAGA_LOG_INFO (idata->rm_.get_string ().c_str ());
 
     // is a VM given which we should contact, or do we need to start a new one?
