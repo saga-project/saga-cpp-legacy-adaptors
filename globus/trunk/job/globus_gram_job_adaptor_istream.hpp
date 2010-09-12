@@ -21,7 +21,12 @@ class gram_istream
 :   public saga::impl::istream_interface
 {
 public:
-    gram_istream(int fd) : pipe_handle(fd), buffer_(fd) {}
+	#if BOOST_VERSION < 104400
+    	gram_istream(int fd) : pipe_handle(fd), buffer_(fd) {}
+    #else
+        gram_istream(int fd) : pipe_handle(fd), buffer_(fd, io::never_close_handle) {}
+    #endif
+    
     ~gram_istream() 
     {
         if(-1 == close(pipe_handle))
