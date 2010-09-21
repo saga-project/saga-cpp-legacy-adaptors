@@ -709,7 +709,7 @@ GridFTPConnection::get_directory_entries( const std::string & url )
         throw globus_gridftp_file_adaptor::exception(CurrentErrorStr_, CurrentError_);
     
     std::vector<saga::url> return_vector;
-    globus_byte_t buffer[64];
+    globus_byte_t buffer[16];
     std::string result;
     
     globus_result_t success_reg_read;
@@ -723,7 +723,7 @@ GridFTPConnection::get_directory_entries( const std::string & url )
     if( this->Error_ )
         throw globus_gridftp_file_adaptor::exception(CurrentErrorStr_,
                                                      CurrentError_);
-        
+            
     typedef boost::tokenizer<boost::char_separator<char> >
     tokenizer;
     
