@@ -225,7 +225,7 @@ void globus_gram_job_adaptor::job_cpi_impl::sync_run (saga::impl::void_t&)
     
     instance_data inst_data (this);
     saga::job::description jd = inst_data->jd_;  // Job description
-    std::string           rm = inst_data->rm_.get_url();  // RM 'host' string
+    std::string            rm = inst_data->rm_.get_url();  // RM 'host' string
     
     saga::job::state state;
     sync_get_state(state);

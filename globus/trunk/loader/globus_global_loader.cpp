@@ -13,6 +13,7 @@
 
 #ifdef SAGA_HAVE_GLOBUS_GRAM
 # include <globus_gram_client.h>
+# include <globus_rsl.h>
 #endif
 
 #ifdef SAGA_HAVE_GLOBUS_GRIDFTP
@@ -49,6 +50,7 @@ namespace globus_module_loader
         #ifdef SAGA_HAVE_GLOBUS_GRAM
           SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) { std::cout << "globus_loader: activate GRAM" << std::endl; }
           globus_module_activate (GLOBUS_GRAM_CLIENT_MODULE);
+          globus_module_activate (GLOBUS_RSL_MODULE);
         #endif
         
         #ifdef SAGA_HAVE_GLOBUS_GRIDFTP
