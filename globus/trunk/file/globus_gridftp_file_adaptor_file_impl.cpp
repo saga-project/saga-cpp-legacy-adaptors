@@ -34,10 +34,33 @@ file_cpi_impl::file_cpi_impl (proxy                * p,
     adaptor_data_t adata(this);
     instance_data data(this);
     
-	  // Initialize file position pointer
-	  data->pointer_ = 0;
+    // Read some stuff from the .ini file
+    saga::ini::ini prefs = adap_ini.get_section ("preferences");
+    
+    if (prefs.has_entry("write_ftp_log")) 
+    {
+        std::string wfl = prefs.get_entry("write_ftp_log");
+        if(wfl == "true" || wfl == "True" || wfl == "TRUE")
+        {
+            write_log_ = true;
+        }
+        else 
+        {
+            write_log_ = false;
+        }
+
+    }
+    
+    if (prefs.has_entry("logilfe_location"))
+        logfile_loc_ = prefs.get_entry("logilfe_location");
+    else 
+        logfile_loc_ = "saga_gridftp.log";
+    
+    
+	// Initialize file position pointer
+	data->pointer_ = 0;
 	  
-	  saga::url location(data->location_);
+	saga::url location(data->location_);
     std::string host(location.get_host());
     std::string scheme(location.get_scheme());
 
@@ -94,7 +117,7 @@ file_cpi_impl::file_cpi_impl (proxy                * p,
     }
         
     GridFTPConnection * ConnectionHandle = 
-    adata->getConnectionHandleForURL(data->location_);
+    adata->getConnectionHandleForURL(data->location_, write_log_, logfile_loc_);
 	
     // check if file exists AND is a file (not a dir)
     bool exists  = false;
@@ -223,7 +246,7 @@ void file_cpi_impl::sync_get_size (saga::off_t& size_out)
     this->check_if_open ("file_cpi_impl::sync_get_size", idata->location_);
     
     GridFTPConnection * ConnectionHandle = 
-    adata->getConnectionHandleForURL(saga::url(idata->location_.get_url()));  
+    adata->getConnectionHandleForURL(saga::url(idata->location_.get_url()), write_log_, logfile_loc_);  
     
     try 
     {
@@ -253,7 +276,7 @@ void file_cpi_impl::sync_read (saga::ssize_t & len_out,
     this->check_if_open ("file_cpi_impl::sync_read", idata->location_);
     
     GridFTPConnection * ConnectionHandle = 
-    adata->getConnectionHandleForURL(saga::url(idata->location_.get_url()));  
+    adata->getConnectionHandleForURL(saga::url(idata->location_.get_url()), write_log_, logfile_loc_);  
     
     // validate parameters
     if (len_in < 0)
@@ -320,7 +343,7 @@ void file_cpi_impl::sync_write (saga::ssize_t  & len_out,
     this->check_if_open ("file_cpi_impl::sync_write", idata->location_);
     
     GridFTPConnection * ConnectionHandle = 
-    adata->getConnectionHandleForURL(saga::url(idata->location_.get_url()));  
+    adata->getConnectionHandleForURL(saga::url(idata->location_.get_url()), write_log_, logfile_loc_);  
     
     // validate parameters
     if (len_in < 0)

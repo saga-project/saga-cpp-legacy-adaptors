@@ -130,7 +130,7 @@ void dir_cpi_impl::sync_is_link (bool & is_link)
     this->check_if_open ("dir_cpi_impl::sync_is_link", InstanceData->location_);
 
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(InstanceData->location_);  
+    AdaptorData->getConnectionHandleForURL(InstanceData->location_, write_log_, logfile_loc_);  
     
     bool test = false;
     
@@ -161,7 +161,7 @@ void dir_cpi_impl::sync_read_link (saga::url & target)
     this->check_if_open ("dir_cpi_impl::sync_read_link", InstanceData->location_);    
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(InstanceData->location_);    
+    AdaptorData->getConnectionHandleForURL(InstanceData->location_, write_log_, logfile_loc_);    
     
     try 
     {

@@ -22,6 +22,9 @@ namespace globus_gridftp_file_adaptor
     {
     private:
         
+        bool write_log_;
+        std::string logfile_loc_;
+                
         typedef saga::adaptors::v1_0::file_cpi<file_cpi_impl> file_cpi;
         
         /* instance data */

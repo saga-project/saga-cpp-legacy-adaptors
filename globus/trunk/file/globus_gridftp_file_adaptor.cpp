@@ -28,7 +28,9 @@ file_adaptor::~file_adaptor()
     delete ConnectionPool_;
 }
 
-GridFTPConnection*  file_adaptor::getConnectionHandleForURL (const saga::url url)
+GridFTPConnection*  file_adaptor::getConnectionHandleForURL (const saga::url url,
+                                                             bool enable_log, 
+                                                             std::string logfile_name)
 {
   if( ConnectionPool_ == NULL )
   {
@@ -49,7 +51,7 @@ GridFTPConnection*  file_adaptor::getConnectionHandleForURL (const saga::url url
     // Add the url to the pool and create a new globus_ftp_handle
     std::pair< connection_pool_type_::const_iterator, bool > InsertResult;
     InsertResult = ConnectionPool_->
-      insert( make_pair( location, new GridFTPConnection(location) ) );
+      insert( make_pair( location, new GridFTPConnection(location, enable_log, logfile_name) ) );
     
     return (InsertResult.first)->second;
   }

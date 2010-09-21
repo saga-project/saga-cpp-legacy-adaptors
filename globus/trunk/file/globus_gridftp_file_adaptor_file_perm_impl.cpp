@@ -52,7 +52,7 @@ void file_cpi_impl::sync_permissions_check (bool & ret, std::string id, int perm
     this->check_if_open ("file_cpi_impl::permission_check", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(saga::url(InstanceData->location_.get_url()));  
+    AdaptorData->getConnectionHandleForURL(saga::url(InstanceData->location_.get_url()), write_log_, logfile_loc_);  
     
     try 
     {
@@ -80,7 +80,7 @@ void file_cpi_impl::sync_get_owner(std::string& out)
 
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(saga::url(InstanceData->location_.get_url()));  
+    AdaptorData->getConnectionHandleForURL(saga::url(InstanceData->location_.get_url()), write_log_, logfile_loc_);  
     
     try 
     {
@@ -107,7 +107,7 @@ void file_cpi_impl::sync_get_group(std::string& out)
     this->check_if_open ("file_cpi_impl::sync_get_group", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(saga::url(InstanceData->location_.get_url()));  
+    AdaptorData->getConnectionHandleForURL(saga::url(InstanceData->location_.get_url()), write_log_, logfile_loc_);  
     
     try 
     {

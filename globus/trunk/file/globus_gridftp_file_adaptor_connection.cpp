@@ -8,6 +8,11 @@
 
 #include "globus_gridftp_file_adaptor_connection.hpp"
 
+extern "C" {
+#include <unistd.h> 
+#include <globus_ftp_client_debug_plugin.h>
+}
+
 using namespace globus_gridftp_file_adaptor;
 
 
@@ -455,11 +460,26 @@ unsigned int GridFTPConnection::write_to_file( const std::string url,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-GridFTPConnection::GridFTPConnection( const saga::url &  server )
+GridFTPConnection::GridFTPConnection( const saga::url &  server, bool enable_log, std::string logfile_name )
 {
+    EnableLogging_ = enable_log;
     this->BufferSize_ = 1024;  // Buffer for non zero-copy read/write ops.
     
     globus_ftp_client_handleattr_init( &handle_attr );
+    
+    
+    if(true == EnableLogging_)
+    {
+        char text[256];
+    
+        DebugLogfile_ = fopen(logfile_name.c_str(), "a");
+        sprintf(text, "%s:%ld", "GridFTP", (long) getpid());
+    
+        globus_ftp_client_debug_plugin_init(&debug_plugin, DebugLogfile_, text);
+    
+        globus_ftp_client_handleattr_init(&handle_attr);
+        globus_ftp_client_handleattr_add_plugin(&handle_attr, &debug_plugin);
+    } 
     
     globus_ftp_client_operationattr_init(&attr);
     globus_ftp_client_operationattr_set_mode( &attr, GLOBUS_FTP_CONTROL_MODE_STREAM);
@@ -472,7 +492,6 @@ GridFTPConnection::GridFTPConnection( const saga::url &  server )
     //    fprintf(stderr, _GASCSL("Error: Unable to set rfc1738 support %s\n"),
     //            globus_error_print_friendly(globus_error_peek(result)));
     //}
-    
     
     
     globus_ftp_client_handle_init( &handle, &handle_attr );
@@ -492,6 +511,12 @@ GridFTPConnection::GridFTPConnection( const saga::url &  server )
 GridFTPConnection::~GridFTPConnection()
 {  
     globus_ftp_client_handle_destroy(&handle);
+    
+    if(true == EnableLogging_)
+    {
+        globus_ftp_client_debug_plugin_destroy(&debug_plugin);
+        fclose(DebugLogfile_);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -985,4 +1010,47 @@ void GridFTPConnection
         throw globus_gridftp_file_adaptor::exception(CurrentErrorStr_,
                                                      CurrentError_);
 	}
+    
+    
+    // GridFTP, like FTP does not preserve file permissions. The permissions 
+    // are determined by the destination site (umask). Clients can however use 
+    // SITE CHMOD command to change the permissions.
+    int is_exe = -1;
+    is_exe = access(src_u.get_path().c_str(), X_OK);
+    
+    std::cout << "ACCESS returned: " << is_exe << std::endl;
+    
+    if(is_exe == 0)
+    {
+        std::cout << "changing perm for: " << saga_to_gridftp_url(dst_url, "gsiftp").c_str() << std::endl;
+
+        // file has executable permission
+        success = globus_ftp_client_chmod(&this->handle,
+                                         saga_to_gridftp_url(dst_url, "gsiftp").c_str(),
+                                         0777,
+                                         &this->attr,
+                                         done_callback,
+                                         this);
+        
+        if( success != GLOBUS_SUCCESS )
+        {
+            globus_object_t * err = globus_error_get(success);          
+            this->set_current_error(err);                               
+            
+            this->Done_   = GLOBUS_TRUE;
+            this->Error_  = GLOBUS_TRUE;
+        }
+        
+        if( this->Error_ )
+            throw globus_gridftp_file_adaptor::exception(CurrentErrorStr_, 
+                                                         CurrentError_);
+        
+        SAGA_VERBOSE (SAGA_VERBOSE_LEVEL_BLURB)
+        {
+            std::cerr << "setting executable bit for: " 
+            << saga_to_gridftp_url(dst_url, "gsiftp").c_str() << std::endl;
+        }
+                                                    
+                                                    
+    }
 }

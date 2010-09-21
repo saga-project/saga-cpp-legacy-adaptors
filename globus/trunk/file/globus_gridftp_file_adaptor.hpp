@@ -29,7 +29,10 @@ struct file_adaptor : public saga::adaptor
       connection_pool_type_;
     connection_pool_type_ * ConnectionPool_;
     
-    GridFTPConnection* getConnectionHandleForURL (const saga::url url);
+    GridFTPConnection* getConnectionHandleForURL (const saga::url url, 
+                                                  bool enable_log=false, 
+                                                  std::string logfile_name="saga_gridftp.log");
+    
     void removeConnectionHandle (const saga::url url);
     
     file_adaptor(); 

@@ -30,7 +30,7 @@ void dir_cpi_impl::sync_change_dir (saga::impl::void_t &, saga::url new_dir)
     saga::url url = merge_urls(InstanceData->location_.get_url(), new_dir);
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(url);
+    AdaptorData->getConnectionHandleForURL(url, write_log_, logfile_loc_);
     
     bool is_dir = false;
     
@@ -68,7 +68,7 @@ void dir_cpi_impl::sync_list (std::vector <saga::url> & list,
     this->check_if_open ("dir_cpi_impl::sync_list", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(InstanceData->location_);
+    AdaptorData->getConnectionHandleForURL(InstanceData->location_, write_log_, logfile_loc_);
     
     try 
     {
@@ -105,7 +105,7 @@ void dir_cpi_impl::sync_exists (bool & exists, saga::url url)
     saga::url u = merge_urls(InstanceData->location_.get_url(), url);
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL( u.get_url() );
+    AdaptorData->getConnectionHandleForURL( u.get_url(), write_log_, logfile_loc_ );
     
     try 
     {
@@ -136,7 +136,7 @@ void dir_cpi_impl::sync_is_dir (bool & is_dir, saga::url url)
 	try 
     {
 		GridFTPConnection * ConnectionHandle = 
-		AdaptorData->getConnectionHandleForURL(u);    
+		AdaptorData->getConnectionHandleForURL(u, write_log_, logfile_loc_);    
         
         is_dir = ConnectionHandle->is_dir(u.get_url());
     } 
@@ -169,7 +169,7 @@ void dir_cpi_impl::sync_is_entry (bool & is_entry, saga::url url)
 	try 
     {
 		GridFTPConnection * ConnectionHandle = 
-		AdaptorData->getConnectionHandleForURL(u);    
+		AdaptorData->getConnectionHandleForURL(u, write_log_, logfile_loc_);    
         
         is_dir  = ConnectionHandle->is_dir(u.get_url());
 		is_link = ConnectionHandle->is_symlink(u.get_url());
@@ -202,7 +202,7 @@ void dir_cpi_impl::sync_is_link (bool & is_link, saga::url url)
     
 	try {
 		GridFTPConnection * ConnectionHandle = 
-        AdaptorData->getConnectionHandleForURL(u);  
+        AdaptorData->getConnectionHandleForURL(u, write_log_, logfile_loc_);  
         
         is_link = ConnectionHandle->is_symlink(u.get_url());
     } 
@@ -230,7 +230,7 @@ void dir_cpi_impl::sync_read_link (saga::url & ret, saga::url source)
     saga::url url = merge_urls(InstanceData->location_.get_url(), source);  
     
 	GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(url);    
+    AdaptorData->getConnectionHandleForURL(url, write_log_, logfile_loc_);    
     
     try 
     {
@@ -258,7 +258,7 @@ void dir_cpi_impl::sync_get_num_entries (std::size_t & num)
     this->check_if_open ("dir_cpi_impl::sync_get_num_entries", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(InstanceData->location_);  
+    AdaptorData->getConnectionHandleForURL(InstanceData->location_, write_log_, logfile_loc_);  
     
     try 
     {
@@ -287,7 +287,7 @@ void dir_cpi_impl::sync_get_entry (saga::url & ret, std::size_t entry )
     this->check_if_open ("dir_cpi_impl::sync_get_entry", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(InstanceData->location_);    
+    AdaptorData->getConnectionHandleForURL(InstanceData->location_, write_log_, logfile_loc_);    
     
     std::vector<saga::url> directory_list;
     
@@ -388,7 +388,7 @@ void dir_cpi_impl::sync_copy (saga::impl::void_t & ret, saga::url src,
     try {
         
         GridFTPConnection * ConnectionHandle = 
-        AdaptorData->getConnectionHandleForURL(InstanceData->location_);
+        AdaptorData->getConnectionHandleForURL(InstanceData->location_, write_log_, logfile_loc_);
         
         if(ConnectionHandle->exist(u_dst.get_url())) {
 			if(ConnectionHandle->is_dir(u_dst.get_url())) {
@@ -460,7 +460,7 @@ void dir_cpi_impl::sync_remove (saga::impl::void_t & ret, saga::url url, int fla
     saga::url u = merge_urls(InstanceData->location_.get_url(), url);
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(u);
+    AdaptorData->getConnectionHandleForURL(u, write_log_, logfile_loc_);
     
     try 
     {
@@ -552,7 +552,7 @@ void dir_cpi_impl::sync_make_dir (saga::impl::void_t & ret, saga::url url, int f
     saga::url u = merge_urls(InstanceData->location_.get_url(), url);
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(u);
+    AdaptorData->getConnectionHandleForURL(u, write_log_, logfile_loc_);
     
     try
     {

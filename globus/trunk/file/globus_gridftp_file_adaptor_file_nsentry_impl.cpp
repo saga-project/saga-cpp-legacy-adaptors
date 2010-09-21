@@ -112,7 +112,7 @@ void file_cpi_impl::sync_is_link   (bool & is_link)
     this->check_if_open ("file_cpi_impl::sync_is_link", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(InstanceData->location_);  
+    AdaptorData->getConnectionHandleForURL(InstanceData->location_, write_log_, logfile_loc_);  
     
     bool test = false;
     
@@ -141,7 +141,7 @@ void file_cpi_impl::sync_read_link (saga::url & target)
     this->check_if_open ("file_cpi_impl::sync_read_link", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
-    AdaptorData->getConnectionHandleForURL(InstanceData->location_);    
+    AdaptorData->getConnectionHandleForURL(InstanceData->location_, write_log_, logfile_loc_);    
     
 	std::string source_entry("");
 	
@@ -215,7 +215,7 @@ void file_cpi_impl::sync_copy (saga::impl::void_t & ret,
     this->check_if_open ("file_cpi_impl::sync_copy", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
-        AdaptorData->getConnectionHandleForURL(InstanceData->location_);
+        AdaptorData->getConnectionHandleForURL(InstanceData->location_, write_log_, logfile_loc_);
     
 	saga::url target = merge_urls(InstanceData->location_.get_url(), tmp_dst);	
 	
@@ -300,7 +300,7 @@ void file_cpi_impl::sync_move (saga::impl::void_t & ret,
     saga::url target = merge_urls(InstanceData->location_.get_url(), dest);
     try {
         GridFTPConnection * ConnectionHandle = 
-        AdaptorData->getConnectionHandleForURL(InstanceData->location_);
+        AdaptorData->getConnectionHandleForURL(InstanceData->location_, write_log_, logfile_loc_);
         
 		if(ConnectionHandle->exist(target.get_url())) {
 			if(ConnectionHandle->is_dir(target.get_url())) {
@@ -330,7 +330,7 @@ void file_cpi_impl::sync_remove (saga::impl::void_t & ret,
     
 	try {
 		GridFTPConnection * ConnectionHandle = 
-        AdaptorData->getConnectionHandleForURL(InstanceData->location_);  
+        AdaptorData->getConnectionHandleForURL(InstanceData->location_, write_log_, logfile_loc_);  
         
 		ConnectionHandle->remove_file( InstanceData->location_.get_url() );
     }

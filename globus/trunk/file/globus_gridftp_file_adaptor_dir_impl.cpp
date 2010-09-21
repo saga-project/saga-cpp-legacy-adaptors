@@ -26,8 +26,30 @@ dir_cpi_impl::dir_cpi_impl (proxy                * p,
 {
     adaptor_data_t adata(this);
     instance_data idata(this);
-           
-	  saga::url location(idata->location_);
+    
+    // Read some stuff from the .ini file
+    saga::ini::ini prefs = adap_ini.get_section ("preferences");
+    
+    if (prefs.has_entry("write_ftp_log")) 
+    {
+        std::string wfl = prefs.get_entry("write_ftp_log");
+        if(wfl == "true" || wfl == "True" || wfl == "TRUE")
+        {
+            write_log_ = true;
+        }
+        else 
+        {
+            write_log_ = false;
+        }
+        
+    }
+    
+    if (prefs.has_entry("logilfe_location"))
+        logfile_loc_ = prefs.get_entry("logilfe_location");
+    else 
+        logfile_loc_ = "saga_gridftp.log";
+    
+    saga::url location(idata->location_);
     std::string host(location.get_host());
     std::string scheme(location.get_scheme());
 	
@@ -84,7 +106,7 @@ dir_cpi_impl::dir_cpi_impl (proxy                * p,
     }
     
     GridFTPConnection * ConnectionHandle = 
-    adata->getConnectionHandleForURL(saga::url(idata->location_.get_url()));
+    adata->getConnectionHandleForURL(saga::url(idata->location_.get_url()), write_log_, logfile_loc_);
 	
     // check if file exists AND is a dir (not a file)
     bool exists  = true;
@@ -169,7 +191,7 @@ void dir_cpi_impl::sync_get_size (saga::off_t& size_out, saga::url name, int fla
     saga::url u = merge_urls(idata->location_.get_url(), name);
     
     GridFTPConnection * ConnectionHandle = 
-    adata->getConnectionHandleForURL(u);  
+    adata->getConnectionHandleForURL(u, write_log_, logfile_loc_);  
     
     try 
     {
@@ -233,7 +255,7 @@ void dir_cpi_impl::sync_is_file(bool & is_file, saga::url name)
 	try 
     {
 		GridFTPConnection * ConnectionHandle = 
-		adata->getConnectionHandleForURL(u);    
+		adata->getConnectionHandleForURL(u, write_log_, logfile_loc_);    
         
         is_file  = ConnectionHandle->is_file(u.get_url());
     } 

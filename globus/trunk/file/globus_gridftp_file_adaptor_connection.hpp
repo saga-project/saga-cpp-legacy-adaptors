@@ -307,6 +307,9 @@ namespace globus_gridftp_file_adaptor
         {
         private:
             
+            FILE * DebugLogfile_;
+            bool   EnableLogging_;
+            
             globus_mutex_t  Lock_;
             globus_cond_t   Cond_;
             globus_bool_t   Done_;
@@ -321,6 +324,7 @@ namespace globus_gridftp_file_adaptor
             globus_ftp_client_handle_t          handle;
             globus_ftp_client_handleattr_t      handle_attr;
             globus_ftp_client_operationattr_t   attr;
+            globus_ftp_client_plugin_t          debug_plugin;
             
             std::string                            CurrentErrorStr_;
             globus_gridftp_file_adaptor::error     CurrentError_;
@@ -416,7 +420,7 @@ namespace globus_gridftp_file_adaptor
              * default constructor.
              *
              */
-            GridFTPConnection( const saga::url  &  url );
+            GridFTPConnection( const saga::url  &  url, bool enable_log=false, std::string logfile_name="saga_gridftp.log" );
             
             /**
              * default destructor.
