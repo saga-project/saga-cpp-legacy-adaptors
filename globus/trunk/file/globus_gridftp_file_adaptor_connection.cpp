@@ -1011,23 +1011,18 @@ void GridFTPConnection
                                                      CurrentError_);
 	}
     
-    
     // GridFTP, like FTP does not preserve file permissions. The permissions 
     // are determined by the destination site (umask). Clients can however use 
     // SITE CHMOD command to change the permissions.
     int is_exe = -1;
     is_exe = access(src_u.get_path().c_str(), X_OK);
-    
-    std::cout << "ACCESS returned: " << is_exe << std::endl;
-    
-    if(is_exe == 0)
+        
+    if(is_exe == 0 && (dst_scheme == "gsiftp" || dst_scheme == "gridftp"))
     {
-        std::cout << "changing perm for: " << saga_to_gridftp_url(dst_url, "gsiftp").c_str() << std::endl;
-
         // file has executable permission
         success = globus_ftp_client_chmod(&this->handle,
                                          saga_to_gridftp_url(dst_url, "gsiftp").c_str(),
-                                         0777,
+                                         0755,
                                          &this->attr,
                                          done_callback,
                                          this);

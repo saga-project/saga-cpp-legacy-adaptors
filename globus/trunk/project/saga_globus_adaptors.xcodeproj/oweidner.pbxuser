@@ -323,6 +323,10 @@
 			7B9E4E1912493EDF00612C8D /* PBXTextBookmark */ = 7B9E4E1912493EDF00612C8D /* PBXTextBookmark */;
 			7B9E4E1A12493EE100612C8D /* PBXTextBookmark */ = 7B9E4E1A12493EE100612C8D /* PBXTextBookmark */;
 			7B9E4E1B12493EE100612C8D /* PBXTextBookmark */ = 7B9E4E1B12493EE100612C8D /* PBXTextBookmark */;
+			7B9E4E1C1249401900612C8D /* PBXTextBookmark */ = 7B9E4E1C1249401900612C8D /* PBXTextBookmark */;
+			7B9E4E1D1249401900612C8D /* PBXTextBookmark */ = 7B9E4E1D1249401900612C8D /* PBXTextBookmark */;
+			7B9E4E1E1249401900612C8D /* PBXTextBookmark */ = 7B9E4E1E1249401900612C8D /* PBXTextBookmark */;
+			7B9E4E1F1249401900612C8D /* PBXTextBookmark */ = 7B9E4E1F1249401900612C8D /* PBXTextBookmark */;
 			7BF0DD141249039700ECB59B = 7BF0DD141249039700ECB59B /* PBXTextBookmark */;
 			7BF0DD151249039700ECB59B = 7BF0DD151249039700ECB59B /* PBXTextBookmark */;
 			7BF0DD161249039700ECB59B = 7BF0DD161249039700ECB59B /* PBXTextBookmark */;
@@ -334,9 +338,9 @@
 	};
 	7B2A157E0D5A768100832C20 /* globus_gridftp_file_adaptor_file_nsentry_impl.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1277, 4667}}";
-			sepNavSelRange = "{6773, 26}";
-			sepNavVisRange = "{4057, 3739}";
+			sepNavIntBoundsRect = "{{0, 0}, {1277, 4589}}";
+			sepNavSelRange = "{9695, 76}";
+			sepNavVisRange = "{8197, 3309}";
 		};
 	};
 	7B2A158C0D5A779E00832C20 /* globus_gridftp_file_adaptor_file_perm_impl.cpp */ = {
@@ -530,7 +534,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 998";
 		rLen = 0;
-		rLoc = 34915;
+		rLoc = 34910;
 		rType = 0;
 		vrLen = 3041;
 		vrLoc = 31129;
@@ -550,7 +554,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 999";
 		rLen = 0;
-		rLoc = 34888;
+		rLoc = 34883;
 		rType = 0;
 		vrLen = 3020;
 		vrLoc = 31298;
@@ -560,7 +564,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 999";
 		rLen = 0;
-		rLoc = 34893;
+		rLoc = 34888;
 		rType = 0;
 		vrLen = 3086;
 		vrLoc = 31236;
@@ -589,7 +593,7 @@
 		isa = PBXTextBookmark;
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		rLen = 4;
-		rLoc = 34796;
+		rLoc = 34791;
 		rType = 0;
 	};
 	7B9E4D201249109D00612C8D /* PBXTextBookmark */ = {
@@ -597,7 +601,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 997";
 		rLen = 4;
-		rLoc = 34796;
+		rLoc = 34791;
 		rType = 0;
 		vrLen = 385;
 		vrLoc = 33937;
@@ -607,7 +611,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 997";
 		rLen = 4;
-		rLoc = 34796;
+		rLoc = 34791;
 		rType = 0;
 		vrLen = 385;
 		vrLoc = 33937;
@@ -667,7 +671,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1008";
 		rLen = 0;
-		rLoc = 35513;
+		rLoc = 35393;
 		rType = 0;
 		vrLen = 3384;
 		vrLoc = 31571;
@@ -677,7 +681,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1008";
 		rLen = 0;
-		rLoc = 35511;
+		rLoc = 35391;
 		rType = 0;
 		vrLen = 3385;
 		vrLoc = 31571;
@@ -687,7 +691,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1004";
 		rLen = 0;
-		rLoc = 35219;
+		rLoc = 35099;
 		rType = 0;
 		vrLen = 3392;
 		vrLoc = 31571;
@@ -697,7 +701,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1004";
 		rLen = 0;
-		rLoc = 35219;
+		rLoc = 35099;
 		rType = 0;
 		vrLen = 3391;
 		vrLoc = 31571;
@@ -707,7 +711,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1007";
 		rLen = 0;
-		rLoc = 35409;
+		rLoc = 35289;
 		rType = 0;
 		vrLen = 3456;
 		vrLoc = 31571;
@@ -717,7 +721,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1018";
 		rLen = 0;
-		rLoc = 36195;
+		rLoc = 36075;
 		rType = 0;
 		vrLen = 3482;
 		vrLoc = 31755;
@@ -727,7 +731,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1001";
 		rLen = 0;
-		rLoc = 34981;
+		rLoc = 34915;
 		rType = 0;
 		vrLen = 3543;
 		vrLoc = 31755;
@@ -737,7 +741,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1001";
 		rLen = 0;
-		rLoc = 34961;
+		rLoc = 34915;
 		rType = 0;
 		vrLen = 3546;
 		vrLoc = 31755;
@@ -747,7 +751,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1005";
 		rLen = 0;
-		rLoc = 35105;
+		rLoc = 35000;
 		rType = 0;
 		vrLen = 3596;
 		vrLoc = 31813;
@@ -757,7 +761,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1010";
 		rLen = 0;
-		rLoc = 35351;
+		rLoc = 35231;
 		rType = 0;
 		vrLen = 3596;
 		vrLoc = 31813;
@@ -767,7 +771,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1008";
 		rLen = 0;
-		rLoc = 35178;
+		rLoc = 35058;
 		rType = 0;
 		vrLen = 3588;
 		vrLoc = 31856;
@@ -777,7 +781,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1010";
 		rLen = 0;
-		rLoc = 35351;
+		rLoc = 35231;
 		rType = 0;
 		vrLen = 3584;
 		vrLoc = 32126;
@@ -787,7 +791,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1010";
 		rLen = 0;
-		rLoc = 35351;
+		rLoc = 35231;
 		rType = 0;
 		vrLen = 3585;
 		vrLoc = 32126;
@@ -797,7 +801,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1013";
 		rLen = 0;
-		rLoc = 35507;
+		rLoc = 35387;
 		rType = 0;
 		vrLen = 3530;
 		vrLoc = 32126;
@@ -807,7 +811,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1009";
 		rLen = 0;
-		rLoc = 35308;
+		rLoc = 35188;
 		rType = 0;
 		vrLen = 3542;
 		vrLoc = 32126;
@@ -817,7 +821,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1000";
 		rLen = 0;
-		rLoc = 34841;
+		rLoc = 34836;
 		rType = 0;
 		vrLen = 3515;
 		vrLoc = 32126;
@@ -837,7 +841,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1006";
 		rLen = 0;
-		rLoc = 34841;
+		rLoc = 34836;
 		rType = 0;
 		vrLen = 3619;
 		vrLoc = 32571;
@@ -847,7 +851,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1007";
 		rLen = 0;
-		rLoc = 34841;
+		rLoc = 34836;
 		rType = 0;
 		vrLen = 3630;
 		vrLoc = 32571;
@@ -857,7 +861,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1007";
 		rLen = 0;
-		rLoc = 34841;
+		rLoc = 34836;
 		rType = 0;
 		vrLen = 3647;
 		vrLoc = 32571;
@@ -867,7 +871,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1010";
 		rLen = 0;
-		rLoc = 34841;
+		rLoc = 34836;
 		rType = 0;
 		vrLen = 3646;
 		vrLoc = 32571;
@@ -877,7 +881,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1011";
 		rLen = 0;
-		rLoc = 34841;
+		rLoc = 34836;
 		rType = 0;
 		vrLen = 3644;
 		vrLoc = 32571;
@@ -887,7 +891,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1012";
 		rLen = 0;
-		rLoc = 34841;
+		rLoc = 34836;
 		rType = 0;
 		vrLen = 3587;
 		vrLoc = 32571;
@@ -897,7 +901,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1017";
 		rLen = 0;
-		rLoc = 34841;
+		rLoc = 34836;
 		rType = 0;
 		vrLen = 3582;
 		vrLoc = 32571;
@@ -907,7 +911,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1018";
 		rLen = 0;
-		rLoc = 34841;
+		rLoc = 34836;
 		rType = 0;
 		vrLen = 3594;
 		vrLoc = 32571;
@@ -917,7 +921,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1032";
 		rLen = 0;
-		rLoc = 35206;
+		rLoc = 35086;
 		rType = 0;
 		vrLen = 3498;
 		vrLoc = 32934;
@@ -927,7 +931,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1035";
 		rLen = 0;
-		rLoc = 35397;
+		rLoc = 35277;
 		rType = 0;
 		vrLen = 3497;
 		vrLoc = 32934;
@@ -937,7 +941,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1032";
 		rLen = 0;
-		rLoc = 35206;
+		rLoc = 35086;
 		rType = 0;
 		vrLen = 3498;
 		vrLoc = 32934;
@@ -947,7 +951,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1018";
 		rLen = 0;
-		rLoc = 34841;
+		rLoc = 34836;
 		rType = 0;
 		vrLen = 3522;
 		vrLoc = 32934;
@@ -957,7 +961,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1035";
 		rLen = 0;
-		rLoc = 35408;
+		rLoc = 35288;
 		rType = 0;
 		vrLen = 3528;
 		vrLoc = 32934;
@@ -967,7 +971,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1035";
 		rLen = 10;
-		rLoc = 35398;
+		rLoc = 35278;
 		rType = 0;
 		vrLen = 3522;
 		vrLoc = 32934;
@@ -1171,7 +1175,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1026";
 		rLen = 0;
-		rLoc = 35212;
+		rLoc = 35092;
 		rType = 0;
 		vrLen = 3564;
 		vrLoc = 32672;
@@ -2501,7 +2505,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1043";
 		rLen = 0;
-		rLoc = 35832;
+		rLoc = 35712;
 		rType = 0;
 		vrLen = 3564;
 		vrLoc = 32769;
@@ -2560,7 +2564,7 @@
 		isa = PBXTextBookmark;
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		rLen = 6;
-		rLoc = 34876;
+		rLoc = 34871;
 		rType = 0;
 	};
 	7B9E4DF612493D2100612C8D /* PBXTextBookmark */ = {
@@ -2568,7 +2572,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1019";
 		rLen = 6;
-		rLoc = 34876;
+		rLoc = 34871;
 		rType = 0;
 		vrLen = 278;
 		vrLoc = 34709;
@@ -2638,7 +2642,7 @@
 		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
 		name = "globus_gridftp_file_adaptor_connection.cpp: 1019";
 		rLen = 6;
-		rLoc = 34876;
+		rLoc = 34871;
 		rType = 0;
 		vrLen = 3521;
 		vrLoc = 32497;
@@ -2920,6 +2924,46 @@
 		vrLen = 3048;
 		vrLoc = 0;
 	};
+	7B9E4E1C1249401900612C8D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B2A157E0D5A768100832C20 /* globus_gridftp_file_adaptor_file_nsentry_impl.cpp */;
+		name = "globus_gridftp_file_adaptor_file_nsentry_impl.cpp: 300";
+		rLen = 76;
+		rLoc = 9695;
+		rType = 0;
+		vrLen = 3309;
+		vrLoc = 8197;
+	};
+	7B9E4E1D1249401900612C8D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B9FB90C0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.hpp */;
+		name = "globus_gridftp_file_adaptor_connection.hpp: 423";
+		rLen = 112;
+		rLoc = 14834;
+		rType = 0;
+		vrLen = 3743;
+		vrLoc = 13032;
+	};
+	7B9E4E1E1249401900612C8D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */;
+		name = "globus_gridftp_file_adaptor_connection.cpp: 1023";
+		rLen = 0;
+		rLoc = 34943;
+		rType = 0;
+		vrLen = 3578;
+		vrLoc = 32810;
+	};
+	7B9E4E1F1249401900612C8D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7B9E4D8612492F6900612C8D /* ssh_job_service.hpp */;
+		name = "ssh_job_service.hpp: 73";
+		rLen = 42;
+		rLoc = 2360;
+		rType = 0;
+		vrLen = 3048;
+		vrLoc = 0;
+	};
 	7B9FB9000BB1BA2400E9EA8D /* globus_gridftp_file_adaptor.cpp */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1277, 1508}}";
@@ -2964,9 +3008,9 @@
 	};
 	7B9FB90B0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {999, 13975}}";
-			sepNavSelRange = "{7360, 19}";
-			sepNavVisRange = "{7301, 184}";
+			sepNavIntBoundsRect = "{{0, 0}, {1277, 13793}}";
+			sepNavSelRange = "{35010, 0}";
+			sepNavVisRange = "{32810, 3578}";
 		};
 	};
 	7B9FB90C0BB1BA2500E9EA8D /* globus_gridftp_file_adaptor_connection.hpp */ = {
