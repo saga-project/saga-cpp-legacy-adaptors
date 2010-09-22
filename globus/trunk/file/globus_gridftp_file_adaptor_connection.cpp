@@ -5,6 +5,7 @@
 
 #include <string>
 #include <boost/tokenizer.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include "globus_gridftp_file_adaptor_connection.hpp"
 
@@ -471,9 +472,11 @@ GridFTPConnection::GridFTPConnection( const saga::url &  server, bool enable_log
     if(true == EnableLogging_)
     {
         char text[256];
-    
+        pid_t pid = getpid();
+        logfile_name.append("."+boost::lexical_cast<std::string>(pid));
+        
         DebugLogfile_ = fopen(logfile_name.c_str(), "a");
-        sprintf(text, "%s:%ld", "GridFTP", (long) getpid());
+        sprintf(text, "%s:%ld", "GridFTP", (long) pid);
     
         globus_ftp_client_debug_plugin_init(&debug_plugin, DebugLogfile_, text);
     
@@ -1014,38 +1017,31 @@ void GridFTPConnection
     // GridFTP, like FTP does not preserve file permissions. The permissions 
     // are determined by the destination site (umask). Clients can however use 
     // SITE CHMOD command to change the permissions.
+    
     int is_exe = -1;
     is_exe = access(src_u.get_path().c_str(), X_OK);
         
     if(is_exe == 0 && (dst_scheme == "gsiftp" || dst_scheme == "gridftp"))
     {
-        // file has executable permission
-        success = globus_ftp_client_chmod(&this->handle,
-                                         saga_to_gridftp_url(dst_url, "gsiftp").c_str(),
-                                         0755,
-                                         &this->attr,
-                                         done_callback,
-                                         this);
-        
-        if( success != GLOBUS_SUCCESS )
-        {
-            globus_object_t * err = globus_error_get(success);          
-            this->set_current_error(err);                               
-            
-            this->Done_   = GLOBUS_TRUE;
-            this->Error_  = GLOBUS_TRUE;
-        }
-        
-        if( this->Error_ )
-            throw globus_gridftp_file_adaptor::exception(CurrentErrorStr_, 
-                                                         CurrentError_);
-        
         SAGA_VERBOSE (SAGA_VERBOSE_LEVEL_BLURB)
         {
             std::cerr << "setting executable bit for: " 
             << saga_to_gridftp_url(dst_url, "gsiftp").c_str() << std::endl;
         }
-                                                    
+        
+        globus_result_t success;
+        GLOBUS_GUARDED_EXEC( success ,
+            globus_ftp_client_chmod(&this->handle,
+                                    saga_to_gridftp_url(dst_url, "gsiftp").c_str(),
+                                    0744,
+                                    &this->attr,
+                                    done_callback,
+                                    this);
+        )
+ 
+        if( this->Error_ )
+            throw globus_gridftp_file_adaptor::exception(CurrentErrorStr_, 
+                                                         CurrentError_);                                                   
                                                     
     }
 }
