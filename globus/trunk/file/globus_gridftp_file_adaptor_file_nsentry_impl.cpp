@@ -192,7 +192,6 @@ void file_cpi_impl::sync_copy (saga::impl::void_t & ret,
         {
             // If the target is a local directory, we need to append the remote 
             // filename to it, otherwise Globus won't be happy.
-            std::cerr << "HERE: " << tmp_dst << std::endl;
             boost::filesystem::path dp(tmp_dst.get_path());
             if(boost::filesystem::is_directory(dp) == true)
             {
