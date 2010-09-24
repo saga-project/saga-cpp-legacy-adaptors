@@ -91,111 +91,12 @@ omii_gridsam_job_service::sync_create_job(saga::job::job& ret, saga::job::descri
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace {
-
-    // The command line splitting below is taken from the Boost.ProgramOptions
-    // library.
-
-    // Copyright Vladimir Prus 2002-2004.
-    // Distributed under the Boost Software License, Version 1.0.
-    // (See accompanying file LICENSE_1_0.txt
-    // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-    // Take a command line string and splits in into tokens, according
-    // to the following rules
-    //
-    //  - Arguments are delimited by white space, which is either a space or 
-    //    a tab.
-    //  - A string surrounded by double quotation marks is interpreted as a 
-    //    single argument, regardless of white space contained within. A 
-    //    quoted string can be embedded in an argument. 
-    //  - A double quotation mark preceded by a backslash, \", is interpreted 
-    //    as a literal double quotation mark (").
-    //  - Backslashes are interpreted literally, unless they immediately precede 
-    //    a double quotation mark.
-    //
-    // These rules are a slight modification of the windows command line 
-    // processor rules, as described here:
-    //    http://article.gmane.org/gmane.comp.lib.boost.user/3005
-    //    http://msdn.microsoft.com/library/en-us/vccelng/htm/progs_12.asp
-    std::vector<std::string> split_commandline (std::string const & input)
-    {
-        using namespace std;
-        vector<string> result;
-
-        string::const_iterator i = input.begin ();
-        string::const_iterator e = input.end   ();
-
-        for (/**/; i != e; ++i)
-            if (!isspace((unsigned char)*i))
-                break;
-       
-        if (i != e) {
-            string current;
-            bool inside_quoted  = false;
-            int backslash_count = 0;
-
-            for (/**/; i != e; ++i) {
-                if (*i == '\\') {
-                    // just count backslashes 
-                    ++backslash_count;
-                }
-                else if (*i == '"') {
-                    // '"' preceded by a backslash is a literal quote
-                    // the backslash which quoted is removed
-                    if (backslash_count > 0) {
-                        current += '"';
-                        --backslash_count;
-                    }
-                    else    // '"' not preceded by a backslash limits a quote
-                      inside_quoted = ! inside_quoted;
-                } 
-                else {
-                    // Not quote or backslash. All accumulated backslashes 
-                    // should be added
-                    if (0 != backslash_count) {
-                        current.append (backslash_count, '\\');
-                        backslash_count = 0;
-                    }
-
-                    if (isspace((unsigned char) *i) && !inside_quoted) {
-                        // Space outside quoted section terminate the current argument
-                        result.push_back (current);
-                        current.resize   (0);
-                
-                        for (/**/; i != e && isspace((unsigned char) *i); ++i) 
-                            /**/;
-
-                        --i;
-                    } 
-                    else 
-                        current += *i;
-                }
-            }
-
-            // If we have trailing backslashes, add them
-            if (0 != backslash_count)
-                current.append (backslash_count, '\\');
-
-            // If we have non-empty 'current' or we're still in quoted
-            // section (even if 'current' is empty), add the last token.
-            if (!current.empty() || inside_quoted)
-                result.push_back (current);
-
-            // FIXME: we SHOULD throw an exception here, non-matching quotes
-            // are a BadParameter -- AM
-        }
-        return result;
-    }
-
-///////////////////////////////////////////////////////////////////////////////
-}
 
 void omii_gridsam_job_service::run_job_noio(saga::job::job& ret, 
                                             std::string host,
                                             std::string commandline)
 {
-    std::vector<std::string> cmdline = split_commandline (commandline);
+    std::vector<std::string> cmdline = saga::adaptors::utils::split_commandline (commandline);
     std::string executable = cmdline[0];
 
     saga::job::description jd;
@@ -242,7 +143,7 @@ void omii_gridsam_job_service::sync_run_job(saga::job::job& ret,
                                             saga::job::istream& out, 
                                             saga::job::istream& err)
 {
-    std::vector<std::string> cmdline = split_commandline (commandline);
+    std::vector<std::string> cmdline = saga::adaptors::utils::split_commandline (commandline);
     std::string executable = cmdline[0];
     
     saga::job::description jd;

@@ -12,6 +12,7 @@
 #include <saga/impl/config.hpp>
 #include <saga/saga/exception.hpp>
 #include <saga/saga/adaptors/task.hpp>
+#include <saga/saga/adaptors/utils.hpp>
 #include <saga/saga/adaptors/attribute.hpp>
 #include <saga/saga/packages/job/adaptors/job.hpp>
 
@@ -184,7 +185,7 @@ sync_run_job_noio(saga::job::job & ret,
         SAGA_ADAPTOR_THROW(error_text, saga::BadParameter);
     }
  
-    std::vector<std::string> cmdline = utility::split_commandline (commandline);
+    std::vector<std::string> cmdline = saga::adaptors::utils::split_commandline (commandline);
     std::string executable = cmdline[0];
     
     // Try to convert the supplied 'host' into a Globus GRAM compliant
@@ -264,7 +265,7 @@ sync_run_job(saga::job::job & ret,
         SAGA_ADAPTOR_THROW(error_text, saga::BadParameter);
     }
  
-    std::vector<std::string> cmdline = utility::split_commandline (commandline);
+    std::vector<std::string> cmdline = saga::adaptors::utils::split_commandline (commandline);
     std::string executable = cmdline[0];
     
     // Try to convert the supplied 'host' into a Globus GRAM compliant

@@ -150,7 +150,6 @@ namespace globus_gram_job_adaptor {
         translate_gram_to_saga_job_state (const saga::job::state& old_state,
                                           int gram_state);
         
-        static std::vector <std::string> split_commandline (std::string const & input);
         
         /**
          *  Translate a SAGA job description to a Globus RSL string

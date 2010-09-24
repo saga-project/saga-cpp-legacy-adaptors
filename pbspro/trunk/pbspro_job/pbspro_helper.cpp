@@ -16,7 +16,6 @@
  * limitations under the License.
  */
 
-//#include <saga/impl/packages/job/split_commandline.hpp>
 #include <saga/saga/adaptors/utils/utils.hpp>
 
 #include "pbspro_helper.hpp"

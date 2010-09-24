@@ -26,7 +26,7 @@ extern "C" {
 #include <cstring>
 
 #include <saga/impl/exception.hpp>
-#include <saga/impl/packages/job/split_commandline.hpp>
+#include <saga/saga/adaptors/utils/utils.hpp>
 
 #include "naregi_helper.hpp"
 
@@ -134,7 +134,7 @@ namespace naregi_job { namespace helper {
 			  std::string& executable,
 			  std::vector<std::string>& options)
   {
-    std::vector<std::string> elems = saga::impl::split_commandline(cmd);
+    std::vector<std::string> elems = saga::adaptors::utils::split_commandline(cmd);
     if (elems.empty()) {
       return false;
     }
