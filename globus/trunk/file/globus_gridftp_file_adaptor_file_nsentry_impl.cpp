@@ -188,6 +188,19 @@ void file_cpi_impl::sync_copy (saga::impl::void_t & ret,
             << "]. If target URL scheme is 'file://', only 'localhost' is accepted as host.";
            SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter);   
         }
+        else 
+        {
+            // If the target is a local directory, we need to append the remote 
+            // filename to it, otherwise Globus won't be happy.
+            std::cerr << "HERE: " << tmp_dst << std::endl;
+            boost::filesystem::path dp(tmp_dst.get_path());
+            if(boost::filesystem::is_directory(dp) == true)
+            {
+                boost::filesystem::path sp(InstanceData->location_.get_path());
+                tmp_dst.set_path(tmp_dst.get_path() + "/" + sp.filename());
+            }
+        }
+
         
         // avoid file:// -> file:// copy.
         if (InstanceData->location_.get_scheme() != "gridftp" 
@@ -218,6 +231,7 @@ void file_cpi_impl::sync_copy (saga::impl::void_t & ret,
         AdaptorData->getConnectionHandleForURL(InstanceData->location_, write_log_, logfile_loc_);
     
 	saga::url target = merge_urls(InstanceData->location_.get_url(), tmp_dst);	
+
 	
     try {
 		if((target.get_host().empty()) || (target.get_host() == ("localhost")))
