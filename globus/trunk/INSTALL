@@ -1,8 +1,8 @@
                     
                      SAGA Globus Adaptors - Installation
-                  <http://saga.cct.lsu.edu/software/python>
+                   <http://saga.cct.lsu.edu/software/cpp>
 
-
+ 
   For detailed informations on how to install SAGA, please refer 
   to the documentation section on our website:
 
@@ -13,11 +13,11 @@
   
   o SAGA Core Components
     You have to install the SAGA Core Components before you can install the
-    Python Bindings. The Core Components are available on the SAGA website.
+    Globus Adaptors. The Core Components are available on the SAGA website.
 
   o SAGA X.509 Adaptor
-    The Globus Adaptors require the SAGA X.509 adaptor to manage the
-    certificates. It is available in the download section of the SAGA website.
+    The Globus Adaptors require the SAGA X.509 adaptor for certificate
+    handling. It is available for download on the SAGA website.
 
   o Boost C++ Libraries >= 1.33
     You need to have the Boost C++ libraries installed on your system. Many
@@ -44,9 +44,9 @@
                             /opt/globus-XX
     --with-globus-flavor=   The flavor of your Globus installation. Check the
                             inlcude directory of your Globus installation to
-                            see which flavors are available. If you don't provide
-                            the Globus flavor, configure will try to detect
-                            it automatically. This works sometimes.
+                            see which flavors are available. If you don't 
+                            provide the Globus flavor, configure will try to 
+                            detect it automatically. This works sometimes.
 
   For a complete list of configure options, you can typ
 
