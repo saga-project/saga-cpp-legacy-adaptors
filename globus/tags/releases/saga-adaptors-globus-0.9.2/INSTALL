@@ -1,0 +1,70 @@
+                    
+                     SAGA Globus Adaptors - Installation
+                   <http://saga.cct.lsu.edu/software/cpp>
+
+ 
+  For detailed informations on how to install SAGA, please refer 
+  to the documentation section on our website:
+
+    http://saga.cct.lsu.edu/software/cpp/documentation 
+
+
+  PREREQUISISTES:
+  
+  o SAGA Core Components
+    You have to install the SAGA Core Components before you can install the
+    Globus Adaptors. The Core Components are available on the SAGA website.
+
+  o SAGA X.509 Adaptor
+    The Globus Adaptors require the SAGA X.509 adaptor for certificate
+    handling. It is available for download on the SAGA website.
+
+  o Boost C++ Libraries >= 1.33
+    You need to have the Boost C++ libraries installed on your system. Many
+    systems already provide binary packages for them. If your system doesn't 
+    you can download the source from http://www.boost.org and build it yourself.
+    
+  o Globus Toolkit >= 4.0
+    You need to have at the client side libraries and headers for the 
+    Globus Toolkit (GRAM, GridFTP, RLS) installed. They're available from
+    the Globus website: http://www.globus.org/toolkit/.
+    
+ 
+  BUILDING AND INSTALLING THE GLOBUS ADAPTORS
+ 
+  The Globus Adaptors come with a configure/make-based buildsystem. There are 
+  some useful options for ./configure:
+
+    --boost-location=       The location of your Boost installation
+                            (e.g. /usr/local/packages/boost-1.42). You only
+                            need this option if boost is *not* installed in
+                            the default path (/usr/ or /usr/local
+    --with-globus-location= The location of your Globus installation. This is
+                            usually something like /usr/local/globus-XX or
+                            /opt/globus-XX
+    --with-globus-flavor=   The flavor of your Globus installation. Check the
+                            inlcude directory of your Globus installation to
+                            see which flavors are available. If you don't 
+                            provide the Globus flavor, configure will try to 
+                            detect it automatically. This works sometimes.
+
+  For a complete list of configure options, you can typ
+
+    ./configure --help
+ 
+
+  To configure, build and install the Globus Adaptors, make sure that 
+  $SAGA_LOCATION points to your SAGA Core Components installation and
+  execute ./configure and make:
+
+    $> export SAGA_LOCATION=/PATH/TO/SAGA_CORE_INSTALLATION
+    $> ./configure --with-boost=/BOOST/DIR/ --globus-location=/GLOBUS/DIR
+    $> make
+    $> make install
+
+
+
+  Please help us to improve the quality of SAGA and file a bug report if you 
+  have encountered any problems with the build system. Our bug-tracking system 
+  can be found at: http://saga.cct.lsu.edu/software/cpp/dev/ 
+
