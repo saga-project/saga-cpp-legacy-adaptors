@@ -23,7 +23,7 @@ SAGA_HAVE_ADAPTOR_X509=yes
 # first make sure that the x509 context adaptor is installed
 AC_MSG_CHECKING([for x509 adaptor])
 if ! test -f $TMP_SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini; then
-  SAGA_HAVE_ADAPTOR_X509="no: needs to be installed for the globus adaptors to function"
+  SAGA_HAVE_ADAPTOR_X509="NO. Get it here: http://saga.cct.lsu.edu/software/cpp/download/"
   AC_MSG_RESULT([ missing])
   BUILD_ADAPTOR_JOB="no (x509 adaptor missing)"
   BUILD_ADAPTOR_FILE="no (x509 adaptor missing)"
