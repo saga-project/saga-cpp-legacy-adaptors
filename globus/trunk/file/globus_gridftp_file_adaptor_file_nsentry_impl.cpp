@@ -12,6 +12,7 @@
 #include <saga/saga/url.hpp>
 #include <saga/saga/exception.hpp>
 #include <saga/saga/adaptors/task.hpp>
+#include <saga/saga/adaptors/utils/filesystem.hpp>
 
 #include <saga/impl/config.hpp>
 
@@ -196,7 +197,7 @@ void file_cpi_impl::sync_copy (saga::impl::void_t & ret,
             if(boost::filesystem::is_directory(dp) == true)
             {
                 boost::filesystem::path sp(InstanceData->location_.get_path());
-                tmp_dst.set_path(tmp_dst.get_path() + "/" + sp.filename());
+                tmp_dst.set_path(tmp_dst.get_path() + "/" + boost::filesystem::filename(sp));
             }
         }
 
