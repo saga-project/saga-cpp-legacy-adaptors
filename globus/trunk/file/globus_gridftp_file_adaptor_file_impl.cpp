@@ -73,9 +73,32 @@ file_cpi_impl::file_cpi_impl (proxy                * p,
        SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined); 
     }
     
-    if (scheme == "file") {
-        is_open_ = true; // otherwise check in copy() will fail
-        return; 
+    if (scheme == "file") 
+    {
+        // make sure file exist
+        namespace fs = boost::filesystem;
+        try 
+        {
+            std::string url = saga::url::unescape(location.get_path());
+            fs::path fpath (url, fs::native);
+            if ( ! fs::exists (fpath) )
+            {
+                SAGA_OSSTREAM strm;
+                strm << "Local file doesn't exist: [" << location << "].";
+                SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined); 
+            }
+            else 
+            {
+                is_open_ = true; // otherwise check in copy() will fail
+                return;
+            }
+        }
+        catch (boost::system::system_error const& e) 
+        {
+            SAGA_ADAPTOR_THROW(
+            location.get_string() + ": caught filesystem exception: " + e.what(),
+            saga::NoSuccess);
+        }
     }
     else
     {
