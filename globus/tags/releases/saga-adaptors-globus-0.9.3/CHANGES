@@ -1,0 +1,35 @@
+                           SAGA Globus Adaptors
+                 <http://saga.cct.lsu.edu/software/cpp>
+                           - Release Changelog -
+
+  
+  Changes with SAGA Globus Adaptors Version 0.9.3          28. September 2010
+  ---------------------------------------------------------------------------
+  
+  o Fixed another Boost filesystem API incompatibility that prevented the
+    GridFTP adaptor from building on Boost =< 1.34.
+    
+
+  Changes with SAGA Globus Adaptors Version 0.9.2          26. September 2010
+  ---------------------------------------------------------------------------
+  
+  o Fixed GRAM adaptor runtime issue (threading error) with Globus >= 5.0.2
+  o GridFTP preserves executable file attributes during remote copy now
+  o Fixed GridFTP bug that didn't allow to copy a file url into a directory
+    without explicitly the target filename. 
+  o GridFTP allows FTP protocol logging for debugging purposes now. This can
+    be enable in the adaptor.ini file by setting "write_ftp_log = true".
+   
+
+  Changes with SAGA Globus Adaptors Version 0.9.1             06. August 2010
+  ---------------------------------------------------------------------------
+
+  o Fixed two bugs related to relative URLS
+    - http://faust.cct.lsu.edu/trac/saga/ticket/489 
+    - http://faust.cct.lsu.edu/trac/saga/ticket/486
+  
+  
+  Changes with SAGA Globus Adaptors Version 0.9.0              18. April 2010
+  ---------------------------------------------------------------------------
+
+  o Initital release after repository split-up
