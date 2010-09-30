@@ -16,52 +16,25 @@ if test "x$REMOTEHOST" = "x"; then
   REMOTEHOST=localhost
 fi
 
-######################
-#### EXAMPLE TEST ####
-######################
-
-# Define a filename
-FILE=/tmp/saga.adaptor.ssh.test.$$
-
-# Give the file some contents
 STRING=saga_was_here
-`echo "$STRING" > $FILE.src`
+FILE=/tmp/saga.adaptor.gram.test
 
-# SAGA CALL NUMBER 1
-echo 'Running a remote echo test and put result in tmp file'
-`$SAGA_LOCATION/bin/saga-file copy file://localhost/$FILE.src ssh://$REMOTEHOST/$FILE.tgt`
+echo 'Run a remote echo test and put result in tmp file:'
+echo $SAGA_LOCATION/bin/saga-job run gram://$REMOTEHOST/ /bin/sh -c "echo $STRING > $FILE"
+$SAGA_LOCATION/bin/saga-job run gram://$REMOTEHOST/ /bin/sh -c "echo $STRING > $FILE"
 
-# SAGA CALL NUMBER 2
-echo 'Try to cat the file using ssh'
-RESULT=`$SAGA_LOCATION/bin/saga-file cat ssh://$REMOTEHOST/$FILE.tgt`
+echo 'Check what the remote temp file contains:'
+echo $SAGA_LOCATION/bin/saga-job run gram://$REMOTEHOST/ /bin/cat $FILE
+RESULT=`$SAGA_LOCATION/bin/saga-job run gram://$REMOTEHOST/ /bin/cat $FILE`
 
-# SAGA CALL NUMBER 3
-echo 'Clean up temporaries'
-rm -f $FILE.src
-`$SAGA_LOCATION/bin/saga-file remove ssh://$REMOTEHOST/$FILE.tgt`
+# Clean up temporaries
+$SAGA_LOCATION/bin/saga-job run gram://$REMOTEHOST/ rm -f $FILE
 
-# CHECK RESULT
-if test "$RESULT" != "$STRING"
-then
-   # Something went wrong!
-   echo "Saga could not succesfully cat the file!"
-   exit 1
-else
-   # Tests succeeded! 
+# Verify the cat exited what was expected
+if test "$RESULT" = "$STRING"; then
    echo "Success"
    exit 0;
+else
+   echo "Failed: $RESULT != $STRING"
+   exit 1
 fi
-
-#####################################################
-#### ADD MORE TESTS SIMILAR TO THE ONE ABOVE !!! ####
-#####################################################
-
-# Try to cover all commands the command line tool has to offer
-
-# Try different combinations of URLs
-
-# Make sure to return 0 in case of success and 1 in case of an error
-
-# Please try to come up with *decriptive* error messages!
-
-# Thanks ;-)
