@@ -102,18 +102,21 @@ namespace globus_gridftp_file_adaptor
         {
             boost::filesystem::path full_path( boost::filesystem::initial_path<boost::filesystem::path>() );
             full_path = boost::filesystem::system_complete( boost::filesystem::path( path ) );
-            saga_url.set_path(full_path.string());
         }
         
         // we don't understand /. at the end of a directory URL
         if(path.length() > 2) {
             if( path.find("/.") == path.length()-2 ) {
                 path.resize(path.length()-2);
-                saga_url.set_path(path);
             }
         }
 		
-        
+		// We need to fileter certain characters that make GridFTP choke 
+		//boost::regex pattern ("<",boost::regex_constants::icase|boost::regex_constants::perl);
+		//path = boost::regex_replace(path, pattern, "%25");
+		//std::cout<<"replace ="<<path<<std::endl;
+		
+		saga_url.set_path(path);
         return saga_url.get_url();
     }  
     
