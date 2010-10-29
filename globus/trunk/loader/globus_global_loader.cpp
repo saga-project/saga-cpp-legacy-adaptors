@@ -45,33 +45,86 @@ namespace globus_module_loader
       // this c'tor is only called once, and is thread safe
       globus_init_singleton (void)
       {
-        globus_module_activate (GLOBUS_COMMON_MODULE);
+        int rc;
+        
+        rc = globus_module_activate (GLOBUS_COMMON_MODULE);
           
         #ifdef SAGA_HAVE_GLOBUS_GRAM
           SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) { std::cout << "globus_loader: activate GRAM" << std::endl; }
-          globus_module_activate (GLOBUS_GRAM_CLIENT_MODULE);
-          globus_module_activate (GLOBUS_RSL_MODULE);
+          rc = globus_module_activate (GLOBUS_GRAM_CLIENT_MODULE);
+          if (rc != GLOBUS_SUCCESS)
+          {
+            SAGA_OSSTREAM strm;
+            strm << "globus_loader: Error activating " << GLOBUS_GRAM_CLIENT_MODULE->module_name 
+                 << " because " << globus_gram_client_error_string(rc);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+          }
+          
+          rc = globus_module_activate (GLOBUS_RSL_MODULE);
+          if (rc != GLOBUS_SUCCESS)
+          {
+            SAGA_OSSTREAM strm;
+            strm << "globus_loader: Error activating " << GLOBUS_RSL_MODULE->module_name 
+                 << " because " << globus_gram_client_error_string(rc);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+          }
         #endif
         
         #ifdef SAGA_HAVE_GLOBUS_GRIDFTP
           SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) { std::cout << "globus_loader: activate FTP" << std::endl; }
-          globus_module_activate (GLOBUS_XIO_MODULE);
-          globus_module_activate (GLOBUS_FTP_CLIENT_MODULE);
+          rc = globus_module_activate (GLOBUS_XIO_MODULE);
+          if (rc != GLOBUS_SUCCESS)
+          {
+            SAGA_OSSTREAM strm;
+            strm << "globus_loader: Error activating GLOBUS_XIO_MODULE because" 
+                 << globus_gram_client_error_string(rc);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+          }
+          
+          rc = globus_module_activate (GLOBUS_FTP_CLIENT_MODULE);
+          if (rc != GLOBUS_SUCCESS)
+          {
+            SAGA_OSSTREAM strm;
+            strm << "globus_loader: Error activating " << GLOBUS_FTP_CLIENT_MODULE->module_name 
+                 << " because " << globus_gram_client_error_string(rc);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+          }
         #endif
         
         #ifdef SAGA_HAVE_GLOBUS_RLS
           SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) { std::cout << "globus_loader: activate RLS" << std::endl; }
-          globus_module_activate (GLOBUS_RLS_CLIENT_MODULE);
+          rc = globus_module_activate (GLOBUS_RLS_CLIENT_MODULE);
+          if (rc != GLOBUS_SUCCESS)
+          {
+            SAGA_OSSTREAM strm;
+            strm << "globus_loader: Error activating " << GLOBUS_RLS_CLIENT_MODULE->module_name 
+                 << " because " << globus_gram_client_error_string(rc);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+          }
         #endif
         
         #ifdef SAGA_HAVE_GLOBUS_GSI
           SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) { std::cout << "globus_loader: activate GSI" << std::endl; }
-          globus_module_activate (GLOBUS_GSI_GSS_ASSIST_MODULE);
+          rc = globus_module_activate (GLOBUS_GSI_GSS_ASSIST_MODULE);
+          if (rc != GLOBUS_SUCCESS)
+          {
+            SAGA_OSSTREAM strm;
+            strm << "globus_loader: Error activating " << GLOBUS_GSI_GSS_ASSIST_MODULE->module_name 
+                 << " because " << globus_gram_client_error_string(rc);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+          }
         #endif
         
         #ifdef SAGA_HAVE_GLOBUS_GASS
           SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) { std::cout << "globus_loader: activate GASS" << std::endl; }
-          globus_module_activate (GLOBUS_GASS_COPY_MODULE);
+          rc = globus_module_activate (GLOBUS_GASS_COPY_MODULE);
+          if (rc != GLOBUS_SUCCESS)
+          {
+            SAGA_OSSTREAM strm;
+            strm << "globus_loader: Error activating " << GLOBUS_GASS_COPY_MODULE->module_name 
+                 << " because " << globus_gram_client_error_string(rc);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+          }          
         #endif
       }
   };
