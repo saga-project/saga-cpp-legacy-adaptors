@@ -57,7 +57,7 @@ namespace globus_module_loader
             SAGA_OSSTREAM strm;
             strm << "globus_loader: Error activating " << GLOBUS_GRAM_CLIENT_MODULE->module_name 
                  << " because " << globus_gram_client_error_string(rc);
-            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::IncorrectURL);
           }
           
           rc = globus_module_activate (GLOBUS_RSL_MODULE);
@@ -66,7 +66,7 @@ namespace globus_module_loader
             SAGA_OSSTREAM strm;
             strm << "globus_loader: Error activating " << GLOBUS_RSL_MODULE->module_name 
                  << " because " << globus_gram_client_error_string(rc);
-            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::IncorrectURL);
           }
         #endif
         
@@ -78,7 +78,7 @@ namespace globus_module_loader
             SAGA_OSSTREAM strm;
             strm << "globus_loader: Error activating GLOBUS_XIO_MODULE because" 
                  << globus_gram_client_error_string(rc);
-            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::IncorrectURL);
           }
           
           rc = globus_module_activate (GLOBUS_FTP_CLIENT_MODULE);
@@ -87,7 +87,7 @@ namespace globus_module_loader
             SAGA_OSSTREAM strm;
             strm << "globus_loader: Error activating " << GLOBUS_FTP_CLIENT_MODULE->module_name 
                  << " because " << globus_gram_client_error_string(rc);
-            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::IncorrectURL);
           }
         #endif
         
@@ -99,7 +99,7 @@ namespace globus_module_loader
             SAGA_OSSTREAM strm;
             strm << "globus_loader: Error activating " << GLOBUS_RLS_CLIENT_MODULE->module_name 
                  << " because " << globus_gram_client_error_string(rc);
-            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::IncorrectURL);
           }
         #endif
         
@@ -111,7 +111,7 @@ namespace globus_module_loader
             SAGA_OSSTREAM strm;
             strm << "globus_loader: Error activating " << GLOBUS_GSI_GSS_ASSIST_MODULE->module_name 
                  << " because " << globus_gram_client_error_string(rc);
-            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::IncorrectURL);
           }
         #endif
         
@@ -123,7 +123,7 @@ namespace globus_module_loader
             SAGA_OSSTREAM strm;
             strm << "globus_loader: Error activating " << GLOBUS_GASS_COPY_MODULE->module_name 
                  << " because " << globus_gram_client_error_string(rc);
-            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm), saga::IncorrectURL);
           }          
         #endif
       }
