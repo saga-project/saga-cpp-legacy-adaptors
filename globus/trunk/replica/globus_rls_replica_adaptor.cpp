@@ -21,7 +21,7 @@ using namespace globus_rls_replica_adaptor;
 adaptor::adaptor() : RLSConnectionPool_(NULL)
 {
     // load the required globus modules
-    globus_module_loader::globus_init ();
+    //globus_module_loader::globus_init ();
 }
 
 adaptor::~adaptor()

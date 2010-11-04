@@ -9,6 +9,8 @@
 #include "globus_gram_job_adaptor_connector.hpp"
 #include "globus_gram_job_adaptor_errorhandler.hpp"
 
+#include "../loader/globus_global_loader.hpp"
+
 #include <saga/saga/util.hpp>
 #include <saga/saga/exception.hpp>
 #include <saga/saga/url.hpp>
@@ -78,6 +80,10 @@ job_cpi_impl::job_cpi_impl (proxy                * p,
                            saga::adaptors::AdaptorDeclined);         
     }
 
+    // If we've made it here, it should be safe to load
+    // the GRAM modules now. The loader employs a sigleton mechanism,
+    // so ut doesn't matter if we call this method multiple times.
+    globus_module_loader::globus_init ();
     
     pipe_to_gass_stderr_[0] = -1;
     pipe_to_gass_stderr_[1] = -1;

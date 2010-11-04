@@ -17,7 +17,9 @@
 
 #include "globus_rls_replica_adaptor_connection.hpp"
 #include "globus_rls_replica_adaptor_logicalfile.hpp"
+
 #include "../shared/globus_gsi_cert_utils.hpp"
+#include "../loader/globus_global_loader.hpp"
 
 namespace globus_rls_replica_adaptor
 {
@@ -68,6 +70,11 @@ namespace globus_rls_replica_adaptor
         {
             instanceData->location_.set_host("localhost"); 
         }
+        
+        // If we've made it here, it should be safe to load
+        // the GRAM modules now. The loader employs a sigleton mechanism,
+        // so ut doesn't matter if we call this method multiple times.
+        globus_module_loader::globus_init ();
         
         // try to create/retreive a connection handle for the given host 
         bool exists = false;

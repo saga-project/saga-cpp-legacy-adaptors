@@ -16,7 +16,7 @@
 #include <saga/saga/adaptors/config.hpp>
 #include <saga/saga/adaptors/adaptor.hpp>
 
-#include "../loader/globus_global_loader.hpp"
+//#include "../loader/globus_global_loader.hpp"
 
 #include <map>
 #include <vector>
@@ -29,7 +29,7 @@ using namespace globus_gram_job_adaptor;
 job_adaptor::job_adaptor()
 {    
     // load the required globus modules
-    globus_module_loader::globus_init ();
+    //globus_module_loader::globus_init ();
 }
     
 job_adaptor::~job_adaptor()

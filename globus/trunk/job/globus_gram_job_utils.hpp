@@ -114,7 +114,7 @@ inline void check_x509_globus_cert(saga::context & context,
           
           // SUCCESS
           SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
-          std::cerr << "gLite CREAM Adaptor: Certificate seems to be present." 
+          std::cerr << "Globus GRAM Adaptor: Certificate seems to be present." 
                     << std::endl;
           }
           context_list.push_back (context);

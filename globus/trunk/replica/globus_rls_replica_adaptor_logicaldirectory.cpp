@@ -18,6 +18,7 @@
 #include <saga/impl/exception_list.hpp>
 
 #include "globus_rls_replica_adaptor_logicaldirectory.hpp"
+#include "../loader/globus_global_loader.hpp"
 
 namespace globus_rls_replica_adaptor
 {
@@ -67,6 +68,10 @@ logical_directory_cpi_impl::logical_directory_cpi_impl (
 		SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter);       
     }
     
+    // If we've made it here, it should be safe to load
+    // the GRAM modules now. The loader employs a sigleton mechanism,
+    // so ut doesn't matter if we call this method multiple times.
+    globus_module_loader::globus_init ();
     
 	// try to create/retreive a connection handle for the given host 
 	try {

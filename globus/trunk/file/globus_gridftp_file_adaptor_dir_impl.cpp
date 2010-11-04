@@ -10,7 +10,9 @@
 #include "globus_gridftp_file_adaptor_dir.hpp"
 #include "globus_gridftp_file_adaptor_file.hpp"
 #include "globus_gridftp_file_adaptor_connection.hpp"
+
 #include "../shared/globus_gsi_cert_utils.hpp"
+#include "../loader/globus_global_loader.hpp"
 
 using namespace globus_gridftp_file_adaptor;
 
@@ -127,6 +129,11 @@ dir_cpi_impl::dir_cpi_impl (proxy                * p,
         SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm),
                            saga::AuthorizationFailed);
     }
+    
+    //If we've made it here, it should be safe to load
+    // the GRAM modules now. The loader employs a sigleton mechanism,
+    // so ut doesn't matter if we call this method multiple times.
+    globus_module_loader::globus_init ();
     
     GridFTPConnection * ConnectionHandle = 
     adata->getConnectionHandleForURL(saga::url(idata->location_.get_url()), write_log_, logfile_loc_);

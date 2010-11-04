@@ -1,4 +1,4 @@
-//  Copyright (c) 2007-2008 Ole Christian Weidner (oweidner@cct.lsu.edu)
+//  Copyright (c) 2007-2010 Ole Christian Weidner (oweidner@cct.lsu.edu)
 // 
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying 
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,7 +7,9 @@
 #include "globus_gram_job_adaptor_service.hpp"
 #include "globus_gram_job_adaptor_errorhandler.hpp"
 #include "globus_gram_job_adaptor_istream.hpp"
+
 #include "../shared/globus_gsi_cert_utils.hpp"
+#include "../loader/globus_global_loader.hpp"
 
 #include <saga/impl/config.hpp>
 #include <saga/saga/exception.hpp>
@@ -89,20 +91,10 @@ job_service_cpi_impl (proxy                * p,
                            saga::AuthorizationFailed);
     }
 
-    // it doesn't make sense to bail out on after an unsuccefful ping. the job
-    // service endpoint could be very well available by the time of the next
-    // api call. 
-    /*try {
-        std::string gram_url = utility::translate_saga_to_gram_url(data->rm_.get_url());
-        connector::ping_jobmanager(data->rm_.get_url());
-    }
-    catch(globus_gram_job_adaptor::exception const& e)
-    {
-        SAGA_OSSTREAM strm;
-		strm << "Could not initialize job service for [" << data->rm_ << "]. " 
-        << e.GlobusErrorText();
-		SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), e.SAGAError()); 
-    }*/
+    // If we've made it here, it should be safe to load
+    // the GRAM modules now. The loader employs a sigleton mechanism,
+    // so ut doesn't matter if we call this method multiple times.
+    globus_module_loader::globus_init ();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

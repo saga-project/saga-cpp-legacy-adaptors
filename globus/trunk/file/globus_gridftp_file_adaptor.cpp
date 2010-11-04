@@ -20,7 +20,7 @@ SAGA_ADAPTOR_REGISTER (file_adaptor);
 file_adaptor::file_adaptor() : ConnectionPool_(NULL)
 {    
     // load the required globus modules
-    globus_module_loader::globus_init ();
+    //globus_module_loader::globus_init ();
 }
 
 file_adaptor::~file_adaptor()
