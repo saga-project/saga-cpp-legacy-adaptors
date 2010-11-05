@@ -8,6 +8,15 @@
 
     http://saga.cct.lsu.edu/software/cpp/documentation 
 
+  ATTENTION:
+
+    The Globus adaptors use versioning now, so please make sure that you
+    DELETE the old Globus adaptors in your SAGA_LOCATION before you 
+    install a newer version, otherwise you might experience weird side-
+    effects! Do something like:
+ 
+      rm -rf $SAGA_LOCATION/lib/libsaga_adaptors_globus*
+
 
   PREREQUISISTES:
   
