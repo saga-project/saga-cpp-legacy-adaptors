@@ -27,7 +27,9 @@ echo " ========================================================        " >> $OUT
 echo " SAGA X.509 ADAPTOR - Configuration Summary                      " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
+echo " Adaptor Version       : $SAGA_LIB_VERSION                       " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Using SAGA Core from  : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
 echo "                                                                 " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT

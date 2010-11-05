@@ -615,9 +615,13 @@ host_alias
 target_alias
 CONFPWD
 CONFDIR
-SAGA_ROOT
 SAGA_LOCATION
 SAGA_CONFIG
+SAGA_VERSION
+SAGA_VERSION_MAJOR
+SAGA_VERSION_MINOR
+SAGA_VERSION_SUBMINOR
+SAGA_LIB_VERSION
 TMP_SAGA_LOCATION
 TMP_SAGA_INSTTYPE
 LIBOBJS
@@ -626,7 +630,6 @@ ac_subst_files=''
       ac_precious_vars='build_alias
 host_alias
 target_alias
-SAGA_ROOT
 SAGA_LOCATION'
 
 
@@ -1194,7 +1197,6 @@ if test -n "$ac_init_help"; then
   cat <<\_ACEOF
 
 Some influential environment variables:
-  SAGA_ROOT   SAGA source tree root
   SAGA_LOCATION
               SAGA installation root
 
@@ -1636,12 +1638,50 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
-
   TMP_SAGA_LOCATION=""
   TMP_SAGA_INSTTYPE=""
 
-  # check saga-config
-  # Extract the first word of "saga-config", so it can be a program name with args.
+  # check SAGA_ROOT - prefer over SAGA_LOCATION and saga-config
+  { echo "$as_me:$LINENO: checking SAGA sources" >&5
+echo $ECHO_N "checking SAGA sources... $ECHO_C" >&6; }
+  if test "x$SAGA_ROOT" != "x"; then
+    TMP_SAGA_LOCATION=$SAGA_ROOT
+    TMP_SAGA_INSTTYPE="source"
+    { echo "$as_me:$LINENO: result: $TMP_SAGA_LOCATION" >&5
+echo "${ECHO_T}$TMP_SAGA_LOCATION" >&6; }
+  else
+    { echo "$as_me:$LINENO: result: not found" >&5
+echo "${ECHO_T}not found" >&6; }
+  fi
+
+
+  # check SAGA_LOCATION - prefer over saga-config
+  if test "x$TMP_SAGA_LOCATION" = "x"; then
+    { echo "$as_me:$LINENO: checking SAGA installation" >&5
+echo $ECHO_N "checking SAGA installation... $ECHO_C" >&6; }
+    if test "x$SAGA_LOCATION"    != "x"; then
+      TMP_SAGA_LOCATION=$SAGA_LOCATION
+      TMP_SAGA_INSTTYPE="install"
+      { echo "$as_me:$LINENO: result: $TMP_SAGA_LOCATION" >&5
+echo "${ECHO_T}$TMP_SAGA_LOCATION" >&6; }
+      { echo "$as_me:$LINENO: checking saga-config" >&5
+echo $ECHO_N "checking saga-config... $ECHO_C" >&6; }
+      if test -x $TMP_SAGA_LOCATION/bin/saga-config; then
+        SAGA_CONFIG=$TMP_SAGA_LOCATION/bin/saga-config
+        { echo "$as_me:$LINENO: result: $SAGA_CONFIG" >&5
+echo "${ECHO_T}$SAGA_CONFIG" >&6; }
+      else
+        { echo "$as_me:$LINENO: result: invalid" >&5
+echo "${ECHO_T}invalid" >&6; }
+      fi
+    else
+      { echo "$as_me:$LINENO: result: not found" >&5
+echo "${ECHO_T}not found" >&6; }
+    fi
+  fi
+
+  if test "x$TMP_SAGA_LOCATION" = "x"; then
+   # Extract the first word of "saga-config", so it can be a program name with args.
 set dummy saga-config; ac_word=$2
 { echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
@@ -1681,49 +1721,57 @@ echo "${ECHO_T}no" >&6; }
 fi
 
 
-
-  { echo "$as_me:$LINENO: checking SAGA installation/sources" >&5
-echo $ECHO_N "checking SAGA installation/sources... $ECHO_C" >&6; }
+   { echo "$as_me:$LINENO: checking saga-config prefix" >&5
+echo $ECHO_N "checking saga-config prefix... $ECHO_C" >&6; }
+   if test "x$SAGA_CONFIG" != "x"; then
+     TMP_SAGA_LOCATION=`$SAGA_CONFIG --prefix`
+     TMP_SAGA_INSTTYPE="install"
+     { echo "$as_me:$LINENO: result: $TMP_SAGA_LOCATION" >&5
+echo "${ECHO_T}$TMP_SAGA_LOCATION" >&6; }
+   else
+     { echo "$as_me:$LINENO: result: invalid" >&5
+echo "${ECHO_T}invalid" >&6; }
+   fi
+  fi
 
   if test "x$SAGA_CONFIG" != "x"; then
-    TMP_SAGA_LOCATION=`$SAGA_CONFIG --prefix`
-    TMP_SAGA_INSTTYPE="install"
+    SAGA_VERSION=`$SAGA_CONFIG --version`
+
+    SAGA_VERSION_MAJOR=`echo $SAGA_VERSION    | cut -f 1 -d .`
+    SAGA_VERSION_MINOR=`echo $SAGA_VERSION    | cut -f 2 -d .`
+    SAGA_VERSION_SUBMINOR=`echo $SAGA_VERSION | cut -f 3 -d .`
+
+    if test "$SAGA_VERSION_SUBMINOR" == ""; then
+      SAGA_VERSION_SUBMINOR=0
+    fi
+
+
+
+
+
+
+    export SAGA_VERSION
+    export SAGA_VERSION_MAJOR
+    export SAGA_VERSION_MINOR
+    export SAGA_VERSION_SUBMINOR
+  else
+    echo "no saga-config found"
   fi
 
 
-  # check SAGA_LOCATION - prefer over saga-config
-  if test "x$SAGA_LOCATION"    != "x"; then
-    TMP_SAGA_LOCATION=$SAGA_LOCATION
-    TMP_SAGA_INSTTYPE="install"
-  fi
+  # We set SAGA_LIB_VERSION to SAGA_VERSION by default.  If a PACKAGE file is
+  # present though. for example for an adaptor, we use its version info instead.
+  # A configure is of course still able to overrule that,
 
+  { echo "$as_me:$LINENO: checking saga lib version" >&5
+echo $ECHO_N "checking saga lib version... $ECHO_C" >&6; }
+  SAGA_LIB_VERSION=#SAGA_VERSION
+  test -f PACKAGE && SAGA_LIB_VERSION=`grep -e '^VERSION:' PACKAGE | cut -f 2 -d ' '`
+  { echo "$as_me:$LINENO: result: $SAGA_LIB_VERSION" >&5
+echo "${ECHO_T}$SAGA_LIB_VERSION" >&6; }
 
-  # check SAGA_ROOT - prefer over SAGA_LOCATION and saga-config
-  if test "x$SAGA_ROOT" = "x"; then
+  export  SAGA_LIB_VERSION
 
-    # try ./, ../ and ../../ as SAGA_ROOT
-
-    if test -e ./make/saga.mk; then
-      SAGA_ROOT=`pwd`
-    fi
-
-    if test -e ../make/saga.mk; then
-      SAGA_ROOT=`pwd`/..
-    fi
-
-    if test -e ../../make/saga.mk; then
-      SAGA_ROOT=`pwd`/../../
-    fi
-
-    if test -e ../../../make/saga.mk; then
-      SAGA_ROOT=`pwd`/../../../
-    fi
-  fi
-
-  if test "x$SAGA_ROOT" != "x"; then
-    TMP_SAGA_LOCATION=$SAGA_ROOT
-    TMP_SAGA_INSTTYPE="source"
-  fi
 
 
   # found anything?
@@ -1732,9 +1780,6 @@ echo $ECHO_N "checking SAGA installation/sources... $ECHO_C" >&6; }
 echo "$as_me: error: Could find neither SAGA source tree nor installation." >&2;}
    { (exit 1); exit 1; }; }
   fi
-
-  { echo "$as_me:$LINENO: result: $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE)" >&5
-echo "${ECHO_T}$TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE)" >&6; }
 
 
 
@@ -1750,6 +1795,11 @@ echo "${ECHO_T}$TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE)" >&6; }
     SAGA_CONFIG_DIR="$TMP_SAGA_LOCATION/share/saga/config"
   fi
 
+  if ! test -e "$SAGA_CONFIG_DIR/saga-config.cache"; then
+    { { echo "$as_me:$LINENO: error: SAGA $TMP_SAGA_INSTTYPE tree seems invalid, no saga-config.cache found." >&5
+echo "$as_me: error: SAGA $TMP_SAGA_INSTTYPE tree seems invalid, no saga-config.cache found." >&2;}
+   { (exit 1); exit 1; }; }
+  fi
   source "$SAGA_CONFIG_DIR/saga-config.cache"
 
 
@@ -2425,16 +2475,20 @@ host_alias!$host_alias$ac_delim
 target_alias!$target_alias$ac_delim
 CONFPWD!$CONFPWD$ac_delim
 CONFDIR!$CONFDIR$ac_delim
-SAGA_ROOT!$SAGA_ROOT$ac_delim
 SAGA_LOCATION!$SAGA_LOCATION$ac_delim
 SAGA_CONFIG!$SAGA_CONFIG$ac_delim
+SAGA_VERSION!$SAGA_VERSION$ac_delim
+SAGA_VERSION_MAJOR!$SAGA_VERSION_MAJOR$ac_delim
+SAGA_VERSION_MINOR!$SAGA_VERSION_MINOR$ac_delim
+SAGA_VERSION_SUBMINOR!$SAGA_VERSION_SUBMINOR$ac_delim
+SAGA_LIB_VERSION!$SAGA_LIB_VERSION$ac_delim
 TMP_SAGA_LOCATION!$TMP_SAGA_LOCATION$ac_delim
 TMP_SAGA_INSTTYPE!$TMP_SAGA_INSTTYPE$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 46; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 50; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -2771,7 +2825,9 @@ echo " ========================================================        " >> $OUT
 echo " SAGA X.509 ADAPTOR - Configuration Summary                      " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
+echo " Adaptor Version       : $SAGA_LIB_VERSION                       " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Using SAGA Core from  : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
 echo "                                                                 " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
