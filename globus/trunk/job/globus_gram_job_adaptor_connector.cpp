@@ -377,6 +377,9 @@ saga_error_tuple connector::submit_job (std::string & ret_jobid,
             continue;
         }
         (void)globus_cond_wait(&monitor.cond, &monitor.mutex);
+        
+        // WE COULD TRY TO DO SOME CTRL+C HANDLING HERE. BUT THAT'S SOMEWHAT RISKY
+        // SINCE WE'RE INSIDE A LIBRARY. BUT THIS IS WHERE IT SHOULD GO.
     }
     
     (void)globus_mutex_unlock(&monitor.mutex);

@@ -3,6 +3,19 @@
                            - Release Changelog -
 
   
+  Changes with SAGA Globus Adaptors Version 0.9.3           05. November 2010
+  ---------------------------------------------------------------------------
+
+  o Fixed a race-condition in the submission process that prevent certain
+    GRAM error messages to show up
+
+  o Fixed several issues with the module loader. The daunting assertion
+    globus_l_is_initialized==1 should be hopefully eradicated once and 
+    for all.
+ 
+  o Enabled library versioning (naming) for the Globus adaptors.
+
+
   Changes with SAGA Globus Adaptors Version 0.9.3          28. September 2010
   ---------------------------------------------------------------------------
   
