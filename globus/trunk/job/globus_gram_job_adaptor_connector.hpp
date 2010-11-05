@@ -100,6 +100,7 @@ namespace globus_gram_job_adaptor {
     typedef struct globus_i_globusrun_gram_monitor_s
     {
         globus_bool_t  done;
+        globus_bool_t  submit_done;
         globus_mutex_t mutex;
         globus_cond_t  cond;
         

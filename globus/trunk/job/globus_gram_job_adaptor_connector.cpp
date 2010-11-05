@@ -85,6 +85,7 @@ void connector::globus_l_globusrun_gram_callback_func(void *user_arg,
     monitor = (globus_i_globusrun_gram_monitor_t *) user_arg;
     
     (void)globus_mutex_lock(&monitor->mutex);
+    monitor->submit_done = GLOBUS_TRUE;
     
     if(monitor->job_contact != NULL &&
        (strcmp(monitor->job_contact, job_contact) != 0))
@@ -252,6 +253,7 @@ saga_error_tuple connector::submit_job (std::string & ret_jobid,
     monitor.verbose=verbose;
     monitor.job_state = 0;
     monitor.job_contact = NULL;
+    monitor.submit_done = GLOBUS_FALSE;
     
     // initialize the mutex
     globus_mutex_init(&monitor.mutex, GLOBUS_NULL);
@@ -284,6 +286,13 @@ saga_error_tuple connector::submit_job (std::string & ret_jobid,
                                              callback_contact,
                                              &monitor.job_contact);
     }
+    
+    while (!monitor.submit_done)
+    {
+        globus_cond_wait(&monitor.cond, &monitor.mutex);
+        err = monitor.failure_code;
+    }
+
     (void)globus_mutex_unlock(&monitor.mutex);
     
     if(err == GLOBUS_GRAM_PROTOCOL_ERROR_WAITING_FOR_COMMIT) 
