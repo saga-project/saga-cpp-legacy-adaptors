@@ -8,6 +8,12 @@ ifndef SAGA_LOCATION
  $(error "SAGA_LOCATION must be set for this Makefile to work")
 endif
 
+ifndef HADOOP_HOME
+ $(error "HADOOP_HOME must be set for this Makefile to work")
+endif
+
+
+
 SAGA_SRC          = $(wildcard *.cpp)
 SAGA_OBJ          = $(SAGA_SRC:%.cpp=%.o)
 
