@@ -37,6 +37,7 @@
   the libhdfs (http://wiki.apache.org/hadoop/LibHDFS) library that is
   included but not built in a default HDFS installation.
 
+  HDFS website: http://hadoop.apache.org/hdfs/
 
 :CONFIGURE OPTIONS:
 
@@ -46,4 +47,3 @@
   
 :KNOWN ISSUES:
 
-  See https://macpro01.cct.lsu.edu/trac/saga/query?status=assigned&status=new&status=reopened&component=HDFS+Adaptor&order=priority
