@@ -3,7 +3,18 @@
                            - Release Changelog -
 
   
-  Changes with SAGA Globus Adaptors Version 0.9.3           05. November 2010
+  
+  Changes with SAGA Globus Adaptors Version 0.9.5           21. November 2010
+  ---------------------------------------------------------------------------
+  
+  o Fixed an error introduced with the race-condition fix in 0.9.4. In case of
+    an early submit error (e.g. if a globus host wasn't configured probably) 
+    the adaptor didn't terminate and hang forever because it still tried to
+    wait for its monitoring thread to terminate although the monitoring thread
+    was never started at all. 
+  
+  
+  Changes with SAGA Globus Adaptors Version 0.9.4           05. November 2010
   ---------------------------------------------------------------------------
 
   o Fixed a race-condition in the submission process that prevent certain
