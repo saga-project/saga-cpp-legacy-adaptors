@@ -1,0 +1,47 @@
+#  Copyright (c) 2005-2007 Andre Merzky (andre@merzky.net)
+# 
+#  Distributed under the Boost Software License, Version 1.0. (See accompanying
+#  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+# vim: ft=make
+
+
+ifndef MAKE_GLOBUS_CFG_IN
+       MAKE_GLOBUS_CFG_IN=yes
+
+############################################################
+# 
+# Globus
+#
+include @CONFDIR@/make.cfg
+
+ifeq "$(SAGA_HAVE_GLOBUS)" "yes"
+
+  GPT_LOCATION          = @GPT_LOCATION@
+  GLOBUS_LOCATION       = @GLOBUS_LOCATION@
+  GLOBUS_FLAVOR         = @GLOBUS_FLAVOR@
+  GLOBUS_FLAVOR_THREADS = @GLOBUS_FLAVOR_THREADS@
+  GLOBUS_CFLAGS         = @GLOBUS_CFLAGS@
+  GLOBUS_LDFLAGS        = @GLOBUS_LDFLAGS@
+  GLOBUS_INCLUDES       = @GLOBUS_INCLUDES@
+  GLOBUS_LIBS           = @GLOBUS_LIBS@
+  
+  SAGA_CPPINCS_SYS     += $(GLOBUS_INCLUDES)
+  SAGA_CXXFLAGS        += $(GLOBUS_CFLAGS)
+  SAGA_CCFLAGS         += $(GLOBUS_CFLAGS)
+  SAGA_LDFLAGS_SYS     += $(GLOBUS_LDFLAGS) $(GLOBUS_LIBS)
+
+endif
+#
+############################################################
+
+endif # guard
+
+ifndef SAGA_IS_CLEANING
+  include @CONFDIR@/saga.config.globus_gass_copy.c.mk
+  include @CONFDIR@/saga.config.globus_gram.c.mk
+  include @CONFDIR@/saga.config.globus_gridftp.c.mk
+  include @CONFDIR@/saga.config.globus_gsi.c.mk
+  include @CONFDIR@/saga.config.globus_rls.c.mk
+endif
+

@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Copyright (c) 2009 Chris Miceli (cmicel1@cct.lsu.edu)
+# Distributed under the Boost Software License, Version 1.0. (See accompanying 
+# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+# Header
+while getopts d arg
+do
+   case $arg in
+      d) echo "This program tests the functionality of the globus job."
+         exit 0;;
+   esac
+done
+
+STRING=saga_was_here
+
+# Run a remote echo test and put result in tmp file
+`$SAGA_LOCATION/bin/saga-job run gram://$REMOTEHOST/ /bin/sh -c "/bin/echo $STRING > /tmp/saga_test_1"`
+
+# Check if remote temp file contains $STRING
+RESULT=`$SAGA_LOCATION/bin/saga-job run gram://$REMOTEHOST/ /bin/cat /tmp/saga_test_1`
+
+# Clean up temporaries
+`$SAGA_LOCATION/bin/saga-file remove gridftp://$REMOTEHOST/tmp/saga_test_1`
+
+# Verify the cat exited what was expected
+if test "$RESULT" != $STRING
+then
+   echo "Saga could not succesfully launch the job!"
+   exit 1
+else
+   echo "Success"
+   exit 0;
+fi
