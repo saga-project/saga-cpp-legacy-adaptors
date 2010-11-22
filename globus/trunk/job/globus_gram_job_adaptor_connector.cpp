@@ -286,11 +286,14 @@ saga_error_tuple connector::submit_job (std::string & ret_jobid,
                                              callback_contact,
                                              &monitor.job_contact);
     }
-    
-    while (!monitor.submit_done)
+     
+    if(err == GLOBUS_SUCCESS)
     {
-        globus_cond_wait(&monitor.cond, &monitor.mutex);
-        err = monitor.failure_code;
+        while (!monitor.submit_done)
+        {
+          globus_cond_wait(&monitor.cond, &monitor.mutex);
+          err = monitor.failure_code;
+        }
     }
 
     (void)globus_mutex_unlock(&monitor.mutex);
