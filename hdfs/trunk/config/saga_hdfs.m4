@@ -107,7 +107,7 @@ AC_DEFUN([AX_SAGA_CHECK_LIBHDFS],
     else # link ok
 
       AC_MSG_RESULT(no)
-      LIBHDFS_LDFLAGS=""
+      LIBHDFS_LDFLAGS="-lhdfs"
       LIBHDFS_CPPFLAGS=""
 
     fi # link ok

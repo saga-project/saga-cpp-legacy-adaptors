@@ -33,9 +33,24 @@ ifeq "$(HAVE_HDFS)" "yes"
  SAGA_LDFLAGS   += @LIBHDFS_LDFLAGS@
 else
  ifndef SAGA_IS_CLEANING
-  $(error "no libhdfs found by configure")
+  $(warning "no libhdfs found by configure")
  endif
 endif
+
+# legacy settings
+ifndef HADOOP_HOME
+ $(error "HADOOP_HOME must be set for this Makefile to work")
+endif
+
+ifndef JAVA_HOME
+ $(error "JAVA_HOME must be set for this Makefile to work")
+endif
+
+SAGA_CPPINCS     += -I$(JAVA_HOME)/include
+SAGA_CPPINCS     += -I$(JAVA_HOME)/include/linux
+SAGA_CPPINCS     += -I$(HADOOP_HOME)/src/c++/libhdfs/
+SAGA_LDFLAGS     += -L$(HADOOP_HOME)/src/c++/libhdfs -lhdfs
+
 
 
 endif # guard

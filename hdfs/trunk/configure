@@ -2503,7 +2503,7 @@ $as_echo "no" >&6; }
 
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-      LIBHDFS_LDFLAGS=""
+      LIBHDFS_LDFLAGS="-lhdfs"
       LIBHDFS_CPPFLAGS=""
 
     fi # link ok
@@ -2511,9 +2511,9 @@ $as_echo "no" >&6; }
   done # foreach path
 
 
-  if test "x$HAVE_LIBHDFS" = "xno"; then
-    as_fn_error "Could not find libhdfs" "$LINENO" 5
-  fi
+  # if test "x$HAVE_LIBHDFS" = "xno"; then
+  #   AC_MSG_ERROR([Could not find libhdfs])
+  # fi
 
 
 
