@@ -111,7 +111,10 @@ namespace pbspro_job
   bool adaptor::find_job(pbsid_t pbsid, saga::job::description& jd) {
     known_jobs_t::const_iterator i =
       find_if(known_jobs_.begin(), known_jobs_.end(),
-	      boost::bind<bool>(&helper::pbsid_match, _1, pbsid));
+
+
+	      boost::bind(&helper::pbsid_match, _1, pbsid));
+	      //	      boost::bind<bool>(&helper::pbsid_match, _1, pbsid));
     if(i == known_jobs_.end()) {
       return false;
     }
