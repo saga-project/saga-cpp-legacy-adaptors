@@ -1,8 +1,9 @@
-                       SAGA HDFS Context Adaptor
+                        SAGA HDFS File Adaptor
                       <http://saga.cct.lsu.edu/>
                         - Release Changelog -
 
-  Changes with SAGA HDFS Context Adaptor Version 0.9.0      18. November 2010
+
+  Changes with SAGA HDFS File Adaptor Version 0.1.0      18. November 2010
   ---------------------------------------------------------------------------
 
   o Initital release after repository split-up

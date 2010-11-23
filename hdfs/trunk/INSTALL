@@ -21,7 +21,7 @@
     you can download the source from http://www.boost.org and build it yourself.
     
  
-  BUILDING AND INSTALLING THE X.509 ADAPTOR
+  BUILDING AND INSTALLING THE HDFS ADAPTOR
  
   The HDFS Adaptor comes with a configure/make-based buildsystem. 
   For a complete list of configure options, you can typ
@@ -34,7 +34,7 @@
   execute ./configure and make:
 
     $> export SAGA_LOCATION=/PATH/TO/SAGA_CORE_INSTALLATION
-    $> ./configure
+    $> ./configure --with-libhdfs-location
     $> make
     $> make install
 
