@@ -1,6 +1,6 @@
                     
                        SAGA X.509 Adaptor - Installation
-                  <http://saga.cct.lsu.edu/software/python>
+                         <http://saga.cct.lsu.edu/>
 
 
   For detailed informations on how to install SAGA, please refer 
@@ -24,24 +24,17 @@
   BUILDING AND INSTALLING THE X.509 ADAPTOR
  
   The X.509 Adaptor comes with a configure/make-based buildsystem. 
-  Here are some useful options for ./configure:
-
-    --boost-location=       The location of your Boost installation
-                            (e.g. /usr/local/packages/boost-1.42). You only
-                            need this option if boost is *not* installed in
-                            the default path (/usr/ or /usr/local
-
   For a complete list of configure options, you can typ
 
     ./configure --help
  
 
-  To configure, build and install the Globus Adaptors, make sure that 
+  To configure, build and install the X509 Adaptor, make sure that 
   $SAGA_LOCATION points to your SAGA Core Components installation and
   execute ./configure and make:
 
     $> export SAGA_LOCATION=/PATH/TO/SAGA_CORE_INSTALLATION
-    $> ./configure --with-boost=/BOOST/DIR/
+    $> ./configure
     $> make
     $> make install
 
