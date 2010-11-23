@@ -115,9 +115,9 @@ AC_DEFUN([AX_SAGA_CHECK_LIBHDFS],
   done # foreach path
 
 
-  if test "x$HAVE_LIBHDFS" = "xno"; then
-    AC_MSG_ERROR([Could not find libhdfs])
-  fi
+  # if test "x$HAVE_LIBHDFS" = "xno"; then
+  #   AC_MSG_ERROR([Could not find libhdfs])
+  # fi
 
   AC_SUBST(HAVE_LIBHDFS)
   AC_SUBST(LIBHDFS_LOCATION)
