@@ -6,11 +6,7 @@
 
 -include config/make.cfg
 
-SAGA_SUBDIRS = context 
-
-ifeq "x$(SAGA_BUILD_ADAPTOR_CONTEXT)" "xyes"
-  SAGA_SUBDIRS += context
-endif
+SAGA_SUBDIRS += context
 
 
 all:: config.summary
