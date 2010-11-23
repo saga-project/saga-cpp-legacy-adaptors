@@ -4,9 +4,7 @@
 #  Version 1.0. (See accompanying LICENSE file 
 #  or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-ifndef SAGA_LOCATION
- $(error "SAGA_LOCATION must be set for this Makefile to work")
-endif
+include ../config/make.cfg
 
 ifndef HADOOP_HOME
  $(error "HADOOP_HOME must be set for this Makefile to work")
@@ -24,9 +22,5 @@ SAGA_ADAPTOR_OBJ  = $(SAGA_OBJ)
 
 SAGA_ADAPTOR_PACKAGES = filesystem namespace
 
-include $(SAGA_LOCATION)/share/saga/make/saga.adaptor.mk
+include $(SAGA_MAKE_INCLUDE_ROOT)/saga.adaptor.mk
 
-SAGA_CPPINCS     += -I$(JAVA_HOME)/include
-SAGA_CPPINCS     += -I$(JAVA_HOME)/include/linux
-SAGA_CPPINCS     += -I$(HADOOP_HOME)/src/c++/libhdfs/
-SAGA_LDFLAGS     += -L$(HADOOP_HOME)/src/c++/libhdfs -lhdfs

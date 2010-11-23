@@ -13,6 +13,8 @@ ifndef MAKE_CFG_IN
 TMP_SAGA_LOCATION = @TMP_SAGA_LOCATION@
 TMP_SAGA_INSTTYPE = @TMP_SAGA_INSTTYPE@
 
+HAVE_HDFS           = @HAVE_LIBHDFS@
+
 ifeq "$(TMP_SAGA_INSTTYPE)" "source"
   SAGA_ROOT              = $(TMP_SAGA_LOCATION)
   SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/make
@@ -21,7 +23,20 @@ else
   SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/share/saga/make
 endif
 
+
 include $(SAGA_MAKE_INCLUDE_ROOT)/saga.util.mk
+
+
+ifeq "$(HAVE_HDFS)" "yes"
+ FLAGS          += -DHAVE_HDFS
+ SAGA_CPPINCS   += @LIBHDFS_CPPFLAGS@
+ SAGA_LDFLAGS   += @LIBHDFS_LDFLAGS@
+else
+ ifndef SAGA_IS_CLEANING
+  $(error "no libhdfs found by configure")
+ endif
+endif
+
 
 endif # guard
 

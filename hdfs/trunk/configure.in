@@ -8,10 +8,12 @@
 # find saga.m4
 
 m4_include([saga.m4])
+m4_include([config/saga_hdfs.m4])
 
 AC_INIT()
 
 AX_SAGA_CONFIG()
+AX_SAGA_CHECK_LIBHDFS()
 
 # create output files
 AC_CONFIG_FILES([config/make.cfg])
@@ -28,6 +30,12 @@ echo " SAGA HDFS ADAPTOR - Configuration Summary                       " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
 echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
+echo "                                                                 " >> $OUT
+echo " HDFS                  : $HAVE_LIBHDFS                           " >> $OUT
+echo "   LIBHDFS_SOURCE      : $LIBHDFS_SOURCE                         " >> $OUT  
+echo "   LIBHDFS_LOCATION    : $LIBHDFS_LOCATION                       " >> $OUT    
+echo "   LIBHDFS_CPPFLAGS    : $LIBHDFS_CPPFLAGS                       " >> $OUT    
+echo "   LIBHDFS_LDFLAGS     : $LIBHDFS_LDFLAGS                        " >> $OUT   
 echo "                                                                 " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
