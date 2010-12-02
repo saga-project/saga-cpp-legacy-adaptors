@@ -114,26 +114,6 @@ namespace ssh_job
       void sync_wait    (bool         & ret, 
                          double         timeout);
 
-      // This adaptor implements the async functions 
-      // based on its own synchronous functions.
-      saga::task async_get_state       (void);
-      saga::task async_get_description (void);
-      saga::task async_get_job_id      (void);
-
-      saga::task async_get_stdin       (void);
-      saga::task async_get_stdout      (void);
-      saga::task async_get_stderr      (void);
-
-      saga::task async_checkpoint      (void);
-      saga::task async_migrate         (saga::job::description   jd);
-      saga::task async_signal          (int                      signal);
-
-      // inherited from the task interface
-      saga::task async_run             (void);
-      saga::task async_cancel          (double timeout);
-      saga::task async_suspend         (void);
-      saga::task async_resume          (void);
-      saga::task async_wait            (double  timeout);
   };  // class job_cpi_impl
 
 } // namespace ssh_job

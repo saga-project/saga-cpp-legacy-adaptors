@@ -568,16 +568,22 @@ SAGA_SCP
 HAVE_SSH
 SAGA_SSH
 TMP_SAGA_INSTTYPE
-TMP_SAGA_LOCATION
 SAGA_LIB_VERSION
+SAGA_MAKE_INCLUDE_DIR
+TMP_SAGA_LOCATION
+SAGA_INI_DIR
+SAGA_BIN_DIR
+SAGA_LIB_DIR
+SAGA_INC_DIR
+SAGA_CONF_DIR
+SAGA_MAKE_DIR
+SAGA_PACKAGE_VERSION
 SAGA_VERSION_SUBMINOR
 SAGA_VERSION_MINOR
 SAGA_VERSION_MAJOR
 SAGA_VERSION
 SAGA_CONFIG
 SAGA_LOCATION
-CONFDIR
-CONFPWD
 target_alias
 host_alias
 build_alias
@@ -619,6 +625,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+with_saga
 with_ssh
 with_scp
 with_sshfs
@@ -1234,6 +1241,7 @@ if test -n "$ac_init_help"; then
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-saga=DIR         use saga at DIR (optional)
   --with-ssh              path to ssh binary [default=check]
   --with-scp              path to scp binary [default=check]
   --with-sshfs            path to sshfs binary [default=check]
@@ -1681,57 +1689,61 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-  CONFPWD=`pwd`
-  CONFDIR=`pwd`/config/
 
 
 
+  tmp_location=""
+
+# Check whether --with-saga was given.
+if test "${with_saga+set}" = set; then :
+  withval=$with_saga;
+              if test "$withval" = "no"; then
+                as_fn_error "SAGA is required" "$LINENO" 5
+              elif test "$withval" = "yes"; then
+                tmp_location=""
+              else
+                tmp_location="$withval"
+              fi
+
+else
+  tmp_location=""
+fi
 
 
-  TMP_SAGA_LOCATION=""
-  TMP_SAGA_INSTTYPE=""
 
-  # check SAGA_ROOT - prefer over SAGA_LOCATION and saga-config
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking SAGA sources" >&5
-$as_echo_n "checking SAGA sources... " >&6; }
-  if test "x$SAGA_ROOT" != "x"; then
-    TMP_SAGA_LOCATION=$SAGA_ROOT
-    TMP_SAGA_INSTTYPE="source"
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $TMP_SAGA_LOCATION" >&5
-$as_echo "$TMP_SAGA_LOCATION" >&6; }
-  else
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
-$as_echo "not found" >&6; }
-  fi
+  # try to find a valid SAGA_LOCATION amongst the possible candidates
+  packages=`ls /usr/local/saga* /usr/local/package/saga* 2>>/dev/null`
 
+  for tmp_path in $tmp_location $SAGA_LOCATION /usr /usr/local /opt /opt/local $packages; do
 
-  # check SAGA_LOCATION - prefer over saga-config
-  if test "x$TMP_SAGA_LOCATION" = "x"; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking SAGA installation" >&5
-$as_echo_n "checking SAGA installation... " >&6; }
-    if test "x$SAGA_LOCATION"    != "x"; then
-      TMP_SAGA_LOCATION=$SAGA_LOCATION
-      TMP_SAGA_INSTTYPE="install"
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: $TMP_SAGA_LOCATION" >&5
-$as_echo "$TMP_SAGA_LOCATION" >&6; }
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga-config" >&5
-$as_echo_n "checking saga-config... " >&6; }
-      if test -x $TMP_SAGA_LOCATION/bin/saga-config; then
-        SAGA_CONFIG=$TMP_SAGA_LOCATION/bin/saga-config
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_CONFIG" >&5
-$as_echo "$SAGA_CONFIG" >&6; }
-      else
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: invalid" >&5
-$as_echo "invalid" >&6; }
-      fi
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for saga in $tmp_path" >&5
+$as_echo_n "checking for saga in $tmp_path... " >&6; }
+
+    # try to verify the prefix via "saga-config --prefix"
+    SAGA_CONFIG=$tmp_path/bin/saga-config
+
+    tmp=`$SAGA_CONFIG --prefix 2> /dev/null`
+
+    if ! test "x$tmp" = "x"; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: found (prefix: $tmp)" >&5
+$as_echo "found (prefix: $tmp)" >&6; }
+      TMP_SAGA_LOCATION=$tmp_path
+      break
     else
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
 $as_echo "not found" >&6; }
     fi
-  fi
 
+  done
+
+
+
+  # if the above did not yield a SAGA__LOCATION, try to find saga-config in
+  # $PATH, and use the reported prefix
   if test "x$TMP_SAGA_LOCATION" = "x"; then
-   # Extract the first word of "saga-config", so it can be a program name with args.
+
+    SAGA_CONFIG=""
+    # Extract the first word of "saga-config", so it can be a program name with args.
 set dummy saga-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
@@ -1771,20 +1783,31 @@ $as_echo "no" >&6; }
 fi
 
 
-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga-config prefix" >&5
+
+    if test "x$SAGA_CONFIG" != "x"; then
+
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga-config prefix" >&5
 $as_echo_n "checking saga-config prefix... " >&6; }
-   if test "x$SAGA_CONFIG" != "x"; then
-     TMP_SAGA_LOCATION=`$SAGA_CONFIG --prefix`
-     TMP_SAGA_INSTTYPE="install"
-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $TMP_SAGA_LOCATION" >&5
+
+      if test "x$SAGA_CONFIG" != "x"; then
+        TMP_SAGA_LOCATION=`$SAGA_CONFIG --prefix`
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $TMP_SAGA_LOCATION" >&5
 $as_echo "$TMP_SAGA_LOCATION" >&6; }
-   else
-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: invalid" >&5
-$as_echo "invalid" >&6; }
-   fi
+      else
+        as_fn_error "invalid" "$LINENO" 5
+      fi
+
+    fi
+
   fi
 
-  if test "x$SAGA_CONFIG" != "x"; then
+
+
+  # if we have a usable SAGA_LOCATION, try to infer all required vars
+  if ! test "x$TMP_SAGA_LOCATION" = "x"; then
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga version" >&5
+$as_echo_n "checking saga version... " >&6; }
     SAGA_VERSION=`$SAGA_CONFIG --version`
 
     SAGA_VERSION_MAJOR=`echo $SAGA_VERSION    | cut -f 1 -d .`
@@ -1804,49 +1827,90 @@ $as_echo "invalid" >&6; }
     export SAGA_VERSION_MAJOR
     export SAGA_VERSION_MINOR
     export SAGA_VERSION_SUBMINOR
-  else
-    echo "no saga-config found"
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_VERSION_MAJOR.$SAGA_VERSION_MINOR.$SAGA_VERSION_SUBMINOR" >&5
+$as_echo "$SAGA_VERSION_MAJOR.$SAGA_VERSION_MINOR.$SAGA_VERSION_SUBMINOR" >&6; }
   fi
-
-
-  # We set SAGA_LIB_VERSION to SAGA_VERSION by default.  If a PACKAGE file is
-  # present though. for example for an adaptor, we use its version info instead.
-  # A configure is of course still able to overrule that,
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga lib version" >&5
-$as_echo_n "checking saga lib version... " >&6; }
-  SAGA_LIB_VERSION=#SAGA_VERSION
-  test -f PACKAGE && SAGA_LIB_VERSION=`grep -e '^VERSION:' PACKAGE | cut -f 2 -d ' '`
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_LIB_VERSION" >&5
-$as_echo "$SAGA_LIB_VERSION" >&6; }
-
-  export  SAGA_LIB_VERSION
 
 
 
   # found anything?
   if test "x$TMP_SAGA_LOCATION" = "x"; then
-    as_fn_error "Could find neither SAGA source tree nor installation." "$LINENO" 5
+    as_fn_error "Couldn't find SAGA installation." "$LINENO" 5
   fi
 
 
 
+  # We set SAGA_LIB_VERSION to SAGA_VERSION by default.  If a local PACKAGE file is
+  # present though. for example for an adaptor, we use its version info instead.
+  # A configure is of course still able to overrule that,
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga package version" >&5
+$as_echo_n "checking saga package version... " >&6; }
+  SAGA_PACKAGE_VERSION=$SAGA_VERSION
+  test -f PACKAGE && SAGA_PACKAGE_VERSION=`grep -e '^VERSION:' PACKAGE | cut -f 2 -d ' '`
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION" >&5
+$as_echo "$SAGA_PACKAGE_VERSION" >&6; }
+
+  export  SAGA_PACKAGE_VERSION
 
 
-  # now, the adaptor and binding config files depend on the earlier findings of
-  # the saga main configure.  If those configures get run from within the main
-  # configure, everything is known in the environment.  If not, we have to pull
-  # it.
-  if test "x$TMP_SAGA_INSTTYPE" = "xsource"; then
-    SAGA_CONFIG_DIR="$TMP_SAGA_LOCATION/config"
-  else
-    SAGA_CONFIG_DIR="$TMP_SAGA_LOCATION/share/saga/config"
-  fi
 
-  if ! test -e "$SAGA_CONFIG_DIR/saga-config.cache"; then
-    as_fn_error "SAGA $TMP_SAGA_INSTTYPE tree seems invalid, no saga-config.cache found." "$LINENO" 5
-  fi
-  source "$SAGA_CONFIG_DIR/saga-config.cache"
+  # we set SAGA_LOCATION, and a couple of other vars
+  SAGA_LOCATION=$TMP_SAGA_LOCATION
+  SAGA_MAKE_DIR=$SAGA_LOCATION/share/saga/make/
+  SAGA_CONF_DIR=$SAGA_LOCATION/share/saga/config/
+  SAGA_INC_DIR=$SAGA_LOCATION/include/
+  SAGA_LIB_DIR=$SAGA_LOCATION/lib/
+  SAGA_BIN_DIR=$SAGA_LOCATION/bin
+  SAGA_INI_DIR=$SAGA_LOCATION/share/saga/
+  SAGA_CONFIG=$SAGA_BIN_DIR/saga-config
+  SAGA_VERSION=`$SAGA_CONFIG --version`
+
+  export SAGA_LOCATION
+  export SAGA_MAKE_DIR
+  export SAGA_CONF_DIR
+  export SAGA_INC_DIR
+  export SAGA_LIB_DIR
+  export SAGA_BIN_DIR
+  export SAGA_INI_DIR
+  export SAGA_CONFIG
+  export SAGA_VERSION
+
+
+
+
+
+
+
+
+
+
+
+
+  # the adaptor and binding config files depend on the earlier findings of
+  # SAGA's main configure.
+  SAGA_CONF="$SAGA_CONF_DIR/saga-config.cache"
+  test -e "$SAGA_CONF" && source "$SAGA_CONF"
+  test -e "$SAGA_CONF" || as_fn_error "SAGA tree at $SAGA_LOCATION seems invalid, no $SAGA_CONF found." "$LINENO" 5
+
+
+  # be backward compatible to old versions of saga.m4
+  TMP_SAGA_LOCATION=$SAGA_LOCATION
+  export TMP_SAGA_LOCATION
+
+
+  SAGA_MAKE_INCLUDE_DIR=$SAGA_MAKE_DIR
+  export SAGA_MAKE_INCLUDE_DIR
+
+
+  SAGA_LIB_VERSION=$SAGA_PACKAGE_VERSION
+  export SAGA_LIB_VERSION
+
+
+  TMP_SAGA_INSTTYPE=install
+  export TMP_SAGA_INSTTYPE
+
 
 
 
@@ -3355,8 +3419,8 @@ echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " | $TEE 
 echo "                                                                 " | $TEE $OUT
 echo " Adaptor version       : $SAGA_LIB_VERSION                       " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
-echo " SSH found             : $HAVE_SSH  $SAGA_SSH_S                  " | $TEE $OUT
-echo " SCP found             : $HAVE_SCP  $SAGA_SCP_S                  " | $TEE $OUT
+echo " SSH   found           : $HAVE_SSH  $SAGA_SSH_S                  " | $TEE $OUT
+echo " SCP   found           : $HAVE_SCP  $SAGA_SCP_S                  " | $TEE $OUT
 echo " SSHFS found           : $HAVE_SSHFS  $SAGA_SSHFS_S              " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT

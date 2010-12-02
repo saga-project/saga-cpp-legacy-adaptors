@@ -102,18 +102,6 @@ namespace ssh_job
                             std::string                 jobid);
       void sync_get_self   (saga::job::self           & ret);
 
-      // This adaptor implements the async functions 
-      // based on its own synchronous functions.
-      saga::task async_create_job (saga::job::description      jd);
-      saga::task async_run_job    (std::string                 cmd, 
-                                   std::string                 host, 
-                                   saga::job::ostream        & in, 
-                                   saga::job::istream        & out, 
-                                   saga::job::istream        & err);
-      saga::task async_list       (void);
-      saga::task async_get_job    (std::string                 jobid);
-      saga::task async_get_self   (void);
-
   };  // class job_service_cpi_impl
 
 } // namespace ssh_job

@@ -390,7 +390,7 @@ namespace ssh_job
 
     // no context was ok for scp or ssh, or preparation failed - flag error
     // FIXME: throw above when error occurs, with better error message
-    SAGA_ADAPTOR_THROW ("Could not connect to remote host", saga::NoSuccess);
+    SAGA_ADAPTOR_THROW ("Could not connect to remote host - missing context?", saga::NoSuccess);
   }
 
   // destructor

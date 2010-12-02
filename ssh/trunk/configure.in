@@ -107,8 +107,8 @@ echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " | $TEE 
 echo "                                                                 " | $TEE $OUT
 echo " Adaptor version       : $SAGA_LIB_VERSION                       " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
-echo " SSH found             : $HAVE_SSH  $SAGA_SSH_S                  " | $TEE $OUT
-echo " SCP found             : $HAVE_SCP  $SAGA_SCP_S                  " | $TEE $OUT
+echo " SSH   found           : $HAVE_SSH  $SAGA_SSH_S                  " | $TEE $OUT
+echo " SCP   found           : $HAVE_SCP  $SAGA_SCP_S                  " | $TEE $OUT
 echo " SSHFS found           : $HAVE_SSHFS  $SAGA_SSHFS_S              " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
