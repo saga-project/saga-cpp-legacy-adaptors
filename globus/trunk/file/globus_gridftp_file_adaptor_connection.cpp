@@ -118,7 +118,7 @@ done_callback( void*                       user_arg,
 ///////////////////////////////////////////////////////////////////////////////
 //
 void GridFTPConnection::
-data_callback( void*                      user_arg,
+data_callback(void*                       user_arg,
               globus_ftp_client_handle_t* handle,
               globus_object_t*            err,
               globus_byte_t*              buffer,
@@ -129,6 +129,7 @@ data_callback( void*                      user_arg,
     GridFTPConnection *ggc = 
     reinterpret_cast<GridFTPConnection*>(user_arg);
     
+	
     if (err != GLOBUS_SUCCESS)
     {
         ggc->set_current_error(err);    
@@ -139,9 +140,7 @@ data_callback( void*                      user_arg,
         ggc->Error_ = GLOBUS_FALSE;
         
 		std::string a = "";
-		a.append((char*)buffer, length);
-		//std::cout << "ADDING: " << a << std::endl;
-		
+		a.append((char*)buffer, length);		
 		
         ((std::string*)user_arg)->append(a);
         
@@ -699,12 +698,12 @@ GridFTPConnection::get_directory_entries( const std::string & url )
     this->Done_   = GLOBUS_FALSE;
     this->Error_  = GLOBUS_FALSE;
     
-	
+		
     globus_result_t success = globus_ftp_client_list( &this->handle,
-                                                     saga_to_gridftp_url(url).c_str(),
-                                                     &this->attr,
-                                                     done_callback,
-                                                     this);
+                                                      saga_to_gridftp_url(url).c_str(),
+                                                      &this->attr,
+                                                      done_callback,
+                                                      this);
     
     if( success != GLOBUS_SUCCESS )
     {
@@ -719,16 +718,20 @@ GridFTPConnection::get_directory_entries( const std::string & url )
         throw globus_gridftp_file_adaptor::exception(CurrentErrorStr_, CurrentError_);
     
     std::vector<saga::url> return_vector;
-    globus_byte_t buffer[64];
+    globus_byte_t * buffer;
+	
+	buffer = (globus_byte_t *)malloc(64 * sizeof(globus_byte_t));
+	
     std::string result("");
     
     globus_result_t success_reg_read;
+		
     GLOBUS_GUARDED_EXEC( success_reg_read,
-                        globus_ftp_client_register_read( &handle,
-                                                        buffer,
-                                                        sizeof(buffer),
-                                                        &data_callback,
-                                                        &result ) )
+                         globus_ftp_client_register_read( &this->handle,
+                                                          buffer,
+                                                          sizeof(buffer),
+                                                          &data_callback,
+                                                          &result ) )
     
 	
 	
@@ -777,6 +780,8 @@ GridFTPConnection::get_directory_entries( const std::string & url )
         }
     }
     
+	free(buffer);
+	
     // see --> Spec. p. 141
     return return_vector;
 }
