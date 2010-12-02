@@ -138,7 +138,12 @@ data_callback( void*                      user_arg,
     {    
         ggc->Error_ = GLOBUS_FALSE;
         
-        ((std::string*)user_arg)->append((char*)buffer, length);
+		std::string a = "";
+		a.append((char*)buffer, length);
+		//std::cout << "ADDING: " << a << std::endl;
+		
+		
+        ((std::string*)user_arg)->append(a);
         
         if( !eof )
         {
@@ -222,6 +227,7 @@ data_callback_read(void*                       user_arg,
     GridFTPConnection *ggc_obj = 
     reinterpret_cast<GridFTPConnection*> (user_arg);
     
+	
     if (err != GLOBUS_SUCCESS)
     {
         ggc_obj->set_current_error(err);
@@ -693,6 +699,7 @@ GridFTPConnection::get_directory_entries( const std::string & url )
     this->Done_   = GLOBUS_FALSE;
     this->Error_  = GLOBUS_FALSE;
     
+	
     globus_result_t success = globus_ftp_client_list( &this->handle,
                                                      saga_to_gridftp_url(url).c_str(),
                                                      &this->attr,
@@ -712,8 +719,8 @@ GridFTPConnection::get_directory_entries( const std::string & url )
         throw globus_gridftp_file_adaptor::exception(CurrentErrorStr_, CurrentError_);
     
     std::vector<saga::url> return_vector;
-    globus_byte_t buffer[16];
-    std::string result;
+    globus_byte_t buffer[64];
+    std::string result("");
     
     globus_result_t success_reg_read;
     GLOBUS_GUARDED_EXEC( success_reg_read,
@@ -723,10 +730,13 @@ GridFTPConnection::get_directory_entries( const std::string & url )
                                                         &data_callback,
                                                         &result ) )
     
+	
+	
     if( this->Error_ )
         throw globus_gridftp_file_adaptor::exception(CurrentErrorStr_,
                                                      CurrentError_);
-            
+    
+		
     typedef boost::tokenizer<boost::char_separator<char> >
     tokenizer;
     
