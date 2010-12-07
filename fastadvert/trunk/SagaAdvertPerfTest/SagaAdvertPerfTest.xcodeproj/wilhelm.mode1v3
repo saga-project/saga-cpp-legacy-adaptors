@@ -278,7 +278,7 @@
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 0}, {269, 988}}</string>
+							<string>{{0, 0}, {269, 710}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -290,14 +290,14 @@
 					<key>GeometryConfiguration</key>
 					<dict>
 						<key>Frame</key>
-						<string>{{0, 0}, {286, 1006}}</string>
+						<string>{{0, 0}, {286, 728}}</string>
 						<key>GroupTreeTableConfiguration</key>
 						<array>
 							<string>MainColumn</string>
 							<real>269</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>0 131 1442 1047 0 0 1920 1178 </string>
+						<string>107 283 1523 769 0 0 1920 1178 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -313,24 +313,13 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>main.cpp</string>
+								<string>&lt;No Editor&gt;</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
-										<key>PBXProjectModuleLabel</key>
-										<string>main.cpp</string>
-										<key>_historyCapacity</key>
-										<integer>0</integer>
-										<key>bookmark</key>
-										<string>ED6D915112AE3A5100D8F24E</string>
-										<key>history</key>
-										<array>
-											<string>ED1B2A71121D63AA00796AA7</string>
-											<string>ED6D915012AE3A5100D8F24E</string>
-										</array>
 									</dict>
 									<key>SplitCount</key>
 									<string>1</string>
@@ -341,14 +330,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {1151, 791}}</string>
+								<string>{{0, 0}, {1232, 513}}</string>
 								<key>RubberWindowFrame</key>
-								<string>0 131 1442 1047 0 0 1920 1178 </string>
+								<string>107 283 1523 769 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>791pt</string>
+							<string>513pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
@@ -361,9 +350,9 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 796}, {1151, 210}}</string>
+								<string>{{0, 518}, {1232, 210}}</string>
 								<key>RubberWindowFrame</key>
-								<string>0 131 1442 1047 0 0 1920 1178 </string>
+								<string>107 283 1523 769 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -372,7 +361,7 @@
 						</dict>
 					</array>
 					<key>Proportion</key>
-					<string>1151pt</string>
+					<string>1232pt</string>
 				</dict>
 			</array>
 			<key>Name</key>
@@ -532,7 +521,7 @@
 		<string>/Users/wilhelm/Documents/SagaAdvertPerfTest/SagaAdvertPerfTest.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>0 131 1442 1047 0 0 1920 1178 </string>
+	<string>107 283 1523 769 0 0 1920 1178 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
