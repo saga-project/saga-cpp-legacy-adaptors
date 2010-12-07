@@ -1,51 +1,0 @@
-TSagaAdvertPerfTest
-v7
-r0
-t303477792.478709
-cCheck dependencies
-cCompileC build/SagaAdvertPerfTest.build/Debug/SagaAdvertPerfTest.build/Objects-normal/x86_64/main.o /Users/wilhelm/Documents/SagaAdvertPerfTest/main.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
-
-N/Developer/SDKs/MacOSX10.6.sdk
-c000000004BF4701900000000000000EE
-t1274310681
-s238
-
-N/Users/wilhelm/Documents/SagaAdvertPerfTest/build/Debug/SagaAdvertPerfTest
-t2
-s0
-
-N/Users/wilhelm/Documents/SagaAdvertPerfTest/build/SagaAdvertPerfTest.build/Debug/SagaAdvertPerfTest.build/Objects-normal/x86_64/SagaAdvertPerfTest.LinkFileList
-c000000004C667CA00000000000000087
-t1281784992
-s135
-
-N/Users/wilhelm/Documents/SagaAdvertPerfTest/build/SagaAdvertPerfTest.build/Debug/SagaAdvertPerfTest.build/Objects-normal/x86_64/main.o
-t2
-s0
-
-N/Users/wilhelm/Documents/SagaAdvertPerfTest/main.cpp
-c000000004C667C9E0000000000000096
-t1281784990
-s150
-i<iostream>
-
-CCheck dependencies
-r0
-lSLF07#2@18"Check dependencies303477792#303477792#0(0"0(0#1#0"9007637348679712#0"0#
-
-CCompileC build/SagaAdvertPerfTest.build/Debug/SagaAdvertPerfTest.build/Objects-normal/x86_64/main.o /Users/wilhelm/Documents/SagaAdvertPerfTest/main.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
-s303477792.452472
-e303477792.478645
-r0
-xCompileC
-xbuild/SagaAdvertPerfTest.build/Debug/SagaAdvertPerfTest.build/Objects-normal/x86_64/main.o
-x/Users/wilhelm/Documents/SagaAdvertPerfTest/main.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.gcc.4_2
-lSLF07#2@60"Compile /Users/wilhelm/Documents/SagaAdvertPerfTest/main.cpp303477792#303477792#0(301"/Users/wilhelm/Documents/SagaAdvertPerfTest/main.cpp:1:27: error: saga/advert.hpp: No such file or directory/Users/wilhelm/Documents/SagaAdvertPerfTest/main.cpp: In function 'int main(int, char* const*)':/Users/wilhelm/Documents/SagaAdvertPerfTest/main.cpp:5: error: 'cout' is not a member of 'std'2(4@42"Saga/advert.hpp: No such file or directory303477792#0#109#0(6@52"/Users/wilhelm/Documents/SagaAdvertPerfTest/main.cpp303477790#1#0#1#0#28"*: No such file or directory0(4@31"'cout' is not a member of 'std'303477792#206#95#0(6@52"/Users/wilhelm/Documents/SagaAdvertPerfTest/main.cpp303477790#5#0#5#0#0"0(0#0#52"/Users/wilhelm/Documents/SagaAdvertPerfTest/main.cpp8390880614907207680#1544"    cd /Users/wilhelm/Documents/SagaAdvertPerfTest    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch x86_64 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -fvisibility-inlines-hidden -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/wilhelm/Documents/SagaAdvertPerfTest/build/SagaAdvertPerfTest.build/Debug/SagaAdvertPerfTest.build/SagaAdvertPerfTest-generated-files.hmap -I/Users/wilhelm/Documents/SagaAdvertPerfTest/build/SagaAdvertPerfTest.build/Debug/SagaAdvertPerfTest.build/SagaAdvertPerfTest-own-target-headers.hmap -I/Users/wilhelm/Documents/SagaAdvertPerfTest/build/SagaAdvertPerfTest.build/Debug/SagaAdvertPerfTest.build/SagaAdvertPerfTest-all-target-headers.hmap -iquote /Users/wilhelm/Documents/SagaAdvertPerfTest/build/SagaAdvertPerfTest.build/Debug/SagaAdvertPerfTest.build/SagaAdvertPerfTest-project-headers.hmap -F/Users/wilhelm/Documents/SagaAdvertPerfTest/build/Debug -I/Users/wilhelm/Documents/SagaAdvertPerfTest/build/Debug/include -I/Users/wilhelm/Documents/SagaAdvertPerfTest/build/SagaAdvertPerfTest.build/Debug/SagaAdvertPerfTest.build/DerivedSources/x86_64 -I/Users/wilhelm/Documents/SagaAdvertPerfTest/build/SagaAdvertPerfTest.build/Debug/SagaAdvertPerfTest.build/DerivedSources -c /Users/wilhelm/Documents/SagaAdvertPerfTest/main.cpp -o /Users/wilhelm/Documents/SagaAdvertPerfTest/build/SagaAdvertPerfTest.build/Debug/SagaAdvertPerfTest.build/Objects-normal/x86_64/main.o1#
-
-CLd /Users/wilhelm/Documents/SagaAdvertPerfTest/build/Debug/SagaAdvertPerfTest normal x86_64
-r0
-
