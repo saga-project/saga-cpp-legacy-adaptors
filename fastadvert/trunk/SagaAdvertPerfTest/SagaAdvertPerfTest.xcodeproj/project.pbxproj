@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8DD76F650486A84900D96B5E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cpp */; settings = {ATTRIBUTES = (); }; };
-		8DD76F6A0486A84900D96B5E /* SagaAdvertPerfTest.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859E8B029090EE04C91782 /* SagaAdvertPerfTest.1 */; };
 		ED7666771216B76500C8D7CF /* libsaga_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED7666761216B76500C8D7CF /* libsaga_core.dylib */; };
 		ED7666791216B78000C8D7CF /* libsaga_package_namespace.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED7666781216B78000C8D7CF /* libsaga_package_namespace.dylib */; };
 		ED76667B1216B79B00C8D7CF /* libsaga_package_advert.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED76667A1216B79B00C8D7CF /* libsaga_package_advert.dylib */; };
@@ -21,7 +20,6 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				8DD76F6A0486A84900D96B5E /* SagaAdvertPerfTest.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -30,7 +28,6 @@
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* SagaAdvertPerfTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SagaAdvertPerfTest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C6859E8B029090EE04C91782 /* SagaAdvertPerfTest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = SagaAdvertPerfTest.1; sourceTree = "<group>"; };
 		ED7666761216B76500C8D7CF /* libsaga_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsaga_core.dylib; path = "/opt/saga-1.5.1/lib/libsaga_core.dylib"; sourceTree = "<absolute>"; };
 		ED7666781216B78000C8D7CF /* libsaga_package_namespace.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsaga_package_namespace.dylib; path = "/opt/saga-1.5.1/lib/libsaga_package_namespace.dylib"; sourceTree = "<absolute>"; };
 		ED76667A1216B79B00C8D7CF /* libsaga_package_advert.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsaga_package_advert.dylib; path = "/opt/saga-1.5.1/lib/libsaga_package_advert.dylib"; sourceTree = "<absolute>"; };
@@ -82,7 +79,6 @@
 		C6859E8C029090F304C91782 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
-				C6859E8B029090EE04C91782 /* SagaAdvertPerfTest.1 */,
 			);
 			name = Documentation;
 			sourceTree = "<group>";
