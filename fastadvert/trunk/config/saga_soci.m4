@@ -41,17 +41,6 @@ AC_DEFUN([AX_SAGA_CHECK_SOCI],
   export HAVE_INTERNAL_SOCI
 
   # internal backends
-  AC_MSG_CHECKING(for backend sqlite3)
-
-  if test "x$HAVE_SQLITE3" = "xyes"; then
-    AC_MSG_RESULT(found)
-    soci_backends_ok="$soci_backends_ok-sqlite3-"
-    SOCI_BACKENDS="$SOCI_BACKENDS sqlite3"
-    HAVE_SOCI_SQLITE3=yes
-  else
-    AC_MSG_RESULT(not found)
-  fi
-  
   AC_MSG_CHECKING(for backend postgresql)
 
   if test "x$HAVE_POSTGRESQL" = "xyes"; then
@@ -71,7 +60,6 @@ AC_DEFUN([AX_SAGA_CHECK_SOCI],
 
   AC_SUBST(HAVE_SOCI)
   AC_SUBST(HAVE_INTERNAL_SOCI)
-  AC_SUBST(HAVE_SOCI_SQLITE3)
   AC_SUBST(HAVE_SOCI_POSTGRESQL)
   AC_SUBST(HAVE_SOCI_MYSQL)
   AC_SUBST(HAVE_SOCI_ODBC)

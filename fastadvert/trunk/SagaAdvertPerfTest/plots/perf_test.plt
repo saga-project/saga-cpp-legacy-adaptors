@@ -1,3 +1,4 @@
+
 # plot directory create test
 
 set terminal postscript
@@ -34,3 +35,4 @@ set ylabel 'Time in seconds'
 
 set output 'attribute_read_test.ps'
 plot 'attribute_read_test.csv' using 1:2
+

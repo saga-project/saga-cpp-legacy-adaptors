@@ -9,11 +9,8 @@
 
 m4_include([saga.m4])
 
-m4_include([config/saga_openssl.m4])
 m4_include([config/saga_postgresql.m4])
 m4_include([config/saga_soci.m4])
-m4_include([config/saga_sqlite3.m4])
-m4_include([config/saga_xmlrpc.m4])
 
 AC_INIT()
 
@@ -21,15 +18,10 @@ AC_CONFIG_HEADERS([external/soci/postgresql/postgresql-config.hpp])
 
 AX_SAGA_CONFIG()
 
-#if test "x$TMP_SAGA_INSTTYPE" == "source"; then
-#  AC_CONFIG_AUX_DIR([$TMP_SAGA_LOCATION/share/saga/config/])
-#else
-#  AC_CONFIG_AUX_DIR([$TMP_SAGA_LOCATION/config/])
-#fi
+AC_CONFIG_AUX_DIR([$SAGA_LOCATION/share/saga/config/])
+CONFDIR="`pwd`/config/"
+AC_SUBST(CONFDIR)
 
-
-AX_SAGA_CHECK_SQLITE3(3.3)
-AC_CONFIG_FILES([config/saga.config.sqlite3.c.mk])
 
 AX_SAGA_CHECK_POSTGRESQL(8.0)
 AC_CONFIG_FILES([config/saga.config.postgresql.c.mk])
@@ -37,18 +29,9 @@ AC_CONFIG_FILES([config/saga.config.postgresql.c.mk])
 AX_SAGA_CHECK_SOCI(2.2)
 AC_CONFIG_FILES([config/saga.config.soci.c.mk])
 
-AX_SAGA_CHECK_XMLRPC([0.7.0])
-AC_CONFIG_FILES([config/saga.config.xmlrpc.c.mk]) 
-
-AX_SAGA_CHECK_OPENSSL(0.9.6)
-AC_CONFIG_FILES([config/saga.config.openssl.c.mk])
-
 # translate defines into integers
 CPP_HAVE_SOCI=0
 CPP_HAVE_INTERNAL_SOCI=0
-CPP_HAVE_SOCI_MYSQL=0
-CPP_HAVE_SOCI_SQLITE3=0
-CPP_HAVE_SOCI_POSTGRESQL=0
 
 if test "$HAVE_SOCI" = "yes"; then
   CPP_HAVE_SOCI=1
@@ -58,22 +41,12 @@ if test "$HAVE_INTERNAL_SOCI" = "yes"; then
   CPP_HAVE_INTERNAL_SOCI=1
 fi
 
-if test "$HAVE_SOCI_MYSQL" = "yes"; then
-  CPP_HAVE_SOCI_MYSQL=1  
-fi                       
-                         
-if test "$HAVE_SOCI_SQLITE3" = "yes"; then
-  CPP_HAVE_SOCI_SQLITE3=1
-fi
-
 if test "$HAVE_SOCI_POSTGRESQL" = "yes"; then
   CPP_HAVE_SOCI_POSTGRESQL=1
 fi
 
 AC_SUBST(CPP_HAVE_SOCI)
 AC_SUBST(CPP_HAVE_INTERNAL_SOCI)
-AC_SUBST(CPP_HAVE_SOCI_MYSQL)
-AC_SUBST(CPP_HAVE_SOCI_SQLITE3)
 AC_SUBST(CPP_HAVE_SOCI_POSTGRESQL)
 
 
@@ -86,26 +59,17 @@ fi
 AC_SUBST([BUILD_ADAPTOR_ADVERT])
 
 if test "$BUILD_ADAPTOR_ADVERT" != "no"; then
-  if test "$HAVE_SQLITE3-$HAVE_POSTGRESQL" == "yes-yes"; then
-    DB_INFO="(w/ SQLite3 & PostgreSQL)"
-    SAGA_DBTYPE="sqlite3"
-  fi
-  if test "$HAVE_SQLITE3-$HAVE_POSTGRESQL" == "yes-no"; then
-    DB_INFO="(w/ SQLite3)"
-    SAGA_DBTYPE="sqlite3"
-  fi
-  if test "$HAVE_SQLITE3-$HAVE_POSTGRESQL" == "no-yes"; then
+  if test "$HAVE_POSTGRESQL" == "yes"; then
     DB_INFO="(w/ PostgreSQL)"
     SAGA_DBTYPE="postgresql"
-  fi
-  if test "$HAVE_SQLITE3-$HAVE_POSTGRESQL" == "no-no"; then
-    DB_INFO="(PostgreSQL and/or SQLite3 req'd.)"
+  else
+    DB_INFO="(PostgreSQL required)"
     SAGA_DBTYPE="none"
     BUILD_ADAPTOR_ADVERT=no
-    BUILD_ADAPTOR_REPLICA=no
   fi
 fi
 
+SAG
 AC_SUBST(SAGA_DBTYPE)
 
 if test "x$BUILD_ADAPTOR_ADVERT" == "xyes"; then
@@ -139,9 +103,6 @@ echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
 echo "                                                                 " >> $OUT
 echo " PostgreSQL Found      : $HAVE_POSTGRESQL $POSTGRESQL_VERSION_S  " >> $OUT
 echo " PostgreSQL Location   : $POSTGRESQL_LOCATION                    " >> $OUT
-echo "                                                                 " >> $OUT
-echo " SQLite3 (>3.3) Found  : $HAVE_SQLITE3                           " >> $OUT
-echo " SQLite3 Location      : $SQLITE3_LOCATION                       " >> $OUT
 echo "                                                                 " >> $OUT
 echo " Fast Advert Adaptor  : $BUILD_ADAPTOR_ADVERT  $DB_INFO_A        " >> $OUT
 echo "                                                                 " >> $OUT

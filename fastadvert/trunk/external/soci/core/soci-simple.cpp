@@ -7,8 +7,11 @@
 
 #define SOCI_SOURCE
 
+#include <stdio.h>
+
 #include "soci-simple.h"
 #include "soci.h"
+
 
 using namespace soci;
 

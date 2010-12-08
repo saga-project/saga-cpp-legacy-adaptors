@@ -9,7 +9,7 @@
 
 void clear_db()
 {
-	saga::url root_url("advert://localhost");
+	saga::url root_url("advert://");
 	saga::advert::directory root_dir(root_url);
 	
 	std::vector<saga::url> url_vector = root_dir.list();
@@ -23,7 +23,7 @@ void clear_db()
 
 saga::url create_url(int depth)
 {
-	std::string url_string("advert://localhost");
+	std::string url_string("advert://");
 	
 	for (int i = 0; i < depth; ++i)
 	{
@@ -163,20 +163,20 @@ void attribute_read_test(int max_depth, int attribute_count)
 /// Main                  //
 ////////////////////////////
 
-int main (int argc, char * const argv[]) {
+int main (int argc, char * const argv[])
+{	
+	std::cout << std::endl << "Starting directory create test ... " << std::endl << std::endl;
+	directory_create_test(200);
 	
+	std::cout << std::endl << std::endl << "Starting attribute create test ..." << std::endl << std::endl;
+	attribute_create_test(100, 100);
 	
-	//std::cout << std::endl << "Starting directory create test ... " << std::endl << std::endl;
-	//directory_create_test(200);
-	
-	//std::cout << std::endl << std::endl << "Starting attribute create test ..." << std::endl << std::endl;
-	//attribute_create_test(100, 100);
-	
-	//std::cout << std::endl << std::endl << "Starting directory read test ..." << std::endl << std::endl;
-	//directory_read_test(500);
+	std::cout << std::endl << std::endl << "Starting directory read test ..." << std::endl << std::endl;
+	directory_read_test(500);
 
 	std::cout << std::endl << std::endl << "Starting attribute read test ..." << std::endl << std::endl;
 	attribute_read_test(100, 100);
 	
-    return 0;
+  return 0;
 }
+
