@@ -233,16 +233,16 @@ context_cpi_impl::cert_info_t context_cpi_impl::get_cert_info (std::string key_p
       return ci;
     }
 
-    if ( d.exists  (dot_dir + "/id_dsa") &&
-         d.is_file (dot_dir + "/id_dsa") )
-    {
-      ci.private_key = d.get_url ().get_path () + "/" + dot_dir + "/id_dsa"; 
-    }
-    else
     if ( d.exists  (dot_dir + "/id_rsa") &&
          d.is_file (dot_dir + "/id_rsa") )
     {
       ci.private_key = d.get_url ().get_path () + "/" + dot_dir + "/id_rsa"; 
+    }
+    else
+    if ( d.exists  (dot_dir + "/id_dsa") &&
+         d.is_file (dot_dir + "/id_dsa") )
+    {
+      ci.private_key = d.get_url ().get_path () + "/" + dot_dir + "/id_dsa"; 
     }
     else
     {
