@@ -23,6 +23,12 @@
 
 :DESCRIPTION:
 
+  *******************************************************
+  ***            THIS ADAPTOR IS DEPRECATED           ***
+  ***       use the BES adaptor to access GridSAM     ***
+  *** https://svn.cct.lsu.edu/repos/saga-adaptors/ogf ***
+  *******************************************************
+
   The adaptor allows (remote) job submission/control/monitoring using the OMII
   GridSAM WebService protocol
 
@@ -48,4 +54,5 @@
 
 :KNOWN ISSUES:
 
-  none
+  Adaptor is deprecated.
+

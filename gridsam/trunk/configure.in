@@ -40,6 +40,13 @@ rm -f $OUT
 TEE="tee -a"
 
 echo "                                                                 " | $TEE $OUT
+echo " *******************************************************         " | $TEE $OUT
+echo " ***            THIS ADAPTOR IS DEPRECATED           ***         " | $TEE $OUT
+echo " ***       use the BES adaptor to access GridSAM     ***         " | $TEE $OUT
+echo " *** https://svn.cct.lsu.edu/repos/saga-adaptors/ogf ***         " | $TEE $OUT
+echo " *******************************************************         " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
 echo " ========================================================        " | $TEE $OUT
 echo " SAGA OMII ADAPTORS                                              " | $TEE $OUT
 echo " --------------------------------------------------------        " | $TEE $OUT

@@ -1,3 +1,10 @@
+
+  *******************************************************
+  ***            THIS ADAPTOR IS DEPRECATED           ***
+  ***       use the BES adaptor to access GridSAM     ***
+  *** https://svn.cct.lsu.edu/repos/saga-adaptors/ogf ***
+  *******************************************************
+
 This README describes how to use the SAGA OMII GridSAM adaptor with custom 
 security credentials. 
 
