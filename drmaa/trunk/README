@@ -1,0 +1,16 @@
+= SAGA job adaptor for DRMAA compilant systems =
+
+== Installation ==
+Make sure that SAGA_LOCATION environment variable is set. Then type::
+
+  make
+  sudo make install
+  
+== Configuration ==
+Edit the ``ogf_drmaa_job_adaptor.ini`` configuration file and update the ``drmaa_path`` property. 
+
+== Running ==
+This adapter handles the following URL schemas:
+* none
+* any://
+* drmaa://
