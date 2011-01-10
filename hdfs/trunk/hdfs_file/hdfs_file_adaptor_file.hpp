@@ -111,6 +111,7 @@ namespace hdfs_file_adaptor
                                    int                  perm);
       void sync_get_owner         (std::string        & out);
       void sync_get_group         (std::string        & out);    
+      void saga_hdfs_delete  (hdfsFS fs, const char* path);
 
   }; // class file_cpi_impl
 
