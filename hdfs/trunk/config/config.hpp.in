@@ -1,0 +1,15 @@
+//
+//  Distributed under the Boost Software License, Version 1.0. (See accompanying
+//  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//
+// NOTE that this header contains only _global_ defines for
+// SAGA.  Local defines (e.g. for a specific adaptor, or
+// a specific compiler) should still be set via the Makefiles.
+
+#ifndef SAGA_HDFS_CONFIG_HPP
+#define SAGA_HDFS_CONFIG_HPP
+ 
+#undef HAVE_HADOOP
+#undef HADOOP_VERSION
+
+#endif
