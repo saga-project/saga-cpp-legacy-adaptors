@@ -18,7 +18,36 @@ AX_SAGA_CONFIG()
 # create output files
 AC_CONFIG_FILES([config/make.cfg])
 
+TMP=`$HADOOP_HOME/bin/hadoop version | head -1 | cut -d ' ' -f 2 || echo "0.0.0"`
+
+TMP_1a=`echo $TMP | cut -f 1 -d .` > /dev/null
+TMP_2a=`echo $TMP | cut -f 2 -d .` > /dev/null
+TMP_3a=`echo $TMP | cut -f 3 -d .` > /dev/null
+
+TMP_1b=`printf "%02d" "$TMP_1a"` > /dev/null
+TMP_2b=`printf "%02d" "$TMP_2a"` > /dev/null
+TMP_3b=`printf "%02d" "$TMP_3a"` > /dev/null
+
+HADOOP_VERSION="$TMP_1b$TMP_2b$TMP_3b"
+
+if test "$HADOOP_VERSION" != "000000"; then
+  HAVE_HADOOP=yes
+else
+  HAVE_HADOOP=no
+fi
+
+AC_SUBST([HAVE_HADOOP])
+AC_SUBST([HADOOP_HOME])
+AC_SUBST([HADOOP_VERSION])
+
+AC_DEFINE_UNQUOTED([HAVE_HADOOP],    [$HAVE_HADOOP])
+AC_DEFINE_UNQUOTED([HADOOP_HOME],    [$HADOOP_HOME])
+AC_DEFINE_UNQUOTED([HADOOP_VERSION], [$HADOOP_VERSION])
+
+AC_CONFIG_HEADERS([config/config.hpp])
+
 AC_OUTPUT()
+
 
 OUT=config.summary
 rm -f $OUT
@@ -31,12 +60,10 @@ echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
 echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
 echo "                                                                 " >> $OUT
-# echo " HDFS                  : $HAVE_LIBHDFS                           " >> $OUT
-# echo "   LIBHDFS_SOURCE      : $LIBHDFS_SOURCE                         " >> $OUT  
-# echo "   LIBHDFS_LOCATION    : $LIBHDFS_LOCATION                       " >> $OUT    
-# echo "   LIBHDFS_CPPFLAGS    : $LIBHDFS_CPPFLAGS                       " >> $OUT    
-# echo "   LIBHDFS_LDFLAGS     : $LIBHDFS_LDFLAGS                        " >> $OUT   
-# echo "                                                                 " >> $OUT
+echo " HADOOP found          : $HAVE_HADOOP                            " >> $OUT
+echo " HADOOP_HOME           : $HADOOP_HOME                            " >> $OUT
+echo " HADOOP_VERSION        : $HADOOP_VERSION                         " >> $OUT
+echo "                                                                 " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
 

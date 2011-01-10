@@ -10,48 +10,32 @@ ifndef MAKE_CFG_IN
        MAKE_CFG_IN=yes
 
 
-TMP_SAGA_LOCATION = @TMP_SAGA_LOCATION@
-TMP_SAGA_INSTTYPE = @TMP_SAGA_INSTTYPE@
-
-HAVE_HDFS           = @HAVE_LIBHDFS@
-
-ifeq "$(TMP_SAGA_INSTTYPE)" "source"
-  SAGA_ROOT              = $(TMP_SAGA_LOCATION)
-  SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/make
-else
-  SAGA_LOCATION          = $(TMP_SAGA_LOCATION)
-  SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/share/saga/make
-endif
+SAGA_LOCATION  = @SAGA_LOCATION@
+HAVE_HADOOP    = @HAVE_HADOOP@
+HADOOP_HOME    = @HADOOP_HOME@
+HADOOP_VERSION = @HADOOP_VERSION@
 
 
-include $(SAGA_MAKE_INCLUDE_ROOT)/saga.util.mk
+include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 
 
-ifeq "$(HAVE_HDFS)" "yes"
+ifeq "$(HAVE_HADOOP)" "yes"
  FLAGS          += -DHAVE_HDFS
- SAGA_CPPINCS   += @LIBHDFS_CPPFLAGS@
- SAGA_LDFLAGS   += @LIBHDFS_LDFLAGS@
+ SAGA_CPPINCS   += -I$(HADOOP_HOME)/src/c++/libhdfs/
+ SAGA_LDFLAGS   += -L$(HADOOP_HOME)/src/c++/libhdfs -lhdfs
 else
  ifndef SAGA_IS_CLEANING
-  $(warning "no libhdfs found by configure")
+  $(error "no hadoop/libhdfs found by configure")
  endif
 endif
 
-# legacy settings
-ifndef HADOOP_HOME
- $(error "HADOOP_HOME must be set for this Makefile to work")
-endif
 
-ifndef JAVA_HOME
+ifdef JAVA_HOME
+ SAGA_CPPINCS     += -I$(JAVA_HOME)/include
+ SAGA_CPPINCS     += -I$(JAVA_HOME)/include/linux
+else
  $(error "JAVA_HOME must be set for this Makefile to work")
 endif
 
-SAGA_CPPINCS     += -I$(JAVA_HOME)/include
-SAGA_CPPINCS     += -I$(JAVA_HOME)/include/linux
-SAGA_CPPINCS     += -I$(HADOOP_HOME)/src/c++/libhdfs/
-SAGA_LDFLAGS     += -L$(HADOOP_HOME)/src/c++/libhdfs -lhdfs
-
-
 
 endif # guard
-

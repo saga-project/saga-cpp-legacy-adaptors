@@ -8,6 +8,7 @@
 #include <saga/saga/exception.hpp>
 
 #include "hdfs_file_adaptor_dir.hpp"
+#include "../config/config.hpp"
 
 namespace hdfs_file_adaptor
 {
@@ -272,10 +273,7 @@ namespace hdfs_file_adaptor
         if ((flags & saga::name_space::Overwrite) && dst_exists) {
 /*            if (is_dst_dir)
                 fs::remove_all(dst_location);*/
-           if(hdfsDelete(fs_, dst_location.string().c_str()) != 0)
-           {
-              SAGA_ADAPTOR_THROW("Could not delete", saga::NoSuccess);
-           }
+           saga_hdfs_delete(fs_, dst_location.string().c_str()); 
         }
     
         if(hdfsExists(fs_, dst_location.string().c_str()) == 0)
@@ -369,10 +367,7 @@ namespace hdfs_file_adaptor
      if ((flags & saga::name_space::Overwrite) && dst_exists) {
 /*         if (is_dst_dir)
              fs::remove_all(dst_location);*/
-        if(hdfsDelete(fs_, dst_location.string().c_str()) != 0)
-        {
-           SAGA_ADAPTOR_THROW("Could not delete", saga::NoSuccess);
-        }
+        saga_hdfs_delete(fs_, dst_location.string().c_str()); 
      }
      // if destination still exists raise an error
      dst_exists = false;
@@ -434,17 +429,11 @@ namespace hdfs_file_adaptor
                  "Please use recursive mode!", saga::BadParameter);
          }
          else {
-            if(hdfsDelete(fs_, src_location.string().c_str()) != 0)
-            {
-               SAGA_ADAPTOR_THROW("Could not delete", saga::NoSuccess);
-            }
+            saga_hdfs_delete(fs_, src_location.string().c_str()); 
          }
      }
      else {
-        if(hdfsDelete(fs_, src_location.string().c_str()) != 0)
-        {
-           SAGA_ADAPTOR_THROW("Could not delete", saga::NoSuccess);
-        }
+        saga_hdfs_delete(fs_, src_location.string().c_str()); 
      }
   }
 
@@ -511,6 +500,21 @@ namespace hdfs_file_adaptor
      {
         SAGA_ADAPTOR_THROW("Could not create directory", saga::NoSuccess);
      }
+  }
+  
+  void dir_cpi_impl::saga_hdfs_delete(hdfsFS fs, const char* path)
+  {
+     #if HADOOP_VERSION < 002100 
+       if ( hdfsDelete(fs, path) != 0 )
+       {
+           SAGA_ADAPTOR_THROW("Could not delete", saga::NoSuccess);
+       }
+     #else
+       if ( hdfsDelete(fs, path, true) != 0 )
+       {   
+           SAGA_ADAPTOR_THROW("Could not delete", saga::NoSuccess);
+       }  
+     #endif
   }
 
 } // namespace

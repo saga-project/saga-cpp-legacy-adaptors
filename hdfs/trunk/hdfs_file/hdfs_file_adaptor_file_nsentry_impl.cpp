@@ -8,6 +8,7 @@
 #include <saga/saga/exception.hpp>
 
 #include "hdfs_file_adaptor_file.hpp"
+#include "../config/config.hpp"
 
 namespace hdfs_file_adaptor
 {
@@ -185,8 +186,7 @@ namespace hdfs_file_adaptor
          }
          else
          {
-            if(hdfsDelete(fs_, dst_location.string().c_str()) < 0)
-               SAGA_ADAPTOR_THROW("Can not delete", saga::NoSuccess);
+            saga_hdfs_delete(fs_, dst_location.string().c_str()); 
          }
      }
   
@@ -283,8 +283,7 @@ namespace hdfs_file_adaptor
          }
          else
          {
-            if(hdfsDelete(fs_, dst_location.string().c_str()) < 0)
-               SAGA_ADAPTOR_THROW("Can not delete", saga::NoSuccess);
+            saga_hdfs_delete(fs_, dst_location.string().c_str()); 
          }
      }
   
@@ -301,10 +300,7 @@ namespace hdfs_file_adaptor
          SAGA_ADAPTOR_THROW("Failed to copy in move", saga::NoSuccess);
      }
      //Remove old
-     if(hdfsDelete(fs_, src_location.string().c_str()) != 0)
-     {
-        SAGA_ADAPTOR_THROW("Failed to delete in move", saga::NoSuccess);
-     }
+     saga_hdfs_delete(fs_, src_location.string().c_str()); 
   }
 
   void file_cpi_impl::sync_remove (saga::impl::void_t & ret,
@@ -314,10 +310,7 @@ namespace hdfs_file_adaptor
      
      // verify current working directory is local
      saga::url url(idata->location_);
-     if(hdfsDelete(fs_, url.get_path().c_str()) != 0)
-     {
-        SAGA_ADAPTOR_THROW("Failed to remove", saga::NoSuccess);
-     }
+     saga_hdfs_delete(fs_, url.get_path().c_str()); 
   }
 
 
@@ -326,6 +319,22 @@ namespace hdfs_file_adaptor
   {
     // Nothing to close here...
   }
+
+  void file_cpi_impl::saga_hdfs_delete(hdfsFS fs, const char* path)
+  {
+     #if HADOOP_VERSION < 002100
+       if ( hdfsDelete(fs, path) != 0 )
+       {
+           SAGA_ADAPTOR_THROW("Could not delete", saga::NoSuccess);
+       }
+     #else
+       if ( hdfsDelete(fs, path, true) != 0 )
+       {   
+           SAGA_ADAPTOR_THROW("Could not delete", saga::NoSuccess);
+       }  
+     #endif
+  }
+  
 
 } // namespace
 
