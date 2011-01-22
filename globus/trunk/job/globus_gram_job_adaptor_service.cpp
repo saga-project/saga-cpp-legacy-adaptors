@@ -29,7 +29,7 @@ job_service_cpi_impl (proxy                * p,
 : base_cpi (p, info, adaptor, cpi::Noflags)
 {
     instance_data data(this);
-    
+        
     if (!data->rm_.get_url().empty())
     {
         saga::url rm(data->rm_);
@@ -153,6 +153,7 @@ sync_get_job(saga::job::job& ret, std::string jobid)
     saga::job::description jd;
     
     jd = adaptor_data->get_job_desc (instance_data->rm_.get_url(), jobid);
+    
     ret = saga::adaptors::job (instance_data->rm_, jobid, 
                                    proxy_->get_session());
 }

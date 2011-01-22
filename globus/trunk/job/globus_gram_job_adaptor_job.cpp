@@ -101,16 +101,20 @@ job_cpi_impl::job_cpi_impl (proxy                * p,
         // connect to the job, we have to:
         //   - set the current state
         //   - try to reconstruct the job description
-        
-        std::string error_text("The adaptor couldn't query the job's "
-                               "status for the following reason: ");
-        
-        // saga_error_tuple et = { (saga::error)saga::adaptors::Success, "" };
-        
-        
+                
         saga::job::state old_state = saga::job::Unknown;
-        saga::job::state new_state = 
-        connector::get_job_state(old_state, inst_data->jobid_);
+        saga::job::state new_state = saga::job::Unknown;
+        
+        try {
+            new_state = connector::get_job_state(old_state, inst_data->jobid_);   
+        }
+        catch(globus_gram_job_adaptor::exception const & e)
+        {
+            SAGA_OSSTREAM strm;
+            strm << "Could not reconnect to job [" << inst_data->jobid_ << "]: " 
+                 << e.GlobusErrorText();
+            SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), e.SAGAError()); 
+        }
         
         
         saga::adaptors::attribute attr (this);

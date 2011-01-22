@@ -483,7 +483,7 @@ saga::job::state connector::get_job_state (saga::job::state old_state,
     globus_gram_client_job_status ( job_contact.c_str(),
                                    &state,
                                    &error );  // FIXME: check type
-    
+        
     if ( GLOBUS_SUCCESS != rc ) {
         // this is a nasty hack, but that's how the Globus guys
         // do it in globusrun.c
@@ -495,7 +495,7 @@ saga::job::state connector::get_job_state (saga::job::state old_state,
             throw globus_gram_job_adaptor::exception(rc);
         }
     }
-    
+        
     saga::job::state ret_state = 
     utility::translate_gram_to_saga_job_state (old_state, state); 
     
