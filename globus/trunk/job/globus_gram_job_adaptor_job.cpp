@@ -231,7 +231,7 @@ void globus_gram_job_adaptor::job_cpi_impl::sync_run (saga::impl::void_t&)
 
 {
     saga_error_tuple et = { (saga::error)saga::adaptors::Success, "" };
-    std::string error_text("Unable run the job because: ");
+    std::string error_text("Unable to run the job because: ");
     
     instance_data inst_data (this);
     saga::job::description jd = inst_data->jd_;  // Job description

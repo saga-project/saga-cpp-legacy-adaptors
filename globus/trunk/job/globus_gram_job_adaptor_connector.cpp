@@ -278,6 +278,7 @@ saga_error_tuple connector::submit_job (std::string & ret_jobid,
         return eh.get_saga_exception_for ("submit_job", err);
     }
     
+    
     (void)globus_mutex_lock(&monitor.mutex);
     {
         err = globus_gram_client_job_request(gram_url.c_str(),
@@ -287,14 +288,16 @@ saga_error_tuple connector::submit_job (std::string & ret_jobid,
                                              &monitor.job_contact);
     }
      
-    if(err == GLOBUS_SUCCESS)
+    
+   /* if(err == GLOBUS_SUCCESS)
     {
         while (!monitor.submit_done)
         {
           globus_cond_wait(&monitor.cond, &monitor.mutex);
           err = monitor.failure_code;
         }
-    }
+        
+    }*/
 
     (void)globus_mutex_unlock(&monitor.mutex);
     
@@ -489,6 +492,7 @@ saga::job::state connector::get_job_state (saga::job::state old_state,
         // do it in globusrun.c
         if (GLOBUS_GRAM_PROTOCOL_ERROR_CONTACTING_JOB_MANAGER == rc) {
             state = GLOBUS_GRAM_PROTOCOL_JOB_STATE_DONE;
+            //throw globus_gram_job_adaptor::exception(rc);
         }
         else {
             // every other protocol error is hopefully a _real_ error
@@ -496,6 +500,8 @@ saga::job::state connector::get_job_state (saga::job::state old_state,
         }
     }
         
+    
+    
     saga::job::state ret_state = 
     utility::translate_gram_to_saga_job_state (old_state, state); 
     
