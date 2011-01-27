@@ -28,9 +28,9 @@
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* SagaAdvertPerfTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SagaAdvertPerfTest; sourceTree = BUILT_PRODUCTS_DIR; };
-		ED7666761216B76500C8D7CF /* libsaga_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsaga_core.dylib; path = "/opt/saga-1.5.1/lib/libsaga_core.dylib"; sourceTree = "<absolute>"; };
-		ED7666781216B78000C8D7CF /* libsaga_package_namespace.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsaga_package_namespace.dylib; path = "/opt/saga-1.5.1/lib/libsaga_package_namespace.dylib"; sourceTree = "<absolute>"; };
-		ED76667A1216B79B00C8D7CF /* libsaga_package_advert.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsaga_package_advert.dylib; path = "/opt/saga-1.5.1/lib/libsaga_package_advert.dylib"; sourceTree = "<absolute>"; };
+		ED7666761216B76500C8D7CF /* libsaga_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsaga_core.dylib; path = "/opt/saga-1.5.3/lib/libsaga_core.dylib"; sourceTree = "<absolute>"; };
+		ED7666781216B78000C8D7CF /* libsaga_package_namespace.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsaga_package_namespace.dylib; path = "/opt/saga-1.5.3/lib/libsaga_package_namespace.dylib"; sourceTree = "<absolute>"; };
+		ED76667A1216B79B00C8D7CF /* libsaga_package_advert.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsaga_package_advert.dylib; path = "/opt/saga-1.5.3/lib/libsaga_package_advert.dylib"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,7 +111,14 @@
 			isa = PBXProject;
 			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "SagaAdvertPerfTest" */;
 			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* SagaAdvertPerfTest */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -142,11 +149,9 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"/opt/saga-1.5.1/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = SagaAdvertPerfTest;
 			};
 			name = Debug;
@@ -157,11 +162,9 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"/opt/saga-1.5.1/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = SagaAdvertPerfTest;
 			};
 			name = Release;
@@ -175,12 +178,12 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/opt/saga-1.5.1/include/**",
-					"/opt/boost-1.43/include",
+					"/opt/saga-1.5.3/include/**",
+					"/opt/boost-1.45.0/include",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"/opt/boost-1.43/lib",
-					"/opt/saga-1.5.1/lib",
+					"/opt/boost-1.45.0/lib",
+					"/opt/saga-1.5.3/lib",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
@@ -198,12 +201,12 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/opt/saga-1.5.1/include/**",
-					"/opt/boost-1.43/include",
+					"/opt/saga-1.5.3/include/**",
+					"/opt/boost-1.45.0/include",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"/opt/boost-1.43/lib",
-					"/opt/saga-1.5.1/lib",
+					"/opt/boost-1.45.0/lib",
+					"/opt/saga-1.5.3/lib",
 				);
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;

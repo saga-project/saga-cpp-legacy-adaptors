@@ -2,14 +2,55 @@
 #include <boost/timer.hpp>
 #include <boost/progress.hpp>
 #include <fstream>
+#include <sys/time.h>
 
-/////////////////////////
-// Helper functions   //
-////////////////////////
+////////////////////////////
+//// Global Vars          //
+////////////////////////////
+
+std::string advert_server_root("advert://SAGA:SAGA_client@cyder.cct.lsu.edu:8080/SagaAdvertPerfTest");
+//std::string advert_server_root("advert://localhost/");
+
+timeval start_time_val;
+timeval stop_time_val;
+
+///////////////////////////////
+// Timing Helper functions   //
+///////////////////////////////
+
+void start_timer()
+{
+	gettimeofday(&start_time_val, 0);
+}
+
+void stop_timer()
+{
+	gettimeofday(&stop_time_val, 0);
+}
+
+long elapsed_msec()
+{
+	long seconds	= stop_time_val.tv_sec - start_time_val.tv_sec;
+	long useconds	= stop_time_val.tv_usec - start_time_val.tv_usec;
+	
+	// ceiled milliseconds 
+	return (seconds * 1000 + useconds/1000.0) + 0.5;
+}
+
+///////////////////////////
+// DB Helper functions   //
+//////////////////////////
+
+void init_db()
+{
+	saga::url root_url(advert_server_root);
+	saga::advert::directory root_dir(root_url, saga::advert::Create);
+}
+
 
 void clear_db()
 {
-	saga::url root_url("advert://");
+	saga::url root_url(advert_server_root);
 	saga::advert::directory root_dir(root_url);
 	
 	std::vector<saga::url> url_vector = root_dir.list();
@@ -23,7 +64,7 @@ void clear_db()
 
 saga::url create_url(int depth)
 {
-	std::string url_string("advert://");
+	std::string url_string(advert_server_root);
 	
 	for (int i = 0; i < depth; ++i)
 	{
@@ -58,10 +99,11 @@ void directory_create_test(int max_depth)
 	{
 		saga::url url = create_url(i);
 		
-		boost::timer t;
-		saga::advert::directory::create(url, saga::advert::CreateParents);
+		start_timer();
+			saga::advert::directory::create(url, saga::advert::CreateParents);
+		stop_timer();
 		
-		outfile << boost::lexical_cast<std::string>(i) << " " << boost::lexical_cast<std::string>(t.elapsed()) << std::endl;
+		outfile << boost::lexical_cast<std::string>(i) << " " << boost::lexical_cast<std::string>(elapsed_msec()) << std::endl;
 		++show_progress;
 	}
 	
@@ -80,11 +122,12 @@ void attribute_create_test(int max_depth, int attribute_count)
 	{
 		saga::url url = create_url(i);
 		
-		boost::timer t;
-		saga::advert::directory dir(url, saga::advert::CreateParents | saga::advert::ReadWrite);
+		start_timer();
+			saga::advert::directory dir(url, saga::advert::CreateParents | saga::advert::ReadWrite);
+			create_attributes(dir, attribute_count);
+		stop_timer();
 		
-		create_attributes(dir, attribute_count);
-		outfile << boost::lexical_cast<std::string>(i) << " " << boost::lexical_cast<std::string>(t.elapsed()) << std::endl;
+		outfile << boost::lexical_cast<std::string>(i) << " " << boost::lexical_cast<std::string>(elapsed_msec()) << std::endl;
 		++show_progress;
 	}
 	
@@ -109,10 +152,11 @@ void directory_read_test(int max_depth)
 	{
 		saga::url url = create_url(i);
 		
-		boost::timer t;
-		saga::advert::directory dir(url);
+		start_timer();
+			saga::advert::directory dir(url);
+		stop_timer();
 		
-		outfile << boost::lexical_cast<std::string>(i) << " " << boost::lexical_cast<std::string>(t.elapsed()) << std::endl;
+		outfile << boost::lexical_cast<std::string>(i) << " " << boost::lexical_cast<std::string>(elapsed_msec()) << std::endl;
 		++show_progress;	
 	}
 	
@@ -141,18 +185,18 @@ void attribute_read_test(int max_depth, int attribute_count)
 	{
 		saga::url url = create_url(i);
 		
-		boost::timer t;
-		saga::advert::directory dir(url);
+		start_timer();
+			saga::advert::directory dir(url);
 		
-		std::vector<std::string> attribute_kyes = dir.list_attributes();
-		for (std::vector<std::string>::iterator j = attribute_kyes.begin(); j != attribute_kyes.end(); ++j)
-		{
-			std::string attribute = dir.get_attribute(*j);
+			std::vector<std::string> attribute_kyes = dir.list_attributes();
+			for (std::vector<std::string>::iterator j = attribute_kyes.begin(); j != attribute_kyes.end(); ++j)
+			{
+				std::string attribute = dir.get_attribute(*j);
 			
-			std::cout << attribute << std::endl;		
-		}
+			}
+		stop_timer();
 		
-		outfile << boost::lexical_cast<std::string>(i) << " " << boost::lexical_cast<std::string>(t.elapsed()) << std::endl;
+		outfile << boost::lexical_cast<std::string>(i) << " " << boost::lexical_cast<std::string>(elapsed_msec()) << std::endl;
 		++show_progress;	
 	}
 	
@@ -165,18 +209,20 @@ void attribute_read_test(int max_depth, int attribute_count)
 
 int main (int argc, char * const argv[])
 {	
+	init_db();
+	
 	std::cout << std::endl << "Starting directory create test ... " << std::endl << std::endl;
-	directory_create_test(200);
+	directory_create_test(50);
 	
 	std::cout << std::endl << std::endl << "Starting attribute create test ..." << std::endl << std::endl;
-	attribute_create_test(100, 100);
-	
+	attribute_create_test(50, 10);
+	 
 	std::cout << std::endl << std::endl << "Starting directory read test ..." << std::endl << std::endl;
-	directory_read_test(500);
+	directory_read_test(50);
 
 	std::cout << std::endl << std::endl << "Starting attribute read test ..." << std::endl << std::endl;
-	attribute_read_test(100, 100);
+	attribute_read_test(50, 10);
 	
-  return 0;
+	return 0;
 }
 
