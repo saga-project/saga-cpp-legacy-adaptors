@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2008-2009 High Energy Accelerator Research Organization (KEK)
  * Copyright (C) 2008-2009 National Institute of Informatics in Japan.
+ * Copyright (C) 2011 Ole Weidner, Louisiana State University 
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

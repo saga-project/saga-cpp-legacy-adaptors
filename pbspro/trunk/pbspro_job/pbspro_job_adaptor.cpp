@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2008-2009 High Energy Accelerator Research Organization (KEK)
  * Copyright (C) 2008-2009 National Institute of Informatics in Japan.
+ * Copyright (C) 2011 Ole Weidner, Louisiana State University 
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,8 +82,12 @@ namespace pbspro_job
     	  std::cout << "Xbinary_path = " << binary_path << std::endl;
         }
 
-      /*if (s.has_section("description")) {
-		saga::ini::section ss = s.get_section("description");
+       // disabled: 07/Feb/11 by Ole Weidner
+       // this is not supported by all backends and leads to
+       // errors and confusion! 
+       // 
+       /*if (s.has_section("description")) {
+	     saga::ini::section ss = s.get_section("description");
 
 		std::string v = ss.get_entry(sja::description_job_contact);
 		saga::url mailto(v);

@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2008-2009 High Energy Accelerator Research Organization (KEK)
  * Copyright (C) 2008-2009 National Institute of Informatics in Japan.
+ * Copyright (C) 2011 Ole Weidner, Louisiana State University 
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,13 +93,17 @@ namespace pbspro_job
 
       if (!data->init_from_jobid_) {
     	  update_state(proxy_, saga::job::New);
-    	  saga::job::description& jd = data->jd_;
-
-    	  if (!jd.attribute_exists(sja::description_job_contact)
-			|| jd.get_attribute(sja::description_job_contact).empty()) {
-			adaptor_data_type ad(this);
-			jd.set_attribute(sja::description_job_contact, ad->get_job_contact());
-		}
+    	  
+          // disabled: 07/Feb/11 by Ole Weidner
+          // this is not supported by all backends and leads to
+          // errors and confusion! 
+          // 
+    	  //saga::job::description& jd = data->jd_;
+    	  //if (!jd.attribute_exists(sja::description_job_contact)
+          // || jd.get_attribute(sja::description_job_contact).empty()) {
+          // adaptor_data_type ad(this);
+          //jd.set_attribute(sja::description_job_contact, ad->get_job_contact());
+		  //}
       }
       else {
 		saga::adaptors::attribute attr(this);

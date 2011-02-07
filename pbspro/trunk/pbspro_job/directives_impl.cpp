@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2008-2009 High Energy Accelerator Research Organization (KEK)
- * Copyright (C) 2008-2009 National Institute of Informatics in Japan.
+ * Copyright (C) 2008-2009 National Institute of Informatics in Japan
+ * Copyright (C) 2011 Ole Weidner, Louisiana State University 
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -472,16 +473,18 @@ namespace pbspro_job { namespace cli {
 
 
     // Job_Contact
-    if (jd.attribute_exists(sja::description_job_contact)) {
+    if (jd.attribute_exists(sja::description_job_contact)) 
+    {
       std::string uri = jd.get_attribute(sja::description_job_contact);
       saga::url mailto(uri);
-      if (!checker->check_job_contact(mailto)) {
-	SAGA_OSSTREAM strm;
-	strm << "Parse failed: "
-	     << "(JobContact entry: '" << uri << "').";
-	SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
-				      saga::BadParameter);
-	throw;
+      if (!checker->check_job_contact(mailto)) 
+      {
+	    SAGA_OSSTREAM strm;
+	    strm << "Parse failed: "
+	         << "(JobContact entry: '" << uri << "').";
+        SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
+				                      saga::BadParameter);
+        throw;
       }
       std::string mailaddr(mailto.get_path());
       p->set_job_contact(mailaddr);
