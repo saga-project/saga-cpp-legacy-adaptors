@@ -69,7 +69,6 @@ namespace pbspro_job { namespace cli {
   void directives_impl::set_project(std::string& project) 
   {
     std::ostringstream os;
-
     if(!project.empty()){
         os << "-A @" << project;
         _list.push_back(os.str());
@@ -431,7 +430,7 @@ namespace pbspro_job { namespace cli {
     	std::vector<std::string> projects =
     		jd.get_vector_attribute(sja::description_job_project);
 
-      if(projects.size() > 1) {
+      if(projects.size() >= 1) {
         checker->check_project(projects[0]);
         p->set_project(projects[0]);
       }
