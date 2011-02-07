@@ -15,7 +15,7 @@ try
               << "http://faust.cct.lsu.edu/trac/saga/ticket/587" 
               << std::endl;
 
-    saga::url js_url("pbs://localhost/");
+    saga::url js_url("pbspro://localhost/");
 
     saga::job::service js(js_url);
 
@@ -44,7 +44,7 @@ catch(saga::exception const & e)
 
 try 
 {
-    saga::url js_url("pbs://localhost/");
+    saga::url js_url("pbspro://localhost/");
 
     saga::job::service js(js_url);
 
@@ -68,6 +68,37 @@ try
 catch(saga::exception const & e)
 {
     std::cerr << "\nPASSED (check output for PBS adaptor exception): " 
+              << e.what() << std::endl;
+}
+
+try
+{
+    saga::url js_url("pbspro://localhost/");
+
+    saga::job::service js(js_url);
+
+    saga::job::description jd;
+
+    jd.set_attribute(
+      saga::job::attributes::description_executable, "/bin/hostname");
+
+    jd.set_attribute(
+      saga::job::attributes::description_output, "myjob.out");
+
+    jd.set_attribute(
+      saga::job::attributes::description_processes_per_host , "2");
+    jd.set_attribute(
+      saga::job::attributes::description_number_of_processes, "4");
+
+    saga::job::job j = js.create_job(jd);
+    j.run();
+    j.wait();
+
+    std::cout << "\nPASSED!" << std::endl;
+}
+catch(saga::exception const & e)
+{
+    std::cerr << "\nFAILED (check output for PBS adaptor exception): "
               << e.what() << std::endl;
 }
 

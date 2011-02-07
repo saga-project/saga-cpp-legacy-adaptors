@@ -76,12 +76,12 @@ namespace pbspro_job
     if (adap_ini.has_section("cli")) {
       saga::ini::section s = adap_ini.get_section("cli");
 
-      if (s.has_entry("binary_path")) {
+        if (s.has_entry("binary_path")) {
     	  binary_path = s.get_entry("binary_path");
-    	  //std::cout << "binary_path = " << binary_path << std::endl;
-      }
+    	  std::cout << "Xbinary_path = " << binary_path << std::endl;
+        }
 
-      if (s.has_section("description")) {
+      /*if (s.has_section("description")) {
 		saga::ini::section ss = s.get_section("description");
 
 		std::string v = ss.get_entry(sja::description_job_contact);
@@ -90,11 +90,15 @@ namespace pbspro_job
 			mailto.get_path().empty()  )
 			// TODO mail address format check.
 		{
+                  std::cout << "false" << std::endl;
 		  return false;
 		}
 		job_contact = v;
-      }
+      }*/
+
     }
+
+    std::cerr << "true" << std::endl;
     return true;
   }
 
