@@ -422,13 +422,14 @@ namespace pbspro_job { namespace cli {
 #endif
 
     // CandidateHosts
-    if (jd.attribute_exists(sja::description_candidate_hosts)) {
-    	std::vector<std::string> hosts =
-    		jd.get_vector_attribute(sja::description_candidate_hosts);
+    if (jd.attribute_exists(sja::description_job_project)) {
+    	std::vector<std::string> projects =
+    		jd.get_vector_attribute(sja::description_job_project);
 
-      // FIXME
-      checker->check_host(hosts[0]);
-      p->set_host(hosts[0]);
+      if(projects.size() > 1) {
+        checker->check_project(projects[0]);
+        p->set_project(projects[0]);
+      }
     }
 
     // added: 07/Feb/11 by Ole Weidner
@@ -442,7 +443,21 @@ namespace pbspro_job { namespace cli {
       std::string queue = jd.get_attribute(sja::description_queue);
 
       checker->check_queue(queue);
-      p->set_host(queue);
+      p->set_queue(queue);
+    }
+
+    // added: 07/Feb/11 by Ole Weidner
+    //
+    // Queue - sets the same 'PBS -q' option as 'CandidateHost' above.
+    // IMHO this is a misinterpretation of the spec. Won't touch it 
+    // in order to maintain compatibility 
+    //
+    if (jd.attribute_exists(sja::description_queue)) 
+    {
+      std::string queue = jd.get_attribute(sja::description_queue);
+
+      checker->check_queue(queue);
+      p->set_queue(queue);
     }
 
     // added: 07/Feb/11 by Ole Weidner
