@@ -204,9 +204,11 @@ namespace pbspro_job
 				       &jobid_converter, _1));
 #endif
     transform(backend_list.begin(), backend_list.end(), backend_list.begin(),
-	      	      boost::bind<std::string>(&helper::jobid_converter::convert_jobid,
-					       //	      boost::bind(&helper::jobid_converter::convert_jobid,
-				       &jobid_converter, _1));
+
+     boost::bind(&helper::jobid_converter::convert_jobid,
+                 &jobid_converter, _1));
+
+
     ret = backend_list;
   }
 
