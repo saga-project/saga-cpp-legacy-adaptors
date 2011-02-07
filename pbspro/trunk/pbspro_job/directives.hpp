@@ -73,6 +73,9 @@ namespace pbspro_job { namespace cli {
     virtual void set_queue(std::string& queue) = 0;
     
     // added: 07/Feb/11 by Ole Weidner
+    virtual void set_project(std::string& project) = 0;
+    
+    // added: 07/Feb/11 by Ole Weidner
     virtual void set_nodes_and_ppn(std::string& number_of_nodes, 
                                    std::string& processors_per_node ) = 0;
     
@@ -114,6 +117,11 @@ namespace pbspro_job { namespace cli {
     
     // added: 07/Feb/11 by Ole Weidner
     virtual bool check_queue(std::string& queue) const {
+      return true;
+    }
+    
+    // added: 07/Feb/11 by Ole Weidner
+    virtual bool check_project(std::string& project) const {
       return true;
     }
     

@@ -54,11 +54,27 @@ namespace pbspro_job { namespace cli {
     void set_queue(std::string& queue);
     
     // added: 07/Feb/11 by Ole Weidner
+    void set_project(std::string& project);
+    
+    // added: 07/Feb/11 by Ole Weidner
     void set_nodes_and_ppn(std::string& number_of_nodes, 
                            std::string& processors_per_node );
 
     void put(std::ostream& s);
   };
+
+  //////////////////////////////////////////////////////////////////////
+  // added: 07/Feb/11 by Ole Weidner
+  //
+  void directives_impl::set_project(std::string& project) 
+  {
+    std::ostringstream os;
+
+    if(!project.empty()){
+        os << "-A @" << project;
+        _list.push_back(os.str());
+    }
+  }
 
   //////////////////////////////////////////////////////////////////////
   // added: 07/Feb/11 by Ole Weidner
@@ -71,7 +87,6 @@ namespace pbspro_job { namespace cli {
         os << "-q @" << queue;
         _list.push_back(os.str());
     }
-
   }
   
   //////////////////////////////////////////////////////////////////////
@@ -536,6 +551,12 @@ namespace pbspro_job { namespace cli {
   // added: 07/Feb/11 by Ole Weidner
   bool directives_checker_impl::check_queue(std::string& queue) const {
     std::cout << "check check_queue:[" << queue << "]"<< std::endl;
+    return true;
+  }
+  
+  // added: 07/Feb/11 by Ole Weidner
+  bool directives_checker_impl::check_project(std::string& project) const {
+    std::cout << "check check_queue:[" << project << "]"<< std::endl;
     return true;
   }
   

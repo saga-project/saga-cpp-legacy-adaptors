@@ -48,6 +48,9 @@ namespace pbspro_job { namespace cli {
     bool check_queue(std::string& queue) const; // same as set_host ?? 
     
     // added: 07/Feb/11 by Ole Weidner
+    bool check_project(std::string& project) const; // same as set_host ?? 
+    
+    // added: 07/Feb/11 by Ole Weidner
     bool check_nodes_and_ppn(std::string& number_of_nodes,  // number of nodes PBS -nodes=X:ppn=Y
                              std::string& processors_per_node ) const;
     
