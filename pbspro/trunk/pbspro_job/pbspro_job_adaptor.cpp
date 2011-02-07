@@ -78,7 +78,7 @@ namespace pbspro_job
 
       if (s.has_entry("binary_path")) {
     	  binary_path = s.get_entry("binary_path");
-    	  std::cout << "binary_path = " << binary_path << std::endl;
+    	  //std::cout << "binary_path = " << binary_path << std::endl;
       }
 
       if (s.has_section("description")) {

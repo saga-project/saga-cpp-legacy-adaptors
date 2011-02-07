@@ -67,6 +67,14 @@ namespace pbspro_job { namespace cli {
     virtual void set_walltime(std::string& seconds) = 0;
     //
     virtual void set_job_contact(std::string& mailaddr) = 0;
+    
+    // added: 07/Feb/11 by Ole Weidner
+    virtual void set_queue(std::string& queue) = 0;
+    
+    // added: 07/Feb/11 by Ole Weidner
+    virtual void set_nodes_and_ppn(std::string& number_of_nodes, 
+                                   std::string& processors_per_node ) = 0;
+    
     //
     virtual void put(std::ostream& s) = 0;
   };
@@ -102,6 +110,18 @@ namespace pbspro_job { namespace cli {
     virtual bool check_job_contact(saga::url& mail_uri) const {
       return true;
     }
+    
+    // added: 07/Feb/11 by Ole Weidner
+    virtual bool check_queue(std::string& queue) const {
+      return true;
+    }
+    
+    // added: 07/Feb/11 by Ole Weidner
+    virtual bool check_nodes_and_ppn(std::string& number_of_nodes, 
+                                     std::string& processors_per_node ) const {
+      return true;
+    }
+    
   };
 
   //////////////////////////////////////////////////////////////////////

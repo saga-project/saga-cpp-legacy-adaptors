@@ -42,6 +42,14 @@ namespace pbspro_job { namespace cli {
     bool check_walltime(std::string& seconds) const;
     //
     bool check_job_contact(saga::url& mail_uri) const;
+    
+    // added: 07/Feb/11 by Ole Weidner
+    bool check_queue(std::string& queue) const; // same as set_host ?? 
+    
+    // added: 07/Feb/11 by Ole Weidner
+    bool check_nodes_and_ppn(std::string& number_of_nodes,  // number of nodes PBS -nodes=X:ppn=Y
+                             std::string& processors_per_node ) const;
+    
   };
 
   //////////////////////////////////////////////////////////////////////

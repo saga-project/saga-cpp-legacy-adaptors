@@ -48,9 +48,42 @@ namespace pbspro_job { namespace cli {
     void set_stageout(std::string file_list);
     void set_walltime(std::string& seconds);
     void set_job_contact(std::string& address);
+    
+    // added: 07/Feb/11 by Ole Weidner
+    void set_queue(std::string& queue);
+    
+    // added: 07/Feb/11 by Ole Weidner
+    void set_nodes_and_ppn(std::string& number_of_nodes, 
+                           std::string& processors_per_node );
 
     void put(std::ostream& s);
   };
+
+  //////////////////////////////////////////////////////////////////////
+  // added: 07/Feb/11 by Ole Weidner
+  //
+  void directives_impl::set_queue(std::string& queue) 
+  {
+    std::ostringstream os;
+
+    if(!queue.empty()){
+        os << "-q @" << queue;
+        _list.push_back(os.str());
+    }
+
+  }
+  
+  //////////////////////////////////////////////////////////////////////
+  // added: 07/Feb/11 by Ole Weidner
+  //
+  void directives_impl::set_nodes_and_ppn(std::string& number_of_nodes,
+                                            std::string& processors_per_node)
+  {
+    std::ostringstream os;
+    os << "-l nodes=" << number_of_nodes <<":ppn=" << processors_per_node;
+    _list.push_back(os.str());
+  }
+  
 
   //////////////////////////////////////////////////////////////////////
   //
@@ -66,8 +99,7 @@ namespace pbspro_job { namespace cli {
   void directives_impl::set_host(std::string& hostname)
   {
     std::ostringstream os;
-//    os << "-l host=" << hostname;
-
+    
     if(!hostname.empty()){
     	os << "-q @" << hostname;
         _list.push_back(os.str());
@@ -383,6 +415,62 @@ namespace pbspro_job { namespace cli {
       p->set_host(hosts[0]);
     }
 
+    // added: 07/Feb/11 by Ole Weidner
+    //
+    // Queue - sets the same 'PBS -q' option as 'CandidateHost' above.
+    // IMHO this is a misinterpretation of the spec. Won't touch it 
+    // in order to maintain compatibility 
+    //
+    if (jd.attribute_exists(sja::description_queue)) 
+    {
+      std::string queue = jd.get_attribute(sja::description_queue);
+
+      checker->check_queue(queue);
+      p->set_host(queue);
+    }
+
+    // added: 07/Feb/11 by Ole Weidner
+    //
+    // ProcessesPerHost & ThreadsPerProcess. They translate to something 
+    // like PBS -l nodes=X:ppn=Y. The limitation is, that both description
+    // attributes have to be used in conjunction, otherwise this will
+    // produce an error.
+    //
+    bool nop_exists = jd.attribute_exists(sja::description_number_of_processes);
+    bool pph_exists = jd.attribute_exists(sja::description_processes_per_host);
+    
+    if(nop_exists && !pph_exists)
+    {
+       SAGA_OSSTREAM strm;
+       strm << "Job description parse failed: "
+            << "The NumberOfProcesses attributed cannot be used " 
+            << " without the ProcessesPerHost attribute!";
+	   SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
+	                                 saga::BadParameter);
+	   throw;
+    }
+    else if(!nop_exists && pph_exists)
+    {
+       SAGA_OSSTREAM strm;
+       strm << "Job description parse failed: "
+            << "The ProcessesPerHost attributed cannot be used " 
+            << " without the NumberOfProcesses attribute!";
+	   SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
+	                                 saga::BadParameter);
+	   throw;    
+    }
+    
+    if(nop_exists && pph_exists)
+    {
+      std::string nop = jd.get_attribute(sja::description_number_of_processes);
+      std::string pph = jd.get_attribute(sja::description_processes_per_host);
+      
+      checker->check_nodes_and_ppn(nop, pph);
+      p->set_nodes_and_ppn(nop, pph);
+    }
+
+
+
     // Job_Contact
     if (jd.attribute_exists(sja::description_job_contact)) {
       std::string uri = jd.get_attribute(sja::description_job_contact);
@@ -439,6 +527,20 @@ namespace pbspro_job { namespace cli {
   //
   bool directives_checker_impl::check_job_contact(saga::url& mail_uri) const {
     std::cout << "check job_contact:[" << mail_uri << "]"<< std::endl;
+    return true;
+  }
+  
+  // added: 07/Feb/11 by Ole Weidner
+  bool directives_checker_impl::check_queue(std::string& queue) const {
+    std::cout << "check check_queue:[" << queue << "]"<< std::endl;
+    return true;
+  }
+  
+  // added: 07/Feb/11 by Ole Weidner
+  bool directives_checker_impl::check_nodes_and_ppn(std::string& number_of_nodes, 
+                                                    std::string& processors_per_node ) const {
+    std::cout << "check check_nodes_and_ppn:[" << number_of_nodes << ":" 
+              <<  processors_per_node << "]"<< std::endl;
     return true;
   }
 }}
