@@ -84,8 +84,11 @@ namespace pbspro_job { namespace cli {
     bp::child c = l.start(cl);
     bp::postream& pos = c.get_stdin();
     pos << *script << std::endl;
-    //std::cout << "test test test test test " << std::endl;
-    std::cout << *script << std::endl;
+
+    SAGA_VERBOSE (SAGA_VERBOSE_LEVEL_DEBUG)
+    {
+      std::cout << *script << std::endl;
+    }
     pos.close();
 
     bp::pistream& stdout = c.get_stdout();

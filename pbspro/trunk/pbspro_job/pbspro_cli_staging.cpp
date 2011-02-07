@@ -64,14 +64,15 @@ namespace pbspro_job { namespace cli {
       return false;
     }
 
-#if 0
-    std::cout << "path=" << file.get_path() << std::endl;
+    SAGA_VERBOSE (SAGA_VERBOSE_LEVEL_DEBUG) 
+    {
+      std::cout << "path=" << file.get_path() << std::endl;
 
-    boost::filesystem::path l(name);
-    std::cout << "l.root_name=" << l.root_name() << std::endl;
-    std::cout << "l.root_directory=" << l.root_directory() << std::endl;
-    std::cout << "l.relative_path=" << l.relative_path() << std::endl;
-#endif
+      boost::filesystem::path l(name);
+      std::cout << "l.root_name=" << l.root_name() << std::endl;
+      std::cout << "l.root_directory=" << l.root_directory() << std::endl;
+      std::cout << "l.relative_path=" << l.relative_path() << std::endl;
+    }
 
     return true;
   }
