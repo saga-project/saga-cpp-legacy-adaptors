@@ -79,7 +79,12 @@ namespace pbspro_job
 
         if (s.has_entry("binary_path")) {
     	  binary_path = s.get_entry("binary_path");
-    	  std::cout << "Xbinary_path = " << binary_path << std::endl;
+        }
+        else
+        {
+          SAGA_ADAPTOR_THROW_NO_CONTEXT("the job was not submitted through SAGA.",
+                         saga::DoesNotExist);
+
         }
 
        // disabled: 07/Feb/11 by Ole Weidner
@@ -103,7 +108,6 @@ namespace pbspro_job
 
     }
 
-    std::cerr << "true" << std::endl;
     return true;
   }
 
