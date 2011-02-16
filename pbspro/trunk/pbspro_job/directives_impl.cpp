@@ -70,7 +70,7 @@ namespace pbspro_job { namespace cli {
   {
     std::ostringstream os;
     if(!project.empty()){
-        os << "-A @" << project;
+        os << "-A " << project;
         _list.push_back(os.str());
     }
   }
@@ -83,7 +83,7 @@ namespace pbspro_job { namespace cli {
     std::ostringstream os;
 
     if(!queue.empty()){
-        os << "-q @" << queue;
+        os << "-q " << queue;
         _list.push_back(os.str());
     }
   }
@@ -116,7 +116,7 @@ namespace pbspro_job { namespace cli {
     std::ostringstream os;
     
     if(!hostname.empty()){
-    	os << "-q @" << hostname;
+    	os << "-q " << hostname;
         _list.push_back(os.str());
     }
 
