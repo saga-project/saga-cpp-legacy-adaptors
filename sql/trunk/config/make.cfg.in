@@ -18,5 +18,17 @@ HAVE_SQLITE3_DTOR_TYPE        = @HAVE_SQLITE3_DTOR_TYPE@
 
 SAGA_HAVE_POSTGRESQL          = @HAVE_POSTGRESQL@
 
+ADAPTOR_ROOT    = @ADAPTOR_ROOT@
+ADAPTOR_CONFDIR = @ADAPTOR_CONFDIR@
+
+# add SAGA and postgres compiler flags
+SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/soci/core/
+SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/soci/core/ -lsoci_core
+
+SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/soci/postgresql/
+SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/soci/postgresql/ -lsoci_postgresql
+
+include $(ADAPTOR_CONFDIR)/saga.config.postgresql.c.mk
+
 endif # guard
 

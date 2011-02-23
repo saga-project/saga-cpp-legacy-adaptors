@@ -555,6 +555,8 @@ PACKAGE_URL=
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+ADAPTOR_CONFDIR
+ADAPTOR_ROOT
 CPP_HAVE_SOCI_POSTGRESQL
 POSTGRESQL_S_LIBS
 POSTGRESQL_LDFLAGS
@@ -2841,6 +2843,12 @@ fi
 
 # create output files
 ac_config_files="$ac_config_files config/make.cfg"
+
+
+ADAPTOR_ROOT=`pwd`
+ADAPTOR_CONFDIR=$ADAPTOR_ROOT/config/
+
+
 
 
 cat >confcache <<\_ACEOF
