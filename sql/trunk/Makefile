@@ -10,6 +10,6 @@ endif
 
 SAGA_SUBDIRS      = external sql_fast_advert
 
-include $(SAGA_LOCATION)/share/saga/make/saga.adaptor.mk
+include $(SAGA_LOCATION)/share/saga/make/saga.mk
 
 

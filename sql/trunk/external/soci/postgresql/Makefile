@@ -5,13 +5,15 @@
 #  http://www.boost.org/LICENSE_1_0.txt)
 
 
+ifndef SAGA_LOCATION
+ $(error "SAGA_LOCATION must be set for this Makefile to work")
+endif
+
 -include ../../../config/make.cfg
--include $(SAGA_MAKE_INCLUDE_ROOT)/saga.util.mk
+include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 
-ifeq "$(SAGA_HAVE_INTERNAL_SOCI)-$(SAGA_HAVE_POSTGRESQL)" "yes-yes"
 
-  SAGA_HDR        = soci-postgresql.h
-  SAGA_HDR_DIR    = .
+ifeq "$(SAGA_HAVE_POSTGRESQL)" "yes"
 
   SAGA_ARC        = soci_postgresql
   SAGA_SRC        = $(wildcard *.cpp)
@@ -19,9 +21,9 @@ ifeq "$(SAGA_HAVE_INTERNAL_SOCI)-$(SAGA_HAVE_POSTGRESQL)" "yes-yes"
 
   SAGA_DONT_INSTALL = 1
 
-endif # build soci with postgreasql
+endif
 
--include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
+include $(SAGA_LOCATION)/share/saga/make/saga.mk
 -include ../../../config/saga.config.postgresql.c.mk
 
 SAGA_CPPINCS    += -I../core/
