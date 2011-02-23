@@ -11,6 +11,9 @@
 // adaptor includes
 #include "sql_fast_advert_advert_directory.hpp"
 
+// Soci
+#include <soci.h>
+#include <soci-postgresql.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace sql_fast_advert
@@ -24,6 +27,10 @@ namespace sql_fast_advert
                                                       TR1::shared_ptr <saga::adaptor>   adaptor)
     : saga::adaptors::v1_0::advert_directory_cpi <advertdirectory_cpi_impl> (p, info, adaptor, cpi::Noflags) 
   {
+  	instance_data data(this);
+  	
+  	std::cout << "Location : " << data->location_ << std::endl;
+  	std::cout << "Mode : " << data->mode_ << std::endl;
     SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
 

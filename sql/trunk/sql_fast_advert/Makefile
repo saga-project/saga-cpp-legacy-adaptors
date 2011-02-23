@@ -18,6 +18,5 @@ SAGA_ADAPTOR_OBJ  = $(SAGA_OBJ)
 SAGA_ADAPTOR_PACKAGES = namespace advert
 
 include $(SAGA_LOCATION)/share/saga/make/saga.adaptor.mk
-
-SAGA_CXXFLAGS += -I$(SAGA_LOCATION)/include/saga/
+include ../config/make.cfg
 

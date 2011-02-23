@@ -16,7 +16,7 @@
 
 // saga package includes
 #include <saga/impl/packages/advert/advert_directory_cpi.hpp>
-
+#include <saga/saga/adaptors/packages/advert_directory_cpi_instance_data.hpp>
 
 ////////////////////////////////////////////////////////////////////////
 namespace sql_fast_advert
