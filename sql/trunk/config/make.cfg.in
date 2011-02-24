@@ -25,8 +25,8 @@ ADAPTOR_CONFDIR = @ADAPTOR_CONFDIR@
 SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/soci/core/
 SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/soci/core/ -lsoci_core
 
-SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/soci/postgresql/
-SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/soci/postgresql/ -lsoci_postgresql
+SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/soci/backends/postgresql/
+SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/soci/backends/postgresql/ -lsoci_postgresql
 
 include $(ADAPTOR_CONFDIR)/saga.config.postgresql.c.mk
 
