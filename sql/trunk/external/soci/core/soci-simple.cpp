@@ -10,6 +10,9 @@
 #include "soci-simple.h"
 #include "soci.h"
 
+#include <stdio.h>
+
+
 using namespace soci;
 
 
