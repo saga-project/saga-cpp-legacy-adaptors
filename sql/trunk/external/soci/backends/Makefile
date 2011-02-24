@@ -8,10 +8,8 @@ ifndef SAGA_LOCATION
  $(error "SAGA_LOCATION must be set for this Makefile to work")
 endif
 
-SAGA_SUBDIRS = core backends
+SAGA_SUBDIRS = mysql oracle postgresql
 
 include $(SAGA_LOCATION)/share/saga/make/saga.mk
 
-# directory deps
-backends: core
 

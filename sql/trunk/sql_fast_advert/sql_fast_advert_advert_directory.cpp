@@ -11,9 +11,6 @@
 // adaptor includes
 #include "sql_fast_advert_advert_directory.hpp"
 
-// Soci
-#include <soci.h>
-#include <soci-postgresql.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace sql_fast_advert
@@ -28,10 +25,36 @@ namespace sql_fast_advert
     : saga::adaptors::v1_0::advert_directory_cpi <advertdirectory_cpi_impl> (p, info, adaptor, cpi::Noflags) 
   {
   	instance_data data(this);
+  	saga::url url(data->location_);
   	
-  	std::cout << "Location : " << data->location_ << std::endl;
-  	std::cout << "Mode : " << data->mode_ << std::endl;
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+  	//
+  	// scheme must be sqlfastadvert
+  	//
+  	
+  	if (url.get_scheme() != "sqlfastadvert")
+  	{
+  		SAGA_OSSTREAM strm;
+  		strm << "cannot handle url scheme: " << url.get_scheme()
+  			 << ":// - this adaptor only supports sqlfastadvert:// schemes.";
+  		
+  		SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+  	}
+  
+
+	//
+	// Try to connect to the database
+	//
+	
+	try
+	{
+		dbc = new database_connection(url);
+  	}
+  	catch(std::runtime_error e)
+  	{
+  		SAGA_ADAPTOR_THROW (e.what(), saga::BadParameter);
+  	}
+  	
+    //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
 
 
@@ -225,13 +248,13 @@ namespace sql_fast_advert
 //  ////////////////////////////////////////////////////////////////////////
 //  //  namespace_dir functions
 //  ////////////////////////////////////////////////////////////////////////
-//  void 
-//    advertdirectory_cpi_impl::sync_list (std::vector <saga::url> & ret, 
-//                                         std::string               pattern, 
-//                                         int                       flags)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
+  void 
+    advertdirectory_cpi_impl::sync_list (std::vector <saga::url> & ret, 
+                                         std::string               pattern, 
+                                         int                       flags)
+	{
+    	SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    }
 //
 //  void 
 //    advertdirectory_cpi_impl::sync_find (std::vector <saga::url> & ret, 

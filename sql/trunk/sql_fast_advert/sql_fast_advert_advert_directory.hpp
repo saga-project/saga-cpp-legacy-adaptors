@@ -18,6 +18,9 @@
 #include <saga/impl/packages/advert/advert_directory_cpi.hpp>
 #include <saga/saga/adaptors/packages/advert_directory_cpi_instance_data.hpp>
 
+// Database Connection includes
+#include "sql_fast_advert_database_connection.hpp"
+
 ////////////////////////////////////////////////////////////////////////
 namespace sql_fast_advert
 {
@@ -90,9 +93,9 @@ namespace sql_fast_advert
 //      // namespace_dir functions      
 //      void sync_change_dir            (saga::impl::void_t          & ret, 
 //                                       saga::url                     target);
-//      void sync_list                  (std::vector <saga::url>     & ret, 
-//                                       std::string                   pattern, 
-//                                       int                           flags);
+      void sync_list                  (std::vector <saga::url>     & ret, 
+                                       std::string                   pattern, 
+                                       int                           flags);
 //      void sync_find                  (std::vector <saga::url>     & ret, 
 //                                       std::string                   pattern, 
 //                                       int                           flags);
@@ -218,6 +221,9 @@ namespace sql_fast_advert
 //      saga::task async_find            (std::string                   pattern, 
 //                                        std::vector <std::string>     patterns, 
 //                                        int                           flags);
+
+	private:
+		database_connection *dbc;
   }; // class advertdirectory_cpi_impl
 
 } // namespace sql_fast_advert

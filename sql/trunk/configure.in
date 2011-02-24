@@ -16,7 +16,6 @@ AX_SAGA_CONFIG()
 m4_include([config/saga_postgresql.m4])
 
 AX_SAGA_CHECK_POSTGRESQL(8.0)
-AC_CONFIG_HEADERS([external/soci/postgresql/postgresql-config.hpp])
 AC_CONFIG_FILES([config/saga.config.postgresql.c.mk])
 
 CPP_HAVE_SOCI_POSTGRESQL=0

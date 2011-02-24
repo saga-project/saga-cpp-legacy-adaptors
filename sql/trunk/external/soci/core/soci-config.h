@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2006 Mateusz Loskot
+// Copyright (C) 2006-2008 Mateusz Loskot
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -20,20 +20,15 @@
 # ifdef SOCI_DLL
 #  ifdef SOCI_SOURCE
 #   define SOCI_DECL __declspec(dllexport)
-#  elif !defined(SOCI_NO_IMPORT)
+#  else
 #   define SOCI_DECL __declspec(dllimport)
 #  endif // SOCI_SOURCE
 # endif // SOCI_DLL
 #endif // _WIN32
-
-# ifdef SAGA_GCC_HAVE_VISIBILITY
-#  define SOCI_DECL __attribute__ ((visibility ("default")))
-#endif
-
 //
 // If SOCI_DECL isn't defined yet define it now
 #ifndef SOCI_DECL
-# define SOCI_DECL  /**/
+# define SOCI_DECL
 #endif
 
 #ifdef _MSC_VER
@@ -41,4 +36,3 @@
 #endif // _MSC_VER
 
 #endif // SOCI_CONFIG_H_INCLUDED
-
