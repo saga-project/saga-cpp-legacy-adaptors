@@ -20,9 +20,11 @@ namespace sql_fast_advert
 		// Destructor
 		~database_connection(void);
 		
+		// MPTT Operations
+		
 		
 	private:
-		SOCI::Session *sql;
+		soci::session *sql;
 	};
 
 }

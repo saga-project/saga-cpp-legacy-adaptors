@@ -10,7 +10,7 @@ namespace sql_fast_advert
 		
 		try
 		{
-			sql = new SOCI::Session(SOCI::postgresql, connectString);
+			sql = new soci::session("postgresql", connectString);
 		}
 		catch(std::runtime_error e)
 		{
