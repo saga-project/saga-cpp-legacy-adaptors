@@ -75,8 +75,12 @@ file_cpi_impl::file_cpi_impl (proxy                * p,
        SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined); 
     }
     
+    this->is_local_file_ = false;
+    
     if (scheme == "file") 
     {
+        this->is_local_file_ = true;
+        
         // make sure file exist
         namespace fs = boost::filesystem;
         try 
@@ -273,6 +277,7 @@ void file_cpi_impl::sync_get_size (saga::off_t& size_out)
     adaptor_data_t adata(this);
     instance_data idata(this);
     
+    this->throw_if_local(idata->location_);
     this->check_if_open ("file_cpi_impl::sync_get_size", idata->location_);
     
     GridFTPConnection * ConnectionHandle = 
@@ -303,6 +308,7 @@ void file_cpi_impl::sync_read (saga::ssize_t & len_out,
     instance_data idata(this);
     saga::filesystem::flags OpenMode = (saga::filesystem::flags)idata->mode_;
     
+    this->throw_if_local(idata->location_);
     this->check_if_open ("file_cpi_impl::sync_read", idata->location_);
     
     GridFTPConnection * ConnectionHandle = 
@@ -370,6 +376,7 @@ void file_cpi_impl::sync_write (saga::ssize_t  & len_out,
     instance_data idata(this);
     saga::filesystem::flags OpenMode = (saga::filesystem::flags)idata->mode_;
     
+    this->throw_if_local(idata->location_);
     this->check_if_open ("file_cpi_impl::sync_write", idata->location_);
     
     GridFTPConnection * ConnectionHandle = 
@@ -431,6 +438,7 @@ void file_cpi_impl::sync_seek (saga::off_t & out,
     adaptor_data_t adata(this);
     instance_data idata(this);
     
+    this->throw_if_local(idata->location_);
     this->check_if_open ("file_cpi_impl::seek", idata->location_);
     
     saga::off_t pos = 0;

@@ -26,9 +26,10 @@ void dir_cpi_impl::sync_get_url  (saga::url & url)
 {
     saga::url u;
     {
-        instance_data data (this);
-        u = data->location_;
-        this->check_if_open ("dir_cpi_impl::sync_get_url", data->location_);
+        instance_data InstanceData (this);
+        u = InstanceData->location_;
+        this->throw_if_local(InstanceData->location_);
+        this->check_if_open ("dir_cpi_impl::sync_get_url", InstanceData->location_);
     }
     
     // complete url
@@ -44,9 +45,10 @@ void dir_cpi_impl::sync_get_cwd (saga::url & cwd)
 {
     saga::url u;
     {
-        instance_data data (this);
-        u = data->location_;
-        this->check_if_open ("dir_cpi_impl::sync_get_cwd", data->location_);
+        instance_data InstanceData (this);
+        u = InstanceData->location_;
+        this->throw_if_local(InstanceData->location_);
+        this->check_if_open ("dir_cpi_impl::sync_get_cwd", InstanceData->location_);
     }
     
     std::string u_str(u.get_url());
@@ -66,9 +68,10 @@ void dir_cpi_impl::sync_get_name (saga::url & name)
 {
     saga::url u;
     {
-      instance_data data (this);
-      u = data->location_;
-      this->check_if_open ("dir_cpi_impl::sync_get_name", data->location_);
+      instance_data InstanceData (this);
+      u = InstanceData->location_;
+      this->throw_if_local(InstanceData->location_);
+      this->check_if_open ("dir_cpi_impl::sync_get_name", InstanceData->location_);
     }
   
     namespace fs = boost::filesystem;
@@ -98,9 +101,10 @@ void dir_cpi_impl::sync_is_dir (bool & is_dir)
 {
     saga::url u;
     {
-      instance_data data (this);
-      u = data->location_;
-      this->check_if_open ("dir_cpi_impl::sync_is_dir", data->location_);
+      instance_data InstanceData (this);
+      u = InstanceData->location_;
+      this->throw_if_local(InstanceData->location_);
+      this->check_if_open ("dir_cpi_impl::sync_is_dir", InstanceData->location_);
     }
   
     is_dir = true;
@@ -112,9 +116,10 @@ void dir_cpi_impl::sync_is_entry (bool & is_entry)
 {
     saga::url u;
     {
-      instance_data data (this);
-      u = data->location_;
-      this->check_if_open ("dir_cpi_impl::sync_is_entry", data->location_);
+      instance_data InstanceData (this);
+      u = InstanceData->location_;
+      this->throw_if_local(InstanceData->location_);
+      this->check_if_open ("dir_cpi_impl::sync_is_entry", InstanceData->location_);
     }
   
     is_entry = false; 
@@ -127,6 +132,7 @@ void dir_cpi_impl::sync_is_link (bool & is_link)
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData (this);
 
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_is_link", InstanceData->location_);
 
     GridFTPConnection * ConnectionHandle = 
@@ -158,6 +164,7 @@ void dir_cpi_impl::sync_read_link (saga::url & target)
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData (this);
   
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_read_link", InstanceData->location_);    
     
     GridFTPConnection * ConnectionHandle = 
@@ -185,6 +192,7 @@ void dir_cpi_impl::sync_link (saga::impl::void_t & ret, saga::url dest, int flag
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData (this);
   
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_link", InstanceData->location_);
 	
     // uses the ns::dir implementation
@@ -224,6 +232,7 @@ void dir_cpi_impl::sync_remove (saga::impl::void_t & ret, int flags)
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData (this);
   
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_remove", InstanceData->location_);
 	
     // uses the ns::dir implementation

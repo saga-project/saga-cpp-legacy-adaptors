@@ -27,6 +27,8 @@ void dir_cpi_impl::sync_change_dir (saga::impl::void_t &, saga::url new_dir)
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
+    
     saga::url url = merge_urls(InstanceData->location_.get_url(), new_dir);
     
     GridFTPConnection * ConnectionHandle = 
@@ -90,7 +92,7 @@ void dir_cpi_impl::sync_list (std::vector <saga::url> & list,
 void dir_cpi_impl::sync_find (std::vector <saga::url> & list, 
                               std::string entry, int flags )
 {
-	// FIXME: implement
+    SAGA_ADAPTOR_THROW("not yet implemented", saga::NotImplemented);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -100,6 +102,7 @@ void dir_cpi_impl::sync_exists (bool & exists, saga::url url)
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_exists", InstanceData->location_);
     
     saga::url u = merge_urls(InstanceData->location_.get_url(), url);
@@ -129,6 +132,7 @@ void dir_cpi_impl::sync_is_dir (bool & is_dir, saga::url url)
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_is_dir", InstanceData->location_);
     
     saga::url u = merge_urls(InstanceData->location_.get_url(), url);  
@@ -159,6 +163,7 @@ void dir_cpi_impl::sync_is_entry (bool & is_entry, saga::url url)
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_is_entry", InstanceData->location_);
     
     saga::url u = merge_urls(InstanceData->location_.get_url(), url);  
@@ -196,6 +201,7 @@ void dir_cpi_impl::sync_is_link (bool & is_link, saga::url url)
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_is_link", InstanceData->location_);
     
     saga::url u = merge_urls(InstanceData->location_.get_url(), url);  
@@ -225,6 +231,7 @@ void dir_cpi_impl::sync_read_link (saga::url & ret, saga::url source)
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_read_link", InstanceData->location_);
     
     saga::url url = merge_urls(InstanceData->location_.get_url(), source);  
@@ -255,6 +262,7 @@ void dir_cpi_impl::sync_get_num_entries (std::size_t & num)
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_get_num_entries", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
@@ -284,6 +292,7 @@ void dir_cpi_impl::sync_get_entry (saga::url & ret, std::size_t entry )
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_get_entry", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
@@ -325,6 +334,7 @@ void dir_cpi_impl::sync_link (saga::impl::void_t & ret, saga::url source,
 {
 	directory_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_link", InstanceData->location_);
 	
 	SAGA_OSSTREAM strm;
@@ -455,6 +465,7 @@ void dir_cpi_impl::sync_remove (saga::impl::void_t & ret, saga::url url, int fla
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_remove", InstanceData->location_);
     
     saga::url u = merge_urls(InstanceData->location_.get_url(), url);
@@ -547,6 +558,7 @@ void dir_cpi_impl::sync_make_dir (saga::impl::void_t & ret, saga::url url, int f
     adaptor_data_t AdaptorData(this);
     directory_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("dir_cpi_impl::sync_make_dir", InstanceData->location_);
     
     saga::url u = merge_urls(InstanceData->location_.get_url(), url);

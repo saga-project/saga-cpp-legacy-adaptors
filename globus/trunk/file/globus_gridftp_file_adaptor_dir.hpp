@@ -87,6 +87,7 @@ private:
     directory_instance_data_t;
 
     bool is_open_;
+    bool is_local_dir_;
     
     inline void
     check_if_open (std::string const& functionname, saga::url const& location)
@@ -99,6 +100,18 @@ private:
             SAGA_ADAPTOR_THROW (SAGA_OSSTREAM_GETSTRING (strm), saga::IncorrectState);
         }
     }
+
+    inline void
+    throw_if_local (saga::url const& location)
+    {
+        if (true == is_local_dir_)
+        {
+            SAGA_OSSTREAM strm;
+            strm << "Not a GridFTP URL: " << location.get_url();
+            SAGA_ADAPTOR_THROW (SAGA_OSSTREAM_GETSTRING (strm), saga::BadParameter);
+        }
+    }
+    
     
   /* adaptor data */
   /////////////////////////////////////////////////////////////////////////////

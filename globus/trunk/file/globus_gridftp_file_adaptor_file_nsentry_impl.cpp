@@ -28,6 +28,7 @@ void file_cpi_impl::sync_get_url  (saga::url & url)
     {
         instance_data data (this);
         u = data->location_;
+        this->throw_if_local(data->location_);
         this->check_if_open ("file_cpi_impl::sync_get_url", data->location_);
     }
     
@@ -44,6 +45,7 @@ void file_cpi_impl::sync_get_cwd  (saga::url & cwd)
     {
         instance_data data (this);
         u = data->location_;
+        this->throw_if_local(data->location_);
         this->check_if_open ("file_cpi_impl::sync_get_cwd", data->location_);
         
     }
@@ -65,6 +67,7 @@ void file_cpi_impl::sync_get_name (saga::url & name)
     {
         instance_data data (this);
         u = data->location_;
+        this->throw_if_local(data->location_);
         this->check_if_open ("file_cpi_impl::sync_get_new", data->location_);
     }
     
@@ -89,6 +92,7 @@ void file_cpi_impl::sync_is_dir (bool & is_dir)
 {
     {
         instance_data data (this);
+        this->throw_if_local(data->location_);
         this->check_if_open ("file_cpi_impl::sync_is_dir", data->location_);
     }
     
@@ -99,6 +103,7 @@ void file_cpi_impl::sync_is_entry  (bool & is_file)
 {
     {
         instance_data data (this);
+        this->throw_if_local(data->location_);
         this->check_if_open ("file_cpi_impl::sync_is_entry", data->location_);
     }
     
@@ -110,6 +115,7 @@ void file_cpi_impl::sync_is_link   (bool & is_link)
     adaptor_data_t AdaptorData(this);
     file_instance_data_t InstanceData (this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("file_cpi_impl::sync_is_link", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
@@ -139,6 +145,7 @@ void file_cpi_impl::sync_read_link (saga::url & target)
     adaptor_data_t AdaptorData(this);
     file_instance_data_t InstanceData (this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("file_cpi_impl::sync_read_link", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
@@ -270,6 +277,7 @@ void file_cpi_impl::sync_link (saga::impl::void_t & ret,
 {
     file_instance_data_t InstanceData (this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("file_cpi_impl::sync_link", InstanceData->location_);
     
 	SAGA_OSSTREAM strm;
@@ -340,6 +348,7 @@ void file_cpi_impl::sync_remove (saga::impl::void_t & ret,
     adaptor_data_t AdaptorData(this);
     file_instance_data_t InstanceData (this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("file_cpi_impl::sync_remove", InstanceData->location_);
     
 	try {

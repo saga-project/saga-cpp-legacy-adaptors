@@ -28,7 +28,7 @@ dir_cpi_impl::dir_cpi_impl (proxy                * p,
 {
     adaptor_data_t adata(this);
     instance_data idata(this);
-    
+        
     // Read some stuff from the .ini file
     saga::ini::ini prefs = adap_ini.get_section ("preferences");
     
@@ -64,7 +64,12 @@ dir_cpi_impl::dir_cpi_impl (proxy                * p,
        SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined); 
     }
     
-    if (scheme == "file") {
+    
+    this->is_local_dir_ = false;
+    
+    if (scheme == "file") 
+    {
+        this->is_local_dir_ = true;
         // make sure directory exist
         namespace fs = boost::filesystem;
         try 
@@ -202,7 +207,7 @@ dir_cpi_impl::dir_cpi_impl (proxy                * p,
         
     }
     
-    is_open_ = true;
+    this->is_open_ = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -246,6 +251,7 @@ void dir_cpi_impl::sync_open(saga::filesystem::file  & new_file_instance,
 {
     instance_data idata(this);
     
+    this->throw_if_local(idata->location_);
     this->check_if_open ("dir_cpi_impl::sync_open", idata->location_);
     
     saga::url url = merge_urls(idata->location_.get_url(), name_to_open);
@@ -262,6 +268,7 @@ void dir_cpi_impl::sync_open_dir(saga::filesystem::directory & new_dir_instance,
 {
     instance_data idata(this);
     
+    this->throw_if_local(idata->location_);
     this->check_if_open ("dir_cpi_impl::sync_open_dir", idata->location_);
         
     saga::url url = merge_urls(idata->location_.get_url(), name_to_open);
@@ -278,6 +285,7 @@ void dir_cpi_impl::sync_is_file(bool & is_file, saga::url name)
     adaptor_data_t adata(this);
     instance_data idata(this);
     
+    this->throw_if_local(idata->location_);
     this->check_if_open ("dir_cpi_impl::sync_is_file", idata->location_);
     
     saga::url u = merge_urls(idata->location_.get_url(), name);

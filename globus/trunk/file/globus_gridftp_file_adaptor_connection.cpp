@@ -720,7 +720,7 @@ GridFTPConnection::get_directory_entries( const std::string & url )
     std::vector<saga::url> return_vector;
     globus_byte_t * buffer;
 	
-	buffer = (globus_byte_t *)malloc(64 * sizeof(globus_byte_t));
+	buffer = (globus_byte_t *)malloc(1024*64 * sizeof(globus_byte_t));
 	
     std::string result("");
     
@@ -813,7 +813,9 @@ get_directory_entries_count( const std::string & url )
         throw globus_gridftp_file_adaptor::exception(CurrentErrorStr_, 
                                                      CurrentError_);
     
-    globus_byte_t buffer[64];
+    globus_byte_t * buffer;
+	buffer = (globus_byte_t *)malloc(1024*64 * sizeof(globus_byte_t));
+
     globus_result_t success_reg_read;
     std::string result;
         

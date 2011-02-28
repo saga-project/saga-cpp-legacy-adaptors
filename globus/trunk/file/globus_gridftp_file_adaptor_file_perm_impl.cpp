@@ -49,6 +49,7 @@ void file_cpi_impl::sync_permissions_check (bool & ret, std::string id, int perm
     adaptor_data_t AdaptorData(this);
     file_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("file_cpi_impl::permission_check", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
@@ -76,6 +77,7 @@ void file_cpi_impl::sync_get_owner(std::string& out)
     adaptor_data_t AdaptorData(this);
     file_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("file_cpi_impl::sync_get_owner", InstanceData->location_);
 
     
@@ -104,6 +106,7 @@ void file_cpi_impl::sync_get_group(std::string& out)
     adaptor_data_t AdaptorData(this);
     file_instance_data_t InstanceData(this);
     
+    this->throw_if_local(InstanceData->location_);
     this->check_if_open ("file_cpi_impl::sync_get_group", InstanceData->location_);
     
     GridFTPConnection * ConnectionHandle = 
