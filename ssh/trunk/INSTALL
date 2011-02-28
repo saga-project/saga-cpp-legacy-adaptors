@@ -44,7 +44,7 @@
       --with-scp=           those cannot be found by configure via your  
       --with-sshfs=         PATH environment,
 
-  For a complete list of configure options, you can typ
+  For a complete list of configure options, you can type
 
     ./configure --help
  
