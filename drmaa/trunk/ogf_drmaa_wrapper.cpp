@@ -171,8 +171,6 @@ namespace psnc_drmaa
 			case DRMAA_PS_SYSTEM_ON_HOLD:
 			case DRMAA_PS_USER_ON_HOLD:
 			case DRMAA_PS_USER_SYSTEM_ON_HOLD:
-				state = saga::job::New;
-				break;
 			case DRMAA_PS_RUNNING:
 			case DRMAA_PS_SYSTEM_SUSPENDED:
 			case DRMAA_PS_USER_SUSPENDED:
