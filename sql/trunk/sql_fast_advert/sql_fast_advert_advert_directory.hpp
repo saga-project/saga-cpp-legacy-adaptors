@@ -13,17 +13,23 @@
 
 // saga adaptor includes
 #include <saga/saga/adaptors/adaptor.hpp>
+#include <saga/saga/adaptors/adaptor_data.hpp>
 
 // saga package includes
 #include <saga/impl/packages/advert/advert_directory_cpi.hpp>
 #include <saga/saga/adaptors/packages/advert_directory_cpi_instance_data.hpp>
 
 // Database Connection includes
+#include "sql_fast_advert_adaptor.hpp"
 #include "sql_fast_advert_database_connection.hpp"
 
 ////////////////////////////////////////////////////////////////////////
 namespace sql_fast_advert
 {
+	
+	// Adaptor data
+	typedef saga::adaptors::adaptor_data<sql_fast_advert::adaptor> adaptor_data;
+	
   ////////////////////////////////////////////////////////////////////
   //  This adaptor implements the functionality of the Saga API "advert".
   //  It defines the functions declared in its base class, advertdirectory_cpi.
@@ -223,6 +229,9 @@ namespace sql_fast_advert
 //                                        int                           flags);
 
 	private:
+		
+	
+		
 		database_connection *dbc;
   }; // class advertdirectory_cpi_impl
 

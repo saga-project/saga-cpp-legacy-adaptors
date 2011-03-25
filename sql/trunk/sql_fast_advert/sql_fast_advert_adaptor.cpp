@@ -45,6 +45,29 @@ namespace sql_fast_advert
     return list;
   }
 
+	adaptor::adaptor()
+	{
+		database_connection_map = new std::map<std::string, database_connection*>();
+	}
+	
+	adaptor::~adaptor()
+	{
+		delete database_connection_map;
+	}
+	
+	database_connection* adaptor::get_database_connection(saga::url url)
+	{
+		database_connection_map_t::iterator it = database_connection_map->find(url.get_host());
+		
+		if (it == database_connection_map->end())
+		{
+			(*database_connection_map)[url.get_host()] = new database_connection(url);
+		}
+		
+		it = database_connection_map->find(url.get_host());
+		return it->second;
+	}
+
 } // namespace sql_fast_advert
 ////////////////////////////////////////////////////////////////////////
 

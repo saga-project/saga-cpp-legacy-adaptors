@@ -24,8 +24,12 @@ namespace sql_fast_advert
                                                       TR1::shared_ptr <saga::adaptor>   adaptor)
     : saga::adaptors::v1_0::advert_directory_cpi <advertdirectory_cpi_impl> (p, info, adaptor, cpi::Noflags) 
   {
-  	instance_data data(this);
-  	saga::url url(data->location_);
+  	instance_data idata(this);
+	adaptor_data  adata(this);
+	
+  	saga::url url(idata->location_);
+
+
   	
   	//
   	// scheme must be sqlfastadvert

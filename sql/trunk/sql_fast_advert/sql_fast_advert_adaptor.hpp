@@ -11,6 +11,8 @@
 // saga adaptor includes
 #include <saga/saga/adaptors/adaptor.hpp>
 
+#include <map>
+#include "sql_fast_advert_database_connection.hpp"
 
 ////////////////////////////////////////////////////////////////////////
 namespace sql_fast_advert
@@ -31,6 +33,19 @@ namespace sql_fast_advert
     { 
       return BOOST_PP_STRINGIZE (SAGA_ADAPTOR_NAME);
     }
+	
+	// Constructor 
+	adaptor();
+	
+	// Destructor 
+	~adaptor();
+	
+	// Database Connection map
+	typedef std::map<std::string, database_connection*> database_connection_map_t;
+	
+	database_connection_map_t *database_connection_map;
+	database_connection* get_database_connection(const saga::url url);
+	
   };
 
 } // namespace sql_fast_advert
