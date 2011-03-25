@@ -53,6 +53,12 @@ namespace sql_fast_advert
 		// Initialize the connection pool
 		pool = new soci::connection_pool(CONNECTION_POOL_SIZE);
 		
+		for (int i = 0; i != CONNECTION_POOL_SIZE; ++i)
+		{
+			soci::session &sql = pool->at(i);
+			sql.open(soci::postgresql, connectString);
+		}
+		
 	}
 	
 	database_connection::~database_connection(void)
