@@ -29,6 +29,7 @@ namespace sql_fast_advert
 	
   	saga::url url(idata->location_);
 
+	std::cout << url.get_path() << std::endl;
 
   	
   	//
@@ -51,12 +52,15 @@ namespace sql_fast_advert
 	
 	try
 	{
-		dbc = new database_connection(url);
+		dbc = adata->get_database_connection(url);
   	}
   	catch(std::runtime_error e)
   	{
   		SAGA_ADAPTOR_THROW (e.what(), saga::BadParameter);
   	}
+  	
+  	
+  	dir_node = dbc->find_node(url.get_path());
   	
     //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
@@ -257,7 +261,7 @@ namespace sql_fast_advert
                                          std::string               pattern, 
                                          int                       flags)
 	{
-    	SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    	SAGA_ADAPTOR_THROW ("Not Implemented sync_list", saga::NotImplemented);
     }
 //
 //  void 

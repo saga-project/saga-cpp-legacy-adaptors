@@ -37,7 +37,7 @@ namespace sql_fast_advert
 				   soci::use("TRUE"),
 				   soci::use(1),
 				   soci::use(2),
-				   soci::use((int) hash["/root"]);
+				   soci::use((int) hash["/root/"]);
 		}
 		
 		// Check the Database layout version
@@ -59,11 +59,40 @@ namespace sql_fast_advert
 			sql.open(soci::postgresql, connectString);
 		}
 		
+		std::cout << "DB Conection Contructor !" << std::endl;
 	}
 	
 	database_connection::~database_connection(void)
 	{
 		delete pool;
+	}
+	
+	node database_connection::find_node(std::string path)
+	{
+		std::string db_path;
+
+		if (path.length() == 0 | path == "/")
+		{
+			db_path = "/root/";
+		}
+		
+		else
+		{
+			db_path = "/root" + path;
+		}
+		
+		node db_node;
+		
+		soci::session sql(*pool);
+		
+		sql << "SELECT id, name, lft, rgt FROM " << DATABASE_NODE_TABLE << " WHERE hash = :hash", 
+		    soci::into(db_node.id),
+		    soci::into(db_node.name),
+		    soci::into(db_node.lft),
+		    soci::into(db_node.rgt),
+		    soci::use((int) hash[db_path]); 
+		
+		return db_node;
 	}
 
 }

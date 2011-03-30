@@ -229,10 +229,8 @@ namespace sql_fast_advert
 //                                        int                           flags);
 
 	private:
-		
-	
-		
 		database_connection *dbc;
+		node dir_node;
   }; // class advertdirectory_cpi_impl
 
 } // namespace sql_fast_advert

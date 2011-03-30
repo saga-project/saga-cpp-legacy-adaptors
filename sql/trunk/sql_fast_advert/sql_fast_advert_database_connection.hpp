@@ -22,6 +22,16 @@
 
 namespace sql_fast_advert
 {
+	struct node
+	{
+		node() : id(), name(""), dir(false), lft(0), rgt(0) {}
+		
+		int 		id;
+		std::string name;
+		bool 		dir;
+		int 		lft;
+		int			rgt;
+	};
 
 	class database_connection
 	{
@@ -37,6 +47,7 @@ namespace sql_fast_advert
 		~database_connection(void);
 		
 		// MPTT Operations
+		node find_node(std::string path);
 
 	};
 
