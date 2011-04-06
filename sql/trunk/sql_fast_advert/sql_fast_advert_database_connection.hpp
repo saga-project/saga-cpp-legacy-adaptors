@@ -4,10 +4,16 @@
 // Saga Includes
 #include <saga/url.hpp>
 
+// Enable SOCI Boost Integration
+#define SOCI_USE_BOOST
+
 // SOCI Includes
 #include <soci.h>
 #include <soci-postgresql.h>
 #include <connection-pool.h>
+
+// Boost Includes
+#include <boost/optional.hpp>
 
 // Jenkins Hash
 #include "jenkins_hash_new.hpp"
@@ -24,11 +30,11 @@ namespace sql_fast_advert
 {
 	struct node
 	{
-		node() : id(), name(""), dir(false), lft(0), rgt(0) {}
+		node() : id(), name(""), dir("FALSE"), lft(0), rgt(0) {}
 		
 		int 		id;
 		std::string name;
-		bool 		dir;
+		std::string	dir;
 		int 		lft;
 		int			rgt;
 	};
@@ -47,7 +53,11 @@ namespace sql_fast_advert
 		~database_connection(void);
 		
 		// MPTT Operations
-		node find_node(std::string path);
+		node find_node(const std::string path);
+		
+		node insert_node(const node parent, const std::string path);
+		
+		std::string get_path(const node db_node);
 
 	};
 

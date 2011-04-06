@@ -11,6 +11,8 @@
 // adaptor includes
 #include "sql_fast_advert_advert_directory.hpp"
 
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace sql_fast_advert
@@ -30,8 +32,76 @@ namespace sql_fast_advert
   	saga::url url(idata->location_);
 
 	std::cout << url.get_path() << std::endl;
+	
+	std::string input = url.get_path();
+	std::vector<std::string> result;
+	boost::split(result, input, boost::is_any_of("/"));
+	
+	for(std::vector<std::string>::iterator i = result.begin(); i != result.end(); i++)
+	{
+		std::cout << *i << std::endl;
+	}
 
-  	
+  	if (idata->mode_ & saga::advert::Unknown)
+	{
+		std::cout << "Unkown" << std::endl;
+	}
+	
+	if (idata->mode_ & saga::advert::None)
+	{
+		std::cout << "None" << std::endl;
+	}
+	
+	if (idata->mode_ & saga::advert::Overwrite)
+	{
+		std::cout << "Overwrite" << std::endl;
+	}
+	
+	if (idata->mode_ & saga::advert::Recursive)
+	{
+		std::cout << "Recursive" << std::endl;
+	}
+	
+	if (idata->mode_ & saga::advert::Dereference)
+	{
+		std::cout << "Dereference" << std::endl;
+	}
+	
+	if (idata->mode_ & saga::advert::Create)
+	{
+		std::cout << "Create" << std::endl;
+	}
+	
+	if (idata->mode_ & saga::advert::Exclusive)
+	{
+		std::cout << "Exclusive" << std::endl;
+	}
+	
+	if (idata->mode_ & saga::advert::Lock)
+	{
+		std::cout << "Lock" << std::endl;
+	}
+	
+	if (idata->mode_ & saga::advert::CreateParents)
+	{
+		std::cout << "CreateParents" << std::endl;
+	}
+	
+	if (idata->mode_ & saga::advert::Read)
+	{
+		std::cout << "Read" << std::endl;
+	}
+	
+	if (idata->mode_ & saga::advert::Write)
+	{
+		std::cout << "Write" << std::endl;
+	}
+	
+	if (idata->mode_ & saga::advert::ReadWrite)
+	{
+		std::cout << "ReadWrite" << std::endl;
+	}
+	
   	//
   	// scheme must be sqlfastadvert
   	//
@@ -59,8 +129,21 @@ namespace sql_fast_advert
   		SAGA_ADAPTOR_THROW (e.what(), saga::BadParameter);
   	}
   	
-  	
   	dir_node = dbc->find_node(url.get_path());
+
+	// Directory not found -> create 
+	if (dir_node.id == 0)
+	{
+		node root_node = dbc->find_node("");
+		
+		std::cout << "lft : " << root_node.lft << " rgt : " << root_node.rgt << std::endl;
+		
+		dir_node = dbc->insert_node(root_node, result[1]);
+	}
+
+	//std::cout << result[1] << std::endl;
+	std::cout << dir_node.id << std::endl;
+	std::cout << dbc->get_path(dir_node) << std::endl;
   	
     //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
