@@ -79,7 +79,7 @@ namespace sql_fast_advert
 //      void sync_get_cwd               (saga::url                   & ret);
 //      void sync_get_name              (saga::url                   & ret);
 //      void sync_read_link             (saga::url                   & ret);
-//      void sync_is_dir                (bool                        & ret);
+      void sync_is_dir                (bool                        & ret);
 //      void sync_is_entry              (bool                        & ret);
 //      void sync_is_link               (bool                        & ret);
 //      void sync_copy                  (saga::impl::void_t          & ret, 
@@ -109,8 +109,8 @@ namespace sql_fast_advert
 //                                       saga::url                     target);
 //      void sync_exists                (bool                        & ret, 
 //                                       saga::url                     target);
-//      void sync_is_dir                (bool                        & ret, 
-//                                       saga::url                     target);
+      void sync_is_dir                (bool                        & ret, 
+                                       saga::url                     target);
 //      void sync_is_entry              (bool                        & ret, 
 //                                       saga::url                     target);
 //      void sync_is_link               (bool                        & ret, 

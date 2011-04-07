@@ -68,21 +68,19 @@ namespace sql_fast_advert
 	node database_connection::find_node(const std::string path)
 	{
 		std::string db_path;
-
+		node db_node;
+		soci::session sql(*pool);
+		
 		if (path.length() == 0 | path == "/")
 		{
 			db_path = "/root/";
 		}
 		
-		else
+		else 
 		{
 			db_path = "/root" + path;
-		}
-		
-		node db_node;
-		
-		soci::session sql(*pool);
-		
+		}	
+
 		sql << "SELECT id, name, dir, lft, rgt FROM " << DATABASE_NODE_TABLE << " WHERE hash = :hash", 
 		    soci::into(db_node.id),
 		    soci::into(db_node.name),
@@ -90,23 +88,22 @@ namespace sql_fast_advert
 		    soci::into(db_node.lft),
 		    soci::into(db_node.rgt),
 		    soci::use((int) hash[db_path]); 
-		
-		
+				
 		return db_node;
 	}
 
-	node database_connection::insert_node(const node parent, const std::string path)
+	node database_connection::insert_node(const node parent, const std::string node_name)
 	{
 		node db_node;
-		int hash_value = (int) hash[get_path(parent) + path];
-		
+		std::string node_path = get_path(parent) + node_name + "/";
+		int hash_value = (int) hash[node_path];
 		soci::session sql(*pool);
 		
 		sql << "UPDATE nodes SET rgt = rgt + 2 WHERE rgt > :lft", soci::use(parent.lft);
 		sql << "UPDATE nodes SET lft = lft + 2 WHERE lft > :lft", soci::use(parent.lft);
 		
 		sql << "INSERT INTO nodes (name, dir, lft, rgt, hash) VALUES (:name, :dir, :lft, :rgt, :hash)",
-			soci::use(path),
+			soci::use(node_name),
 			soci::use("TRUE"),
 			soci::use(parent.lft + 1),
 			soci::use(parent.lft + 2),
@@ -146,6 +143,50 @@ namespace sql_fast_advert
 			}
 			
 			path_vector.resize(BATCH_SIZE);
+		}
+		
+		return result;
+	}
+	
+	std::vector<node> database_connection::get_child_nodes(const node parent)
+	{
+		std::vector<node> result;
+		node tmp_node;
+		int depth = 0;
+		soci::session sql(*pool);
+		
+		// Find the parent node depth
+		sql << 
+		"SELECT (COUNT(node.id) - 1) AS depth "
+		"FROM nodes AS node, nodes AS parent "
+		"WHERE node.lft BETWEEN parent.lft AND parent.rgt AND node.id = :id "
+		"GROUP BY node.id", 		
+		soci::into(depth),
+		soci::use(parent.id);
+
+		// Find all child nodes with depth = 1 
+		soci::statement statement = 
+		( sql.prepare << 
+			"SELECT node.id, node.name, node.dir, node.lft, node.rgt "
+			"FROM nodes AS node, nodes AS parent, nodes AS sub_parent "
+			"WHERE node.lft BETWEEN parent.lft AND parent.rgt "
+			"AND node.lft BETWEEN sub_parent.lft AND sub_parent.rgt AND sub_parent.id = :id "
+			"GROUP BY node.id, node.name, node.dir, node.lft, node.rgt "
+			"HAVING (COUNT(node.id) - (:depth + 1)) = 1", 
+			soci::into(tmp_node.id),
+			soci::into(tmp_node.name),
+			soci::into(tmp_node.dir),
+			soci::into(tmp_node.lft),
+			soci::into(tmp_node.rgt),
+			soci::use(parent.id),
+ 			soci::use(depth)
+		);
+		
+		statement.execute();
+		
+		while(statement.fetch())
+		{
+			result.push_back(tmp_node);
 		}
 		
 		return result;

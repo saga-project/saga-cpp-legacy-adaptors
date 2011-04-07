@@ -138,12 +138,16 @@ namespace sql_fast_advert
 		
 		std::cout << "lft : " << root_node.lft << " rgt : " << root_node.rgt << std::endl;
 		
-		dir_node = dbc->insert_node(root_node, result[1]);
+		//dir_node = dbc->insert_node(root_node, result[1]);
 	}
 
 	//std::cout << result[1] << std::endl;
 	std::cout << dir_node.id << std::endl;
 	std::cout << dbc->get_path(dir_node) << std::endl;
+	
+	
+	//std::vector<node> node_vector = dbc->get_child_nodes(dir_node);
+	//std::cout << node_vector.size() << std::endl;
   	
     //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
@@ -273,11 +277,12 @@ namespace sql_fast_advert
 //    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
 //  }
 //
-//  void 
-//    advertdirectory_cpi_impl::sync_is_dir (bool & ret)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
+  void 
+    advertdirectory_cpi_impl::sync_is_dir (bool & ret)
+  {
+		ret = true;
+		//SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+  }
 //
 //  void 
 //    advertdirectory_cpi_impl::sync_is_entry (bool & ret)
@@ -344,7 +349,18 @@ namespace sql_fast_advert
                                          std::string               pattern, 
                                          int                       flags)
 	{
-    	SAGA_ADAPTOR_THROW ("Not Implemented sync_list", saga::NotImplemented);
+		std::vector<node> node_vector = dbc->get_child_nodes(dir_node);
+		std::cout << "Pattern : " << pattern << std::endl;
+		std::cout << "Vector size : " << node_vector.size() << std::endl;
+		
+		for (std::vector<node>::iterator i = node_vector.begin(); i != node_vector.end(); i++)
+		{
+			saga::url url(i->name);
+			ret.push_back(url);
+		}
+		
+		
+    	//SAGA_ADAPTOR_THROW ("Not Implemented sync_list", saga::NotImplemented);
     }
 //
 //  void 
@@ -362,12 +378,13 @@ namespace sql_fast_advert
 //    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
 //  }
 //
-//  void 
-//    advertdirectory_cpi_impl::sync_is_dir (bool      & ret, 
-//                                           saga::url   entry)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
+  void 
+    advertdirectory_cpi_impl::sync_is_dir (bool      & ret, 
+                                           saga::url   entry)
+  {
+	ret = true;
+    //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+  }
 //
 //  void 
 //    advertdirectory_cpi_impl::sync_is_entry (bool      & ret, 
