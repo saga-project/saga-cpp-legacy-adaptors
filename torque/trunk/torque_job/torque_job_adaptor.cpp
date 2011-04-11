@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2008-2009 High Energy Accelerator Research Organization (KEK)
- * Copyright (C) 2008-2009 National Institute of Informatics in Japan.
+ * Copyright (C) 2008-2009 National Institute of Informatics in Japan. * Copyright (C) 2011 Ole Weidner, Louisiana State University 
+ * Copyright (C) 2011 Ole Weidner, Louisiana State University 
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -76,25 +77,35 @@ namespace torque_job
     if (adap_ini.has_section("cli")) {
       saga::ini::section s = adap_ini.get_section("cli");
 
-      if (s.has_entry("binary_path")) {
-	// TODO
-      }
+        if (s.has_entry("binary_path")) {
+    	    binary_path = s.get_entry("binary_path");
+        }
+        else
+        {
+          SAGA_ADAPTOR_THROW_NO_CONTEXT("the job was not submitted through SAGA.",
+                         saga::DoesNotExist);
 
-      if (s.has_section("description")) {
-	saga::ini::section ss = s.get_section("description");
+        }
 
-	std::string v = ss.get_entry(sja::description_job_contact);
-	saga::url mailto(v);
-	if (mailto.get_scheme() != "mailto" ||
-	    mailto.get_path().empty()
-	    // TODO mail address format check.
-	    ) {
-	  return false;
-	}
-	job_contact = v;
-      }
+       // disabled: 11/Apr/11 by Ole Weidner
+       // this is not supported by all backends and leads to
+       // errors and confusion! 
+       // 
+       /*
+       if (s.has_section("description")) {
+         saga::ini::section ss = s.get_section("description"); 
+ 
+         std::string v = ss.get_entry(sja::description_job_contact);
+         saga::url mailto(v);
+         if (mailto.get_scheme() != "mailto" ||
+             mailto.get_path().empty()
+             // TODO mail address format check.
+             ) {
+           return false;
+         }
+         job_contact = v;
+       }*/
     }
-
     return true;
   }
 

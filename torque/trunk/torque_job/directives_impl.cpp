@@ -345,22 +345,34 @@ namespace torque_job { namespace cli {
       p->set_host(hosts[0]);
     }
 
+    // added: 11/April/11 by Ole Weidner
+    //
+    if (jd.attribute_exists(sja::description_job_contact)) 
+    {
+      std::string mailaddr = jd.get_attribute(sja::description_job_contact);
+      p->set_job_contact(mailaddr);
+    }
+
     // Job_Contact
-    if (jd.attribute_exists(sja::description_job_contact)) {
+    // DISABLED: 11/April/11 by Ole Weidner
+    /*if (jd.attribute_exists(sja::description_job_contact)) 
+    {
       std::string uri = jd.get_attribute(sja::description_job_contact);
       saga::url mailto(uri);
-      if (!checker->check_job_contact(mailto)) {
-	SAGA_OSSTREAM strm;
-	strm << "Parse failed: "
-	     << "(JobContact entry: '" << uri << "').";
-	SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
-				      saga::BadParameter);
-	throw;
+      if (!checker->check_job_contact(mailto)) 
+      {
+	    SAGA_OSSTREAM strm;
+	    strm << "Parse failed: "
+	         << "(JobContact entry: '" << uri << "').";
+        SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
+				                      saga::BadParameter);
+        throw;
       }
       std::string mailaddr(mailto.get_path());
       p->set_job_contact(mailaddr);
+    }*/
+    
     }
-  }
 
   //////////////////////////////////////////////////////////////////////
   //
