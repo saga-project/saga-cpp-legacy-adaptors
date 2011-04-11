@@ -68,55 +68,64 @@ namespace pbspro_job { namespace cli {
     job_script_ptr script = jsbuilder->build(jd);
 
     //bp::command_line cl(command, command, path);
-    bp::command_line cl(command);
-
-    bp::launcher l;
-    l.set_stdin_behavior(bp::redirect_stream);
-    l.set_stdout_behavior(bp::redirect_stream);
-    l.set_stderr_behavior(bp::redirect_stream);
-
-#if 0
-    std::ofstream f("test.cmd");
-    f << *script << std::endl;
-    f.close();
-#endif
-
-    bp::child c = l.start(cl);
-    bp::postream& pos = c.get_stdin();
-    pos << *script << std::endl;
-
-    SAGA_VERBOSE (SAGA_VERBOSE_LEVEL_DEBUG)
-    {
-      std::cout << *script << std::endl;
-    }
-    pos.close();
-
-    bp::pistream& stdout = c.get_stdout();
-
-    output_parser parser;
-    parser.reset("^" RE_PBS_JOBID "$");
-
-    std::string line;
-    std::vector<std::string> matched;
-    while (std::getline(stdout, line)) {
-      matched.clear();
-      if (parser.parse_line(line, matched)) {
-	id = matched[0];
-	// TODO matched[4] check ?
-	break;
+    
+    bool ret_val;
+    
+    try {
+      bp::command_line cl(command);
+  
+      bp::launcher l;
+      l.set_stdin_behavior(bp::redirect_stream);
+      l.set_stdout_behavior(bp::redirect_stream);
+      l.set_stderr_behavior(bp::redirect_stream);
+  
+  #if 0
+      std::ofstream f("test.cmd");
+      f << *script << std::endl;
+      f.close();
+  #endif
+  
+      bp::child c = l.start(cl);
+      bp::postream& pos = c.get_stdin();
+      pos << *script << std::endl;
+  
+      SAGA_VERBOSE (SAGA_VERBOSE_LEVEL_DEBUG)
+      {
+        std::cout << *script << std::endl;
+      }
+      pos.close();
+  
+      bp::pistream& stdout = c.get_stdout();
+  
+      output_parser parser;
+      parser.reset("^" RE_PBS_JOBID "$");
+  
+      std::string line;
+      std::vector<std::string> matched;
+      while (std::getline(stdout, line)) {
+        matched.clear();
+        if (parser.parse_line(line, matched)) {
+    id = matched[0];
+    // TODO matched[4] check ?
+    break;
+        }
+      }
+      stdout.close();
+  
+      bp::status s = c.wait();
+      if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
+        // ?
+        ret_val = id.empty() ? false : true;
+      } else {
+        error_handling(c.get_stderr(), os);
+        ret_val = false;
       }
     }
-    stdout.close();
-
-    bp::status s = c.wait();
-    if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
-      // ?
-      return id.empty() ? false : true;
-    } else {
-      error_handling(c.get_stderr(), os);
-      return false;
+    catch(std::exception const &e) {
+      SAGA_ADAPTOR_THROW_NO_CONTEXT(e.what(), saga::NoSuccess);
     }
-
+    
+    return ret_val;
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -148,49 +157,58 @@ namespace pbspro_job { namespace cli {
   bool qstat::execute(std::vector<std::string>& idlist, std::ostringstream& os)
   {
     //bp::command_line cl(command, command, path);
-    bp::command_line cl(command);
-
-    bp::launcher l;
-    l.set_stdout_behavior(bp::redirect_stream);
-    l.set_stderr_behavior(bp::redirect_stream);
-
-    bp::child c = l.start(cl);
-
-    bp::pistream& stdout = c.get_stdout();
-
-    if (!check_header(stdout)) {
-      // TODO exception ?
+    
+    bool ret_val;
+    
+    try { 
+      bp::command_line cl(command);
+  
+      bp::launcher l;
+      l.set_stdout_behavior(bp::redirect_stream);
+      l.set_stderr_behavior(bp::redirect_stream);
+  
+      bp::child c = l.start(cl);
+  
+      bp::pistream& stdout = c.get_stdout();
+  
+      if (!check_header(stdout)) {
+        // TODO exception ?
+        stdout.close();
+        ret_val = false;
+      }
+  
+      // no list
+      if (stdout.eof()) {
+        stdout.close();
+        ret_val = true;
+      }
+  
+      parser.reset(RE_QSTAT);
+  
+      std::string line;
+      std::vector<std::string> matched;
+  
+      while (std::getline(stdout, line)) {
+        matched.clear();
+        if (parser.parse_line(line, matched)) {
+    idlist.push_back(matched[0]);
+        }
+      }
       stdout.close();
-      return false;
-    }
-
-    // no list
-    if (stdout.eof()) {
-      stdout.close();
-      return true;
-    }
-
-    parser.reset(RE_QSTAT);
-
-    std::string line;
-    std::vector<std::string> matched;
-
-    while (std::getline(stdout, line)) {
-      matched.clear();
-      if (parser.parse_line(line, matched)) {
-	idlist.push_back(matched[0]);
+  
+      bp::status s = c.wait();
+      if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
+        ret_val = true;
+      } else {
+        error_handling(c.get_stderr(), os);
+        ret_val = false;
       }
     }
-    stdout.close();
-
-    bp::status s = c.wait();
-    if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
-      return true;
-    } else {
-      error_handling(c.get_stderr(), os);
-      return false;
+    catch(std::exception const &e) {
+      SAGA_ADAPTOR_THROW_NO_CONTEXT(e.what(), saga::NoSuccess);
     }
-
+    
+    return ret_val;
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -200,63 +218,72 @@ namespace pbspro_job { namespace cli {
 			std::ostringstream& os)
   {
     //bp::command_line cl(command, command, path);
-    bp::command_line cl(command);
-
-    cl.argument(id);
-
-    bp::launcher l;
-    l.set_stdout_behavior(bp::redirect_stream);
-    l.set_stderr_behavior(bp::redirect_stream);
-
-    bp::child c = l.start(cl);
-
-    bp::pistream& stdout = c.get_stdout();
-
-    if (!check_header(stdout)) {
-      // TODO exception ?
-      stdout.close();
-      return false;
-    }
-
-    // no list -- status deleted ?
-    if (stdout.eof()) {
-      pbs_state = "?"; // TODO
-      stdout.close();
-      return true;
-    }
-
-    parser.reset(RE_QSTAT);
-
-    std::vector<std::string> matched;
-    std::string line;
-
-    // TODO while ?
-    if (std::getline(stdout, line)) {
-      stdout.close();
-      if (parser.parse_line(line, matched)) {
-    	pbs_state = matched[7];
+    bool ret_val;
+    
+    try {
+    
+      bp::command_line cl(command);
+  
+      cl.argument(id);
+  
+      bp::launcher l;
+      l.set_stdout_behavior(bp::redirect_stream);
+      l.set_stderr_behavior(bp::redirect_stream);
+  
+      bp::child c = l.start(cl);
+  
+      bp::pistream& stdout = c.get_stdout();
+  
+      if (!check_header(stdout)) {
+        // TODO exception ?
+        stdout.close();
+        ret_val = false;
+      }
+  
+      // no list -- status deleted ?
+      if (stdout.eof()) {
+        pbs_state = "?"; // TODO
+        stdout.close();
+        ret_val = true;
+      }
+  
+      parser.reset(RE_QSTAT);
+  
+      std::vector<std::string> matched;
+      std::string line;
+  
+      // TODO while ?
+      if (std::getline(stdout, line)) {
+        stdout.close();
+        if (parser.parse_line(line, matched)) {
+        pbs_state = matched[7];
+        }
+        else {
+    // parse failed.
+    // TODO exception ?
+          ret_val = false;
+        }
       }
       else {
-	// parse failed.
-	// TODO exception ?
-    	  return false;
+        // read failed.
+        stdout.close();
+        // TODO exception ?
+        ret_val = false;
+      }
+  
+      bp::status s = c.wait();
+      if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
+        ret_val = pbs_state.empty() ? false : true;
+      } else {
+        error_handling(c.get_stderr(), os);
+        ret_val = false;
       }
     }
-    else {
-      // read failed.
-      stdout.close();
-      // TODO exception ?
-      return false;
+    catch(std::exception const &e) {
+      SAGA_ADAPTOR_THROW_NO_CONTEXT(e.what(), saga::NoSuccess);
     }
-
-    bp::status s = c.wait();
-    if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
-      return pbs_state.empty() ? false : true;
-    } else {
-      error_handling(c.get_stderr(), os);
-      return false;
-    }
-
+    
+    return ret_val;
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -266,35 +293,45 @@ namespace pbspro_job { namespace cli {
 				     std::ostringstream& os)
   {
     //bp::command_line cl(command, command, path);
-    bp::command_line cl(command);
-
-    cl.argument("-f");
-//    cl.argument("@nrg04.cc.kek.jp");
-    cl.argument(id);
-
-    bp::launcher l;
-    l.set_stdout_behavior(bp::redirect_stream);
-    l.set_stderr_behavior(bp::redirect_stream);
-
-    bp::child c = l.start(cl);
-
-    bp::pistream& stdout = c.get_stdout();
-
-//    if(!stdout){
-//    	std::cout << "pistream is empty" << std::endl;
-//    }
-
-    jobstat_ptr fullstat = builder.create(stdout);
-    stdout.close();
-
-    bp::status s = c.wait();
-    if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
-      return fullstat;
-    } else {
-      error_handling(c.get_stderr(), os);
-      jobstat_ptr empty_data;
-      return empty_data;
+    
+    jobstat_ptr ret_val;
+    
+    try {
+      bp::command_line cl(command);
+  
+      cl.argument("-f");
+  //    cl.argument("@nrg04.cc.kek.jp");
+      cl.argument(id);
+  
+      bp::launcher l;
+      l.set_stdout_behavior(bp::redirect_stream);
+      l.set_stderr_behavior(bp::redirect_stream);
+  
+      bp::child c = l.start(cl);
+  
+      bp::pistream& stdout = c.get_stdout();
+  
+  //    if(!stdout){
+  //    	std::cout << "pistream is empty" << std::endl;
+  //    }
+  
+      jobstat_ptr fullstat = builder.create(stdout);
+      stdout.close();
+  
+      bp::status s = c.wait();
+      if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
+        ret_val = fullstat;
+      } else {
+        error_handling(c.get_stderr(), os);
+        jobstat_ptr empty_data;
+        ret_val = empty_data;
+      }
     }
+    catch(std::exception const &e) {
+      SAGA_ADAPTOR_THROW_NO_CONTEXT(e.what(), saga::NoSuccess);
+    }
+    
+    return ret_val;
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -339,42 +376,50 @@ namespace pbspro_job { namespace cli {
   //
   std::string ssh::tracejob_get_exit_state(std::string id, std::string svr_name, std::ostringstream& os)
   {
-	  bp::command_line cl(command);
-	  cl.argument(svr_name);
-	  cl.argument("tracejob");
-	  cl.argument(id);
-
-	  bp::launcher l;
-	  l.set_stdout_behavior(bp::redirect_stream);
-	  l.set_stderr_behavior(bp::redirect_stream);
-
-	  bp::child c = l.start(cl);
-
-	  bp::pistream& stdout = c.get_stdout();
-
-	  // Find Exit_status
-	  std::string exit_state;
-	  boost::regex r("(Exit_status=)(\\d+)");
-	  boost::smatch results;
-	  std::string line;
-	  while ( std::getline(stdout, line)) {
-		  boost::regex_search(line, results, r);
-		  if (!results.str().empty()){
-			  exit_state = results.str(2);
-		  }
-	  }
-	  stdout.close();
-
-	  bp::status s = c.wait();
-	  if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
-		  //std::cout << "exit_state = " << exit_state << std::endl;
-		  return exit_state;
-	  } else {
-		  //std::cout << "exit_state is empty..." << exit_state << std::endl;
-		  error_handling(c.get_stderr(), os);
-		  std::string empty_str;
-		  return empty_str;
-	  }
+    std::string ret_val("");
+  
+    try {
+    
+      bp::command_line cl(command);
+      cl.argument(svr_name);
+      cl.argument("tracejob");
+      cl.argument(id);
+  
+      bp::launcher l;
+      l.set_stdout_behavior(bp::redirect_stream);
+      l.set_stderr_behavior(bp::redirect_stream);
+  
+      bp::child c = l.start(cl);
+  
+      bp::pistream& stdout = c.get_stdout();
+  
+      // Find Exit_status
+      std::string exit_state;
+      boost::regex r("(Exit_status=)(\\d+)");
+      boost::smatch results;
+      std::string line;
+      while ( std::getline(stdout, line)) {
+        boost::regex_search(line, results, r);
+        if (!results.str().empty()){
+          exit_state = results.str(2);
+        }
+      }
+      stdout.close();
+  
+      bp::status s = c.wait();
+      if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
+        //std::cout << "exit_state = " << exit_state << std::endl;
+        ret_val = exit_state;
+      } else {
+        //std::cout << "exit_state is empty..." << exit_state << std::endl;
+        error_handling(c.get_stderr(), os);
+        ret_val = "";
+      }
+    }
+    catch(std::exception const &e) {
+      SAGA_ADAPTOR_THROW_NO_CONTEXT(e.what(), saga::NoSuccess);
+    }
+    return ret_val;
   }
 
 
