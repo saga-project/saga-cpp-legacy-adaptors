@@ -6,8 +6,11 @@
 
 -include make.cfg 
 
+.PHONY: all
+all::
+	@true
+
 distclean::
 	$(RM) make.cfg
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
-
