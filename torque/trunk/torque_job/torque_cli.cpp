@@ -50,53 +50,62 @@ namespace torque_job { namespace cli {
   {
     job_script_ptr script = jsbuilder->build(jd);
 
+    bool ret_val;
+    
     //bp::command_line cl(command, command, path);
-    bp::command_line cl(command);
-
-    bp::launcher l;
-    l.set_stdin_behavior(bp::redirect_stream);
-    l.set_stdout_behavior(bp::redirect_stream);
-    l.set_stderr_behavior(bp::redirect_stream);
-
-#if 0
-    std::ofstream f("test.cmd");
-    f << *script << std::endl;
-    f.close();
-#endif
-
-    bp::child c = l.start(cl);
-    bp::postream& pos = c.get_stdin();
-    pos << *script << std::endl;
-    //std::cout << "test test test test test " << std::endl;
-    std::cout << *script << std::endl;
-    pos.close();
-
-    bp::pistream& stdout = c.get_stdout();
-
-    output_parser parser;
-    parser.reset("^" RE_PBS_JOBID "$");
-
-    std::string line;
-    std::vector<std::string> matched;
-    while (std::getline(stdout, line)) {
-      matched.clear();
-      if (parser.parse_line(line, matched)) {
-	id = matched[0];
-	// TODO matched[4] check ?
-	break;
+    try {
+      bp::command_line cl(command);
+    
+      bp::launcher l;
+      l.set_stdin_behavior(bp::redirect_stream);
+      l.set_stdout_behavior(bp::redirect_stream);
+      l.set_stderr_behavior(bp::redirect_stream);
+  
+  #if 0
+      std::ofstream f("test.cmd");
+      f << *script << std::endl;
+      f.close();
+  #endif
+  
+      bp::child c = l.start(cl);
+      bp::postream& pos = c.get_stdin();
+      pos << *script << std::endl;
+      //std::cout << "test test test test test " << std::endl;
+      std::cout << *script << std::endl;
+      pos.close();
+  
+      bp::pistream& stdout = c.get_stdout();
+  
+      output_parser parser;
+      parser.reset("^" RE_PBS_JOBID "$");
+  
+      std::string line;
+      std::vector<std::string> matched;
+      while (std::getline(stdout, line)) {
+        matched.clear();
+        if (parser.parse_line(line, matched)) {
+    id = matched[0];
+    // TODO matched[4] check ?
+    break;
+        }
       }
+      stdout.close();
+  
+      bp::status s = c.wait();
+      if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
+        // ?
+        ret_val =  id.empty() ? false : true;
+      } else {
+        error_handling(c.get_stderr(), os);
+        ret_val =  false;
+      }
+      
     }
-    stdout.close();
-
-    bp::status s = c.wait();
-    if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
-      // ?
-      return id.empty() ? false : true;
-    } else {
-      error_handling(c.get_stderr(), os);
-      return false;
+    catch(std::exception const &e) {
+      SAGA_ADAPTOR_THROW_NO_CONTEXT(e.what(), saga::NoSuccess);
     }
 
+  return ret_val;
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -105,49 +114,59 @@ namespace torque_job { namespace cli {
   bool qstat::execute(std::vector<std::string>& idlist, std::ostringstream& os)
   {
     //bp::command_line cl(command, command, path);
-    bp::command_line cl(command);
-
-    bp::launcher l;
-    l.set_stdout_behavior(bp::redirect_stream);
-    l.set_stderr_behavior(bp::redirect_stream);
-
-    bp::child c = l.start(cl);
-
-    bp::pistream& stdout = c.get_stdout();
-
-    if (!check_header(stdout)) {
-      // TODO exception ?
+    
+    bool ret_val;
+    
+    try {
+    
+      bp::command_line cl(command);
+  
+      bp::launcher l;
+      l.set_stdout_behavior(bp::redirect_stream);
+      l.set_stderr_behavior(bp::redirect_stream);
+  
+      bp::child c = l.start(cl);
+  
+      bp::pistream& stdout = c.get_stdout();
+  
+      if (!check_header(stdout)) {
+        // TODO exception ?
+        stdout.close();
+        ret_val =  false;
+      }
+  
+      // no list
+      if (stdout.eof()) {
+        stdout.close();
+        ret_val =  true;
+      }
+  
+      parser.reset(RE_QSTAT);
+  
+      std::string line;
+      std::vector<std::string> matched;
+  
+      while (std::getline(stdout, line)) {
+        matched.clear();
+        if (parser.parse_line(line, matched)) {
+    idlist.push_back(matched[0]);
+        }
+      }
       stdout.close();
-      return false;
-    }
-
-    // no list
-    if (stdout.eof()) {
-      stdout.close();
-      return true;
-    }
-
-    parser.reset(RE_QSTAT);
-
-    std::string line;
-    std::vector<std::string> matched;
-
-    while (std::getline(stdout, line)) {
-      matched.clear();
-      if (parser.parse_line(line, matched)) {
-	idlist.push_back(matched[0]);
+  
+      bp::status s = c.wait();
+      if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
+        ret_val =  true;
+      } else {
+        error_handling(c.get_stderr(), os);
+        ret_val =  false;
       }
     }
-    stdout.close();
-
-    bp::status s = c.wait();
-    if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
-      return true;
-    } else {
-      error_handling(c.get_stderr(), os);
-      return false;
+    catch(std::exception const &e) {
+      SAGA_ADAPTOR_THROW_NO_CONTEXT(e.what(), saga::NoSuccess);
     }
-
+    
+    return ret_val;
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -157,70 +176,80 @@ namespace torque_job { namespace cli {
 			std::ostringstream& os)
   {
     //bp::command_line cl(command, command, path);
-    bp::command_line cl(command);
-
-    //Get server host name
-    boost::regex r("(\\d+)\\.(.*)");
-	boost::smatch results;
-	boost::regex_search(id, results, r);
-	std::string svr_name = results.str(2);
-    if ( !svr_name.empty()) {
-        id += "@" + svr_name;
-    }
-
-    cl.argument(id);
-
-    bp::launcher l;
-    l.set_stdout_behavior(bp::redirect_stream);
-    l.set_stderr_behavior(bp::redirect_stream);
-
-    bp::child c = l.start(cl);
-
-    bp::pistream& stdout = c.get_stdout();
-
-    if (!check_header(stdout)) {
-      // TODO exception ?
-      stdout.close();
-      return false;
-    }
-
-    // no list -- status deleted ?
-    if (stdout.eof()) {
-      pbs_state = "?"; // TODO
-      stdout.close();
-      return true;
-    }
-
-    parser.reset(RE_QSTAT);
-
-    std::vector<std::string> matched;
-    std::string line;
-
-    // TODO while ?
-    if (std::getline(stdout, line)) {
-      stdout.close();
-      if (parser.parse_line(line, matched)) {
-	pbs_state = matched[7];
-      } else {
-	// parse failed.
-	// TODO exception ?
-	return false;
+    
+    bool ret_val;
+    
+    try {
+    
+      bp::command_line cl(command);
+  
+      //Get server host name
+      boost::regex r("(\\d+)\\.(.*)");
+    boost::smatch results;
+    boost::regex_search(id, results, r);
+    std::string svr_name = results.str(2);
+      if ( !svr_name.empty()) {
+          id += "@" + svr_name;
       }
-    } else {
-      // read failed.
-      stdout.close();
-      // TODO exception ?
-      return false;
+  
+      cl.argument(id);
+  
+      bp::launcher l;
+      l.set_stdout_behavior(bp::redirect_stream);
+      l.set_stderr_behavior(bp::redirect_stream);
+  
+      bp::child c = l.start(cl);
+  
+      bp::pistream& stdout = c.get_stdout();
+  
+      if (!check_header(stdout)) {
+        // TODO exception ?
+        stdout.close();
+        ret_val =  false;
+      }
+  
+      // no list -- status deleted ?
+      if (stdout.eof()) {
+        pbs_state = "?"; // TODO
+        stdout.close();
+        ret_val =  true;
+      }
+  
+      parser.reset(RE_QSTAT);
+  
+      std::vector<std::string> matched;
+      std::string line;
+  
+      // TODO while ?
+      if (std::getline(stdout, line)) {
+        stdout.close();
+        if (parser.parse_line(line, matched)) {
+    pbs_state = matched[7];
+        } else {
+    // parse failed.
+    // TODO exception ?
+    ret_val =  false;
+        }
+      } else {
+        // read failed.
+        stdout.close();
+        // TODO exception ?
+        ret_val =  false;
+      }
+  
+      bp::status s = c.wait();
+      if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
+        ret_val =  pbs_state.empty() ? false : true;
+      } else {
+        error_handling(c.get_stderr(), os);
+        ret_val =  false;
+      }
     }
-
-    bp::status s = c.wait();
-    if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
-      return pbs_state.empty() ? false : true;
-    } else {
-      error_handling(c.get_stderr(), os);
-      return false;
+    catch(std::exception const &e) {
+      SAGA_ADAPTOR_THROW_NO_CONTEXT(e.what(), saga::NoSuccess);
     }
-
+    
+    return ret_val;
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -230,41 +259,52 @@ namespace torque_job { namespace cli {
 				     std::ostringstream& os)
   {
     //bp::command_line cl(command, command, path);
-    bp::command_line cl(command);
-
-    cl.argument("-f");
-
-    //Get server host name
-    boost::regex r("(\\d+)\\.(.*)");
-	boost::smatch results;
-	boost::regex_search(id, results, r);
-	std::string svr_name = results.str(2);
-    if ( !svr_name.empty()) {
-        id += "@" + svr_name;
+    
+    jobstat_ptr ret_val;
+    
+    try {
+    
+      bp::command_line cl(command);
+  
+      cl.argument("-f");
+  
+      //Get server host name
+      boost::regex r("(\\d+)\\.(.*)");
+    boost::smatch results;
+    boost::regex_search(id, results, r);
+    std::string svr_name = results.str(2);
+      if ( !svr_name.empty()) {
+          id += "@" + svr_name;
+      }
+  
+    cl.argument(id);
+  
+  
+      bp::launcher l;
+      l.set_stdout_behavior(bp::redirect_stream);
+      l.set_stderr_behavior(bp::redirect_stream);
+  
+      bp::child c = l.start(cl);
+  
+      bp::pistream& stdout = c.get_stdout();
+  
+      jobstat_ptr fullstat = builder.create(stdout);
+      stdout.close();
+  
+      bp::status s = c.wait();
+      if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
+        ret_val =  fullstat;
+      } else {
+        error_handling(c.get_stderr(), os);
+        jobstat_ptr empty_data;
+        ret_val =  empty_data;
+      }
     }
-
-	cl.argument(id);
-
-
-    bp::launcher l;
-    l.set_stdout_behavior(bp::redirect_stream);
-    l.set_stderr_behavior(bp::redirect_stream);
-
-    bp::child c = l.start(cl);
-
-    bp::pistream& stdout = c.get_stdout();
-
-    jobstat_ptr fullstat = builder.create(stdout);
-    stdout.close();
-
-    bp::status s = c.wait();
-    if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
-      return fullstat;
-    } else {
-      error_handling(c.get_stderr(), os);
-      jobstat_ptr empty_data;
-      return empty_data;
+    catch(std::exception const &e) {
+      SAGA_ADAPTOR_THROW_NO_CONTEXT(e.what(), saga::NoSuccess);
     }
+    
+    return ret_val;
   }
 
   //////////////////////////////////////////////////////////////////////
