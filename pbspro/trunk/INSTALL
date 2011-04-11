@@ -41,6 +41,13 @@
   to you PBSPro installation in the adaptor's configuration file:
   
   $SAGA_LOCATION/share/saga/saga_adaptor_pbspro_job.ini
+
+  In order to use the adaptor, you can either define the $PBS_HOME environment
+  variable in your shell as your local PBS (Pro) installation base directory, 
+  or alternatively set it explicitly in the adaptor's .ini file by changing 
+  the following line:
+
+  pbspro_location = ${PBS_HOME}
  
 
   Please help us to improve the quality of SAGA and file a bug report if you 
