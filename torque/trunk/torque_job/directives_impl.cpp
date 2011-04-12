@@ -44,6 +44,7 @@ namespace torque_job { namespace cli {
     void set_error(std::string& path);
     void set_environment(std::vector<std::string>& env);
     void set_working_directory(std::string path);
+    void set_job_project(std::string job_project);
     void set_stagein(std::string file_list);
     void set_stageout(std::string file_list);
     void set_walltime(std::string& seconds);
@@ -112,6 +113,15 @@ namespace torque_job { namespace cli {
 	os << ",";
       }
     }
+    _list.push_back(os.str());
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  //
+  void directives_impl::set_job_project(std::string job_project)
+  {
+    std::ostringstream os;
+    os << "-A " << job_project;
     _list.push_back(os.str());
   }
 
@@ -230,6 +240,13 @@ namespace torque_job { namespace cli {
 
     directives_ptr p = w.lock();
 
+    // Job Project
+    if (jd.attribute_exists(sja::description_job_project)) {
+      std::string path_job_project = jd.get_attribute(sja::description_job_project);
+
+      p->set_job_project(path_job_project);
+    }
+
     // WorkingDirectory
     if (jd.attribute_exists(sja::description_working_directory)) {
       std::string path = jd.get_attribute(sja::description_working_directory);
@@ -247,7 +264,6 @@ namespace torque_job { namespace cli {
 
         p->set_working_directory(stgp_builder.get_workdir());
     }
-
 
     // Output File
     if (jd.attribute_exists(sja::description_output)) {

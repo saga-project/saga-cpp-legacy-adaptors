@@ -58,6 +58,8 @@ namespace torque_job { namespace cli {
     //
     virtual void set_environment(std::vector<std::string>& env) = 0;
     //
+    virtual void set_job_project(std::string job_project) = 0;
+
     virtual void set_working_directory(std::string path) = 0;
     //
     virtual void set_stagein(std::string file_list) = 0;
