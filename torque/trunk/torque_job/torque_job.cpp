@@ -163,7 +163,11 @@ namespace torque_job
     std::string pbsid = jobid_converter.convert_pbsid(sagaid);
 
     std::ostringstream os;
-    cli::qstat qstat;
+
+    adaptor_data_type ad(this);
+    std::string bin_pth(ad->get_binary_path());
+    cli::qstat qstat(bin_pth);
+
 
     cli::jobstat_ptr fullstat = qstat.get_full_status(pbsid, os);
     if (fullstat.get()) {
@@ -443,18 +447,20 @@ namespace torque_job
     }
 
     instance_data data(this);
+    adaptor_data_type ad(this);
+
     saga::job::description& jd = data->jd_;
 
-    cli::qsub qsub(localhost);
+    std::string bin_pth(ad->get_binary_path());
+    cli::qsub qsub(localhost, bin_pth);
 
     std::string pbsid;
     std::ostringstream os;
     bool success = qsub.execute(jd, pbsid, os);
-    if (!success) {
+    if (!success) 
+    {
       std::string msg = os.str();
-      // please check user@host
-      //saga::error e = cli::em.check(msg);
-      //SAGA_ADAPTOR_THROW(msg, e);
+ 
       SAGA_ADAPTOR_THROW(msg, saga::NoSuccess);
     }
 
@@ -462,7 +468,6 @@ namespace torque_job
     saga::adaptors::attribute attr(this);
     attr.set_attribute(sja::jobid, sagaid);
 
-    adaptor_data_type ad(this);
     ad->register_job(pbsid, jd);
 
     update_state(proxy_, saga::job::Running);

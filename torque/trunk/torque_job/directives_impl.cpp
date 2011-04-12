@@ -366,7 +366,9 @@ namespace torque_job { namespace cli {
     if (jd.attribute_exists(sja::description_job_contact)) 
     {
       std::string mailaddr = jd.get_attribute(sja::description_job_contact);
-      p->set_job_contact(mailaddr);
+      if(!mailaddr.empty()) {
+        p->set_job_contact(mailaddr);
+      }
     }
 
     // Job_Contact

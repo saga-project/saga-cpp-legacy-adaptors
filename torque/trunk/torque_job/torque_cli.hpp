@@ -115,11 +115,11 @@ namespace torque_job { namespace cli {
   //////////////////////////////////////////////////////////////////////
   //
   class qsub {
-    const std::string command;
+    std::string command;
     job_script_builder_ptr jsbuilder;
 
   public:
-    qsub(std::string localhost);
+    qsub(std::string localhost, std::string bin_pth);
     DESTRUCTOR(qsub);
     //
     bool execute(saga::job::description& jd,
@@ -129,7 +129,7 @@ namespace torque_job { namespace cli {
   //////////////////////////////////////////////////////////////////////
   //
   class qstat {
-    const std::string command;
+    std::string command;
     output_parser parser;
     jobstat_builder builder;
 
@@ -138,9 +138,9 @@ namespace torque_job { namespace cli {
     bool check_header(std::istream& stdout);
 
   public:
-    qstat() : command("qstat") {}
+    qstat(std::string bin_pth);
     DESTRUCTOR(qstat);
-
+    //
     bool execute(std::vector<std::string>& idlist, std::ostringstream& os);
 
     bool get_state(std::string id, std::string& pbs_state,

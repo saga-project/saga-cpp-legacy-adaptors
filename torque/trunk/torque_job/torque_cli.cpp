@@ -36,13 +36,20 @@ namespace torque_job { namespace cli {
 #define RE_QSTATF2 "^\\s+(\\S+)\\s+=\\s+(.+)$"
 #define RE_QSTATF3 "^\t(.+)$"
 
-  //////////////////////////////////////////////////////////////////////
-  //
-  qsub::qsub(std::string localhost)
-    : command("qsub")
+//////////////////////////////////////////////////////////////////////
+//
+qsub::qsub(std::string localhost, std::string bin_pth)
+{
+  if (!bin_pth.empty()) 
   {
-    jsbuilder = job_script_builder_ptr(new job_script_builder(localhost));
+    command = bin_pth + "/qsub";
   }
+  else {
+    SAGA_ADAPTOR_THROW_NO_CONTEXT("binary_path must be defined in .ini file.",
+                                  saga::NoSuccess);
+  }  
+  jsbuilder = job_script_builder_ptr(new job_script_builder(localhost)); 
+}
 
   //
   bool qsub::execute(saga::job::description& jd,
@@ -70,11 +77,17 @@ namespace torque_job { namespace cli {
       bp::child c = l.start(cl);
       bp::postream& pos = c.get_stdin();
       pos << *script << std::endl;
-      //std::cout << "test test test test test " << std::endl;
-      std::cout << *script << std::endl;
+
+      SAGA_VERBOSE (SAGA_VERBOSE_LEVEL_DEBUG)
+      {
+        std::cout << *script << std::endl;
+      }
+
       pos.close();
   
       bp::pistream& stdout = c.get_stdout();
+      bp::pistream& stderr = c.get_stderr();
+
   
       output_parser parser;
       parser.reset("^" RE_PBS_JOBID "$");
@@ -83,23 +96,27 @@ namespace torque_job { namespace cli {
       std::vector<std::string> matched;
       while (std::getline(stdout, line)) {
         matched.clear();
-        if (parser.parse_line(line, matched)) {
-    id = matched[0];
-    // TODO matched[4] check ?
-    break;
+        if (parser.parse_line(line, matched)) 
+        {
+          id = matched[0];
+          // TODO matched[4] check ?
+          break;
         }
       }
       stdout.close();
   
       bp::status s = c.wait();
-      if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
-        // ?
-        ret_val =  id.empty() ? false : true;
-      } else {
-        error_handling(c.get_stderr(), os);
-        ret_val =  false;
-      }
       
+      if (s.exited() && s.exit_status() == EXIT_SUCCESS) 
+      {
+        error_handling(stderr, os);
+        ret_val =  id.empty() ? false : true;
+      } 
+      else 
+      {
+        error_handling(stderr, os);
+        ret_val =  false;
+      }      
     }
     catch(std::exception const &e) {
       SAGA_ADAPTOR_THROW_NO_CONTEXT(e.what(), saga::NoSuccess);
@@ -107,6 +124,21 @@ namespace torque_job { namespace cli {
 
   return ret_val;
   }
+
+  //////////////////////////////////////////////////////////////////////
+  //
+  qstat::qstat(std::string bin_pth)
+  {
+    if (!bin_pth.empty()) 
+    {
+      command = bin_pth + "/qstat";
+    }
+    else {
+      SAGA_ADAPTOR_THROW_NO_CONTEXT("binary_path must be defined in .ini file.",
+                                  saga::NoSuccess);
+    }
+  }
+
 
   //////////////////////////////////////////////////////////////////////
   //  get all PBS JobID (qstat job_id)
@@ -148,14 +180,17 @@ namespace torque_job { namespace cli {
   
       while (std::getline(stdout, line)) {
         matched.clear();
-        if (parser.parse_line(line, matched)) {
-    idlist.push_back(matched[0]);
+        if (parser.parse_line(line, matched)) 
+        {
+          idlist.push_back(matched[0]);
         }
       }
       stdout.close();
   
       bp::status s = c.wait();
-      if (s.exited() && s.exit_status() == EXIT_SUCCESS) {
+            
+      if (s.exited() && s.exit_status() == EXIT_SUCCESS) 
+      {
         ret_val =  true;
       } else {
         error_handling(c.get_stderr(), os);
@@ -442,10 +477,10 @@ namespace torque_job { namespace cli {
     while (err.good()) {
       std::getline(err, line);
       if (!line.empty()) {
-	if (os.tellp() != std::ostream::pos_type(0)) {
-	  os <<  '\n';
-	}
-	os << line;
+	    //if (os.tellp() != std::ostream::pos_type(0)) {
+	    //  os <<  '\n';
+      //	}
+	      os << line;
       }
     }
   }

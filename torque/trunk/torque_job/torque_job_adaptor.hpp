@@ -72,6 +72,8 @@ namespace torque_job
     bool find_job(pbsid_t pbsid, saga::job::description& jd);
     //
     std::string get_job_contact() { return job_contact; }
+    
+    std::string get_binary_path() { return binary_path; }
   };
 
 } // namespace torque_job

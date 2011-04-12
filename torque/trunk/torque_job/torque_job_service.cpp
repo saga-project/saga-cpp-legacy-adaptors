@@ -148,6 +148,7 @@ namespace torque_job
     }
 
     instance_data data(this);
+    adaptor_data_type ad(this);
 
     // create new job. state == saga::job::New
     saga::job::job job = saga::adaptors::job(data->rm_.get_url(),
@@ -155,7 +156,8 @@ namespace torque_job
     std::string pbsid;
     std::ostringstream os;
 
-    cli::qsub qsub(localhost);
+    std::string bin_pth(ad->get_binary_path());
+    cli::qsub qsub(localhost, bin_pth);
 
     if (qsub.execute(jd, pbsid, os) == false) {
       std::string msg = os.str();
@@ -167,7 +169,6 @@ namespace torque_job
     saga::adaptors::attribute attr(job);
     attr.set_attribute(sja::jobid, sagaid);
 
-    adaptor_data_type ad(this);
     ad->register_job(pbsid, jd);
     // set current state
     job.get_state();
@@ -180,7 +181,11 @@ namespace torque_job
     std::vector<std::string> backend_list;
 
     std::ostringstream os;
-    cli::qstat qstat;
+
+    adaptor_data_type ad(this);
+    std::string bin_pth(ad->get_binary_path());
+    cli::qstat qstat(bin_pth);
+    
     if (qstat.execute(backend_list, os) == false) {
       std::string msg = os.str();
       //saga::error e = cli::em.check(msg);
@@ -220,7 +225,11 @@ namespace torque_job
     } else {
       std::string unuse;
       std::ostringstream os;
-      cli::qstat qstat;
+
+    adaptor_data_type ad(this);
+    std::string bin_pth(ad->get_binary_path());
+    cli::qstat qstat(bin_pth);
+    
       bool found = qstat.get_state(pbsid, unuse, os);
       if (found) {
 	job = saga::adaptors::job(data->rm_.get_url(),

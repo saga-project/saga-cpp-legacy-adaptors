@@ -82,9 +82,8 @@ namespace torque_job
         }
         else
         {
-          SAGA_ADAPTOR_THROW_NO_CONTEXT("the job was not submitted through SAGA.",
-                         saga::DoesNotExist);
-
+          SAGA_ADAPTOR_THROW_NO_CONTEXT("binary_path must be defined in .ini file.",
+                         saga::NoSuccess);
         }
 
        // disabled: 11/Apr/11 by Ole Weidner
