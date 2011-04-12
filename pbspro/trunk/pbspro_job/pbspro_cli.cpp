@@ -43,22 +43,15 @@ namespace pbspro_job { namespace cli {
   {
 	if (!bin_pth.empty()) {
 		command = bin_pth + "/qsub";
-		//std::cout << "bin_pth/qsub = " << command << std::endl;
 	}
-	else {
-		bin_pth = getenv("PBS_HOME");
-		if(!bin_pth.empty()){
-			command = bin_pth + "/bin/qsub";
-			//std::cout << "$PBS_HOME/qsub = " << command << std::endl;
-		}
-		else{
-			command = "qsub";
-		}
-	}
-	//std::cout << "qsub command = " << command << std::endl;
+
+        else 
+        {
+           SAGA_ADAPTOR_THROW_NO_CONTEXT("binary_path must be defined in .ini file.",
+                                          saga::NoSuccess);
+        }  
 
 	jsbuilder = job_script_builder_ptr(new job_script_builder(localhost));
-
   }
 
   //
