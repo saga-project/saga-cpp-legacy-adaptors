@@ -242,9 +242,12 @@ namespace torque_job { namespace cli {
 
     // Job Project
     if (jd.attribute_exists(sja::description_job_project)) {
-      std::string path_job_project = jd.get_attribute(sja::description_job_project);
+      std::vector<std::string> projects = jd.get_vector_attribute(sja::description_job_project);
 
-      p->set_job_project(path_job_project);
+      if(projects.size() >= 1) 
+      {
+        p->set_job_project(projects[0]);
+      }
     }
 
     // WorkingDirectory
