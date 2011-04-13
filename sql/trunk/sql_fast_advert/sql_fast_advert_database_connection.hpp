@@ -57,6 +57,8 @@ namespace sql_fast_advert
 		
 		node insert_node(const node parent, const std::string node_name);
 		
+		//void remove_node(const node n);
+		
 		std::string get_path(const node db_node);
 		
 		void get_child_nodes(std::vector<node> &ret, const node parent);
