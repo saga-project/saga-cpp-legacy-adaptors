@@ -50,8 +50,55 @@ namespace torque_job { namespace cli {
     void set_walltime(std::string& seconds);
     void set_job_contact(std::string& address);
 
+    // added: 07/Feb/11 by Ole Weidner
+    void set_queue(std::string& queue);
+    
+    // added: 07/Feb/11 by Ole Weidner
+    void set_project(std::string& project);
+    
+    // added: 07/Feb/11 by Ole Weidner
+    void set_nodes_and_ppn(std::string& number_of_nodes, 
+                           std::string& processors_per_node );
+
     void put(std::ostream& s);
   };
+
+  //////////////////////////////////////////////////////////////////////
+  // added: 13/April/11 by Ole Weidner
+  //
+  void directives_impl::set_project(std::string& project) 
+  {
+    std::ostringstream os;
+    if(!project.empty()){
+        os << "-A " << project;
+        _list.push_back(os.str());
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  // added: 13/April/11 by Ole Weidner
+  //
+  void directives_impl::set_queue(std::string& queue) 
+  {
+    std::ostringstream os;
+
+    if(!queue.empty()){
+        os << "-q " << queue;
+        _list.push_back(os.str());
+    }
+  }
+  
+  //////////////////////////////////////////////////////////////////////
+  // added: 13/April/11 by Ole Weidner
+  //
+  void directives_impl::set_nodes_and_ppn(std::string& number_of_nodes,
+                                            std::string& processors_per_node)
+  {
+    std::ostringstream os;
+    os << "-l nodes=" << number_of_nodes <<":ppn=" << processors_per_node;
+    _list.push_back(os.str());
+  }
+
 
   //////////////////////////////////////////////////////////////////////
   //
@@ -240,14 +287,82 @@ namespace torque_job { namespace cli {
 
     directives_ptr p = w.lock();
 
-    // Job Project
+    // added: 07/Apr/11 by Ole Weidner
+    //
+    // Queue - sets the same 'PBS -q' option as 'CandidateHost' above.
+    // IMHO this is a misinterpretation of the spec. Won't touch it 
+    // in order to maintain compatibility 
+    //
     if (jd.attribute_exists(sja::description_job_project)) {
-      std::vector<std::string> projects = jd.get_vector_attribute(sja::description_job_project);
+    	std::vector<std::string> projects =
+    		jd.get_vector_attribute(sja::description_job_project);
 
-      if(projects.size() >= 1) 
-      {
-        p->set_job_project(projects[0]);
+      if(projects.size() >= 1) {
+        checker->check_project(projects[0]);
+        p->set_project(projects[0]);
       }
+    }
+
+    // added: 07/Apr/11 by Ole Weidner
+    //
+    // Queue - sets the same 'PBS -q' option as 'CandidateHost' above.
+    // IMHO this is a misinterpretation of the spec. Won't touch it 
+    // in order to maintain compatibility 
+    //
+    if (jd.attribute_exists(sja::description_queue)) 
+    {
+      std::string queue = jd.get_attribute(sja::description_queue);
+
+      checker->check_queue(queue);
+      p->set_queue(queue);
+    }
+
+    // added: 07/Apr/11 by Ole Weidner
+    //
+    // ProcessesPerHost & ThreadsPerProcess. They translate to something 
+    // like PBS -l nodes=X:ppn=Y. The limitation is, that both description
+    // attributes have to be used in conjunction, otherwise this will
+    // produce an error.
+    //
+    bool nop_exists = jd.attribute_exists(sja::description_number_of_processes);
+    bool pph_exists = jd.attribute_exists(sja::description_processes_per_host);
+    
+    if(nop_exists && !pph_exists)
+    {
+       SAGA_OSSTREAM strm;
+       strm << "Job description parse failed: "
+            << "The NumberOfProcesses attributed cannot be used " 
+            << " without the ProcessesPerHost attribute!";
+	   SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
+	                                 saga::BadParameter);
+	   throw;
+    }
+    else if(!nop_exists && pph_exists)
+    {
+       SAGA_OSSTREAM strm;
+       strm << "Job description parse failed: "
+            << "The ProcessesPerHost attributed cannot be used " 
+            << " without the NumberOfProcesses attribute!";
+	   SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
+	                                 saga::BadParameter);
+	   throw;    
+    }
+    
+    if(nop_exists && pph_exists)
+    {
+      std::string nop = jd.get_attribute(sja::description_number_of_processes);
+      std::string pph = jd.get_attribute(sja::description_processes_per_host);
+      
+      checker->check_nodes_and_ppn(nop, pph);
+      p->set_nodes_and_ppn(nop, pph);
+    }
+
+    // added: 11/April/11 by Ole Weidner
+    //
+    if (jd.attribute_exists(sja::description_job_contact)) 
+    {
+      std::string mailaddr = jd.get_attribute(sja::description_job_contact);
+      p->set_job_contact(mailaddr);
     }
 
     // WorkingDirectory
