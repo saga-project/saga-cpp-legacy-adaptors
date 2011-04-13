@@ -19,6 +19,9 @@
 #include <saga/impl/packages/advert/advert_directory_cpi.hpp>
 #include <saga/saga/adaptors/packages/advert_directory_cpi_instance_data.hpp>
 
+// boost includes
+#include <boost/filesystem.hpp>
+
 // Database Connection includes
 #include "sql_fast_advert_adaptor.hpp"
 #include "sql_fast_advert_database_connection.hpp"
@@ -29,6 +32,10 @@ namespace sql_fast_advert
 	
 	// Adaptor data
 	typedef saga::adaptors::adaptor_data<sql_fast_advert::adaptor> adaptor_data;
+	
+	// Normalize boost::filesystem::path
+	static boost::filesystem::path normalize_boost_path(const boost::filesystem::path path);
+
 	
   ////////////////////////////////////////////////////////////////////
   //  This adaptor implements the functionality of the Saga API "advert".
@@ -91,14 +98,15 @@ namespace sql_fast_advert
 //      void sync_move                  (saga::impl::void_t          & ret, 
 //                                       saga::url                     target, 
 //                                       int                           flags);
-//      void sync_remove                (saga::impl::void_t          & ret, 
-//                                       int                           flags);
+      void sync_remove                (saga::impl::void_t          & ret, 
+                                       int                           flags);
 //      void sync_close                 (saga::impl::void_t          & ret, 
 //                                       double                        timeout);
 //
 //      // namespace_dir functions      
-//      void sync_change_dir            (saga::impl::void_t          & ret, 
-//                                       saga::url                     target);
+      void sync_change_dir            (saga::impl::void_t          & ret, 
+                                       saga::url                     target);
+
       void sync_list                  (std::vector <saga::url>     & ret, 
                                        std::string                   pattern, 
                                        int                           flags);
@@ -130,9 +138,11 @@ namespace sql_fast_advert
 //                                       saga::url                     source, 
 //                                       saga::url                     target, 
 //                                       int                           flags);
-//      void sync_remove                (saga::impl::void_t          & ret, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
+
+      void sync_remove                (saga::impl::void_t          & ret, 
+                                       saga::url                     target, 
+                                       int                           flags);
+
 //      void sync_make_dir              (saga::impl::void_t          & ret, 
 //                                       saga::url                     target, 
 //                                       int                           flags);
@@ -230,7 +240,12 @@ namespace sql_fast_advert
 
 	private:
 		database_connection *dbc;
+		std::string path_string;
 		node dir_node;
+		std::vector<node> node_vector;
+		
+		void create_parents(boost::filesystem::path path);
+		
   }; // class advertdirectory_cpi_impl
 
 } // namespace sql_fast_advert

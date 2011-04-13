@@ -17,6 +17,37 @@
 ///////////////////////////////////////////////////////////////////////////////
 namespace sql_fast_advert
 {
+	boost::filesystem::path normalize_boost_path(const boost::filesystem::path path)
+	{
+		boost::filesystem::path normalized_path;
+		
+		for (boost::filesystem::path::iterator i = path.begin(); i != path.end(); i++)
+		{
+			if (*i == ".")
+			{
+				continue;
+			}
+
+			else if (*i == "..")
+			{
+				normalized_path = normalized_path.parent_path();
+			}
+
+			else 
+			{
+				normalized_path /= *i;
+			}
+		}
+		
+		if (normalized_path.string() == "")
+		{
+			normalized_path /= "/";
+		}
+		
+		return normalized_path;
+	}
+
+	
   ////////////////////////////////////////////////////////////////////////
   //  constructor
   advertdirectory_cpi_impl::advertdirectory_cpi_impl (proxy                           * p, 
@@ -28,19 +59,25 @@ namespace sql_fast_advert
   {
   	instance_data idata(this);
 	adaptor_data  adata(this);
-	
-  	saga::url url(idata->location_);
 
-	std::cout << url.get_path() << std::endl;
+	//
+	// Path definition
+	// the path retrieved form a saga::url seems not to be consistent. 
+	// So this will be the path structure the sqlfastadvert adaptor will work with.
+	// 
+	// Examples
+	// root : /
+	// path : /usr
+	// path : /var/www 
+	//
 	
-	std::string input = url.get_path();
-	std::vector<std::string> result;
-	boost::split(result, input, boost::is_any_of("/"));
+	saga::url url(idata->location_);
+	boost::filesystem::path path = normalize_boost_path(boost::filesystem::path(url.get_path()));
 	
-	for(std::vector<std::string>::iterator i = result.begin(); i != result.end(); i++)
-	{
-		std::cout << *i << std::endl;
-	}
+	//
+	// Decode flags
+	// Debug purpose only and should be removed later 
+	//
 
   	if (idata->mode_ & saga::advert::Unknown)
 	{
@@ -128,26 +165,58 @@ namespace sql_fast_advert
   	{
   		SAGA_ADAPTOR_THROW (e.what(), saga::BadParameter);
   	}
-  	
-  	dir_node = dbc->find_node(url.get_path());
 
-	// Directory not found -> create 
+	// 
+	//  Try to find the directory node
+	// 
+	
+	dir_node = dbc->find_node(path.string());
+	
+	// 
+	// If there is no node we work through the flags 
+	//
+
 	if (dir_node.id == 0)
 	{
-		node root_node = dbc->find_node("");
+		// 
+		// No Create or CreateParents
+		//
 		
-		std::cout << "lft : " << root_node.lft << " rgt : " << root_node.rgt << std::endl;
+		if ( !(idata->mode_ & saga::advert::Create) & !(idata->mode_ & saga::advert::CreateParents))
+		{
+			SAGA_ADAPTOR_THROW ("Directory dose not exist", saga::IncorrectURL);
+		}
 		
-		//dir_node = dbc->insert_node(root_node, result[1]);
+		//
+		// Create but no CreateParents
+		//
+		
+		if ( (idata->mode_ & saga::advert::Create) & !(idata->mode_ & saga::advert::CreateParents) )
+		{
+			node parent_node = dbc->find_node((path.parent_path()).string());
+						
+			if (parent_node.id == 0)
+			{
+				SAGA_ADAPTOR_THROW ("Parent directory dose not exist", saga::IncorrectURL);
+			}
+			
+			else
+			{
+				dir_node = dbc->insert_node(parent_node, *(--path.end()));
+			}
+		}
+		
+		
+		//
+		// CreateParents
+		//
+		
+		if ( idata->mode_ & saga::advert::CreateParents )
+		{
+			create_parents(path);
+		}
+	
 	}
-
-	//std::cout << result[1] << std::endl;
-	std::cout << dir_node.id << std::endl;
-	std::cout << dbc->get_path(dir_node) << std::endl;
-	
-	
-	//std::vector<node> node_vector = dbc->get_child_nodes(dir_node);
-	//std::cout << node_vector.size() << std::endl;
   	
     //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
@@ -159,6 +228,25 @@ namespace sql_fast_advert
   {
   }
 
+	void advertdirectory_cpi_impl::create_parents(boost::filesystem::path path)
+	{
+		node parent_node = dbc->find_node((path.parent_path()).string());
+		
+		std::cout << "call create parents : " << path << std::endl;
+		
+		if (parent_node.id == 0)
+		{
+			create_parents(path.parent_path());
+			
+			parent_node = dbc->find_node((path.parent_path()).string());
+			dir_node = dbc->insert_node(parent_node, *(--path.end()));
+		}
+		
+		else
+		{
+			dir_node = dbc->insert_node(parent_node, *(--path.end()));
+		}
+	}
 
 //  ////////////////////////////////////////////////////////////////////////
 //  //  SAGA CPI functions 
@@ -279,9 +367,16 @@ namespace sql_fast_advert
 //
   void 
     advertdirectory_cpi_impl::sync_is_dir (bool & ret)
-  {
+  {	
+	if (dir_node.dir == "t")
+	{
 		ret = true;
-		//SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+	}
+	
+	if (dir_node.dir == "f")
+	{
+		ret = false;
+	}
   }
 //
 //  void 
@@ -326,12 +421,16 @@ namespace sql_fast_advert
 //    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
 //  }
 //
-//  void 
-//    advertdirectory_cpi_impl::sync_remove (saga::impl::void_t & ret, 
-//                                           int            flags)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
+  void 
+    advertdirectory_cpi_impl::sync_remove (saga::impl::void_t & ret, 
+                                           int            flags)
+  {
+	
+	std::cout << "sync_remove" << std::endl;
+	
+    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+  }
+
 //
 //  void 
 //    advertdirectory_cpi_impl::sync_close (saga::impl::void_t & ret, 
@@ -349,18 +448,14 @@ namespace sql_fast_advert
                                          std::string               pattern, 
                                          int                       flags)
 	{
-		std::vector<node> node_vector = dbc->get_child_nodes(dir_node);
-		std::cout << "Pattern : " << pattern << std::endl;
-		std::cout << "Vector size : " << node_vector.size() << std::endl;
-		
+		node_vector.clear();
+		dbc->get_child_nodes(node_vector, dir_node);
+	
 		for (std::vector<node>::iterator i = node_vector.begin(); i != node_vector.end(); i++)
 		{
 			saga::url url(i->name);
 			ret.push_back(url);
 		}
-		
-		
-    	//SAGA_ADAPTOR_THROW ("Not Implemented sync_list", saga::NotImplemented);
     }
 //
 //  void 
@@ -382,8 +477,23 @@ namespace sql_fast_advert
     advertdirectory_cpi_impl::sync_is_dir (bool      & ret, 
                                            saga::url   entry)
   {
-	ret = true;
-    //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+	for (std::vector<node>::iterator i = node_vector.begin(); i != node_vector.end(); i++)
+	{
+		if (i->name == entry.get_path())
+		{
+			if (i->dir == "t")
+			{
+				ret = true;
+			}
+			
+			if (i->dir == "f")
+			{
+				ret = false;
+			}
+		
+			break;
+		}
+	}
   }
 //
 //  void 
@@ -447,13 +557,16 @@ namespace sql_fast_advert
 //    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
 //  }
 //
-//  void 
-//    advertdirectory_cpi_impl::sync_remove (saga::impl::void_t & ret, 
-//                                           saga::url      entry, 
-//                                           int            flags)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
+  void 
+    advertdirectory_cpi_impl::sync_remove (saga::impl::void_t & ret, 
+                                           saga::url      entry, 
+                                           int            flags)
+  {
+	
+	
+    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+  }
+
 //
 //  void 
 //    advertdirectory_cpi_impl::sync_open (saga::name_space::entry & ret, 
@@ -471,12 +584,55 @@ namespace sql_fast_advert
 //    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
 //  }
 //
-//  void 
-//    advertdirectory_cpi_impl::sync_change_dir (saga::impl::void_t & ret, 
-//                                               saga::url      dir)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
+  void 
+    advertdirectory_cpi_impl::sync_change_dir (saga::impl::void_t & ret, 
+                                               saga::url      dir)
+  {
+	instance_data idata(this);
+	saga::url url(idata->location_);
+	
+	std::string dir_path = dir.get_path();
+	
+	//
+	// Relative Path
+ 	//
+	
+	if (dir_path[0] != '/')
+	{
+		instance_data idata(this);	
+		boost::filesystem::path path = normalize_boost_path(boost::filesystem::path((url.get_path()) + (dir.get_path())));
+		
+		dir_node = dbc->find_node(path.string());
+		if (dir_node.id == 0)
+		{
+			SAGA_ADAPTOR_THROW ("Directory not found", saga::IncorrectURL);
+		}
+		else
+		{
+			(idata->location_).set_url(path.string());
+		}
+	}
+	
+	//
+	// Absolute path 
+	//
+
+	else
+	{
+		boost::filesystem::path path = normalize_boost_path(boost::filesystem::path(dir.get_path()));
+		
+		dir_node = dbc->find_node(path.string());
+		if(dir_node.id == 0)
+		{
+			SAGA_ADAPTOR_THROW ("Directory not found", saga::IncorrectURL);
+		}
+		else
+		{
+			(idata->location_).set_url(path.string());
+		}
+	}
+  }
+
 //
 //  void 
 //    advertdirectory_cpi_impl::sync_make_dir (saga::impl::void_t & ret, 

@@ -59,7 +59,7 @@ namespace sql_fast_advert
 		
 		std::string get_path(const node db_node);
 		
-		std::vector<node> get_child_nodes(const node parent);
+		void get_child_nodes(std::vector<node> &ret, const node parent);
 
 	};
 

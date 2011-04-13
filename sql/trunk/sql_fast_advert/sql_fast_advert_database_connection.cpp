@@ -37,7 +37,7 @@ namespace sql_fast_advert
 				   soci::use("TRUE"),
 				   soci::use(1),
 				   soci::use(2),
-				   soci::use((int) hash["/root/"]);
+				   soci::use((int) hash["/"]);
 		}
 		
 		// Check the Database layout version
@@ -71,23 +71,13 @@ namespace sql_fast_advert
 		node db_node;
 		soci::session sql(*pool);
 		
-		if (path.length() == 0 | path == "/")
-		{
-			db_path = "/root/";
-		}
-		
-		else 
-		{
-			db_path = "/root" + path;
-		}	
-
 		sql << "SELECT id, name, dir, lft, rgt FROM " << DATABASE_NODE_TABLE << " WHERE hash = :hash", 
 		    soci::into(db_node.id),
 		    soci::into(db_node.name),
 			soci::into(db_node.dir),
 		    soci::into(db_node.lft),
 		    soci::into(db_node.rgt),
-		    soci::use((int) hash[db_path]); 
+		    soci::use((int) hash[path]); 
 				
 		return db_node;
 	}
@@ -95,7 +85,10 @@ namespace sql_fast_advert
 	node database_connection::insert_node(const node parent, const std::string node_name)
 	{
 		node db_node;
-		std::string node_path = get_path(parent) + node_name + "/";
+		std::string node_path = get_path(parent) + "/" + node_name;
+		
+		std::cout << "parent path : " << node_path << std::endl;
+		
 		int hash_value = (int) hash[node_path];
 		soci::session sql(*pool);
 		
@@ -124,13 +117,16 @@ namespace sql_fast_advert
 	{
 		const int BATCH_SIZE = 100;
 		std::vector<std::string> path_vector(BATCH_SIZE);		
-		std::string result = "/";
+		std::string result = "";
 		
 		soci::session sql(*pool);
 		
+		//
+		// Select all nodes except the root node 
+		//	
 		soci::statement statement = ( sql.prepare << 
 		"SELECT parent.name FROM nodes AS node, nodes AS parent "
-		"WHERE node.lft BETWEEN parent.lft AND parent.rgt "
+		"WHERE node.lft BETWEEN parent.lft AND parent.rgt and parent.id != 1"
 		"AND node.id = :id ORDER BY parent.lft", soci::into(path_vector), soci::use(db_node.id) );
 		
 		statement.execute();
@@ -138,8 +134,8 @@ namespace sql_fast_advert
 		while(statement.fetch())
 		{
 			for(std::vector<std::string>::iterator i = path_vector.begin(); i != path_vector.end(); i++)
-			{
-				result += (*i + "/"); 
+			{		
+				result += ("/" + *i); 
 			}
 			
 			path_vector.resize(BATCH_SIZE);
@@ -148,9 +144,8 @@ namespace sql_fast_advert
 		return result;
 	}
 	
-	std::vector<node> database_connection::get_child_nodes(const node parent)
+	void database_connection::get_child_nodes(std::vector<node> &ret, const node parent)
 	{
-		std::vector<node> result;
 		node tmp_node;
 		int depth = 0;
 		soci::session sql(*pool);
@@ -186,9 +181,7 @@ namespace sql_fast_advert
 		
 		while(statement.fetch())
 		{
-			result.push_back(tmp_node);
+			ret.push_back(tmp_node);
 		}
-		
-		return result;
 	}
 }
