@@ -38,6 +38,18 @@ namespace sql_fast_advert
 				   soci::use(1),
 				   soci::use(2),
 				   soci::use((int) hash["/"]);
+				
+			sql << "CREATE TABLE " << DATABASE_ATTRIBUTES_TABLE << " ("
+				   "node_id		integer			NOT NULL	,"
+				   "key			varchar(256)	NOT NULL	,"
+				   "value		varchar(256)	NOT NULL 	)";	
+				
+			sql << "CREATE TABLE " << DATABASE_VECTOR_ATTRIBUTES_TABLE << " ("
+			       "node_id		integer			NOT NULL	,"
+				   "key			varchar(256)	NOT NULL	,"
+				   "value		varchar(256)	NOT NULL	)";
+				
+			
 		}
 		
 		// Check the Database layout version
