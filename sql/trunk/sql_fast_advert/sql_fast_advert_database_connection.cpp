@@ -113,6 +113,15 @@ namespace sql_fast_advert
 		return db_node;
 	}
 	
+	void database_connection::remove_node(const node db_node)
+	{
+		soci::session sql(*pool);
+		
+		sql << "DELETE FROM nodes WHERE lft BETWEEN :lft AND :rgt", soci::use(db_node.lft), soci::use(db_node.rgt);
+		sql << "UPDATE nodes SET rgt = rgt - :width WHERE rgt > :rgt", soci::use(db_node.rgt - db_node.lft + 1), soci::use(db_node.rgt);
+		sql << "UPDATE nodes SET lft = lft - :width WHERE lft > :rgt", soci::use(db_node.rgt - db_node.lft + 1), soci::use(db_node.rgt);
+	}
+	
 	std::string database_connection::get_path(const node db_node)
 	{
 		const int BATCH_SIZE = 100;
@@ -182,6 +191,19 @@ namespace sql_fast_advert
 		while(statement.fetch())
 		{
 			ret.push_back(tmp_node);
+		}
+	}
+	
+	bool database_connection::node_is_leaf(const node db_node)
+	{
+		if ((db_node.rgt - db_node.lft) == 1)
+		{
+			return true;
+		}
+		
+		else
+		{
+			return false;
 		}
 	}
 }

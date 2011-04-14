@@ -57,12 +57,13 @@ namespace sql_fast_advert
 		
 		node insert_node(const node parent, const std::string node_name);
 		
-		//void remove_node(const node n);
+		void remove_node(const node db_node);
 		
 		std::string get_path(const node db_node);
 		
 		void get_child_nodes(std::vector<node> &ret, const node parent);
-
+		
+		static bool node_is_leaf(const node db_node);
 	};
 
 }

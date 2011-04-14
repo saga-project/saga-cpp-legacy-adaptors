@@ -562,9 +562,55 @@ namespace sql_fast_advert
                                            saga::url      entry, 
                                            int            flags)
   {
+	std::cout << "Remove" << std::endl;
+	std::cout << entry << std::endl;
 	
+	boost::filesystem::path path = normalize_boost_path(boost::filesystem::path(entry.get_path()));
+	node db_node = dbc->find_node(path.string());
 	
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+	//
+	// Check if entry exists 
+	//
+	
+	if (db_node.id == 0)
+	{
+		SAGA_ADAPTOR_THROW ("Directory dose not exist", saga::IncorrectURL);
+	}
+	
+	//
+	// Check if somebody tries to remove the root node
+	//
+	
+	if (db_node.id == 1)
+	{
+		SAGA_ADAPTOR_THROW ("Impossible to remove the root node", saga::IncorrectURL);
+	}
+	
+	//
+	// Recursive remove
+	//
+	
+	if (flags & saga::advert::Recursive)
+	{
+		dbc->remove_node(db_node);
+	}
+	
+	//
+	// Leaf remove
+	//
+	
+	else
+	{
+		if (database_connection::node_is_leaf(db_node))
+		{
+			dbc->remove_node(db_node);
+		}
+		
+		else
+		{
+			SAGA_ADAPTOR_THROW ("No recursive flag set", saga::BadParameter);
+		}
+	}
   }
 
 //
@@ -631,6 +677,10 @@ namespace sql_fast_advert
 			(idata->location_).set_url(path.string());
 		}
 	}
+	
+	std::cout << "Change Dir" << std::endl;
+	std::cout << idata->location_ << std::endl;
+	std::cout << dir_node.name << std::endl;
   }
 
 //
