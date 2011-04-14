@@ -47,9 +47,15 @@ namespace sql_fast_advert
 			sql << "CREATE TABLE " << DATABASE_VECTOR_ATTRIBUTES_TABLE << " ("
 			       "node_id		integer			NOT NULL	,"
 				   "key			varchar(256)	NOT NULL	,"
-				   "value		varchar(256)	NOT NULL	)";
-				
+				   "value_id	integer			NOT NULL	)";
 			
+			sql << "CREATE TABLE " << DATABASE_VECTOR_ATTRIBUTES_VALUE_TABLE << " ("	
+				   "id			integer			NOT NULL	,"
+				   "value		varchar(256) 	NOT NULL	)";	
+				
+			sql << "CREATE TABLE " << DATABASE_DATA_TABLE << " ("
+			       "node_id		integer			NOT NULL	'"
+				   "data		varchar			NOT NULL	)";
 		}
 		
 		// Check the Database layout version
