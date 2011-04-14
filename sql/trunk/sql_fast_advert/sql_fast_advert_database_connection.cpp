@@ -224,4 +224,75 @@ namespace sql_fast_advert
 			return false;
 		}
 	}
+	
+	bool database_connection::attribute_exists (const node db_node, const std::string key)
+	{
+		int count = 0;
+		
+		soci::session sql(*pool);
+		sql << "SELECT COUNT(*) FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key = ':key'", soci::use(db_node.id), soci::use(key), soci::into(count);
+		
+		if (count == 0)
+		{
+			return false;
+		}
+		
+		else 
+		{
+			return true;
+		}
+	}
+	
+	bool database_connection::attribute_is_vector (const node db_node, const std::string key)
+	{
+		int count = 0;
+		
+		soci::session sql(*pool);
+		sql << "SELECT COUNT(*) FROM " <<  DATABASE_VECTOR_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key = ':key'", soci::use(db_node.id), soci::use(key), soci::into(count);
+		
+		if (count == 0)
+		{
+			return false;
+		}
+		
+		else
+		{
+			return true;
+		}
+	}
+	
+	std::string database_connection::get_attribute (const node db_node, const std::string key)
+	{
+		
+	}
+	
+	void database_connection::set_attribute (const node db_node, const std::string key, const std::string value)
+	{
+		
+	}
+
+	void database_connection::get_vector_attribute (std::vector<std::string> &ret, const node db_node, const std::string key)
+	{
+		
+	}
+		
+	void database_connection::set_vector_attribute (const node db_node, const std::string key, std::vector<std::string> value)
+	{
+		
+	}
+
+	void database_connection::remove_attribute (const node db_node, const std::string key)
+	{
+		
+	}
+	
+	void database_connection::list_attributes (std::vector<std::string> &ret, const node db_node)
+	{
+		
+	}
+	
+	void database_connection::find_attributes (std::vector<std::string> &ret, const node db_node)
+	{
+		
+	}
 }

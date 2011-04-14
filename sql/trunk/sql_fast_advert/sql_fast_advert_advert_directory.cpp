@@ -248,46 +248,42 @@ namespace sql_fast_advert
 		}
 	}
 
-//  ////////////////////////////////////////////////////////////////////////
-//  //  SAGA CPI functions 
+//////////////////////////////////////////////////////////////////////////
+////  SAGA CPI functions 
+//////////////////////////////////////////////////////////////////////////
+
 //
-//  ////////////////////////////////////////////////////////////////////////
-//  // attribute functions
-//  void 
-//    advertdirectory_cpi_impl::sync_attribute_exists (bool        & ret, 
-//                                                     std::string   key)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
+//   attribute functions
 //
-//  void 
-//    advertdirectory_cpi_impl::sync_attribute_is_readonly (bool        & ret, 
-//                                                          std::string   key)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
-//
-//  void 
-//    advertdirectory_cpi_impl::sync_attribute_is_writable (bool        & ret, 
-//                                                          std::string   key)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
-//
-//  void 
-//    advertdirectory_cpi_impl::sync_attribute_is_vector (bool        & ret, 
-//                                                        std::string   key)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
-//
-//  void 
-//    advertdirectory_cpi_impl::sync_attribute_is_extended (bool        & ret, 
-//                                                          std::string   key)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
-//
+
+void advertdirectory_cpi_impl::sync_attribute_exists (bool &ret, std::string key)
+{
+	ret = dbc->attribute_exists(dir_node, key);
+}
+
+void advertdirectory_cpi_impl::sync_attribute_is_readonly (bool &ret, std::string key)
+{
+	instance_data idata(this);
+	ret = !(idata->mode_ & saga::advert::Read);
+}
+
+void advertdirectory_cpi_impl::sync_attribute_is_writable (bool &ret, std::string key)
+{
+	instance_data idata(this);
+	ret = (idata->mode_ & saga::advert::Write);
+}
+
+void advertdirectory_cpi_impl::sync_attribute_is_vector (bool &ret, std::string key)
+{
+	ret = dbc->attribute_is_vector(dir_node, key);
+}
+
+void advertdirectory_cpi_impl::sync_attribute_is_extended (bool &ret, std::string key)
+{
+	instance_data idata(this);
+	ret = (idata->mode_ & saga::advert::Write);
+}
+
 //  ////////////////////////////////////////////////////////////////////////
 //  void 
 //    advertdirectory_cpi_impl::sync_get_attribute (std::string & ret, 

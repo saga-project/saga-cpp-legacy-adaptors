@@ -51,19 +51,20 @@ namespace sql_fast_advert
                                 saga::ini::ini const            & adap_ini,
                                 TR1::shared_ptr <saga::adaptor>   adaptor);
 
-      // destructor of the advert adaptor 
-      ~advertdirectory_cpi_impl  (void);
+	// destructor of the advert adaptor
+	~advertdirectory_cpi_impl  (void);
+	
+	// attribute functions
+	void sync_attribute_exists (bool &ret, std::string key);
 
-//      // attribute functions
-//      void sync_attribute_exists      (bool                        & ret, 
-//                                       std::string                   key);
-//      void sync_attribute_is_readonly (bool                        & ret, 
-//                                       std::string                   key);
-//      void sync_attribute_is_writable (bool                        & ret, 
-//                                       std::string                   key);
-//      void sync_attribute_is_vector   (bool                        & ret, 
-//                                       std::string                   key);
-//      void sync_attribute_is_extended (bool                        & ret, 
+	void sync_attribute_is_readonly (bool &ret, std::string key);
+	
+	void sync_attribute_is_writable (bool &ret, std::string key);
+	
+	void sync_attribute_is_vector (bool &ret, std::string key);
+	
+	void sync_attribute_is_extended (bool &ret, std::string key);
+	
 //                                       std::string                   key);
 //      void sync_get_attribute         (std::string                 & ret, 
 //                                       std::string                   key);

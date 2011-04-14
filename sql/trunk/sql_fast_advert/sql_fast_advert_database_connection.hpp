@@ -68,6 +68,26 @@ namespace sql_fast_advert
 		void get_child_nodes(std::vector<node> &ret, const node parent);
 		
 		static bool node_is_leaf(const node db_node);
+		
+		// Attribute Operations
+		bool attribute_exists (const node db_node, const std::string key);
+		
+		bool attribute_is_vector (const node db_node, const std::string key);
+		
+		std::string get_attribute (const node db_node, const std::string key);
+		
+		void set_attribute (const node db_node, const std::string key, const std::string value);
+
+		void get_vector_attribute (std::vector<std::string> &ret, const node db_node, const std::string key);
+			
+		void set_vector_attribute (const node db_node, const std::string key, std::vector<std::string> value);
+
+		void remove_attribute (const node db_node, const std::string key);
+		
+		void list_attributes (std::vector<std::string> &ret, const node db_node);
+		
+		void find_attributes (std::vector<std::string> &ret, const node db_node);
+		 
 	};
 
 }
