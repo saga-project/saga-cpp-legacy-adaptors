@@ -6,8 +6,6 @@
 
 include ../config/make.cfg
 
-SAGA_MAKE_DEBUG=yes
-
 SAGA_SRC          = $(wildcard *.cpp)
 SAGA_OBJ          = $(SAGA_SRC:%.cpp=%.o)
 
