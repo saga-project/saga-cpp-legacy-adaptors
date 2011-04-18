@@ -69,10 +69,10 @@ namespace torque_job
 
       saga::url rm(data->rm_);
       std::string scheme(rm.get_scheme());
-      if (!scheme.empty() && scheme != "torque" && scheme != "any") {
+      if (!scheme.empty() && scheme != "torque" && scheme != "xt5torque") {
         SAGA_OSSTREAM strm;
         strm << "Could not initialize job service for [" << data->rm_ << "]. "
-             << "Only any:// and torque:// schemes are supported.";
+             << "Only any://, torque:// and xt5torque:// schemes are supported.";
         SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm),
                            saga::BadParameter);
       }
@@ -452,7 +452,11 @@ namespace torque_job
     saga::job::description& jd = data->jd_;
 
     std::string bin_pth(ad->get_binary_path());
-    cli::qsub qsub(localhost, bin_pth);
+
+    saga::url rm(data->rm_);
+    std::string url_scheme(rm.get_scheme());
+    
+    cli::qsub qsub(localhost, bin_pth, url_scheme);
 
     std::string pbsid;
     std::ostringstream os;

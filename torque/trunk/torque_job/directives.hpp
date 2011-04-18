@@ -80,6 +80,9 @@ namespace torque_job { namespace cli {
     virtual void set_nodes_and_ppn(std::string& number_of_nodes, 
                                    std::string& processors_per_node ) = 0;
     
+    // added: 18/April/11 by Ole Weidner
+    virtual void set_xt5_size(std::string& number_of_nodes) = 0;
+    
     //
     virtual void put(std::ostream& s) = 0;
   };
@@ -132,6 +135,11 @@ namespace torque_job { namespace cli {
       return true;
     }
 
+    // added: 18/April/11 by Ole Weidner
+    virtual bool check_xt5_size(std::string& number_of_nodes) const {
+      return true;
+    }
+
   };
 
   //////////////////////////////////////////////////////////////////////
@@ -142,7 +150,7 @@ namespace torque_job { namespace cli {
     VDESTRUCTOR(directives_builder);
     //
     virtual directives_ptr build(saga::job::description& jd,
-				 std::string localhost) = 0;
+				 std::string localhost, std::string url_scheme) = 0;
   };
 
   //////////////////////////////////////////////////////////////////////

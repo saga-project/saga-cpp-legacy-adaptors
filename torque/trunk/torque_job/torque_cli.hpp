@@ -116,10 +116,11 @@ namespace torque_job { namespace cli {
   //
   class qsub {
     std::string command;
+    std::string url_scheme;
     job_script_builder_ptr jsbuilder;
 
   public:
-    qsub(std::string localhost, std::string bin_pth);
+    qsub(std::string localhost, std::string bin_pth, std::string url_scheme);
     DESTRUCTOR(qsub);
     //
     bool execute(saga::job::description& jd,

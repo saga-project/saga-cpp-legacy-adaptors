@@ -53,7 +53,7 @@ namespace torque_job { namespace cli {
     //
     directives_ptr create();
     //
-    void set_directives(saga::job::description& jd, std::string localhost);
+    void set_directives(saga::job::description& jd, std::string localhost, std::string url_scheme);
 
   public:
     //
@@ -62,7 +62,7 @@ namespace torque_job { namespace cli {
     //
     directives_builder_impl(directives_checker_ptr checker);
     //
-    directives_ptr build(saga::job::description& jd, std::string localhost);
+    directives_ptr build(saga::job::description& jd, std::string localhost, std::string url_scheme);
   };
 
 }}

@@ -93,11 +93,13 @@ namespace torque_job { namespace cli {
   //
   class job_script_builder {
     std::string localhost;
+    std::string url_scheme;
     directives_builder_ptr dbl;
 
   public:
     //
-    job_script_builder(std::string localhost) : localhost(localhost)
+    job_script_builder(std::string localhost, std::string url_scheme) 
+        : localhost(localhost), url_scheme(url_scheme)
     {
       directives_checker_ptr
 	checker(new _directives_checker_impl());
@@ -120,7 +122,7 @@ namespace torque_job { namespace cli {
     }
 #endif
     //
-    job_script_ptr build(saga::job::description& jd);
+    job_script_ptr build(saga::job::description& jd, std::string url_scheme);
   };
 
 }}

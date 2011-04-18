@@ -60,6 +60,9 @@ namespace torque_job { namespace cli {
     void set_nodes_and_ppn(std::string& number_of_nodes, 
                            std::string& processors_per_node );
 
+    // added: 18/April/11 by Ole Weidner
+    void set_xt5_size(std::string& number_of_nodes);
+
     void put(std::ostream& s);
   };
 
@@ -99,6 +102,15 @@ namespace torque_job { namespace cli {
     _list.push_back(os.str());
   }
 
+  //////////////////////////////////////////////////////////////////////
+  // added: 18/April/11 by Ole Weidner
+  //
+  void directives_impl::set_xt5_size(std::string& number_of_nodes)
+  {
+    std::ostringstream os;
+    os << "-l size=" << number_of_nodes;
+    _list.push_back(os.str());
+  }
 
   //////////////////////////////////////////////////////////////////////
   //
@@ -270,18 +282,18 @@ namespace torque_job { namespace cli {
   //////////////////////////////////////////////////////////////////////
   //
   directives_ptr directives_builder_impl::build(saga::job::description& jd,
-						std::string localhost)
+						std::string localhost, std::string url_scheme)
   {
     directives_ptr d = create();
     w = d;
-    set_directives(jd, localhost);
+    set_directives(jd, localhost, url_scheme);
     return d;
   }
 
   //////////////////////////////////////////////////////////////////////
   //
   void directives_builder_impl::set_directives(saga::job::description& jd,
-					       std::string localhost)
+					       std::string localhost, std::string url_scheme)
   {
     staging_path_builder stgp_builder(localhost);
 
@@ -324,39 +336,80 @@ namespace torque_job { namespace cli {
     // attributes have to be used in conjunction, otherwise this will
     // produce an error.
     //
-    bool nop_exists = jd.attribute_exists(sja::description_number_of_processes);
-    bool pph_exists = jd.attribute_exists(sja::description_processes_per_host);
     
-    if(nop_exists && !pph_exists)
+    if(url_scheme == "xt5torque")
     {
-       SAGA_OSSTREAM strm;
-       strm << "Job description parse failed: "
-            << "The NumberOfProcesses attributed cannot be used " 
-            << " without the ProcessesPerHost attribute!";
-	   SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
-	                                 saga::BadParameter);
-	   throw;
+        SAGA_VERBOSE (SAGA_VERBOSE_LEVEL_DEBUG)
+        {
+            std::cout << "TORQUE adaptor is in Cray XT5 mode." << std::endl;
+        }
+        // Cray XT5 specific argument handling (see README for details)
+        bool nop_exists = jd.attribute_exists(sja::description_number_of_processes);
+        bool pph_exists = jd.attribute_exists(sja::description_processes_per_host);
+        
+        if(!nop_exists)
+        {
+            SAGA_OSSTREAM strm;
+            strm << "Job description parse failed: "
+                 << "You need to specify the 'number_of_processes' attribute in order to" 
+                 << "use the TORQUE adaptor on a Cray XT5!";
+            SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
+                                          saga::BadParameter);
+            throw;
+	     
+	    }
+	    
+	    if(pph_exists) 
+	    {
+            SAGA_VERBOSE (SAGA_VERBOSE_LEVEL_DEBUG)
+            {
+                std::cout << "The 'description_processes_per_host' is ignored in Cray XT5 mode." 
+                          << std::endl;
+            }
+	    }
+	    
+	    std::string nop = jd.get_attribute(sja::description_number_of_processes);
+        checker->check_xt5_size(nop);
+        p->set_xt5_size(nop);
     }
-    else if(!nop_exists && pph_exists)
+    else
     {
-       SAGA_OSSTREAM strm;
-       strm << "Job description parse failed: "
-            << "The ProcessesPerHost attributed cannot be used " 
-            << " without the NumberOfProcesses attribute!";
-	   SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
-	                                 saga::BadParameter);
-	   throw;    
+        // Regular (non-Cray XT5) argument handling
+        
+        bool nop_exists = jd.attribute_exists(sja::description_number_of_processes);
+        bool pph_exists = jd.attribute_exists(sja::description_processes_per_host);
+        
+        if(nop_exists && !pph_exists)
+        {
+           SAGA_OSSTREAM strm;
+           strm << "Job description parse failed: "
+                << "The NumberOfProcesses attributed cannot be used " 
+                << " without the ProcessesPerHost attribute!";
+           SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
+                                         saga::BadParameter);
+           throw;
+        }
+        else if(!nop_exists && pph_exists)
+        {
+           SAGA_OSSTREAM strm;
+           strm << "Job description parse failed: "
+                << "The ProcessesPerHost attributed cannot be used " 
+                << " without the NumberOfProcesses attribute!";
+           SAGA_ADAPTOR_THROW_NO_CONTEXT(SAGA_OSSTREAM_GETSTRING(strm),
+                                         saga::BadParameter);
+           throw;    
+        }
+        
+        if(nop_exists && pph_exists)
+        {
+          std::string nop = jd.get_attribute(sja::description_number_of_processes);
+          std::string pph = jd.get_attribute(sja::description_processes_per_host);
+          
+          checker->check_nodes_and_ppn(nop, pph);
+          p->set_nodes_and_ppn(nop, pph);
+        }
     }
     
-    if(nop_exists && pph_exists)
-    {
-      std::string nop = jd.get_attribute(sja::description_number_of_processes);
-      std::string pph = jd.get_attribute(sja::description_processes_per_host);
-      
-      checker->check_nodes_and_ppn(nop, pph);
-      p->set_nodes_and_ppn(nop, pph);
-    }
-
     // added: 11/April/11 by Ole Weidner
     //
     if (jd.attribute_exists(sja::description_job_contact)) 

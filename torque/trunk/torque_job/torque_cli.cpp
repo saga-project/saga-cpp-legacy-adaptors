@@ -38,7 +38,8 @@ namespace torque_job { namespace cli {
 
 //////////////////////////////////////////////////////////////////////
 //
-qsub::qsub(std::string localhost, std::string bin_pth)
+qsub::qsub(std::string localhost, std::string bin_pth, std::string url_scheme)
+: url_scheme(url_scheme)
 {
   if (!bin_pth.empty()) 
   {
@@ -48,14 +49,14 @@ qsub::qsub(std::string localhost, std::string bin_pth)
     SAGA_ADAPTOR_THROW_NO_CONTEXT("binary_path must be defined in .ini file.",
                                   saga::NoSuccess);
   }  
-  jsbuilder = job_script_builder_ptr(new job_script_builder(localhost)); 
+  jsbuilder = job_script_builder_ptr(new job_script_builder(localhost, url_scheme)); 
 }
 
   //
   bool qsub::execute(saga::job::description& jd,
 		     std::string& id, std::ostringstream& os)
   {
-    job_script_ptr script = jsbuilder->build(jd);
+    job_script_ptr script = jsbuilder->build(jd, url_scheme);
 
     bool ret_val;
     

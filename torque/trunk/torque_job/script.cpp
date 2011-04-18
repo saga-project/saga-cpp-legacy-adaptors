@@ -64,7 +64,7 @@ namespace torque_job { namespace cli {
 
   //////////////////////////////////////////////////////////////////////
   //
-  job_script_ptr job_script_builder::build(saga::job::description& jd)
+  job_script_ptr job_script_builder::build(saga::job::description& jd, std::string url_scheme)
   {
     std::string command = jd.get_attribute(sja::description_executable);
 
@@ -75,7 +75,7 @@ namespace torque_job { namespace cli {
 
     job_script_ptr j = job_script_ptr(new job_script());
 
-    j->set_directives(dbl->build(jd, localhost));
+    j->set_directives(dbl->build(jd, localhost, url_scheme));
     j->set_commandline(command, args);
 
     return j;
