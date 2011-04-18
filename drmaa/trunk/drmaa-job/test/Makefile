@@ -4,12 +4,7 @@
 #  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
-ifndef SAGA_LOCATION
-SAGA_LOCATION=/usr/local
-endif
-
-
--include make.cfg
+-include ../../config/make.cfg
 
 SAGA_SRC          = $(wildcard *.cpp)
 SAGA_OBJ          = $(SAGA_SRC:%.cpp=%.o)
