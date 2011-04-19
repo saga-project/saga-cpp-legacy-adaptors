@@ -234,9 +234,11 @@ namespace torque_job { namespace cli {
   //
   void directives_impl::set_job_contact(std::string& address)
   {
-    std::ostringstream os;
-    os << "-M " << address;
-    _list.push_back(os.str());
+    if(!address.empty()) {
+      std::ostringstream os;
+      os << "-M " << address;
+      _list.push_back(os.str());
+    }
   }
 
   //////////////////////////////////////////////////////////////////////
