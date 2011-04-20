@@ -1,5 +1,5 @@
 
-PACKAGE: saga-adaptors-pbspro
+PACKAGE: saga-adaptors-pbs
 VERSION: 1.1
 
 DEPENDENCIES:
@@ -12,6 +12,9 @@ DIRS:
 
 FILES:
   PACKAGE
+  LICENSE
+  CHANGES
+  INSTALL
   Makefile
   configure
   configure.in
