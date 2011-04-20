@@ -1,0 +1,11 @@
+                         SAGA TORQUE Job Adaptor
+         <http://saga.cct.lsu.edu/software/cpp/adaptors/torque>
+         
+                           - Release Changelog -
+                           
+
+  Changes with SAGA TORQUE Job Adaptor Version 1.0             20. April 2011
+  ---------------------------------------------------------------------------
+
+  o Initital release
+  o Implemented Cray XT5 specific script options (see README)
