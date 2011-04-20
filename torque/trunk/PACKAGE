@@ -1,6 +1,6 @@
 
 PACKAGE: saga-adaptors-torque
-VERSION: 1.0.0
+VERSION: 1.0
 
 DEPENDENCIES:
   saga-core
@@ -12,6 +12,9 @@ DIRS:
 
 FILES:
   PACKAGE
+  INSTALL
+  LICENSE
+  README
   Makefile
   configure
   configure.in
