@@ -11,13 +11,10 @@
 // adaptor includes
 #include "sql_fast_advert_advert_directory.hpp"
 
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/split.hpp>
-
 ///////////////////////////////////////////////////////////////////////////////
 namespace sql_fast_advert
-{
-	boost::filesystem::path normalize_boost_path(const boost::filesystem::path path)
+{	
+	static boost::filesystem::path normalize_boost_path(const boost::filesystem::path path)
 	{
 		boost::filesystem::path normalized_path;
 		
@@ -46,7 +43,6 @@ namespace sql_fast_advert
 		
 		return normalized_path;
 	}
-
 	
   ////////////////////////////////////////////////////////////////////////
   //  constructor
@@ -56,7 +52,7 @@ namespace sql_fast_advert
                                                       saga::ini::ini const            & adap_ini,
                                                       TR1::shared_ptr <saga::adaptor>   adaptor)
     : saga::adaptors::v1_0::advert_directory_cpi <advertdirectory_cpi_impl> (p, info, adaptor, cpi::Noflags) 
-  {
+{
   	instance_data idata(this);
 	adaptor_data  adata(this);
 
@@ -171,7 +167,7 @@ namespace sql_fast_advert
 	// 
 	
 	dir_node = dbc->find_node(path.string());
-	
+
 	// 
 	// If there is no node we work through the flags 
 	//
@@ -217,9 +213,16 @@ namespace sql_fast_advert
 		}
 	
 	}
-  	
-    //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-  }
+	
+	// 
+	// The node must be a directory
+	//
+
+	if (dir_node.dir == "f")
+	{
+		SAGA_ADAPTOR_THROW ("This node is not a directory", saga::IncorrectURL);
+	}
+}
 
 
   ////////////////////////////////////////////////////////////////////////
@@ -228,11 +231,20 @@ namespace sql_fast_advert
   {
   }
 
+  ////////////////////////////////////////////////////////////////////////
+  //  Create Parents
+
 	void advertdirectory_cpi_impl::create_parents(boost::filesystem::path path)
 	{
 		node parent_node = dbc->find_node((path.parent_path()).string());
 		
-		std::cout << "call create parents : " << path << std::endl;
+		// 
+		// The parent node must be a Directory
+		//
+		if (parent_node.dir == "f")
+		{
+			SAGA_ADAPTOR_THROW ((parent_node.name + " is not a directoy "), saga::IncorrectURL);
+		}
 		
 		if (parent_node.id == 0)
 		{
@@ -284,40 +296,34 @@ void advertdirectory_cpi_impl::sync_attribute_is_extended (bool &ret, std::strin
 	ret = (idata->mode_ & saga::advert::Write);
 }
 
-//  ////////////////////////////////////////////////////////////////////////
-//  void 
-//    advertdirectory_cpi_impl::sync_get_attribute (std::string & ret, 
-//                                                  std::string   key)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
 //
-//  ////////////////////////////////////////////////////////////////////////
-//  void 
-//    advertdirectory_cpi_impl::sync_get_vector_attribute (std::vector <std::string> & ret, 
-//                                                         std::string                 key)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
-//
-//  ////////////////////////////////////////////////////////////////////////
-//  void 
-//    advertdirectory_cpi_impl::sync_set_attribute (saga::impl::void_t & ret, 
-//                                                  std::string    key, 
-//                                                  std::string    val)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
-//
-//  ////////////////////////////////////////////////////////////////////////
-//  void 
-//    advertdirectory_cpi_impl::sync_set_vector_attribute (saga::impl::void_t              & ret, 
-//                                                         std::string                 key, 
-//                                                         std::vector <std::string>   val)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
-//
+// attribute getter, setter 
+// 
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+void advertdirectory_cpi_impl::sync_get_attribute (std::string &ret, std::string   key)
+{
+	ret = dbc->get_attribute(dir_node, key);
+}
+
+void advertdirectory_cpi_impl::sync_set_attribute (saga::impl::void_t &ret, std::string key, std::string val)
+{
+	dbc->set_attribute(dir_node, key, val);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// void advertdirectory_cpi_impl::sync_get_vector_attribute (std::vector <std::string> &ret, std::string key)
+//{
+// 	SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+//}
+
+//void advertdirectory_cpi_impl::sync_set_vector_attribute (saga::impl::void_t &ret, std::string key, std::vector <std::string> val)
+// {
+//   SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+// }
+
 //  ////////////////////////////////////////////////////////////////////////
 //  void 
 //    advertdirectory_cpi_impl::sync_remove_attribute (saga::impl::void_t & ret, 

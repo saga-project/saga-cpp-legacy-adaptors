@@ -59,7 +59,7 @@ namespace sql_fast_advert
 		// MPTT Operations
 		node find_node(const std::string path);
 		
-		node insert_node(const node parent, const std::string node_name);
+		node insert_node(const node parent, const std::string node_name, const bool is_dir = true);
 		
 		void remove_node(const node db_node);
 		

@@ -8,63 +8,72 @@
 #ifndef ADAPTORS_SQL_FAST_ADVERT_ADVERT_HPP
 #define ADAPTORS_SQL_FAST_ADVERT_ADVERT_HPP
 
+#define LOG std::cout << "File : " << __FILE__ << " Line : " << __LINE__ << " Function : " << __FUNCTION__ << std::endl;
+
 // saga includes
 #include <saga/saga.hpp>
 
 // saga adaptor includes
 #include <saga/saga/adaptors/adaptor.hpp>
+#include <saga/saga/adaptors/packages/advert_cpi_instance_data.hpp>
 
 // advert package includes
 #include <saga/impl/packages/advert/advert_cpi.hpp>
 
+// boost includes
+#include <boost/filesystem.hpp>
+
+// Database Connection includes
+#include "sql_fast_advert_adaptor.hpp"
+#include "sql_fast_advert_database_connection.hpp"
 
 ////////////////////////////////////////////////////////////////////////
 namespace sql_fast_advert
 {
+	// Adaptor data
+	typedef saga::adaptors::adaptor_data<sql_fast_advert::adaptor> adaptor_data;
+
   //////////////////////////////////////////////////////////////////////
   //  This adaptor implements the functionality of the Saga API "advert".
   //  It defines the functions declared in its base class, advert_file_cpi.
-  class advert_cpi_impl 
-    : public saga::adaptors::v1_0::advert_cpi <advert_cpi_impl>
-  {
+	class advert_cpi_impl : public saga::adaptors::v1_0::advert_cpi <advert_cpi_impl>
+	{
     private:
-      typedef saga::adaptors::v1_0::advert_cpi <advert_cpi_impl> base_cpi;
+    	typedef saga::adaptors::v1_0::advert_cpi <advert_cpi_impl> base_cpi;
 
     public:    
-      // constructor of the advert adaptor 
-      advert_cpi_impl (proxy                           * p, 
-                       cpi_info const                  & info, 
-                       saga::ini::ini const            & glob_ini, 
-                       saga::ini::ini const            & adap_ini,
-                       TR1::shared_ptr <saga::adaptor>   adaptor);
+		// constructor of the advert adaptor 
+      	advert_cpi_impl				(
+										proxy						      	*p, 
+                       					cpi_info const                  	&info, 
+                       					saga::ini::ini const            	&glob_ini, 
+                       					saga::ini::ini const            	&adap_ini,
+                       					TR1::shared_ptr <saga::adaptor>		adaptor	
+									);
 
       // destructor of the advert adaptor 
-      ~advert_cpi_impl (void);
+		~advert_cpi_impl			(void);
 
-//      //////////////////////
-//      // attribute functions
-//      void sync_attribute_exists      (bool & ret, std::string key);
-//      void sync_attribute_is_readonly (bool & ret, std::string key);
-//      void sync_attribute_is_writable (bool & ret, std::string key);
-//      void sync_attribute_is_vector   (bool & ret, std::string key);
-//      void sync_attribute_is_extended (bool & ret, std::string key);
-//
-//      void sync_get_attribute         (std::string               & ret,
-//                                       std::string                 key);
-//      void sync_set_attribute         (saga::impl::void_t        & ret, 
-//                                       std::string                 key, 
-//                                       std::string                 val);
-//      void sync_get_vector_attribute  (std::vector <std::string> & ret, 
-//                                       std::string                 key);
-//      void sync_set_vector_attribute  (saga::impl::void_t        & ret, 
-//                                       std::string                 key, 
-//                                       std::vector <std::string>   ret);
-//      void sync_remove_attribute      (saga::impl::void_t        & ret,
-//                                       std::string                 key);
-//      void sync_list_attributes       (std::vector <std::string> & ret);
-//      void sync_find_attributes       (std::vector <std::string> & ret, 
-//                                       std::string                 pattern);
-//
+	///////////////////////////////////////////////////////////////////////////
+	// attribute functions
+	///////////////////////////////////////////////////////////////////////////
+		
+		void sync_attribute_exists      (bool &ret, std::string key);
+      	void sync_attribute_is_readonly (bool &ret, std::string key);
+      	void sync_attribute_is_writable (bool &ret, std::string key);
+		void sync_attribute_is_vector   (bool &ret, std::string key);
+      	void sync_attribute_is_extended (bool &ret, std::string key);
+
+      	void sync_get_attribute 		(std::string &ret, std::string key);		
+		void sync_set_attribute 		(saga::impl::void_t &ret, std::string key, std::string val);
+
+     	void sync_get_vector_attribute 	(std::vector <std::string> 	&ret, std::string key);										
+		void sync_set_vector_attribute  (saga::impl::void_t	&ret, std::string key, std::vector <std::string> ret);
+										
+      	void sync_remove_attribute     	(saga::impl::void_t	&ret, std::string key);
+      	void sync_list_attributes 		(std::vector <std::string> 	&ret);	
+      	void sync_find_attributes      	(std::vector <std::string> 	&ret, std::string pattern);
+
 //      ////////////////////////////
 //      // namespace_entry functions
 //      void sync_get_url   (saga::url    & ret);
@@ -131,6 +140,14 @@ namespace sql_fast_advert
 //      saga::task async_retrieve_object       (saga::session  s);
 //      saga::task async_store_string          (std::string    str);
 //      saga::task async_retrieve_string       (void);
+
+private:
+	database_connection *dbc;
+	std::string path_string;
+	node dir_node;
+	std::vector<node> node_vector;
+
+	void create_parents(boost::filesystem::path path);
 
   }; // class advert_cpi_impl
 

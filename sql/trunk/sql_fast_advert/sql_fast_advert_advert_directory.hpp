@@ -33,9 +33,6 @@ namespace sql_fast_advert
 	// Adaptor data
 	typedef saga::adaptors::adaptor_data<sql_fast_advert::adaptor> adaptor_data;
 	
-	// Normalize boost::filesystem::path
-	static boost::filesystem::path normalize_boost_path(const boost::filesystem::path path);
-
 	
   ////////////////////////////////////////////////////////////////////
   //  This adaptor implements the functionality of the Saga API "advert".
@@ -65,12 +62,10 @@ namespace sql_fast_advert
 	
 	void sync_attribute_is_extended (bool &ret, std::string key);
 	
-//                                       std::string                   key);
-//      void sync_get_attribute         (std::string                 & ret, 
-//                                       std::string                   key);
-//      void sync_set_attribute         (saga::impl::void_t          & ret, 
-//                                       std::string                   key, 
-//                                       std::string                   val);
+	void sync_get_attribute (std::string &ret, std::string key);
+	
+	void sync_set_attribute (saga::impl::void_t &ret, std::string key, std::string val);
+	
 //      void sync_get_vector_attribute  (std::vector <std::string>   & ret, 
 //                                       std::string                   key);
 //      void sync_set_vector_attribute  (saga::impl::void_t          & ret,
