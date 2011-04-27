@@ -9,6 +9,8 @@ namespace sql_fast_advert
 		std::string connectString = "dbname=fast_advert";
 		connectString += " host=" + url.get_host();
 		connectString += " port=" + url.get_port();
+		connectString += " user=SAGA";
+		connectString += " password=SAGA_client";
 		
 		// Try to connect 
 		soci::session sql(soci::postgresql, connectString);
@@ -133,10 +135,19 @@ namespace sql_fast_advert
 	void database_connection::remove_node(const node db_node)
 	{
 		soci::session sql(*pool);
+	
+		//
+		// Remove the node
+		// 
+		sql << "DELETE FROM " << DATABASE_NODE_TABLE << " WHERE lft BETWEEN :lft AND :rgt", soci::use(db_node.lft), soci::use(db_node.rgt);
+		sql << "UPDATE " << DATABASE_NODE_TABLE << " SET rgt = rgt - :width WHERE rgt > :rgt", soci::use(db_node.rgt - db_node.lft + 1), soci::use(db_node.rgt);
+		sql << "UPDATE " << DATABASE_NODE_TABLE << " SET lft = lft - :width WHERE lft > :rgt", soci::use(db_node.rgt - db_node.lft + 1), soci::use(db_node.rgt);
 		
-		sql << "DELETE FROM nodes WHERE lft BETWEEN :lft AND :rgt", soci::use(db_node.lft), soci::use(db_node.rgt);
-		sql << "UPDATE nodes SET rgt = rgt - :width WHERE rgt > :rgt", soci::use(db_node.rgt - db_node.lft + 1), soci::use(db_node.rgt);
-		sql << "UPDATE nodes SET lft = lft - :width WHERE lft > :rgt", soci::use(db_node.rgt - db_node.lft + 1), soci::use(db_node.rgt);
+		// 
+		// Delete all attributes for this node
+		// 
+		sql << "DELETE FROM " << DATABASE_ATTRIBUTES_TABLE 			<< " WHERE node_id = :id", soci::use(db_node.id);
+		sql << "DELETE FROM " << DATABASE_VECTOR_ATTRIBUTES_TABLE 	<< " WHERE node_id = :id", soci::use(db_node.id);
 	}
 	
 	std::string database_connection::get_path(const node db_node)
@@ -266,7 +277,7 @@ namespace sql_fast_advert
 		sql << "INSERT INTO " << DATABASE_ATTRIBUTES_TABLE << " VALUES (:node_id, :key, :value)", soci::use(db_node.id), soci::use(key), soci::use(value);
 	}
 
-	void database_connection::get_vector_attribute (std::vector<std::string> &ret, const node db_node, const std::string key)
+	void database_connection::get_vector_attribute ( const node db_node, std::vector<std::string> &ret, const std::string key)
 	{
 		int value_id = 0;
 		int batch_size = 0;
@@ -304,13 +315,35 @@ namespace sql_fast_advert
 
 	void database_connection::remove_attribute (const node db_node, const std::string key)
 	{
-		
+		soci::session sql(*pool);
+		sql << "DELETE FROM " << DATABASE_ATTRIBUTES_TABLE 			<< " WHERE node_id = :id AND key = ':key'", soci::use(db_node.id), soci::use(key);
+		sql << "DELETE FROM " << DATABASE_VECTOR_ATTRIBUTES_TABLE 	<< " WHERE node_id = :id AND key = ':key'", soci::use(db_node.id), soci::use(key);
 	}
 	
 	void database_connection::list_attributes (std::vector<std::string> &ret, const node db_node)
 	{
+		const int BATCH_SIZE = 50;
+		std::vector<std::string> batch(BATCH_SIZE);
+		
+		soci::session sql(*pool);
+		soci::statement statement = (
+			sql.prepare << "SELECT key FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id UNION"
+						<< "SELECT key FROM " << DATABASE_VECTOR_ATTRIBUTES_TABLE << "WHERE node_id = :id", soci::use(db_node.id), soci::into(batch));
+		
+		statement.execute();
+		
+		while(statement.fetch())
+		{
+			for (std::vector<std::string>::iterator i = batch.begin(); i != batch.end(); i++)
+			{
+				ret.push_back(*i);
+			}
+			
+			batch.resize(BATCH_SIZE);
+		}
 		
 	}
+	
 	
 	void database_connection::find_attributes (std::vector<std::string> &ret, const node db_node)
 	{

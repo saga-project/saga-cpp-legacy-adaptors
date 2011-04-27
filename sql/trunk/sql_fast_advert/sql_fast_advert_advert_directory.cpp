@@ -268,33 +268,33 @@ namespace sql_fast_advert
 //   attribute functions
 //
 
-void advertdirectory_cpi_impl::sync_attribute_exists (bool &ret, std::string key)
-{
-	ret = dbc->attribute_exists(dir_node, key);
-}
+	void advertdirectory_cpi_impl::sync_attribute_exists (bool &ret, std::string key)
+	{
+		ret = dbc->attribute_exists(dir_node, key);
+	}
 
-void advertdirectory_cpi_impl::sync_attribute_is_readonly (bool &ret, std::string key)
-{
-	instance_data idata(this);
-	ret = !(idata->mode_ & saga::advert::Read);
-}
+	void advertdirectory_cpi_impl::sync_attribute_is_readonly (bool &ret, std::string key)
+	{
+		instance_data idata(this);
+		ret = !(idata->mode_ & saga::advert::Read);
+	}
 
-void advertdirectory_cpi_impl::sync_attribute_is_writable (bool &ret, std::string key)
-{
-	instance_data idata(this);
-	ret = (idata->mode_ & saga::advert::Write);
-}
+	void advertdirectory_cpi_impl::sync_attribute_is_writable (bool &ret, std::string key)
+	{
+		instance_data idata(this);
+		ret = (idata->mode_ & saga::advert::Write);
+	}
 
-void advertdirectory_cpi_impl::sync_attribute_is_vector (bool &ret, std::string key)
-{
-	ret = dbc->attribute_is_vector(dir_node, key);
-}
+	void advertdirectory_cpi_impl::sync_attribute_is_vector (bool &ret, std::string key)
+	{
+		ret = dbc->attribute_is_vector(dir_node, key);
+	}
 
-void advertdirectory_cpi_impl::sync_attribute_is_extended (bool &ret, std::string key)
-{
-	instance_data idata(this);
-	ret = (idata->mode_ & saga::advert::Write);
-}
+	void advertdirectory_cpi_impl::sync_attribute_is_extended (bool &ret, std::string key)
+	{
+		instance_data idata(this);
+		ret = (idata->mode_ & saga::advert::Write);
+	}
 
 //
 // attribute getter, setter 
@@ -302,51 +302,46 @@ void advertdirectory_cpi_impl::sync_attribute_is_extended (bool &ret, std::strin
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-void advertdirectory_cpi_impl::sync_get_attribute (std::string &ret, std::string   key)
-{
-	ret = dbc->get_attribute(dir_node, key);
-}
+	void advertdirectory_cpi_impl::sync_get_attribute (std::string &ret, std::string   key)
+	{
+		ret = dbc->get_attribute(dir_node, key);
+	}
 
-void advertdirectory_cpi_impl::sync_set_attribute (saga::impl::void_t &ret, std::string key, std::string val)
-{
-	dbc->set_attribute(dir_node, key, val);
-}
+	void advertdirectory_cpi_impl::sync_set_attribute (saga::impl::void_t &ret, std::string key, std::string val)
+	{
+		dbc->set_attribute(dir_node, key, val);
+	}
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// void advertdirectory_cpi_impl::sync_get_vector_attribute (std::vector <std::string> &ret, std::string key)
-//{
-// 	SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//}
+	void advertdirectory_cpi_impl::sync_get_vector_attribute (std::vector <std::string> &ret, std::string key)
+	{
+		dbc->get_vector_attribute(dir_node, ret, key);
+	}
 
-//void advertdirectory_cpi_impl::sync_set_vector_attribute (saga::impl::void_t &ret, std::string key, std::vector <std::string> val)
-// {
-//   SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-// }
+	void advertdirectory_cpi_impl::sync_set_vector_attribute (saga::impl::void_t &ret, std::string key, std::vector <std::string> val)
+ 	{
+		dbc->set_vector_attribute(dir_node, key, val);
+	}
 
-//  ////////////////////////////////////////////////////////////////////////
-//  void 
-//    advertdirectory_cpi_impl::sync_remove_attribute (saga::impl::void_t & ret, 
-//                                                     std::string    key)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
-//
-//  ////////////////////////////////////////////////////////////////////////
-//  void 
-//    advertdirectory_cpi_impl::sync_list_attributes (std::vector <std::string> & ret)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
-//
-//  ////////////////////////////////////////////////////////////////////////
-//  void 
-//    advertdirectory_cpi_impl::sync_find_attributes (std::vector <std::string> & ret, 
-//                                                    std::string                 pattern)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
-//
+////////////////////////////////////////////////////////////////////////
+  	void advertdirectory_cpi_impl::sync_remove_attribute (saga::impl::void_t &ret, std::string key)
+  	{
+		dbc->remove_attribute(dir_node, key);
+  	}
+
+////////////////////////////////////////////////////////////////////////
+  	void advertdirectory_cpi_impl::sync_list_attributes (std::vector <std::string> &ret)
+  	{
+		dbc->list_attributes(ret, dir_node);
+  	}
+
+////////////////////////////////////////////////////////////////////////
+	void advertdirectory_cpi_impl::sync_find_attributes (std::vector <std::string> &ret, std::string pattern)
+  	{
+    	SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+  	}
+
 //  ////////////////////////////////////////////////////////////////////////
 //  // namespace_entry functions
 //  void 

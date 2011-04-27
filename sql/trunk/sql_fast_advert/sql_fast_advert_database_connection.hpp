@@ -78,7 +78,7 @@ namespace sql_fast_advert
 		
 		void set_attribute (const node db_node, const std::string key, const std::string value);
 
-		void get_vector_attribute (std::vector<std::string> &ret, const node db_node, const std::string key);
+		void get_vector_attribute (const node db_node, std::vector<std::string> &ret, const std::string key);
 			
 		void set_vector_attribute (const node db_node, const std::string key, std::vector<std::string> value);
 

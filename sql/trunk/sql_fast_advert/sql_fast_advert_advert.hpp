@@ -74,22 +74,24 @@ namespace sql_fast_advert
       	void sync_list_attributes 		(std::vector <std::string> 	&ret);	
       	void sync_find_attributes      	(std::vector <std::string> 	&ret, std::string pattern);
 
-//      ////////////////////////////
-//      // namespace_entry functions
-//      void sync_get_url   (saga::url    & ret);
-//      void sync_get_cwd   (saga::url    & ret);
-//      void sync_get_name  (saga::url    & ret);
-//
-//      void sync_read_link (saga::url    & ret);
-//      void sync_is_dir    (bool         & ret);
-//      void sync_is_entry  (bool         & ret);
-//      void sync_is_link   (bool         & ret);
-//      void sync_copy      (saga::impl::void_t & ret, saga::url target, int flags);
-//      void sync_link      (saga::impl::void_t & ret, saga::url target, int flags);
-//      void sync_move      (saga::impl::void_t & ret, saga::url target, int flags);
-//      void sync_remove    (saga::impl::void_t & ret, int       flags);    
-//      void sync_close     (saga::impl::void_t & ret, double    timeout);
-//
+   ///////////////////////////////////////////////////////////////////////////
+   // namespace_entry functions
+  ///////////////////////////////////////////////////////////////////////////
+
+    	void sync_get_url   (saga::url    & ret);
+      	void sync_get_cwd   (saga::url    & ret);
+      	void sync_get_name  (saga::url    & ret);
+
+      	void sync_read_link (saga::url    & ret);
+      	void sync_is_dir    (bool         & ret);
+      	void sync_is_entry  (bool         & ret);
+      	void sync_is_link   (bool         & ret);
+      	void sync_copy      (saga::impl::void_t & ret, saga::url target, int flags);
+      	void sync_link      (saga::impl::void_t & ret, saga::url target, int flags);
+		void sync_move      (saga::impl::void_t & ret, saga::url target, int flags);
+      	void sync_remove    (saga::impl::void_t & ret, int       flags);    
+      	void sync_close     (saga::impl::void_t & ret, double    timeout);
+
 //      // advert functions
 //      void sync_store_object    (saga::impl::void_t & ret, saga::object  obj);
 //      void sync_retrieve_object (saga::object       & ret, saga::session s);
