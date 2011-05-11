@@ -14,6 +14,7 @@
 
 // Boost Includes
 #include <boost/optional.hpp>
+#include <boost/lexical_cast.hpp>
 
 // Jenkins Hash
 #include "jenkins_hash_new.hpp"

@@ -83,62 +83,62 @@ namespace sql_fast_advert
 
   	if (idata->mode_ & saga::advert::Unknown)
 	{
-		std::cout << "Unkown" << std::endl;
+		//std::cout << "Unkown" << std::endl;
 	}
 	
 	if (idata->mode_ & saga::advert::None)
 	{
-		std::cout << "None" << std::endl;
+		//std::cout << "None" << std::endl;
 	}
 	
 	if (idata->mode_ & saga::advert::Overwrite)
 	{
-		std::cout << "Overwrite" << std::endl;
+		//std::cout << "Overwrite" << std::endl;
 	}
 	
 	if (idata->mode_ & saga::advert::Recursive)
 	{
-		std::cout << "Recursive" << std::endl;
+		//std::cout << "Recursive" << std::endl;
 	}
 	
 	if (idata->mode_ & saga::advert::Dereference)
 	{
-		std::cout << "Dereference" << std::endl;
+		//std::cout << "Dereference" << std::endl;
 	}
 	
 	if (idata->mode_ & saga::advert::Create)
 	{
-		std::cout << "Create" << std::endl;
+		//std::cout << "Create" << std::endl;
 	}
 	
 	if (idata->mode_ & saga::advert::Exclusive)
 	{
-		std::cout << "Exclusive" << std::endl;
+		//std::cout << "Exclusive" << std::endl;
 	}
 	
 	if (idata->mode_ & saga::advert::Lock)
 	{
-		std::cout << "Lock" << std::endl;
+		//std::cout << "Lock" << std::endl;
 	}
 	
 	if (idata->mode_ & saga::advert::CreateParents)
 	{
-		std::cout << "CreateParents" << std::endl;
+		//std::cout << "CreateParents" << std::endl;
 	}
 	
 	if (idata->mode_ & saga::advert::Read)
 	{
-		std::cout << "Read" << std::endl;
+		//std::cout << "Read" << std::endl;
 	}
 	
 	if (idata->mode_ & saga::advert::Write)
 	{
-		std::cout << "Write" << std::endl;
+		//std::cout << "Write" << std::endl;
 	}
 	
 	if (idata->mode_ & saga::advert::ReadWrite)
 	{
-		std::cout << "ReadWrite" << std::endl;
+		//std::cout << "ReadWrite" << std::endl;
 	}
 	
   	//
@@ -271,9 +271,11 @@ namespace sql_fast_advert
 
   	////////////////////////////////////////////////////////////////////////
   	//  SAGA CPI functions 
-
+	////////////////////////////////////////////////////////////////////////
+	
 	////////////////////////////////////////////////////////////////////////
  	// attribute functions
+	////////////////////////////////////////////////////////////////////////
 
 	void advert_cpi_impl::sync_attribute_exists (bool &ret, std::string key)
 	{
@@ -347,9 +349,10 @@ namespace sql_fast_advert
     	SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   	}
 
-////////////////////////////////////////////////////////////////////////
-// namespace_entry functions
-
+	////////////////////////////////////////////////////////////////////////
+	// namespace_entry functions
+	////////////////////////////////////////////////////////////////////////
+	
 	void advert_cpi_impl::sync_get_url (saga::url & url)
 	{
 		instance_data idata(this);

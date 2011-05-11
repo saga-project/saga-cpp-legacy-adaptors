@@ -8,7 +8,7 @@ namespace sql_fast_advert
 	{
 		std::string connectString = "dbname=fast_advert";
 		connectString += " host=" + url.get_host();
-		connectString += " port=" + url.get_port();
+		connectString += " port=" + boost::lexical_cast<std::string>(url.get_port());
 		connectString += " user=SAGA";
 		connectString += " password=SAGA_client";
 		
@@ -129,25 +129,92 @@ namespace sql_fast_advert
 		    soci::into(db_node.rgt),
 		    soci::use(hash_value);
 		
+		std::cout << "insert node" << std::endl;
+		
 		return db_node;
 	}
 	
 	void database_connection::remove_node(const node db_node)
 	{
-		soci::session sql(*pool);
-	
 		//
-		// Remove the node
+		// Batch Size for vector operations
+		//
+		const int BATCH_SIZE = 50;
+		
+		soci::session sql(*pool);
+		sql.begin();
+		
+		//
+		// Remove the node and its childs
 		// 
-		sql << "DELETE FROM " << DATABASE_NODE_TABLE << " WHERE lft BETWEEN :lft AND :rgt", soci::use(db_node.lft), soci::use(db_node.rgt);
+		
+		std::vector<int> node_id_batch(BATCH_SIZE);
+		
+		soci::statement statement = 
+		(
+			sql.prepare << "DELETE FROM " << DATABASE_NODE_TABLE << " WHERE lft BETWEEN :lft AND :rgt RETURNING id", soci::use(db_node.lft), soci::use(db_node.rgt), soci::into(node_id_batch)	
+		);
+		
+		statement.execute();
+				
+		while(statement.fetch())
+		{
+			for(std::vector<int>::iterator i = node_id_batch.begin(); i != node_id_batch.end(); i++)
+			{
+				// =====================
+				// = remove attributes =
+				// =====================
+				
+				sql << "DELETE FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id", soci::use(*i);
+				
+				// ============================
+				// = remove vector attributes =
+				// ============================
+				
+				std::vector<int> value_id_batch(BATCH_SIZE);
+				
+				soci::statement delete_vector =
+				(
+					sql.prepare << "DELETE FROM " << DATABASE_VECTOR_ATTRIBUTES_TABLE << " WHERE node_id = :id RETURNING value_id", soci::use(*i), soci::into(value_id_batch)
+				);
+				
+				delete_vector.execute();
+				
+				while(delete_vector.fetch())
+				{
+					for(std::vector<int>::iterator j = value_id_batch.begin(); j != value_id_batch.end(); j++)
+					{
+						sql << "DELETE FROM " << DATABASE_VECTOR_ATTRIBUTES_VALUE_TABLE << " WHERE id = :id", soci::use(*j);
+					}
+					
+					// ====================
+					// = resize the batch =
+					// ====================
+					value_id_batch.resize(BATCH_SIZE);
+				}
+				
+				// ========================
+				// = remove data for node =
+				// ========================
+				
+				sql << "DELETE FROM " << DATABASE_DATA_TABLE << " WHERE node_id = :id", soci::use(*i);
+				
+				
+				// ========================
+				// = resize the the batch =
+				// ========================
+				node_id_batch.resize(BATCH_SIZE);
+			}
+		}
+		
+		
+		// ==========================
+		// = Update the MPTT values =
+		// ==========================
 		sql << "UPDATE " << DATABASE_NODE_TABLE << " SET rgt = rgt - :width WHERE rgt > :rgt", soci::use(db_node.rgt - db_node.lft + 1), soci::use(db_node.rgt);
 		sql << "UPDATE " << DATABASE_NODE_TABLE << " SET lft = lft - :width WHERE lft > :rgt", soci::use(db_node.rgt - db_node.lft + 1), soci::use(db_node.rgt);
-		
-		// 
-		// Delete all attributes for this node
-		// 
-		sql << "DELETE FROM " << DATABASE_ATTRIBUTES_TABLE 			<< " WHERE node_id = :id", soci::use(db_node.id);
-		sql << "DELETE FROM " << DATABASE_VECTOR_ATTRIBUTES_TABLE 	<< " WHERE node_id = :id", soci::use(db_node.id);
+	
+		sql.commit();
 	}
 	
 	std::string database_connection::get_path(const node db_node)
