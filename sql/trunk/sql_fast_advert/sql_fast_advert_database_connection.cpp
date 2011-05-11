@@ -4,13 +4,16 @@
 namespace sql_fast_advert
 {
 	
-	database_connection::database_connection(saga::url url)
+	database_connection::database_connection(const saga::url &url, std::map<std::string, std::string> &ini_file_options)
 	{
 		std::string connectString = "dbname=fast_advert";
 		connectString += " host=" + url.get_host();
 		connectString += " port=" + boost::lexical_cast<std::string>(url.get_port());
-		connectString += " user=SAGA";
-		connectString += " password=SAGA_client";
+		connectString += " user=" + ini_file_options["db_user"];
+		connectString += " password=" + ini_file_options["db_pass"];
+		
+		CONNECTION_POOL_SIZE 	= boost::lexical_cast<int>(ini_file_options["connection_pool_size"]);
+	 	BATCH_SIZE 				= boost::lexical_cast<int>(ini_file_options["batch_size"]);
 		
 		// Try to connect 
 		soci::session sql(soci::postgresql, connectString);
@@ -135,12 +138,7 @@ namespace sql_fast_advert
 	}
 	
 	void database_connection::remove_node(const node db_node)
-	{
-		//
-		// Batch Size for vector operations
-		//
-		const int BATCH_SIZE = 50;
-		
+	{		
 		soci::session sql(*pool);
 		sql.begin();
 		
@@ -219,7 +217,6 @@ namespace sql_fast_advert
 	
 	std::string database_connection::get_path(const node db_node)
 	{
-		const int BATCH_SIZE = 100;
 		std::vector<std::string> path_vector(BATCH_SIZE);		
 		std::string result = "";
 		
@@ -389,7 +386,6 @@ namespace sql_fast_advert
 	
 	void database_connection::list_attributes (std::vector<std::string> &ret, const node db_node)
 	{
-		const int BATCH_SIZE = 50;
 		std::vector<std::string> batch(BATCH_SIZE);
 		
 		soci::session sql(*pool);

@@ -155,7 +155,7 @@ namespace sql_fast_advert
 	
 	try
 	{
-		dbc = adata->get_database_connection(url);
+		dbc = adata->get_database_connection(url, adap_ini);
   	}
   	catch(std::runtime_error e)
   	{

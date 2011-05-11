@@ -55,13 +55,42 @@ namespace sql_fast_advert
 		delete database_connection_map;
 	}
 	
-	database_connection* adaptor::get_database_connection(saga::url url)
+	database_connection* adaptor::get_database_connection(saga::url url,  saga::ini::ini const &adap_ini)
 	{
 		database_connection_map_t::iterator it = database_connection_map->find(url.get_host());
 		
 		if (it == database_connection_map->end())
 		{
-			(*database_connection_map)[url.get_host()] = new database_connection(url);
+			std::map<std::string, std::string> ini_file_options;
+			
+			// Read some stuff from the .ini file
+		  	saga::ini::ini prefs = adap_ini.get_section ("preferences");
+
+		   	if (prefs.has_entry("db_user")) 
+		   	{
+		    	std::string db_user = prefs.get_entry("db_user");
+				ini_file_options["db_user"] = db_user;
+		   	}
+		
+			if (prefs.has_entry("db_pass"))
+			{
+				std::string db_pass = prefs.get_entry("db_pass");
+				ini_file_options["db_pass"] = db_pass;
+			}
+			
+			if (prefs.has_entry("connection_pool_size"))
+			{
+				std::string connection_pool_size = prefs.get_entry("connection_pool_size");
+				ini_file_options["connection_pool_size"] = connection_pool_size;
+			}
+			
+			if (prefs.has_entry("batch_size"))
+			{
+				std::string batch_size = prefs.get_entry("batch_size");
+				ini_file_options["batch_size"] = batch_size;
+			}
+			
+			(*database_connection_map)[url.get_host()] = new database_connection(url, ini_file_options);
 		}
 		
 		it = database_connection_map->find(url.get_host());

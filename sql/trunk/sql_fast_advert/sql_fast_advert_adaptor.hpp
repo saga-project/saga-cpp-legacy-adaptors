@@ -44,7 +44,7 @@ namespace sql_fast_advert
 	typedef std::map<std::string, database_connection*> database_connection_map_t;
 	
 	database_connection_map_t *database_connection_map;
-	database_connection* get_database_connection(const saga::url url);
+	database_connection* get_database_connection(const saga::url url, saga::ini::ini const &adap_ini);
 	
   };
 

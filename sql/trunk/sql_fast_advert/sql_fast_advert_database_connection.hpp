@@ -15,12 +15,12 @@
 // Boost Includes
 #include <boost/optional.hpp>
 #include <boost/lexical_cast.hpp>
+#include <map>
 
 // Jenkins Hash
 #include "jenkins_hash_new.hpp"
 
 // Database Connnection Defines
-#define CONNECTION_POOL_SIZE 10
 #define DATABASE_LAYOUT_VERSION "1.0"
 
 // Database Table names
@@ -49,10 +49,13 @@ namespace sql_fast_advert
 	private:
 		util::jenkins_hash hash;
 		soci::connection_pool *pool;
+		
+		int CONNECTION_POOL_SIZE;
+		int BATCH_SIZE;
 
 	public:
 		// Contructor
-		database_connection(saga::url url);
+		database_connection(const saga::url &url, std::map<std::string, std::string> &ini_file_options);
 		
 		// Destructor
 		~database_connection(void);
