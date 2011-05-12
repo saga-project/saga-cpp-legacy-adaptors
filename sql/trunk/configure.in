@@ -37,25 +37,19 @@ AC_SUBST(ADAPTOR_CONFDIR)
 AC_OUTPUT()
 
 OUT=config.summary
-
 rm -f $OUT
-touch $OUT
+TEE="tee -a"
 
-echo "                                                                 " >> $OUT
-echo " ========================================================        " >> $OUT
-echo " SAGA DEFAULT ADAPTORS                                           " >> $OUT
-echo " --------------------------------------------------------        " >> $OUT
-echo "                                                                 " >> $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
-echo "                                                                 " >> $OUT
-echo " PostgreSQL Found      : $HAVE_POSTGRESQL $POSTGRESQL_VERSION_S  " >> $OUT
-echo " PostgreSQL Location   : $POSTGRESQL_LOCATION                    " >> $OUT
-echo "                                                                 " >> $OUT
-echo " ========================================================        " >> $OUT
-echo "                                                                 " >> $OUT
-
-
-if test "$SAGA_RECURSIVE_CONFIG" = "yes" ; then
-  cat $OUT >> $SAGA_ROOT/$OUT
-fi
+echo "                                                                 " | $TEE $OUT
+echo " ========================================================        " | $TEE $OUT
+echo " SAGA SSH ADAPTORS                                               " | $TEE $OUT
+echo " --------------------------------------------------------        " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " Using SAGA from       : $TMP_SAGA_LOCATION                      " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " PostgreSQL Found      : $HAVE_POSTGRESQL $POSTGRESQL_VERSION_S  " | $TEE $OUT
+echo " PostgreSQL Location   : $POSTGRESQL_LOCATION                    " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " --------------------------------------------------------        " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
 
