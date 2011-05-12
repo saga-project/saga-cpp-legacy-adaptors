@@ -132,7 +132,7 @@ namespace sql_fast_advert
 		    soci::into(db_node.rgt),
 		    soci::use(hash_value);
 		
-		std::cout << "insert node" << std::endl;
+		//std::cout << "insert node" << std::endl;
 		
 		return db_node;
 	}
@@ -304,7 +304,7 @@ namespace sql_fast_advert
 		boost::optional<std::string> attribute_value;
 		boost::optional<int> vector_attribute_value;
 		
-		std::cout << "database_connection::attribute_exists" << std::endl;
+		//std::cout << "database_connection::attribute_exists" << std::endl;
 		
 		soci::session sql(*pool);
 		sql << "SELECT value FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key = :key", soci::use(db_node.id), soci::use(key), soci::into(attribute_value);
@@ -317,6 +317,7 @@ namespace sql_fast_advert
 	bool database_connection::attribute_is_vector (const node db_node, const std::string key)
 	{
 		boost::optional<int> attribute_value;
+
 		
 		soci::session sql(*pool);
 		sql << "SELECT value_id FROM " <<  DATABASE_VECTOR_ATTRIBUTES_TABLE 
@@ -330,7 +331,7 @@ namespace sql_fast_advert
 		std::string value;
 		
 		soci::session sql(*pool);
-		sql << "SELECT value FROM " << DATABASE_ATTRIBUTES_TABLE " WHERE node_id = :id AND key = ':key'", soci::use(db_node.id), soci::use(key), soci::into(value);
+		sql << "SELECT value FROM " << DATABASE_ATTRIBUTES_TABLE " WHERE node_id = :id AND key = :key", soci::use(db_node.id), soci::use(key), soci::into(value);
 		
 		return value;
 	}
@@ -390,8 +391,7 @@ namespace sql_fast_advert
 		
 		soci::session sql(*pool);
 		soci::statement statement = (
-			sql.prepare << "SELECT key FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id UNION"
-						<< "SELECT key FROM " << DATABASE_VECTOR_ATTRIBUTES_TABLE << "WHERE node_id = :id", soci::use(db_node.id), soci::into(batch));
+			sql.prepare << "SELECT key FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id", soci::use(db_node.id), soci::into(batch) );
 		
 		statement.execute();
 		

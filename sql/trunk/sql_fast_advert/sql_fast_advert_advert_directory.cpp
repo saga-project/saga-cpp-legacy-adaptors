@@ -445,12 +445,18 @@ namespace sql_fast_advert
                                          std::string               pattern, 
                                          int                       flags)
 	{
+		instance_data idata(this);
+		saga::url parent_url(idata->location_);
+		
 		node_vector.clear();
 		dbc->get_child_nodes(node_vector, dir_node);
 	
 		for (std::vector<node>::iterator i = node_vector.begin(); i != node_vector.end(); i++)
-		{
-			saga::url url(i->name);
+		{		
+			boost::filesystem::path path = normalize_boost_path(boost::filesystem::path(parent_url.get_path() + i->name));
+
+			saga::url url(parent_url);
+			url.set_path(path.string());
 			ret.push_back(url);
 		}
     }
