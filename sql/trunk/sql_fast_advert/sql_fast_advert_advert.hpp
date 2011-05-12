@@ -68,7 +68,7 @@ namespace sql_fast_advert
 		void sync_set_attribute 		(saga::impl::void_t &ret, std::string key, std::string val);
 
      	void sync_get_vector_attribute 	(std::vector <std::string> 	&ret, std::string key);										
-		void sync_set_vector_attribute  (saga::impl::void_t	&ret, std::string key, std::vector <std::string> ret);
+		void sync_set_vector_attribute  (saga::impl::void_t	&ret, std::string key, std::vector <std::string> val);
 										
       	void sync_remove_attribute     	(saga::impl::void_t	&ret, std::string key);
       	void sync_list_attributes 		(std::vector <std::string> 	&ret);	
