@@ -198,7 +198,11 @@ namespace sql_fast_advert
 			
 			else
 			{
-				dir_node = dbc->insert_node(parent_node, (*(--path.end())));
+#if BOOST_FILESYSTEM_VERSION > 2
+      dir_node = dbc->insert_node(parent_node, (*(--path.end())).string());
+#else
+      dir_node = dbc->insert_node(parent_node, (*(--path.end())));
+#endif
 			}
 		}
 		
@@ -251,12 +255,21 @@ namespace sql_fast_advert
 			create_parents(path.parent_path());
 			
 			parent_node = dbc->find_node((path.parent_path()).string());
-			dir_node = dbc->insert_node(parent_node, (*(--path.end())));
+#if BOOST_FILESYSTEM_VERSION > 2
+      dir_node = dbc->insert_node(parent_node, (*(--path.end())).string());
+#else
+      dir_node = dbc->insert_node(parent_node, (*(--path.end())));
+#endif
+
 		}
 		
 		else
 		{
-			dir_node = dbc->insert_node(parent_node, (*(--path.end())));
+#if BOOST_FILESYSTEM_VERSION > 2
+      dir_node = dbc->insert_node(parent_node, (*(--path.end())).string());
+#else
+      dir_node = dbc->insert_node(parent_node, (*(--path.end())));
+#endif
 		}
 	}
 
