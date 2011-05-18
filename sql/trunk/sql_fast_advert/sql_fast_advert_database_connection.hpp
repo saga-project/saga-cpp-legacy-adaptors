@@ -49,8 +49,10 @@ namespace sql_fast_advert
 	private:
 		util::jenkins_hash hash;
 		soci::connection_pool *pool;
+		std::string connectString;
 		
 		int CONNECTION_POOL_SIZE;
+		int CURRENT_CONNECTION_POOL_SIZE;
 		int BATCH_SIZE;
 
 	public:
@@ -59,6 +61,9 @@ namespace sql_fast_advert
 		
 		// Destructor
 		~database_connection(void);
+		
+		// Grow Connection pool for Async API calls
+		void grow_pool();
 		
 		// MPTT Operations
 		node find_node(const std::string path);

@@ -6,20 +6,27 @@ namespace sql_fast_advert
 	
 	database_connection::database_connection(const saga::url &url, std::map<std::string, std::string> &ini_file_options)
 	{
-		std::string connectString = "dbname=fast_advert";
+		connectString  = "dbname=fast_advert";
 		connectString += " host=" + url.get_host();
 		connectString += " port=" + boost::lexical_cast<std::string>(url.get_port());
 		connectString += " user=" + ini_file_options["db_user"];
 		connectString += " password=" + ini_file_options["db_pass"];
 		
-		CONNECTION_POOL_SIZE 	= boost::lexical_cast<int>(ini_file_options["connection_pool_size"]);
-	 	BATCH_SIZE 				= boost::lexical_cast<int>(ini_file_options["batch_size"]);
+		CONNECTION_POOL_SIZE 			= boost::lexical_cast<int>(ini_file_options["connection_pool_size"]);
+	 	BATCH_SIZE 						= boost::lexical_cast<int>(ini_file_options["batch_size"]);
+		CURRENT_CONNECTION_POOL_SIZE 	= 0;
 		
-		// Try to connect 
-		soci::session sql(soci::postgresql, connectString);
-
+		
+		// Initialize the connection pool
+		pool = new soci::connection_pool(CONNECTION_POOL_SIZE);
+		
+		// Try to connect and holt at least one opend soci::session
+		grow_pool();
+		
 		// Check if there is allready a database layout
-		// if not create a fresh layout 		
+		// if not create a fresh layout 
+		soci::session sql(*pool);
+				
 		boost::optional<std::string> table_name;
 		sql << "SELECT tablename FROM pg_tables WHERE tablename='" << DATABASE_VERSION_TABLE << "'", soci::into(table_name);
 		
@@ -63,7 +70,7 @@ namespace sql_fast_advert
 				   "data		varchar			NOT NULL	)";
 		}
 		
-		// Check the Database layout version
+		//Check the Database layout version
 		std:: string layoutVersion;
 		sql << "SELECT layout_version FROM " << DATABASE_VERSION_TABLE, soci::into(layoutVersion);
 		
@@ -72,20 +79,22 @@ namespace sql_fast_advert
 			std::runtime_error error("Database layout version missmatch !");
 			throw error;
 		}
-		
-		// Initialize the connection pool
-		pool = new soci::connection_pool(CONNECTION_POOL_SIZE);
-		
-		for (int i = 0; i != CONNECTION_POOL_SIZE; ++i)
-		{
-			soci::session &sql = pool->at(i);
-			sql.open(soci::postgresql, connectString);
-		}
 	}
 	
 	database_connection::~database_connection(void)
 	{
 		delete pool;
+	}
+	
+	void database_connection::grow_pool()
+	{
+		if (CURRENT_CONNECTION_POOL_SIZE < CONNECTION_POOL_SIZE)
+		{
+			soci::session &sql = pool->at(CURRENT_CONNECTION_POOL_SIZE);
+			sql.open(soci::postgresql, connectString);
+			
+			CURRENT_CONNECTION_POOL_SIZE++;
+		}
 	}
 	
 	node database_connection::find_node(const std::string path)
