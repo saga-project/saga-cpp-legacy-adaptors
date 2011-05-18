@@ -66,16 +66,34 @@ namespace sql_fast_advert
 			// Read some stuff from the .ini file
 		  	saga::ini::ini prefs = adap_ini.get_section ("preferences");
 
-		   	if (prefs.has_entry("db_user")) 
+			if (prefs.has_entry("dbname")) 
+			{
+				std::string db_user = prefs.get_entry("dbname");
+				ini_file_options["dbname"] = db_user;
+			}
+			
+			if (prefs.has_entry("host")) 
+			{
+				std::string db_user = prefs.get_entry("host");
+				ini_file_options["host"] = db_user;
+			}
+
+			if (prefs.has_entry("port")) 
+			{
+				std::string db_user = prefs.get_entry("port");
+				ini_file_options["port"] = db_user;
+			}
+			
+		   	if (prefs.has_entry("user")) 
 		   	{
-		    	std::string db_user = prefs.get_entry("db_user");
-				ini_file_options["db_user"] = db_user;
+		    	std::string db_user = prefs.get_entry("user");
+				ini_file_options["user"] = db_user;
 		   	}
 		
-			if (prefs.has_entry("db_pass"))
+			if (prefs.has_entry("password"))
 			{
-				std::string db_pass = prefs.get_entry("db_pass");
-				ini_file_options["db_pass"] = db_pass;
+				std::string db_pass = prefs.get_entry("password");
+				ini_file_options["password"] = db_pass;
 			}
 			
 			if (prefs.has_entry("connection_pool_size"))
@@ -88,6 +106,12 @@ namespace sql_fast_advert
 			{
 				std::string batch_size = prefs.get_entry("batch_size");
 				ini_file_options["batch_size"] = batch_size;
+			}
+			
+			if (prefs.has_entry("check_db"))
+			{
+				std::string batch_size = prefs.get_entry("check_db");
+				ini_file_options["check_db"] = batch_size;
 			}
 			
 			(*database_connection_map)[url.get_host()] = new database_connection(url, ini_file_options);

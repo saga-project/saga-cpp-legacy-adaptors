@@ -6,11 +6,75 @@ namespace sql_fast_advert
 	
 	database_connection::database_connection(const saga::url &url, std::map<std::string, std::string> &ini_file_options)
 	{
-		connectString  = "dbname=fast_advert";
-		connectString += " host=" + url.get_host();
-		connectString += " port=" + boost::lexical_cast<std::string>(url.get_port());
-		connectString += " user=" + ini_file_options["db_user"];
-		connectString += " password=" + ini_file_options["db_pass"];
+		
+		std::string dbname = "";
+		
+		if (url.get_query().find("dbname=") != std::string::npos)
+		{
+			int start = url.get_query().find("dbname=");
+			int end = url.get_query().find(",");
+			
+			dbname = url.get_query().substr(start + 7, end - (start + 7));	
+		}
+		
+		else 
+		{
+			dbname = ini_file_options["dbname"];
+		}
+		
+		std::string host = "";
+		
+		if (url.get_host() != "")
+		{
+			host = url.get_host();
+		}
+		
+		else
+		{
+			host =  ini_file_options["host"];
+		}
+		
+		std::string port = "";
+		
+		if (url.get_port() != -1)
+		{
+			port = boost::lexical_cast<std::string>(url.get_port());
+		}
+		
+		else
+		{
+			port = ini_file_options["port"];
+		}
+		
+		std::string user = "";
+		
+		if (url.get_username() != "")
+		{
+			port = url.get_username();
+		}
+		
+		else
+		{
+			user = ini_file_options["user"];
+		}
+		
+		std::string password = "";
+		
+		if (url.get_password() != "")
+		{
+			port = url.get_password();
+		}
+		
+		else
+		{
+			password = ini_file_options["password"];
+		}
+		
+		connectString  = "dbname="    + dbname;
+		connectString += " host="     + host;
+		connectString += " port="     + port;
+		connectString += " user="     + user;
+		connectString += " password=" + password;
 		
 		CONNECTION_POOL_SIZE 			= boost::lexical_cast<int>(ini_file_options["connection_pool_size"]);
 	 	BATCH_SIZE 						= boost::lexical_cast<int>(ini_file_options["batch_size"]);
@@ -25,59 +89,63 @@ namespace sql_fast_advert
 		
 		// Check if there is allready a database layout
 		// if not create a fresh layout 
-		soci::session sql(*pool);
-				
-		boost::optional<std::string> table_name;
-		sql << "SELECT tablename FROM pg_tables WHERE tablename='" << DATABASE_VERSION_TABLE << "'", soci::into(table_name);
 		
-		if (!table_name.is_initialized())
+		if (ini_file_options["check_db"] == "true")
 		{
-			sql << "CREATE TABLE "<< DATABASE_VERSION_TABLE << " (layout_version varchar(8))";
-			sql << "INSERT INTO  "<< DATABASE_VERSION_TABLE << " VALUES(:versionString)", soci::use(DATABASE_LAYOUT_VERSION);
-			
-			sql << "CREATE TABLE "<< DATABASE_NODE_TABLE << " ("
-			       "id 		serial 			PRIMARY KEY	,"
-				   "name 	varchar(256) 	NOT NULL	,"
-				   "dir 	boolean			NOT NULL	,"
-				   "lft		integer			NOT NULL	,"
-				   "rgt		integer			NOT NULL	,"
-				   "hash	integer			NOT NULL	)";
-			
-			sql << "INSERT INTO " << DATABASE_NODE_TABLE << " (name, dir, lft, rgt, hash)"
-			       " VALUES (:name, :dir, :lft, :rgt, :hash)", 
-				   soci::use("root"),
-				   soci::use("TRUE"),
-				   soci::use(1),
-				   soci::use(2),
-				   soci::use((int) hash["/"]);
+			soci::session sql(*pool);
 				
-			sql << "CREATE TABLE " << DATABASE_ATTRIBUTES_TABLE << " ("
-				   "node_id		integer			NOT NULL	,"
-				   "key			varchar(256)	NOT NULL	,"
-				   "value		varchar(256)	NOT NULL 	)";	
-				
-			sql << "CREATE TABLE " << DATABASE_VECTOR_ATTRIBUTES_TABLE << " ("
-			       "node_id		integer			NOT NULL	,"
-				   "key			varchar(256)	NOT NULL	,"
-				   "value_id	serial			NOT NULL	)";
-			
-			sql << "CREATE TABLE " << DATABASE_VECTOR_ATTRIBUTES_VALUE_TABLE << " ("	
-				   "id			integer			NOT NULL	,"
-				   "value		varchar(256) 	NOT NULL	)";	
-				
-			sql << "CREATE TABLE " << DATABASE_DATA_TABLE << " ("
-			       "node_id		integer			NOT NULL	,"
-				   "data		varchar			NOT NULL	)";
-		}
+			boost::optional<std::string> table_name;
+			sql << "SELECT tablename FROM pg_tables WHERE tablename='" << DATABASE_VERSION_TABLE << "'", soci::into(table_name);
 		
-		//Check the Database layout version
-		std:: string layoutVersion;
-		sql << "SELECT layout_version FROM " << DATABASE_VERSION_TABLE, soci::into(layoutVersion);
+			if (!table_name.is_initialized())
+			{
+				sql << "CREATE TABLE "<< DATABASE_VERSION_TABLE << " (layout_version varchar(8))";
+				sql << "INSERT INTO  "<< DATABASE_VERSION_TABLE << " VALUES(:versionString)", soci::use(DATABASE_LAYOUT_VERSION);
+			
+				sql << "CREATE TABLE "<< DATABASE_NODE_TABLE << " ("
+			       	"id 		serial 			PRIMARY KEY	,"
+				   	"name 		varchar(256) 	NOT NULL	,"
+				   	"dir 		boolean			NOT NULL	,"
+				   	"lft		integer			NOT NULL	,"
+				   	"rgt		integer			NOT NULL	,"
+				   	"hash		integer			NOT NULL	)";
+			
+				sql << "INSERT INTO " << DATABASE_NODE_TABLE << " (name, dir, lft, rgt, hash)"
+			       	" VALUES (:name, :dir, :lft, :rgt, :hash)", 
+				   	soci::use("root"),
+				   	soci::use("TRUE"),
+				   	soci::use(1),
+				   	soci::use(2),
+				   	soci::use((int) hash["/"]);
+				
+				sql << "CREATE TABLE " << DATABASE_ATTRIBUTES_TABLE << " ("
+				   	"node_id		integer			NOT NULL	,"
+				   	"key			varchar(256)	NOT NULL	,"
+				   	"value			varchar(256)	NOT NULL 	)";	
+				
+				sql << "CREATE TABLE " << DATABASE_VECTOR_ATTRIBUTES_TABLE << " ("
+			       	"node_id		integer			NOT NULL	,"
+				   	"key			varchar(256)	NOT NULL	,"
+				   	"value_id		serial			NOT NULL	)";
+			
+				sql << "CREATE TABLE " << DATABASE_VECTOR_ATTRIBUTES_VALUE_TABLE << " ("	
+				   	"id			integer			NOT NULL	,"
+				   	"value		varchar(256) 	NOT NULL	)";	
+				
+				sql << "CREATE TABLE " << DATABASE_DATA_TABLE << " ("
+			       	"node_id		integer			NOT NULL	,"
+				   	"data			varchar			NOT NULL	)";
+			}
 		
-		if (layoutVersion != DATABASE_LAYOUT_VERSION)
-		{
-			std::runtime_error error("Database layout version missmatch !");
-			throw error;
+			//Check the Database layout version
+			std:: string layoutVersion;
+			sql << "SELECT layout_version FROM " << DATABASE_VERSION_TABLE, soci::into(layoutVersion);
+		
+			if (layoutVersion != DATABASE_LAYOUT_VERSION)
+			{
+				std::runtime_error error("Database layout version missmatch !");
+				throw error;
+			}
 		}
 	}
 	
