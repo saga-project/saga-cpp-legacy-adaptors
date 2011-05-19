@@ -1,0 +1,21 @@
+
+PACKAGE: saga-adaptors-sqladvert
+VERSION: 1.0
+
+DEPENDENCIES:
+  saga-core
+
+DIRS:
+  config/
+  external/
+  sql_fast_advert/
+
+FILES:
+  PACKAGE
+  INSTALL
+  LICENSE
+  CHANGES
+  Makefile
+  configure
+  configure.in
+
