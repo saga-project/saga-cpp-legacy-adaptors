@@ -295,7 +295,7 @@ namespace sql_fast_advert
 
 	void advert_cpi_impl::sync_attribute_exists (bool &ret, std::string key)
 	{
-		LOG
+		//LOG
 		ret = dbc->attribute_exists(dir_node, key);
   	}
 
@@ -337,7 +337,7 @@ namespace sql_fast_advert
   	////////////////////////////////////////////////////////////////////////
   	void advert_cpi_impl::sync_set_attribute (saga::impl::void_t &ret, std::string key, std::string val)
 	{
-		LOG
+		//LOG
    		dbc->set_attribute(dir_node, key, val);
 	}
 

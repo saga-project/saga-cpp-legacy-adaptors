@@ -27,8 +27,6 @@
 #define DATABASE_VERSION_TABLE					"version"
 #define DATABASE_NODE_TABLE	 					"nodes"
 #define DATABASE_ATTRIBUTES_TABLE 				"attributes"
-#define DATABASE_VECTOR_ATTRIBUTES_TABLE 		"vector_attributes"
-#define DATABASE_VECTOR_ATTRIBUTES_VALUE_TABLE 	"vector_attribute_values"
 #define DATABASE_DATA_TABLE						"data"
 
 namespace sql_fast_advert

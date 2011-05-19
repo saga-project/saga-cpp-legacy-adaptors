@@ -120,16 +120,9 @@ namespace sql_fast_advert
 				sql << "CREATE TABLE " << DATABASE_ATTRIBUTES_TABLE << " ("
 				   	"node_id		integer			NOT NULL	,"
 				   	"key			varchar(256)	NOT NULL	,"
-				   	"value			varchar(256)	NOT NULL 	)";	
-				
-				sql << "CREATE TABLE " << DATABASE_VECTOR_ATTRIBUTES_TABLE << " ("
-			       	"node_id		integer			NOT NULL	,"
-				   	"key			varchar(256)	NOT NULL	,"
-				   	"value_id		serial			NOT NULL	)";
-			
-				sql << "CREATE TABLE " << DATABASE_VECTOR_ATTRIBUTES_VALUE_TABLE << " ("	
-				   	"id			integer			NOT NULL	,"
-				   	"value		varchar(256) 	NOT NULL	)";	
+				   	"value			varchar(256)	NOT NULL	,"
+					"is_vector 		boolean			NOT NULL	,"
+					"UNIQUE (key)								)";		
 				
 				sql << "CREATE TABLE " << DATABASE_DATA_TABLE << " ("
 			       	"node_id		integer			NOT NULL	,"
@@ -241,31 +234,6 @@ namespace sql_fast_advert
 				
 				sql << "DELETE FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id", soci::use(*i);
 				
-				// ============================
-				// = remove vector attributes =
-				// ============================
-				
-				std::vector<int> value_id_batch(BATCH_SIZE);
-				
-				soci::statement delete_vector =
-				(
-					sql.prepare << "DELETE FROM " << DATABASE_VECTOR_ATTRIBUTES_TABLE << " WHERE node_id = :id RETURNING value_id", soci::use(*i), soci::into(value_id_batch)
-				);
-				
-				delete_vector.execute();
-				
-				while(delete_vector.fetch())
-				{
-					for(std::vector<int>::iterator j = value_id_batch.begin(); j != value_id_batch.end(); j++)
-					{
-						sql << "DELETE FROM " << DATABASE_VECTOR_ATTRIBUTES_VALUE_TABLE << " WHERE id = :id", soci::use(*j);
-					}
-					
-					// ====================
-					// = resize the batch =
-					// ====================
-					value_id_batch.resize(BATCH_SIZE);
-				}
 				
 				// ========================
 				// = remove data for node =
@@ -277,6 +245,7 @@ namespace sql_fast_advert
 				// ========================
 				// = resize the the batch =
 				// ========================
+				
 				node_id_batch.resize(BATCH_SIZE);
 			}
 		}
@@ -378,28 +347,35 @@ namespace sql_fast_advert
 	bool database_connection::attribute_exists (const node db_node, const std::string key)
 	{		
 		boost::optional<std::string> attribute_value;
-		boost::optional<int> vector_attribute_value;
-		
-		//std::cout << "database_connection::attribute_exists" << std::endl;
-		
+
 		soci::session sql(*pool);
 		sql << "SELECT value FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key = :key", soci::use(db_node.id), soci::use(key), soci::into(attribute_value);
 			
-		sql << "SELECT value_id FROM " << DATABASE_VECTOR_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key = :key", soci::use(db_node.id), soci::use(key), soci::into(vector_attribute_value);
-			
-		return (attribute_value.is_initialized() | vector_attribute_value.is_initialized());
+		return (attribute_value.is_initialized());
 	}
 	
 	bool database_connection::attribute_is_vector (const node db_node, const std::string key)
 	{
-		boost::optional<int> attribute_value;
+		std::string is_vector;
 
 		
 		soci::session sql(*pool);
-		sql << "SELECT value_id FROM " <<  DATABASE_VECTOR_ATTRIBUTES_TABLE 
-			<< " WHERE node_id = :id AND key = ':key'", soci::use(db_node.id), soci::use(key), soci::into(attribute_value);
+		sql << "SELECT is_vector FROM " <<  DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key = :key", soci::use(db_node.id), soci::use(key), soci::into(is_vector);
 		
-		return attribute_value.is_initialized();
+		if (is_vector == "t")
+		{
+			return true;
+		}
+		
+		else if (is_vector == "f")
+		{
+			return false;
+		}
+		
+		else
+		{
+			return false;
+		}
 	}
 	
 	std::string database_connection::get_attribute (const node db_node, const std::string key)
@@ -415,41 +391,41 @@ namespace sql_fast_advert
 	void database_connection::set_attribute (const node db_node, const std::string key, const std::string value)
 	{
 		soci::session sql(*pool);
-		sql << "INSERT INTO " << DATABASE_ATTRIBUTES_TABLE << " VALUES (:node_id, :key, :value)", soci::use(db_node.id), soci::use(key), soci::use(value);
+		sql << "INSERT INTO " << DATABASE_ATTRIBUTES_TABLE << " VALUES (:node_id, :key, :value, 'f')", soci::use(db_node.id), soci::use(key), soci::use(value);
 	}
 
 	void database_connection::get_vector_attribute ( const node db_node, std::vector<std::string> &ret, const std::string key)
-	{
-		int value_id = 0;
-		int batch_size = 0;
+	{	
+		std::vector<std::string> values(BATCH_SIZE);
 		
 		soci::session sql(*pool);
-		sql << "SELECT value_id FROM " << DATABASE_VECTOR_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key = ':key'", soci::use(db_node.id), soci::use(key), soci::into(value_id);
-		
-		if (value_id != 0)
+
+		soci::statement statement = 
+		(
+			sql.prepare << "SELECT value FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key =':key'", soci::use(db_node.id), soci::use(key), soci::into(values)
+		);
+	
+		statement.execute();
+	
+		while(statement.fetch())
 		{
-			sql << "SELECT COUNT(*) FROM " << DATABASE_VECTOR_ATTRIBUTES_VALUE_TABLE << " WHERE id = :value_id", soci::use(value_id), soci::into(batch_size);
+			for (std::vector<std::string>::iterator i = values.begin(); i != values.end(); i++)
+			{
+				ret.push_back(*i);
+			}
 			
-			soci::statement statement = (
-				sql.prepare << "SELECT value FROM " << DATABASE_VECTOR_ATTRIBUTES_VALUE_TABLE << " WHERE id = :value_id", soci::use(value_id), soci::into(ret));
-				
-			ret.resize(batch_size);
-			
-			statement.execute();
-			statement.fetch();
+			values.resize(BATCH_SIZE);
 		}
 	}
 		
 	void database_connection::set_vector_attribute (const node db_node, const std::string key, std::vector<std::string> value)
 	{
 		soci::session sql(*pool);
-		sql << "INSERT INTO " << DATABASE_VECTOR_ATTRIBUTES_TABLE << " (node_id, key) VALUES (:node_id, ':key')", soci::use(db_node.id), soci::use(key);
 		
-		int value_id;
-		sql << "SELECT value_id FROM " << DATABASE_VECTOR_ATTRIBUTES_TABLE << " WHERE node_id = :node_id and key=':key'", soci::use(db_node.id), soci::use(key), soci::into(value_id);
-		
-		soci::statement statement = (sql.prepare << "INSERT INTO " << DATABASE_VECTOR_ATTRIBUTES_VALUE_TABLE << " (id, value) VALUES (:value_id, :value)",
-													soci::use(value_id), soci::use(value));
+		soci::statement statement = 
+		(
+			sql.prepare << "INSERT INTO " << DATABASE_ATTRIBUTES_TABLE << " VALUES (:node_id, ':key', ':value', 't')", soci::use(db_node.id), soci::use(key), soci::use(value)
+		);
 												
 		statement.execute(true);
 	}
@@ -457,28 +433,30 @@ namespace sql_fast_advert
 	void database_connection::remove_attribute (const node db_node, const std::string key)
 	{
 		soci::session sql(*pool);
-		sql << "DELETE FROM " << DATABASE_ATTRIBUTES_TABLE 			<< " WHERE node_id = :id AND key = ':key'", soci::use(db_node.id), soci::use(key);
-		sql << "DELETE FROM " << DATABASE_VECTOR_ATTRIBUTES_TABLE 	<< " WHERE node_id = :id AND key = ':key'", soci::use(db_node.id), soci::use(key);
+		sql << "DELETE FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key = :key", soci::use(db_node.id), soci::use(key);
 	}
 	
 	void database_connection::list_attributes (std::vector<std::string> &ret, const node db_node)
 	{
-		std::vector<std::string> batch(BATCH_SIZE);
+		std::vector<std::string> keys(BATCH_SIZE);
 		
 		soci::session sql(*pool);
-		soci::statement statement = (
-			sql.prepare << "SELECT key FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id", soci::use(db_node.id), soci::into(batch) );
+		
+		soci::statement statement = 
+		(
+			sql.prepare << "SELECT key FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id", soci::use(db_node.id), soci::into(keys) 
+		);
 		
 		statement.execute();
 		
 		while(statement.fetch())
 		{
-			for (std::vector<std::string>::iterator i = batch.begin(); i != batch.end(); i++)
+			for (std::vector<std::string>::iterator i = keys.begin(); i != keys.end(); i++)
 			{
 				ret.push_back(*i);
 			}
 			
-			batch.resize(BATCH_SIZE);
+			keys.resize(BATCH_SIZE);
 		}
 		
 	}
