@@ -5,8 +5,7 @@ namespace sql_fast_advert
 {
 	
 	database_connection::database_connection(const saga::url &url, std::map<std::string, std::string> &ini_file_options)
-	{
-		
+	{		
 		std::string dbname = "";
 		
 		if (url.get_query().find("dbname=") != std::string::npos)
@@ -50,7 +49,7 @@ namespace sql_fast_advert
 		
 		if (url.get_username() != "")
 		{
-			port = url.get_username();
+			user = url.get_username();
 		}
 		
 		else
@@ -62,7 +61,7 @@ namespace sql_fast_advert
 		
 		if (url.get_password() != "")
 		{
-			port = url.get_password();
+			password = url.get_password();
 		}
 		
 		else
