@@ -27,7 +27,75 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET escape_string_warning = off;
 
+--
+-- Name: plpgsql; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: postgres
+--
+
+CREATE OR REPLACE PROCEDURAL LANGUAGE plpgsql;
+
+
+ALTER PROCEDURAL LANGUAGE plpgsql OWNER TO postgres;
+
 SET search_path = public, pg_catalog;
+
+--
+-- Name: insert_node(character varying, boolean, integer, integer, integer); Type: FUNCTION; Schema: public; Owner: SAGA
+--
+
+CREATE FUNCTION insert_node(n character varying, d boolean, l integer, r integer, h integer) RETURNS record
+    LANGUAGE plpgsql
+    AS $$
+declare
+node record;
+begin
+update nodes set rgt = rgt + 2 where rgt > l;
+update nodes set lft = lft  + 2 where lft > l;
+insert into nodes (name, dir, lft, rgt, hash) values (n, d, l + 1, l + 2, h);
+select * into node from nodes where hash = h;
+return node;
+end;
+$$;
+
+
+ALTER FUNCTION public.insert_node(n character varying, d boolean, l integer, r integer, h integer) OWNER TO "SAGA";
+
+--
+-- Name: remove_node(integer, integer); Type: FUNCTION; Schema: public; Owner: SAGA
+--
+
+CREATE FUNCTION remove_node(l integer, r integer) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+declare
+node record;
+begin
+for node in delete from nodes where nodes.lft between l and r returning nodes.id loop
+delete from attributes where node_id = node.id;
+delete from data where node_id = node.id;
+end loop;
+update nodes set rgt = rgt - (r - l + 1) where rgt > r;
+update nodes set lft = lft - (r - l + 1) where lft > r;
+end;
+$$;
+
+
+ALTER FUNCTION public.remove_node(l integer, r integer) OWNER TO "SAGA";
+
+--
+-- Name: return_int(integer); Type: FUNCTION; Schema: public; Owner: SAGA
+--
+
+CREATE FUNCTION return_int(input integer) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+declare
+begin
+return input;
+end;
+$$;
+
+
+ALTER FUNCTION public.return_int(input integer) OWNER TO "SAGA";
 
 SET default_tablespace = '';
 
@@ -96,6 +164,13 @@ ALTER SEQUENCE nodes_id_seq OWNED BY nodes.id;
 
 
 --
+-- Name: nodes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: SAGA
+--
+
+SELECT pg_catalog.setval('nodes_id_seq', 55, true);
+
+
+--
 -- Name: version; Type: TABLE; Schema: public; Owner: SAGA; Tablespace: 
 --
 
@@ -114,11 +189,37 @@ ALTER TABLE nodes ALTER COLUMN id SET DEFAULT nextval('nodes_id_seq'::regclass);
 
 
 --
--- Name: attributes_key_key; Type: CONSTRAINT; Schema: public; Owner: SAGA; Tablespace: 
+-- Data for Name: attributes; Type: TABLE DATA; Schema: public; Owner: SAGA
+--
+
+
+
+--
+-- Data for Name: data; Type: TABLE DATA; Schema: public; Owner: SAGA
+--
+
+
+
+--
+-- Data for Name: nodes; Type: TABLE DATA; Schema: public; Owner: SAGA
+--
+
+INSERT INTO nodes VALUES (1, 'root', true, 1, 2, -86386329);
+
+
+--
+-- Data for Name: version; Type: TABLE DATA; Schema: public; Owner: SAGA
+--
+
+INSERT INTO version VALUES ('1.0');
+
+
+--
+-- Name: attributes_node_id_key; Type: CONSTRAINT; Schema: public; Owner: SAGA; Tablespace: 
 --
 
 ALTER TABLE ONLY attributes
-    ADD CONSTRAINT attributes_key_key UNIQUE (key);
+    ADD CONSTRAINT attributes_node_id_key UNIQUE (node_id, key);
 
 
 --
