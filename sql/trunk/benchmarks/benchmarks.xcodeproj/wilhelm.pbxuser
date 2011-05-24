@@ -1,0 +1,226 @@
+// !$*UTF8*$!
+{
+	08FB7793FE84155DC02AAC07 /* Project object */ = {
+		activeBuildConfigurationName = Release;
+		activeExecutable = ED76665E1216B1AC00C8D7CF /* SagaAdvertPerfTest */;
+		activeTarget = 8DD76F620486A84900D96B5E /* SagaAdvertPerfTest */;
+		addToTargets = (
+			8DD76F620486A84900D96B5E /* SagaAdvertPerfTest */,
+		);
+		codeSenseManager = ED7666681216B1B100C8D7CF /* Code sense */;
+		executables = (
+			ED76665E1216B1AC00C8D7CF /* SagaAdvertPerfTest */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXBookmarksDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXBookmarksDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					200,
+					200,
+					501.58349609375,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXBookmarksDataSource_LocationID,
+					PBXBookmarksDataSource_NameID,
+					PBXBookmarksDataSource_CommentsID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXExecutablesDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXExecutablesDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					22,
+					300,
+					580,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXExecutablesDataSource_ActiveFlagID,
+					PBXExecutablesDataSource_NameID,
+					PBXExecutablesDataSource_CommentsID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					912,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					652,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 313409237;
+			PBXWorkspaceStateSaveDate = 313409237;
+		};
+		perUserProjectItems = {
+			ED1B2A71121D63AA00796AA7 = ED1B2A71121D63AA00796AA7 /* PBXTextBookmark */;
+			ED1B2A8C121DBE8A00796AA7 = ED1B2A8C121DBE8A00796AA7 /* PBXTextBookmark */;
+			ED6D913112A8393F00D8F24E = ED6D913112A8393F00D8F24E /* PBXTextBookmark */;
+			ED6D915012AE3A5100D8F24E = ED6D915012AE3A5100D8F24E /* PBXTextBookmark */;
+			ED6D915112AE3A5100D8F24E = ED6D915112AE3A5100D8F24E /* PBXTextBookmark */;
+		};
+		sourceControlManager = ED7666671216B1B100C8D7CF /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	08FB7796FE84155DC02AAC07 /* main.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1340, 2745}}";
+			sepNavSelRange = "{2985, 0}";
+			sepNavVisRange = "{0, 708}";
+		};
+	};
+	8DD76F620486A84900D96B5E /* SagaAdvertPerfTest */ = {
+		activeExec = 0;
+		executables = (
+			ED76665E1216B1AC00C8D7CF /* SagaAdvertPerfTest */,
+		);
+	};
+	C6859E8B029090EE04C91782 /* SagaAdvertPerfTest.1 */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = text.man;
+		name = SagaAdvertPerfTest.1;
+		path = /Users/wilhelm/Documents/SagaAdvertPerfTest/SagaAdvertPerfTest.1;
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 1125}}";
+			sepNavSelRange = "{1774, 0}";
+			sepNavVisRange = "{920, 1209}";
+			sepNavWindowFrame = "{{15, 615}, {750, 558}}";
+		};
+	};
+	ED1B2A71121D63AA00796AA7 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C6859E8B029090EE04C91782 /* SagaAdvertPerfTest.1 */;
+		name = "SagaAdvertPerfTest.1: 40";
+		rLen = 0;
+		rLoc = 1774;
+		rType = 0;
+		vrLen = 2129;
+		vrLoc = 0;
+	};
+	ED1B2A8C121DBE8A00796AA7 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 08FB7796FE84155DC02AAC07 /* main.cpp */;
+		name = "main.cpp: 152";
+		rLen = 0;
+		rLoc = 3778;
+		rType = 0;
+		vrLen = 1527;
+		vrLoc = 3116;
+	};
+	ED6D913112A8393F00D8F24E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 08FB7796FE84155DC02AAC07 /* main.cpp */;
+		name = "main.cpp: 124";
+		rLen = 0;
+		rLoc = 2985;
+		rType = 0;
+		vrLen = 1438;
+		vrLoc = 3208;
+	};
+	ED6D915012AE3A5100D8F24E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 08FB7796FE84155DC02AAC07 /* main.cpp */;
+		name = "main.cpp: 124";
+		rLen = 0;
+		rLoc = 2985;
+		rType = 0;
+		vrLen = 1438;
+		vrLoc = 3208;
+	};
+	ED6D915112AE3A5100D8F24E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 08FB7796FE84155DC02AAC07 /* main.cpp */;
+		name = "main.cpp: 124";
+		rLen = 0;
+		rLoc = 2985;
+		rType = 0;
+		vrLen = 1438;
+		vrLoc = 3208;
+	};
+	ED76665E1216B1AC00C8D7CF /* SagaAdvertPerfTest */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+			{
+				active = YES;
+				name = DYLD_LIBRARY_PATH;
+				value = "/opt/saga-1.5.1/lib:/opt/boost-1.43/lib";
+			},
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = SagaAdvertPerfTest;
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	ED7666671216B1B100C8D7CF /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "Saga Fastadvert";
+			};
+		};
+	};
+	ED7666681216B1B100C8D7CF /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+}
