@@ -225,15 +225,6 @@ namespace sql_fast_advert
 	
 	}
 	
-	// 
-	// The node must be a Entry
-	//
-
-	if (dir_node.dir == "t")
-	{
-		SAGA_ADAPTOR_THROW ("This node is not an entry", saga::IncorrectURL);
-	}
-	
     //SAGA_ADAPTOR_THROW ("Not Implemented advert.cpp", saga::NotImplemented);
   }
 
