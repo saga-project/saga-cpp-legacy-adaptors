@@ -1996,8 +1996,8 @@ ac_config_files="$ac_config_files condor_job/condor_job_adaptor.ini"
 
 
 SAGA_CONFIGURE_OK=yes
-if test "$HAVE_SAGA"   = "no"; then SAGA_CONFIGURE_OK=no; fi
-if test "$HAVE_CONDOR" = "no"; then SAGA_CONFIGURE_OK=no; fi
+if ! test "$HAVE_SAGA"        = "yes"; then SAGA_CONFIGURE_OK=no; fi
+if ! test "$SAGA_HAVE_CONDOR" = "yes"; then SAGA_CONFIGURE_OK=no; fi
 
 
 cat >confcache <<\_ACEOF

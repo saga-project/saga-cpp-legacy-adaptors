@@ -29,8 +29,8 @@ AC_CONFIG_FILES([config/make.cfg])
 AC_CONFIG_FILES([condor_job/condor_job_adaptor.ini])
 
 SAGA_CONFIGURE_OK=yes
-if test "$HAVE_SAGA"   = "no"; then SAGA_CONFIGURE_OK=no; fi
-if test "$HAVE_CONDOR" = "no"; then SAGA_CONFIGURE_OK=no; fi
+if ! test "$HAVE_SAGA"        = "yes"; then SAGA_CONFIGURE_OK=no; fi
+if ! test "$SAGA_HAVE_CONDOR" = "yes"; then SAGA_CONFIGURE_OK=no; fi
 AC_SUBST([SAGA_CONFIGURE_OK])
 
 AC_OUTPUT()
