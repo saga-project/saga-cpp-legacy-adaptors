@@ -28,6 +28,11 @@ AC_SUBST([BUILD_ADAPTOR_JOB])
 AC_CONFIG_FILES([config/make.cfg])
 AC_CONFIG_FILES([condor_job/condor_job_adaptor.ini])
 
+SAGA_CONFIGURE_OK=yes
+if test "$HAVE_SAGA"   = "no"; then SAGA_CONFIGURE_OK=no; fi
+if test "$HAVE_CONDOR" = "no"; then SAGA_CONFIGURE_OK=no; fi
+AC_SUBST([SAGA_CONFIGURE_OK])
+
 AC_OUTPUT()
 
 OUT=config.summary
@@ -46,7 +51,6 @@ echo " Condor Version        : $CONDOR_VERSION                         " | $TEE 
 echo " Condor Location       : $CONDOR_LOCATION                        " | $TEE $OUT
 echo " Condor Config         : $CONDOR_CONFIG                          " | $TEE $OUT
 echo " Condor Path           : $CONDOR_PATH                            " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo " Job Adaptor           : $BUILD_ADAPTOR_JOB                      " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
