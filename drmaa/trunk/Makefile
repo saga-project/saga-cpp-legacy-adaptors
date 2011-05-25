@@ -8,9 +8,9 @@
 
 SAGA_SUBDIRS = config drmaa-job
 
-all:: config.summary
+all:: config/make.cfg
 
-config.summary:
+config/make.cfg: 
 	@echo ""
 	@echo " ================================= "
 	@echo "  you need to run configure first  "
@@ -18,6 +18,6 @@ config.summary:
 	@echo ""
 	@false
 
+
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
--include $(SAGA_MAKE_INCLUDE_ROOT)/saga.dist.mk
 

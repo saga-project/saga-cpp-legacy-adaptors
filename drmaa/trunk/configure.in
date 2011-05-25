@@ -16,6 +16,12 @@ AX_SAGA_CONFIG()
 # create output files
 AC_CONFIG_FILES([config/make.cfg])
 
+
+SAGA_CONFIGURE_OK=yes
+if test "$HAVE_SAGA" = "no"; then SAGA_CONFIGURE_OK=no; fi
+AC_SUBST([SAGA_CONFIGURE_OK])
+
+
 AC_OUTPUT()
 
 OUT=config.summary
