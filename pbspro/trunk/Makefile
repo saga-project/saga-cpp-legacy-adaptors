@@ -9,9 +9,9 @@
 SAGA_SUBDIRS = config pbspro_job
 
 
-all:: config.summary
+all:: config/make.cfg
 
-config.summary:
+config/make.cfg: 
 	@echo ""
 	@echo " ================================= "
 	@echo "  you need to run configure first  "
@@ -21,5 +21,4 @@ config.summary:
 
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
--include $(SAGA_LOCATION)/share/saga/make/saga.dist.mk
 

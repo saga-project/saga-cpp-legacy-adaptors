@@ -4,12 +4,20 @@
 #  (See accompanying file LICENSE or copy at 
 #  http://www.boost.org/LICENSE_1_0.txt)
 
-ifndef SAGA_LOCATION
- $(error "SAGA_LOCATION must be set for this Makefile to work")
-endif
+-include config/make.cfg
 
 SAGA_SUBDIRS = config external sql_fast_advert
 
-include $(SAGA_LOCATION)/share/saga/make/saga.mk
+all:: config/make.cfg
 
+config/make.cfg: 
+	@echo ""
+	@echo " ================================= "
+	@echo "  you need to run configure first  "
+	@echo " ================================= "
+	@echo ""
+	@false
+
+
+-include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
 

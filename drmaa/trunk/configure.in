@@ -33,7 +33,8 @@ echo " ========================================================        " >> $OUT
 echo " SAGA DRMAA ADAPTOR - Configuration Summary                      " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION                      " >> $OUT
+echo " Using SAGA from       : $SAGA_LOCATION                          " >> $OUT
+echo "       SAGA version    : $SAGA_VERSION                           " >> $OUT
 echo "                                                                 " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT

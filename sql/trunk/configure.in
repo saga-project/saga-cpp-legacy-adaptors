@@ -34,6 +34,11 @@ ADAPTOR_CONFDIR=$ADAPTOR_ROOT/config/
 AC_SUBST(ADAPTOR_ROOT)
 AC_SUBST(ADAPTOR_CONFDIR)
 
+SAGA_CONFIGURE_OK=yes
+if ! test "$HAVE_SAGA"       = "yes"; then SAGA_CONFIGURE_OK=no; fi
+if ! test "$HAVE_POSTGRESQL" = "yes"; then SAGA_CONFIGURE_OK=no; fi
+AC_SUBST([SAGA_CONFIGURE_OK])
+
 AC_OUTPUT()
 
 OUT=config.summary
@@ -45,7 +50,10 @@ echo " ========================================================        " | $TEE 
 echo " SAGA SSH ADAPTORS                                               " | $TEE $OUT
 echo " --------------------------------------------------------        " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION                      " | $TEE $OUT
+echo " Using SAGA from       : $SAGA_LOCATION                          " | $TEE $OUT
+echo "       SAGA version    : $SAGA_VERSION                           " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " Adaptor Version       : $SAGA_LIB_VERSION                       " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo " PostgreSQL Found      : $HAVE_POSTGRESQL $POSTGRESQL_VERSION_S  " | $TEE $OUT
 echo " PostgreSQL Location   : $POSTGRESQL_LOCATION                    " | $TEE $OUT

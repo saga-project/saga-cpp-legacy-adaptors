@@ -3163,7 +3163,8 @@ echo " ========================================================        " | $TEE 
 echo " SAGA CONDOR ADAPTORS - Configuration Summary                    " | $TEE $OUT
 echo " --------------------------------------------------------        " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " | $TEE $OUT
+echo " Using SAGA from       : $SAGA_LOCATION                          " | $TEE $OUT
+echo "       SAGA version    : $SAGA_VERSION                           " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo " Condor Found          : $SAGA_HAVE_CONDOR                       " | $TEE $OUT
 echo " Condor Version        : $CONDOR_VERSION                         " | $TEE $OUT

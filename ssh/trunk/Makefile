@@ -8,25 +8,25 @@
 
 SAGA_SUBDIRS       = config
 
-ifeq "x$(SAGA_BUILD_ADAPTOR_FILESYSTEM)" "xyes"
+ifeq "x$(BUILD_ADAPTOR_FILESYSTEM)" "xyes"
   SAGA_SUBDIRS    += ssh_file
   BUILD_SOMETHING  = yes
 endif
 
-ifeq "x$(SAGA_BUILD_ADAPTOR_JOB)" "xyes"
+ifeq "x$(BUILD_ADAPTOR_JOB)" "xyes"
   SAGA_SUBDIRS    += ssh_job
   BUILD_SOMETHING  = yes
 endif
 
-ifeq "x$(SAGA_BUILD_ADAPTOR_CONTEXT)" "xyes"
+ifeq "x$(BUILD_ADAPTOR_CONTEXT)" "xyes"
   SAGA_SUBDIRS    += ssh_context
 # SAGA_SUBDIRS    += ssh_suite
 endif
 
 
-all:: config.summary
+all:: config/make.cfg
 
-config.summary:
+config/make.cfg: 
 	@echo ""
 	@echo " ================================= "
 	@echo "  you need to run configure first  "
@@ -36,7 +36,6 @@ config.summary:
 
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
--include $(SAGA_LOCATION)/share/saga/make/saga.dist.mk
 
 
 ssh_file:    ssh_context

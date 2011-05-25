@@ -25,16 +25,16 @@ SAGA_HAVE_ADAPTOR_X509=yes
 AC_MSG_CHECKING([for x509 adaptor])
 if ! test -f $TMP_SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini; then
   SAGA_HAVE_ADAPTOR_X509="NO. Get it here: http://saga.cct.lsu.edu/software/cpp/download/"
-  AC_MSG_RESULT([ missing])
+  AC_MSG_RESULT([missing])
   BUILD_ADAPTOR_JOB="no (x509 adaptor missing)"
   BUILD_ADAPTOR_FILE="no (x509 adaptor missing)"
   BUILD_ADAPTOR_REPLICA="no (x509 adaptor missing)"
   BUILD_ADAPTOR_LOADER="no (x509 adaptor missing)"
 else
-  AC_MSG_RESULT([ ok ($TMP_SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini)])
+  AC_MSG_RESULT([ok])
+  AX_SAGA_GLOBUS()
 fi
 
-AX_SAGA_GLOBUS()
 
 if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
   if test "x$SAGA_HAVE_ADAPTOR_REPLICA" = "xyes"; then
@@ -80,6 +80,13 @@ AC_CONFIG_FILES([config/saga.config.globus_gridftp.c.mk])
 AC_CONFIG_FILES([config/saga.config.globus_gsi.c.mk])
 AC_CONFIG_FILES([config/saga.config.globus_rls.c.mk])
 
+
+SAGA_CONFIGURE_OK=yes
+if ! test "$HAVE_SAGA"   = "yes"; then SAGA_CONFIGURE_OK=no; fi
+if ! test "$HAVE_GLOBUS" = "yes"; then SAGA_CONFIGURE_OK=no; fi
+AC_SUBST([SAGA_CONFIGURE_OK])
+
+
 AC_OUTPUT()
 
 OUT=config.summary
@@ -91,9 +98,11 @@ echo " ========================================================          " >> $O
 echo " SAGA GLOBUS ADAPTORS - Required Externals                         " >> $OUT
 echo " --------------------------------------------------------          " >> $OUT
 echo "                                                                   " >> $OUT
+echo " Using SAGA from          : $SAGA_LOCATION                         " >> $OUT
+echo "       SAGA version       : $SAGA_VERSION                          " >> $OUT
+echo "                                                                   " >> $OUT
 echo " Adaptor Version          : $SAGA_LIB_VERSION                      " >> $OUT
 echo "                                                                   " >> $OUT
-echo " Using SAGA Core from     : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE)" >> $OUT                                                            
 echo " X.509 Adaptor Found      : $SAGA_HAVE_ADAPTOR_X509                " >> $OUT
 echo "                                                                   " >> $OUT
 echo " Globus Toolkit Found     : $HAVE_GLOBUS ($GLOBUS_VERSION)         " >> $OUT

@@ -9,25 +9,25 @@
 
 SAGA_SUBDIRS   = config
 
-ifeq "x$(SAGA_BUILD_ADAPTOR_LOADER)" "xyes"
+ifeq "x$(BUILD_ADAPTOR_LOADER)" "xyes"
   SAGA_SUBDIRS += loader
 endif
 
-ifeq "x$(SAGA_BUILD_ADAPTOR_REPLICA)" "xyes"
+ifeq "x$(BUILD_ADAPTOR_REPLICA)" "xyes"
   SAGA_SUBDIRS += replica
 endif
 
-ifeq "x$(SAGA_BUILD_ADAPTOR_FILE)" "xyes"
+ifeq "x$(BUILD_ADAPTOR_FILE)" "xyes"
   SAGA_SUBDIRS += file
 endif
 
-ifeq "x$(SAGA_BUILD_ADAPTOR_JOB)" "xyes"
+ifeq "x$(BUILD_ADAPTOR_JOB)" "xyes"
   SAGA_SUBDIRS += job
 endif
 
-all:: config.summary
+all:: config/make.cfg
 
-config.summary:
+config/make.cfg: 
 	@echo ""
 	@echo " ================================= "
 	@echo "  you need to run configure first  "
@@ -37,7 +37,7 @@ config.summary:
 
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
--include $(SAGA_LOCATION)/share/saga/make/saga.dist.mk
+
 
 # dir depenencies for parallel builds
 job:     loader

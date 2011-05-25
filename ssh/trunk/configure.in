@@ -12,13 +12,6 @@ AC_INIT()
 
 AX_SAGA_CONFIG()
 
-if test "x$TMP_SAGA_INSTTYPE" == "xinstall"; then
-  AC_CONFIG_AUX_DIR([$TMP_SAGA_LOCATION/share/saga/config/])
-else
-  AC_CONFIG_AUX_DIR([$TMP_SAGA_LOCATION/config/])
-fi
-
-
 AX_SAGA_CHECK_SSH()
 
 if test "$HAVE_SSH" = "yes"; then
@@ -92,6 +85,11 @@ AC_SUBST([BUILD_ADAPTOR_JOB])
 AC_CONFIG_FILES([config/make.cfg])
 AC_CONFIG_FILES([config/config.hpp])
 
+SAGA_CONFIGURE_OK=yes
+if ! test "$HAVE_SAGA" = "yes"; then SAGA_CONFIGURE_OK=no; fi
+if ! test "$HAVE_SSH"  = "yes"; then SAGA_CONFIGURE_OK=no; fi
+AC_SUBST([SAGA_CONFIGURE_OK])
+
 AC_OUTPUT()
 
 OUT=config.summary
@@ -103,7 +101,8 @@ echo " ========================================================        " | $TEE 
 echo " SAGA SSH ADAPTORS                                               " | $TEE $OUT
 echo " --------------------------------------------------------        " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " | $TEE $OUT
+echo " Using SAGA from       : $SAGA_LOCATION                          " | $TEE $OUT
+echo "       SAGA version    : $SAGA_VERSION                           " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo " Adaptor version       : $SAGA_LIB_VERSION                       " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT

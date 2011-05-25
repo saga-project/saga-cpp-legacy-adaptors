@@ -3890,7 +3890,8 @@ echo " ========================================================        " | $TEE 
 echo " SAGA CURL ADAPTORS                                              " | $TEE $OUT
 echo " --------------------------------------------------------        " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION                      " | $TEE $OUT
+echo " Using SAGA from       : $SAGA_LOCATION                          " | $TEE $OUT
+echo "       SAGA version    : $SAGA_VERSION                           " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo " CURL found            : $HAVE_CURL  ($CURL_LOCATION)            " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT

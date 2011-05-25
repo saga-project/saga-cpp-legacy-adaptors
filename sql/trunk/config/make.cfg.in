@@ -9,6 +9,8 @@
 ifndef MAKE_CFG_DEFAULT_IN
        MAKE_CFG_DEFAULT_IN=yes
 
+SAGA_LOCATION                 = @SAGA_LOCATION@
+SAGA_CONFIGURE_OK             = @SAGA_CONFIGURE_OK@
 
 SAGA_HAVE_SOCI_SQLITE3        = @HAVE_SOCI_SQLITE3@
 SAGA_HAVE_SOCI_POSTGRESQL     = @HAVE_SOCI_POSTGRESQL@
@@ -18,8 +20,9 @@ HAVE_SQLITE3_DTOR_TYPE        = @HAVE_SQLITE3_DTOR_TYPE@
 
 SAGA_HAVE_POSTGRESQL          = @HAVE_POSTGRESQL@
 
-ADAPTOR_ROOT    = @ADAPTOR_ROOT@
-ADAPTOR_CONFDIR = @ADAPTOR_CONFDIR@
+ADAPTOR_ROOT                  = @ADAPTOR_ROOT@
+ADAPTOR_CONFDIR               = @ADAPTOR_CONFDIR@
+
 
 # add SAGA and postgres compiler flags
 SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/soci/core/
@@ -29,6 +32,7 @@ SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/soci/backends/postgresql/
 SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/soci/backends/postgresql/ -lsoci_postgresql
 
 include $(ADAPTOR_CONFDIR)/saga.config.postgresql.c.mk
+include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 
 endif # guard
 
