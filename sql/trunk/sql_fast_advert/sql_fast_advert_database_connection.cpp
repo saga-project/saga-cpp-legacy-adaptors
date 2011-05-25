@@ -318,8 +318,6 @@ namespace sql_fast_advert
     int depth = 0;
     soci::session sql(*pool);
 
-    std::cout << "get child nodes" << std::endl; 
-
     // Find the parent node depth
     sql << 
       "SELECT (COUNT(node.id) - 1) AS depth "
