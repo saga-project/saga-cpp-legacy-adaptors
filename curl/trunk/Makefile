@@ -16,10 +16,9 @@ ifeq "x$(SAGA_BUILD_ADAPTOR_FILE)" "xyes"
   SAGA_SUBDIRS += curl_file
 endif
 
+all:: config/make.cfg
 
-all:: config.summary
-
-config.summary:
+config/make.cfg: 
 	@echo ""
 	@echo " ================================= "
 	@echo "  you need to run configure first  "
@@ -29,5 +28,4 @@ config.summary:
 
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
--include $(SAGA_LOCATION)/share/saga/make/saga.dist.mk
 

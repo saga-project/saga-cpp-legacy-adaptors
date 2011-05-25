@@ -57,6 +57,13 @@ AC_SUBST([BUILD_ADAPTOR_FILESYSTEM])
 AC_CONFIG_FILES([config/make.cfg])
 AC_CONFIG_FILES([config/config.hpp])
 
+
+SAGA_CONFIGURE_OK=yes
+if test "$HAVE_SAGA" = "no"; then SAGA_CONFIGURE_OK=no; fi
+if test "$HAVE_CURL" = "no"; then SAGA_CONFIGURE_OK=no; fi
+AC_SUBST([SAGA_CONFIGURE_OK])
+
+
 AC_OUTPUT()
 
 OUT=config.summary
