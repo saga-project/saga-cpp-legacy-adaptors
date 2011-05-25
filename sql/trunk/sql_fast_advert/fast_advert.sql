@@ -188,7 +188,7 @@ ALTER SEQUENCE nodes_id_seq OWNED BY nodes.id;
 -- Name: nodes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: SAGA
 --
 
-SELECT pg_catalog.setval('nodes_id_seq', 870, true);
+SELECT pg_catalog.setval('nodes_id_seq', 875, true);
 
 
 --
@@ -213,21 +213,6 @@ ALTER TABLE nodes ALTER COLUMN id SET DEFAULT nextval('nodes_id_seq'::regclass);
 -- Data for Name: attributes; Type: TABLE DATA; Schema: public; Owner: SAGA
 --
 
-INSERT INTO attributes VALUES (56, 'foo', 'something else', false);
-INSERT INTO attributes VALUES (57, 'bar03', 'blabla', false);
-INSERT INTO attributes VALUES (56, 'bar', 'something', false);
-INSERT INTO attributes VALUES (58, 'test', '1', false);
-INSERT INTO attributes VALUES (56, 'fooo', 'something else', false);
-INSERT INTO attributes VALUES (57, 'bar04', 'blabla', false);
-INSERT INTO attributes VALUES (57, 'foo', 'blabla', false);
-INSERT INTO attributes VALUES (57, 'bar', 'blabla', false);
-INSERT INTO attributes VALUES (57, 'bar05', 'blabla', false);
-INSERT INTO attributes VALUES (57, 'bar01', 'blabla', false);
-INSERT INTO attributes VALUES (57, 'bar02', 'blabla', false);
-INSERT INTO attributes VALUES (465, 'state', 'Unknown', false);
-INSERT INTO attributes VALUES (465, 'stopped', 'false', false);
-INSERT INTO attributes VALUES (468, 'state', 'Unknown', false);
-INSERT INTO attributes VALUES (468, 'stopped', 'false', false);
 
 
 --
@@ -240,16 +225,7 @@ INSERT INTO attributes VALUES (468, 'stopped', 'false', false);
 -- Data for Name: nodes; Type: TABLE DATA; Schema: public; Owner: SAGA
 --
 
-INSERT INTO nodes VALUES (1, 'root', true, 1, 20, -86386329);
-INSERT INTO nodes VALUES (57, 'weidner', true, 16, 17, -877973446);
-INSERT INTO nodes VALUES (466, 'BigJob', true, 2, 7, -2068730691);
-INSERT INTO nodes VALUES (467, 'Bigjob-b21ca6a8-8647-11e0-89f7-d8d385abb2b0', true, 3, 6, 766557942);
-INSERT INTO nodes VALUES (58, 'andre', true, 14, 15, -1334043152);
-INSERT INTO nodes VALUES (464, 'Bigjob-a1d50ec0-8647-11e0-b871-d8d385abb2b0', true, 8, 11, -2064990300);
-INSERT INTO nodes VALUES (59, 'shantenu', true, 12, 13, 1292625084);
-INSERT INTO nodes VALUES (56, 'wilhelm', true, 18, 19, -377805401);
-INSERT INTO nodes VALUES (465, 'localhost', true, 9, 10, 980945832);
-INSERT INTO nodes VALUES (468, 'localhost', true, 4, 5, 554968904);
+INSERT INTO nodes VALUES (1, 'root', true, 1, 2, -86386329);
 
 
 --
