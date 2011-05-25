@@ -318,6 +318,8 @@ namespace sql_fast_advert
     int depth = 0;
     soci::session sql(*pool);
 
+    std::cout << "get child nodes" << std::endl; 
+
     // Find the parent node depth
     sql << 
       "SELECT (COUNT(node.id) - 1) AS depth "
@@ -413,7 +415,11 @@ namespace sql_fast_advert
   void database_connection::set_attribute (const node db_node, const std::string key, const std::string value)
   {
     soci::session sql(*pool);
-    sql << "INSERT INTO " << DATABASE_ATTRIBUTES_TABLE << " VALUES (:node_id, :key, :value, 'f')", soci::use(db_node.id), soci::use(key), soci::use(value);
+    
+    soci::procedure stored_procedure = (sql.prepare << "set_attribute(:node_id, :key, :value, 'f')", soci::use(db_node.id), soci::use(key), soci::use(value));
+    stored_procedure.execute(true);
+    
+    //sql << "INSERT INTO " << DATABASE_ATTRIBUTES_TABLE << " VALUES (:node_id, :key, :value, 'f')", soci::use(db_node.id), soci::use(key), soci::use(value);
   }
 
   void database_connection::get_vector_attribute ( const node db_node, std::vector<std::string> &ret, const std::string key)
@@ -473,6 +479,7 @@ namespace sql_fast_advert
 
     while(statement.fetch())
     {
+      
       for (std::vector<std::string>::iterator i = keys.begin(); i != keys.end(); i++)
       {
         ret.push_back(*i);

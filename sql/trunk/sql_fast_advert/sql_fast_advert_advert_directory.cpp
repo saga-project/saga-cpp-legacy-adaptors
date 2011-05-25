@@ -68,7 +68,7 @@ namespace sql_fast_advert
 	//
 	
 	saga::url url(idata->location_);
-	boost::filesystem::path path = normalize_boost_path(boost::filesystem::path(url.get_path()));
+  path = normalize_boost_path(boost::filesystem::path(url.get_path()));
 	
 	//
 	// Decode flags
@@ -217,15 +217,7 @@ namespace sql_fast_advert
 		}
 	
 	}
-	
-	// 
-	// The node must be a directory
-	//
 
-	if (dir_node.dir == "f")
-	{
-		SAGA_ADAPTOR_THROW ("This node is not a directory", saga::IncorrectURL);
-	}
 }
 
 
@@ -571,11 +563,22 @@ namespace sql_fast_advert
                                            saga::url      entry, 
                                            int            flags)
   {
-	std::cout << "Remove" << std::endl;
-	std::cout << entry << std::endl;
 	
-	boost::filesystem::path path = normalize_boost_path(boost::filesystem::path(entry.get_path()));
-	node db_node = dbc->find_node(path.string());
+	boost::filesystem::path entry_path = normalize_boost_path(boost::filesystem::path(entry.get_path()));
+	
+	  // =================
+    // = Relative path =
+    // =================
+    
+    if (entry_path.string()[0] != '/')
+    {
+      entry_path = path / entry_path;
+    }
+	
+	  
+	
+	
+	node db_node = dbc->find_node(entry_path.string());
 	
 	//
 	// Check if entry exists 

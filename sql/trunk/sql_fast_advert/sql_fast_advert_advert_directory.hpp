@@ -235,7 +235,7 @@ namespace sql_fast_advert
 
 	private:
 		database_connection *dbc;
-		std::string path_string;
+		boost::filesystem::path path;
 		node dir_node;
 		std::vector<node> node_vector;
 		
