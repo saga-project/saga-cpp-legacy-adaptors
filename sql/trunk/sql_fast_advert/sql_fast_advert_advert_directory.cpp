@@ -467,13 +467,40 @@ namespace sql_fast_advert
 //    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
 //  }
 //
-//  void 
-//    advertdirectory_cpi_impl::sync_exists (bool      & ret, 
-//                                           saga::url   entry)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
-//
+  void 
+    advertdirectory_cpi_impl::sync_exists (bool      & ret, 
+                                           saga::url   entry)
+  {
+    
+     boost::filesystem::path entry_path = normalize_boost_path(boost::filesystem::path(entry.get_path()));
+
+  	  // =================
+      // = Relative path =
+      // =================
+
+      if (entry_path.string()[0] != '/')
+      {
+        entry_path = path / entry_path;
+      }
+
+  	  node db_node = dbc->find_node(entry_path.string());
+
+  	//
+  	// Check if entry exists 
+  	//
+
+  	if (db_node.id == 0)
+  	{
+      ret = false;
+  	}
+
+    else
+    {
+      ret = true;
+    }
+    
+  }
+
   void 
     advertdirectory_cpi_impl::sync_is_dir (bool      & ret, 
                                            saga::url   entry)
@@ -564,7 +591,7 @@ namespace sql_fast_advert
                                            int            flags)
   {
 	
-	boost::filesystem::path entry_path = normalize_boost_path(boost::filesystem::path(entry.get_path()));
+	  boost::filesystem::path entry_path = normalize_boost_path(boost::filesystem::path(entry.get_path()));
 	
 	  // =================
     // = Relative path =
@@ -574,11 +601,8 @@ namespace sql_fast_advert
     {
       entry_path = path / entry_path;
     }
-	
-	  
-	
-	
-	node db_node = dbc->find_node(entry_path.string());
+
+	  node db_node = dbc->find_node(entry_path.string());
 	
 	//
 	// Check if entry exists 

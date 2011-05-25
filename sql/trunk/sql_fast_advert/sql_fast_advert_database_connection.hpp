@@ -24,10 +24,10 @@
 #define DATABASE_LAYOUT_VERSION "1.0"
 
 // Database Table names
-#define DATABASE_VERSION_TABLE					"version"
-#define DATABASE_NODE_TABLE	 					"nodes"
-#define DATABASE_ATTRIBUTES_TABLE 				"attributes"
-#define DATABASE_DATA_TABLE						"data"
+#define DATABASE_VERSION_TABLE		  	"version"
+#define DATABASE_NODE_TABLE	 			  	"nodes"
+#define DATABASE_ATTRIBUTES_TABLE   	"attributes"
+#define DATABASE_DATA_TABLE				  	"data"
 
 namespace sql_fast_advert
 {

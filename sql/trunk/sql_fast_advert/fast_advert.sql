@@ -106,11 +106,20 @@ CREATE FUNCTION set_attribute(id integer, k character varying, v character varyi
     AS $$
 declare
 begin
-perform * from attributes where node_id = id and key = k;
-if FOUND then
-update attributes set value = v where node_id = id and key = k;
+if iv then
+  perform * from attributes where node_id = id and key = k and value = v;
+  if FOUND then
+    update attributes set value = v where node_id = id and key = k and value = v;
+  else
+    insert into attributes values (id, k, v, iv);
+  end if;
 else
-insert into attributes values (id, k, v, iv);
+  perform * from attributes where node_id = id and key = k;
+  if FOUND then
+    update attributes set value = v where node_id = id and key = k;
+  else
+    insert into attributes values (id, k, v, iv);
+  end if;
 end if;
 end;
 $$;

@@ -121,8 +121,8 @@ namespace sql_fast_advert
           "node_id		    integer			  NOT NULL	,"
           "key			      varchar(256)	NOT NULL	,"
           "value			    varchar(256)	NOT NULL	,"
-          "is_vector 		  boolean			  NOT NULL	,"
-          "UNIQUE (node_id, key)			            )";		
+          "is_vector 		  boolean			  NOT NULL	)";
+          //"UNIQUE (node_id, key)			            )";		
 
         sql << "CREATE TABLE " << DATABASE_DATA_TABLE << " ("
           "node_id		integer			NOT NULL	,"
@@ -430,7 +430,7 @@ namespace sql_fast_advert
 
     soci::statement statement = 
       (
-      sql.prepare << "SELECT value FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key =':key'", soci::use(db_node.id), soci::use(key), soci::into(values)
+      sql.prepare << "SELECT value FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key =:key", soci::use(db_node.id), soci::use(key), soci::into(values)
       );
 
     statement.execute();
@@ -446,16 +446,28 @@ namespace sql_fast_advert
     }
   }
 
-  void database_connection::set_vector_attribute (const node db_node, const std::string key, std::vector<std::string> value)
+  void database_connection::set_vector_attribute (const node db_node, const std::string key, std::vector<std::string> values)
   {
     soci::session sql(*pool);
+    
+    std::cout << "set_vector_attribute" << std::endl;
 
-    soci::statement statement = 
-      (
-      sql.prepare << "INSERT INTO " << DATABASE_ATTRIBUTES_TABLE << " VALUES (:node_id, ':key', ':value', 't')", soci::use(db_node.id), soci::use(key), soci::use(value)
-      );
+    std::string value;
+    //soci::statement statement = 
+    //  (
+    //  sql.prepare << "INSERT INTO " << DATABASE_ATTRIBUTES_TABLE << " VALUES (:node_id, :key, :value, 't')", soci::use(db_node.id), soci::use(key), soci::use(value)
+    //  );
+      
+      
+    soci::procedure stored_procedure = (sql.prepare << "set_attribute(:node_id, :key, :value, 't')", soci::use(db_node.id), soci::use(key), soci::use(value));
+   
 
-    statement.execute(true);
+    for (std::vector<std::string>::iterator i = values.begin(); i != values.end(); i++)
+    {
+      value = *i;
+      stored_procedure.execute(true);
+    }
+
   }
 
   void database_connection::remove_attribute (const node db_node, const std::string key)

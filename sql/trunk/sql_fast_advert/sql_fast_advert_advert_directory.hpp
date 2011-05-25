@@ -110,8 +110,9 @@ namespace sql_fast_advert
 //                                       int                           flags);
 //      void sync_read_link             (saga::url                   & ret, 
 //                                       saga::url                     target);
-//      void sync_exists                (bool                        & ret, 
-//                                       saga::url                     target);
+      void sync_exists                (bool                        & ret, 
+                                       saga::url                     target);
+
       void sync_is_dir                (bool                        & ret, 
                                        saga::url                     target);
 //      void sync_is_entry              (bool                        & ret, 
