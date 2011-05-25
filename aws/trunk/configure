@@ -3346,7 +3346,7 @@ echo " ========================================================        " | $TEE 
 echo " SAGA AWS ADAPTORS                                               " | $TEE $OUT
 echo " --------------------------------------------------------        " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " | $TEE $OUT
+echo " Using SAGA from       : $TMP_SAGA_LOCATION                      " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo " AWS tools found       : $HAVE_AWS $DETAIL                       " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
