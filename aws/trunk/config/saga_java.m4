@@ -54,7 +54,7 @@ AC_DEFUN([AX_SAGA_CHECK_JAVA],
               [want_java="yes"])
 
   # use JAVA_LOCATION if avaialble, and if not 
-  # overwritten by --with-awjava
+  # overwritten by --with-java
 
   if test "x$want_java" = "xyes"; then
     

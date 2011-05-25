@@ -12,9 +12,9 @@ ifeq "x$(SAGA_BUILD_ADAPTOR_JOB)" "xyes"
   SAGA_SUBDIRS += aws_job
 endif
 
-all:: config.summary
+all:: config/make.cfg
 
-config.summary:
+config/make.cfg: 
 	@echo ""
 	@echo " ================================= "
 	@echo "  you need to run configure first  "
@@ -22,9 +22,7 @@ config.summary:
 	@echo ""
 	@false
 
-
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
--include $(SAGA_LOCATION)/share/saga/make/saga.dist.mk
 
 # directory dependencies...
 aws_suite:     internal

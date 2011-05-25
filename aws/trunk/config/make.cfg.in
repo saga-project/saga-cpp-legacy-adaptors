@@ -10,16 +10,8 @@ ifndef MAKE_CFG_AWS_IN
        MAKE_CFG_AWS_IN=yes
 
 
-TMP_SAGA_LOCATION = @TMP_SAGA_LOCATION@
-TMP_SAGA_INSTTYPE = @TMP_SAGA_INSTTYPE@
-
-ifeq "$(TMP_SAGA_INSTTYPE)" "source"
-  SAGA_ROOT              = $(TMP_SAGA_LOCATION)
-  SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/make
-else
-  SAGA_LOCATION          = $(TMP_SAGA_LOCATION)
-  SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/share/saga/make
-endif
+SAGA_LOCATION               = @SAGA_LOCATION@
+SAGA_CONFIGURE_OK           = @SAGA_CONFIGURE_OK@
 
 SAGA_HAVE_AWS               = @HAVE_AWS@
 SAGA_HAVE_JAVA              = @HAVE_JAVA@
@@ -29,13 +21,7 @@ SAGA_BUILD_ADAPTOR_REPLICA  = @BUILD_ADAPTOR_REPLICA@
 SAGA_BUILD_ADAPTOR_FILE     = @BUILD_ADAPTOR_FILE@
 SAGA_BUILD_ADAPTOR_JOB      = @BUILD_ADAPTOR_JOB@
 
-# at this point, we also add the flags for linking the adaptor suite
-ifndef SAGA_ADAPTOR_SUITE
-  SAGA_CPPFLAGS += -I../aws_suite
-  SAGA_LDFLAGS  += -L../aws_suite -lsaga_adaptor_aws_suite
-endif
-
-include $(SAGA_MAKE_INCLUDE_ROOT)/saga.util.mk
+include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 
 endif # guard
 
