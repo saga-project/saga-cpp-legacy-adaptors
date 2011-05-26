@@ -86,7 +86,13 @@ file_cpi_impl::file_cpi_impl (proxy                * p,
         try 
         {
             std::string url = saga::url::unescape(location.get_path());
+            
+            #if BOOST_FILESYSTEM_VERSION > 2
+            fs::path fpath (url);
+            #else
             fs::path fpath (url, fs::native);
+            #endif
+            
             if ( ! fs::exists (fpath) )
             {
                 SAGA_OSSTREAM strm;
