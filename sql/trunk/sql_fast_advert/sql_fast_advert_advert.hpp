@@ -30,67 +30,68 @@
 ////////////////////////////////////////////////////////////////////////
 namespace sql_fast_advert
 {
-	// Adaptor data
-	typedef saga::adaptors::adaptor_data<sql_fast_advert::adaptor> adaptor_data;
+  // Adaptor data
+  typedef saga::adaptors::adaptor_data<sql_fast_advert::adaptor> adaptor_data;
 
   //////////////////////////////////////////////////////////////////////
   //  This adaptor implements the functionality of the Saga API "advert".
   //  It defines the functions declared in its base class, advert_file_cpi.
-	class advert_cpi_impl : public saga::adaptors::v1_0::advert_cpi <advert_cpi_impl>
-	{
-    private:
-    	typedef saga::adaptors::v1_0::advert_cpi <advert_cpi_impl> base_cpi;
+  class advert_cpi_impl : public saga::adaptors::v1_0::advert_cpi <advert_cpi_impl>
+  {
+  private:
+    typedef saga::adaptors::v1_0::advert_cpi <advert_cpi_impl> base_cpi;
 
-    public:    
-		// constructor of the advert adaptor 
-      	advert_cpi_impl				(
-										proxy						      	*p, 
-                       					cpi_info const                  	&info, 
-                       					saga::ini::ini const            	&glob_ini, 
-                       					saga::ini::ini const            	&adap_ini,
-                       					TR1::shared_ptr <saga::adaptor>		adaptor	
-									);
+  public:    
+   
+    // constructor of the advert adaptor 
+    advert_cpi_impl (
+      proxy					          	      	*p, 
+      cpi_info const                  	&info, 
+      saga::ini::ini const            	&glob_ini, 
+      saga::ini::ini const            	&adap_ini,
+      TR1::shared_ptr <saga::adaptor>		adaptor	
+    );
 
-      // destructor of the advert adaptor 
-		~advert_cpi_impl			(void);
+    // destructor of the advert adaptor 
+    ~advert_cpi_impl			(void);
 
-	///////////////////////////////////////////////////////////////////////////
-	// attribute functions
-	///////////////////////////////////////////////////////////////////////////
-		
-		void sync_attribute_exists      (bool &ret, std::string key);
-      	void sync_attribute_is_readonly (bool &ret, std::string key);
-      	void sync_attribute_is_writable (bool &ret, std::string key);
-		void sync_attribute_is_vector   (bool &ret, std::string key);
-      	void sync_attribute_is_extended (bool &ret, std::string key);
+    ///////////////////////////////////////////////////////////////////////////
+    // attribute functions
+    ///////////////////////////////////////////////////////////////////////////
 
-      	void sync_get_attribute 		(std::string &ret, std::string key);		
-		void sync_set_attribute 		(saga::impl::void_t &ret, std::string key, std::string val);
+    void sync_attribute_exists      (bool &ret, std::string key);
+    void sync_attribute_is_readonly (bool &ret, std::string key);
+    void sync_attribute_is_writable (bool &ret, std::string key);
+    void sync_attribute_is_vector   (bool &ret, std::string key);
+    void sync_attribute_is_extended (bool &ret, std::string key);
 
-     	void sync_get_vector_attribute 	(std::vector <std::string> 	&ret, std::string key);										
-		void sync_set_vector_attribute  (saga::impl::void_t	&ret, std::string key, std::vector <std::string> val);
-										
-      	void sync_remove_attribute     	(saga::impl::void_t	&ret, std::string key);
-      	void sync_list_attributes 		(std::vector <std::string> 	&ret);	
-      	void sync_find_attributes      	(std::vector <std::string> 	&ret, std::string pattern);
+    void sync_get_attribute (std::string &ret, std::string key);		
+    void sync_set_attribute (saga::impl::void_t &ret, std::string key, std::string val);
 
-   ///////////////////////////////////////////////////////////////////////////
-   // namespace_entry functions
-  ///////////////////////////////////////////////////////////////////////////
+    void sync_get_vector_attribute  (std::vector <std::string> 	&ret, std::string key);										
+    void sync_set_vector_attribute  (saga::impl::void_t	&ret, std::string key, std::vector <std::string> val);
 
-    	void sync_get_url   (saga::url    & ret);
-      	void sync_get_cwd   (saga::url    & ret);
-      	void sync_get_name  (saga::url    & ret);
+    void sync_remove_attribute  (saga::impl::void_t	&ret, std::string key);
+    void sync_list_attributes   (std::vector <std::string> 	&ret);	
+    void sync_find_attributes   (std::vector <std::string> 	&ret, std::string pattern);
 
-      	void sync_read_link (saga::url    & ret);
-      	void sync_is_dir    (bool         & ret);
-      	void sync_is_entry  (bool         & ret);
-      	void sync_is_link   (bool         & ret);
-      	void sync_copy      (saga::impl::void_t & ret, saga::url target, int flags);
-      	void sync_link      (saga::impl::void_t & ret, saga::url target, int flags);
-		void sync_move      (saga::impl::void_t & ret, saga::url target, int flags);
-      	void sync_remove    (saga::impl::void_t & ret, int       flags);    
-      	void sync_close     (saga::impl::void_t & ret, double    timeout);
+    ///////////////////////////////////////////////////////////////////////////
+    // namespace_entry functions
+    ///////////////////////////////////////////////////////////////////////////
+
+    void sync_get_url   (saga::url &ret);
+    void sync_get_cwd   (saga::url &ret);
+    void sync_get_name  (saga::url &ret);
+
+    void sync_read_link (saga::url &ret);
+    void sync_is_dir    (bool &ret);
+    void sync_is_entry  (bool &ret);
+    void sync_is_link   (bool &ret);
+    void sync_copy      (saga::impl::void_t &ret, saga::url target, int flags);
+    void sync_link      (saga::impl::void_t &ret, saga::url target, int flags);
+    void sync_move      (saga::impl::void_t &ret, saga::url target, int flags);
+    void sync_remove    (saga::impl::void_t &ret, int flags);    
+    void sync_close     (saga::impl::void_t &ret, double timeout);
 
 //      // advert functions
 //      void sync_store_object    (saga::impl::void_t & ret, saga::object  obj);
@@ -143,13 +144,20 @@ namespace sql_fast_advert
 //      saga::task async_store_string          (std::string    str);
 //      saga::task async_retrieve_string       (void);
 
-private:
-	database_connection *dbc;
-	std::string path_string;
-	node dir_node;
-	std::vector<node> node_vector;
+  private:
+    
+    // The Database Connection
+    database_connection *dbc;
+    
+    // Basic informations for the current database node
+    node dir_node;
+    std::vector<node> node_vector;
+    
+    // The path of this database node
+    boost::filesystem::path path;
 
-	void create_parents(boost::filesystem::path path);
+    // Helper function to create a complete path including it's parents 
+    void create_parents(boost::filesystem::path path_);
 
   }; // class advert_cpi_impl
 

@@ -66,39 +66,33 @@ namespace sql_fast_advert
 	
 	void sync_set_attribute (saga::impl::void_t &ret, std::string key, std::string val);
 	
-    void sync_get_vector_attribute (std::vector <std::string> &ret, std::string key);
+  void sync_get_vector_attribute (std::vector <std::string> &ret, std::string key);
     
 	void sync_set_vector_attribute (saga::impl::void_t & ret, std::string key, std::vector <std::string> val);
     
 	void sync_remove_attribute (saga::impl::void_t &ret, std::string key);
 	
-    void sync_list_attributes (std::vector <std::string> &ret);
+  void sync_list_attributes (std::vector <std::string> &ret);
     
 	void sync_find_attributes (std::vector <std::string> &ret, std::string pattern);
 	
-//      // namespace_entry functions
-//      void sync_get_url               (saga::url                   & ret);
-//      void sync_get_cwd               (saga::url                   & ret);
-//      void sync_get_name              (saga::url                   & ret);
-//      void sync_read_link             (saga::url                   & ret);
-      void sync_is_dir                (bool                        & ret);
-//      void sync_is_entry              (bool                        & ret);
-//      void sync_is_link               (bool                        & ret);
-//      void sync_copy                  (saga::impl::void_t          & ret, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_link                  (saga::impl::void_t          & ret, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_move                  (saga::impl::void_t          & ret, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-      void sync_remove                (saga::impl::void_t          & ret, 
-                                       int                           flags);
-//      void sync_close                 (saga::impl::void_t          & ret, 
-//                                       double                        timeout);
-//
-//      // namespace_dir functions      
+	// namespace_entry functions
+  void sync_get_url     (saga::url &ret);
+  void sync_get_cwd     (saga::url &ret);
+  void sync_get_name    (saga::url &ret);
+  void sync_read_link   (saga::url &ret);
+  void sync_is_dir      (bool      &ret);
+  void sync_is_entry    (bool      &ret);
+  void sync_is_link     (bool      &ret);
+  
+  void sync_copy        (saga::impl::void_t &ret, saga::url target, int flags);
+  void sync_link        (saga::impl::void_t &ret, saga::url target, int flags);
+  void sync_move        (saga::impl::void_t &ret, saga::url target, int flags);
+  void sync_remove      (saga::impl::void_t &ret, int flags);
+  void sync_close       (saga::impl::void_t &ret, double timeout);
+  
+  
+  // namespace_dir functions      
       void sync_change_dir            (saga::impl::void_t          & ret, 
                                        saga::url                     target);
 
@@ -235,12 +229,18 @@ namespace sql_fast_advert
 //                                        int                           flags);
 
 	private:
-		database_connection *dbc;
-		boost::filesystem::path path;
-		node dir_node;
-		std::vector<node> node_vector;
-		
-		void create_parents(boost::filesystem::path path);
+    // The Database Connection
+    database_connection *dbc;
+    
+    // Basic informations for the current database node
+    node dir_node;
+    std::vector<node> node_vector;
+    
+    // The path of this database node
+    boost::filesystem::path path;
+
+    // Helper function to create a complete path including it's parents 
+    void create_parents(boost::filesystem::path path_);
 		
   }; // class advertdirectory_cpi_impl
 

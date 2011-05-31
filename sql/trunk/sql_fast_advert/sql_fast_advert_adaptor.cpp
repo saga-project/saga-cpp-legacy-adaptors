@@ -17,12 +17,15 @@ SAGA_ADAPTOR_REGISTER (sql_fast_advert::adaptor);
 
 
 ////////////////////////////////////////////////////////////////////////
+//  Namespace sql_fast_advert 
+////////////////////////////////////////////////////////////////////////
+
 namespace sql_fast_advert
 {
 
   // register function for the SAGA engine
   saga::impl::adaptor_selector::adaptor_info_list_type
-  adaptor::adaptor_register (saga::impl::session * s)
+    adaptor::adaptor_register (saga::impl::session * s)
   {
     // list of implemented cpi's
     saga::impl::adaptor_selector::adaptor_info_list_type list;
@@ -45,81 +48,81 @@ namespace sql_fast_advert
     return list;
   }
 
-	adaptor::adaptor()
-	{
-		database_connection_map = new std::map<std::string, database_connection*>();
-	}
-	
-	adaptor::~adaptor()
-	{
-		delete database_connection_map;
-	}
-	
-	database_connection* adaptor::get_database_connection(saga::url url,  saga::ini::ini const &adap_ini)
-	{
-		database_connection_map_t::iterator it = database_connection_map->find(url.get_host());
-		
-		if (it == database_connection_map->end())
-		{
-			std::map<std::string, std::string> ini_file_options;
-			
-			// Read some stuff from the .ini file
-		  	saga::ini::ini prefs = adap_ini.get_section ("preferences");
+  adaptor::adaptor()
+  {
+    database_connection_map = new std::map<std::string, database_connection*>();
+  }
 
-			if (prefs.has_entry("dbname")) 
-			{
-				std::string db_user = prefs.get_entry("dbname");
-				ini_file_options["dbname"] = db_user;
-			}
-			
-			if (prefs.has_entry("host")) 
-			{
-				std::string db_user = prefs.get_entry("host");
-				ini_file_options["host"] = db_user;
-			}
+  adaptor::~adaptor()
+  {
+    delete database_connection_map;
+  }
 
-			if (prefs.has_entry("port")) 
-			{
-				std::string db_user = prefs.get_entry("port");
-				ini_file_options["port"] = db_user;
-			}
-			
-		   	if (prefs.has_entry("user")) 
-		   	{
-		    	std::string db_user = prefs.get_entry("user");
-				ini_file_options["user"] = db_user;
-		   	}
-		
-			if (prefs.has_entry("password"))
-			{
-				std::string db_pass = prefs.get_entry("password");
-				ini_file_options["password"] = db_pass;
-			}
-			
-			if (prefs.has_entry("connection_pool_size"))
-			{
-				std::string connection_pool_size = prefs.get_entry("connection_pool_size");
-				ini_file_options["connection_pool_size"] = connection_pool_size;
-			}
-			
-			if (prefs.has_entry("batch_size"))
-			{
-				std::string batch_size = prefs.get_entry("batch_size");
-				ini_file_options["batch_size"] = batch_size;
-			}
-			
-			if (prefs.has_entry("check_db"))
-			{
-				std::string batch_size = prefs.get_entry("check_db");
-				ini_file_options["check_db"] = batch_size;
-			}
-			
-			(*database_connection_map)[url.get_host()] = new database_connection(url, ini_file_options);
-		}
-		
-		it = database_connection_map->find(url.get_host());
-		return it->second;
-	}
+  database_connection* adaptor::get_database_connection(saga::url url,  saga::ini::ini const &adap_ini)
+  {
+    database_connection_map_t::iterator it = database_connection_map->find(url.get_host());
+
+    if (it == database_connection_map->end())
+    {
+      std::map<std::string, std::string> ini_file_options;
+
+      // Read some stuff from the .ini file
+      saga::ini::ini prefs = adap_ini.get_section ("preferences");
+
+      if (prefs.has_entry("dbname")) 
+      {
+        std::string db_user = prefs.get_entry("dbname");
+        ini_file_options["dbname"] = db_user;
+      }
+
+      if (prefs.has_entry("host")) 
+      {
+        std::string db_user = prefs.get_entry("host");
+        ini_file_options["host"] = db_user;
+      }
+
+      if (prefs.has_entry("port")) 
+      {
+        std::string db_user = prefs.get_entry("port");
+        ini_file_options["port"] = db_user;
+      }
+
+      if (prefs.has_entry("user")) 
+      {
+        std::string db_user = prefs.get_entry("user");
+        ini_file_options["user"] = db_user;
+      }
+
+      if (prefs.has_entry("password"))
+      {
+        std::string db_pass = prefs.get_entry("password");
+        ini_file_options["password"] = db_pass;
+      }
+
+      if (prefs.has_entry("connection_pool_size"))
+      {
+        std::string connection_pool_size = prefs.get_entry("connection_pool_size");
+        ini_file_options["connection_pool_size"] = connection_pool_size;
+      }
+
+      if (prefs.has_entry("batch_size"))
+      {
+        std::string batch_size = prefs.get_entry("batch_size");
+        ini_file_options["batch_size"] = batch_size;
+      }
+
+      if (prefs.has_entry("check_db"))
+      {
+        std::string batch_size = prefs.get_entry("check_db");
+        ini_file_options["check_db"] = batch_size;
+      }
+
+      (*database_connection_map)[url.get_host()] = new database_connection(url, ini_file_options);
+    }
+
+    it = database_connection_map->find(url.get_host());
+    return it->second;
+  }
 
 } // namespace sql_fast_advert
 ////////////////////////////////////////////////////////////////////////

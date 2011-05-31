@@ -27,25 +27,24 @@ namespace sql_fast_advert
     // @param factory the factory where the adaptor registers
     //        its maker function and description table
     saga::impl::adaptor_selector::adaptor_info_list_type 
-          adaptor_register (saga::impl::session * s);
+      adaptor_register (saga::impl::session * s);
 
     std::string get_name (void) const
     { 
       return BOOST_PP_STRINGIZE (SAGA_ADAPTOR_NAME);
     }
-	
-	// Constructor 
-	adaptor();
-	
-	// Destructor 
-	~adaptor();
-	
-	// Database Connection map
-	typedef std::map<std::string, database_connection*> database_connection_map_t;
-	
-	database_connection_map_t *database_connection_map;
-	database_connection* get_database_connection(const saga::url url, saga::ini::ini const &adap_ini);
-	
+
+    // Constructor 
+    adaptor();
+
+    // Destructor 
+    ~adaptor();
+
+    // Database Connection map
+    typedef std::map<std::string, database_connection*> database_connection_map_t;
+
+    database_connection_map_t *database_connection_map;
+    database_connection* get_database_connection(const saga::url url, saga::ini::ini const &adap_ini);
   };
 
 } // namespace sql_fast_advert
