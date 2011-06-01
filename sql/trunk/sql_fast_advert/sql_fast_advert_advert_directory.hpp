@@ -139,17 +139,19 @@ namespace sql_fast_advert
 //      void sync_open                  (saga::name_space::entry     & ret, 
 //                                       saga::url                     target, 
 //                                       int                           flags);
-//      void sync_open_dir              (saga::name_space::directory & ret, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//
-//      // advert directory functi      ons
+      void sync_open_dir              (saga::name_space::directory & ret, 
+                                       saga::url                     target, 
+                                       int                           flags);
+
+//      // advert directory functions
 //      void sync_open                  (saga::advert::entry         & ret,
 //                                       saga::url                     target, 
 //                                       int                           flags);
-//      void sync_open_dir              (saga::advert::directory     & ret,
-//                                       saga::url                     target, 
-//                                       int                           flags);
+
+      void sync_open_dir              (saga::advert::directory     & ret,
+                                       saga::url                     target, 
+                                       int                           flags);
+
 //      void sync_find                  (std::vector <saga::url>     & ret,
 //                                       std::string                   pattern, 
 //                                       std::vector <std::string>     patterns,
