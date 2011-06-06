@@ -35,16 +35,15 @@ else
   AX_SAGA_GLOBUS()
 fi
 
-
 if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
-  if test "x$SAGA_HAVE_ADAPTOR_REPLICA" = "xyes"; then
+  if test "x$SAGA_HAVE_PACKAGE_REPLICA" = "xyes"; then
     BUILD_ADAPTOR_REPLICA="yes"
   fi
 
-  if test "x$SAGA_HAVE_ADAPTOR_FILESYSTEM" = "xyes"; then
+  if test "x$SAGA_HAVE_PACKAGE_FILESYSTEM" = "xyes"; then
     BUILD_ADAPTOR_FILE="yes"
   fi
-  if test "x$SAGA_HAVE_ADAPTOR_JOB" = "xyes"; then
+  if test "x$SAGA_HAVE_PACKAGE_JOB" = "xyes"; then
     BUILD_ADAPTOR_JOB="yes"
   fi
   
