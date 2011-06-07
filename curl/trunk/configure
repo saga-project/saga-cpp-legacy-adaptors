@@ -2697,12 +2697,10 @@ BUILD_ADAPTOR_FILESYSTEM=no
 
 if test "x$HAVE_CURL" = "xyes"; then
 
-  if test "x$SAGA_HAVE_ADAPTOR_CONTEXT" = "xyes"; then
-    BUILD_ADAPTOR_CONTEXT="yes"
-  fi
+  BUILD_ADAPTOR_CONTEXT="yes"
 
   if test "$HAVE_CURL" = "yes"; then
-    if test "x$SAGA_HAVE_ADAPTOR_FILESYSTEM" = "xyes"; then
+    if test "x$SAGA_HAVE_PACKAGE_FILESYSTEM" = "xyes"; then
       BUILD_ADAPTOR_FILESYSTEM="yes"
     fi
   fi

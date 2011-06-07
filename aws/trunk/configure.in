@@ -41,10 +41,8 @@ BUILD_ADAPTOR_CONTEXT=no
 BUILD_ADAPTOR_JOB=no
 
 if test "x$HAVE_AWS" = "xyes"; then
-  if test "x$SAGA_HAVE_ADAPTOR_CONTEXT" = "xyes"; then
-    BUILD_ADAPTOR_CONTEXT="yes"
-  fi
-  if test "x$SAGA_HAVE_ADAPTOR_JOB" = "xyes"; then
+  BUILD_ADAPTOR_CONTEXT="yes"
+  if test "x$SAGA_HAVE_PACKAGE_JOB" = "xyes"; then
     BUILD_ADAPTOR_JOB="yes"
   fi
 fi

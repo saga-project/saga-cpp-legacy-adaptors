@@ -35,4 +35,5 @@ SAGA_ADAPTOR_OBJ  = $(SAGA_OBJ)
 SAGA_ADAPTOR_PACKAGES = job
 
 include $(SAGA_MAKE_INCLUDE_ROOT)/saga.adaptor.mk
+include $(SAGA_MAKE_INCLUDE_ROOT)/saga.doc.mk
 

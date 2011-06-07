@@ -26,3 +26,11 @@ FILES:
   configure
   configure.in
 
+PACKAGING:
+  deb-section:        devel
+  deb-priority:       optional
+  deb-essential:      no
+  deb-depends:        saga-core @SAGA_VERSION@ @DEB_DEPS@
+  deb-provides:       saga-adaptors-ssh
+  deb-description:    http://www.saga-project.org/adaptors/ssh
+

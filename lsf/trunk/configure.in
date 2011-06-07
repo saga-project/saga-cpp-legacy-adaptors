@@ -18,7 +18,7 @@ AX_SAGA_CHECK_LSF()
 
 BUILD_ADAPTOR_JOB=no
 
-if test "x$SAGA_HAVE_ADAPTOR_JOB-$SAGA_HAVE_LSF" = "xyes-yes"; then
+if test "x$SAGA_HAVE_PACKAGE_JOB-$SAGA_HAVE_LSF" = "xyes-yes"; then
   BUILD_ADAPTOR_JOB="yes"
 fi
 

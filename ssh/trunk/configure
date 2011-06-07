@@ -2127,20 +2127,20 @@ BUILD_ADAPTOR_FILESYSTEM=no
 BUILD_ADAPTOR_JOB=no
 
 if test "x$HAVE_SSH" = "xyes"; then
-  if test "x$SAGA_HAVE_ADAPTOR_CONTEXT" = "xyes"; then
+  if test "x$SAGA_HAVE_PACKAGE_CONTEXT" = "xyes"; then
     BUILD_ADAPTOR_CONTEXT="yes"
   fi
 fi
 
 if test "x$HAVE_SSH" = "xyes"; then
-  if test "x$SAGA_HAVE_ADAPTOR_JOB" = "xyes"; then
+  if test "x$SAGA_HAVE_PACKAGE_JOB" = "xyes"; then
     BUILD_ADAPTOR_JOB="yes"
     BUILD_ADAPTOR_CONTEXT="yes"
   fi
 fi
 
 if test "$HAVE_SSHFS-$HAVE_SCP" = "yes-yes"; then
-  if test "x$SAGA_HAVE_ADAPTOR_FILESYSTEM" = "xyes"; then
+  if test "x$SAGA_HAVE_PACKAGE_FILESYSTEM" = "xyes"; then
     BUILD_ADAPTOR_FILESYSTEM="yes"
     BUILD_ADAPTOR_CONTEXT="yes"
   fi
@@ -2174,8 +2174,6 @@ SAGA_CONFIGURE_OK=yes
 if ! test "$HAVE_SAGA" = "yes"; then SAGA_CONFIGURE_OK=no; fi
 if ! test "$HAVE_SSH"  = "yes"; then SAGA_CONFIGURE_OK=no; fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: $SAGA_CONFIGURE_OK" >&5
-$as_echo "$as_me: $SAGA_CONFIGURE_OK" >&6;}
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
