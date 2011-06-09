@@ -75,9 +75,11 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
         : ::condor::job::description
     {
         saga_to_condor(saga::job::description const & jd,
-                attributes_type preset_attributes = attributes_type())
+                       std::vector <saga::context> const & context_list,
+                       attributes_type preset_attributes = attributes_type())
             : description(preset_attributes)
             , saga_description_(jd)
+            , context_list_(context_list)
         {
             using namespace saga::job::attributes;
 
@@ -115,6 +117,8 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
 
             map_attribute(description_number_of_processes, "queue", "1");
 
+            process_x509_certs();
+          
             process_file_transfer();
 
             if (saga_description_.attribute_exists(description_job_contact))
@@ -210,6 +214,57 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
         }
 
     private:
+      
+        bool process_x509_certs()
+        {
+            using namespace saga::job::attributes;
+            
+            std::vector<saga::context>::const_iterator it = context_list_.begin();
+            while(it != context_list_.end())
+            {
+              if ((*it).attribute_exists (saga::attributes::context_type) &&
+                  (*it).get_attribute (saga::attributes::context_type) == "x509")
+              {
+                if(!(*it).attribute_exists (saga::attributes::context_userproxy)) 
+                {
+                  SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) 
+                  {
+                    std::cerr << "Condor Adaptor: X.509 found but userproxy was not set! Unusable." 
+                    << std::endl;
+                  }
+                }
+                else
+                {
+                  std::string userproxy((*it).get_attribute (saga::attributes::context_userproxy));
+                  
+                  if(!boost::filesystem::exists(userproxy)) 
+                  {
+                    SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) 
+                    {
+                      std::cerr << "Condor Adaptor: X.509 userproxy " << userproxy 
+                      << " No such file or directory." << std::endl;
+                    }
+                  }
+                  else 
+                  {
+                    SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) 
+                    {
+                      std::cerr << "globus GRAM Adaptor: X.509 context found pointing to user proxy at " 
+                      << userproxy << ". Inserting into ClassAd" << std::endl;
+                      
+                      attributes_["x509userproxy"] = userproxy;
+                    }
+                  }
+                }
+              }
+              ++it;
+            
+            }
+          
+            return true;
+        }
+
+      
         bool process_file_transfer()
         {
             using namespace saga::job::attributes;
@@ -437,8 +492,9 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
         }
 
     private:
-        saga::job::description const &  saga_description_;
-        std::vector<std::string>        requirements_;
+        saga::job::description const &     saga_description_;
+        std::vector<std::string>           requirements_;
+        std::vector<saga::context> const & context_list_;
     };
 
 }}}} // namespace saga::adaptors::condor::detail

@@ -26,7 +26,6 @@ namespace saga { namespace adaptors { namespace condor {
         condor_url_ = get_adaptor()->validate_rm(instance_rm);
 
         // TODO: Should we try something here, like connecting to a GAHP server,
-        //          or should we delay it until needed?
     }
 
     void job_service_cpi_impl::sync_create_job(saga::job::job & ret,
