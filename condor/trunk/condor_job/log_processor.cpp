@@ -47,7 +47,7 @@ namespace saga { namespace adaptors { namespace condor {
                     msg += "}";
                 }
                 if (!msg.empty())
-                    SAGA_LOG_ALWAYS(msg.c_str())
+                    SAGA_LOG_INFO(msg.c_str())
             }
 
             ::condor::job::classad & ca_;

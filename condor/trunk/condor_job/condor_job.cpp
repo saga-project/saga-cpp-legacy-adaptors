@@ -267,15 +267,14 @@ namespace saga { namespace adaptors { namespace condor {
             boost::process::postream & in = c.get_stdin();
             boost::process::pistream & out = c.get_stdout();
 
-            SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG)
-            {
-                std::cerr << " ** Condor adaptor (job::run)\n"
+            std::stringstream os;
+                os << " ** Condor adaptor (job::run)\n"
                     "    About to submit job description:\n"
                     "========================================\n"
                     << desc
-                    << "========================================\n"
-                    << std::flush;
-            }
+                    << "========================================\n";
+            
+            SAGA_LOG_DEBUG(os.str());
 
             in << desc << std::flush;
             in.close();

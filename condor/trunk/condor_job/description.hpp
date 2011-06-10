@@ -214,6 +214,22 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
         }
 
     private:
+        
+        std::string get_cert_info(saga::context const & c)
+        {
+          using namespace saga::attributes;
+          std::stringstream os;
+          
+          os << "Context:"; 
+          
+          if (c.attribute_exists (saga::attributes::context_type))
+            os << " type=" << c.get_attribute (context_type);
+            
+          if (c.attribute_exists (saga::attributes::context_type))
+            os << " userproxy=" << c.get_attribute (context_userproxy);
+          
+          return os.str();
+        }
       
         bool process_x509_certs()
         {
@@ -227,11 +243,7 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
               {
                 if(!(*it).attribute_exists (saga::attributes::context_userproxy)) 
                 {
-                  SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) 
-                  {
-                    std::cerr << "Condor Adaptor: X.509 found but userproxy was not set! Unusable." 
-                    << std::endl;
-                  }
+                  SAGA_LOG_INFO(get_cert_info(*it) + " is not usable. Userproxy attribute not set.");
                 }
                 else
                 {
@@ -239,28 +251,18 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
                   
                   if(!boost::filesystem::exists(userproxy)) 
                   {
-                    SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) 
-                    {
-                      std::cerr << "Condor Adaptor: X.509 userproxy " << userproxy 
-                      << " No such file or directory." << std::endl;
-                    }
+                    SAGA_LOG_INFO(get_cert_info(*it) + " is not usable. Userproxy path doesn't exist.");
                   }
                   else 
                   {
-                    SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) 
-                    {
-                      std::cerr << "globus GRAM Adaptor: X.509 context found pointing to user proxy at " 
-                      << userproxy << ". Inserting into ClassAd" << std::endl;
+                    SAGA_LOG_INFO(get_cert_info(*it) + " is valid. Inserting into Condor ClassAd.");
                       
-                      attributes_["x509userproxy"] = userproxy;
-                    }
+                    attributes_["x509userproxy"] = userproxy;
                   }
                 }
               }
               ++it;
-            
             }
-          
             return true;
         }
 
