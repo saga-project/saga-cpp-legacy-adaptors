@@ -65,7 +65,7 @@ AC_DEFUN([AX_SAGA_CHECK_CONDOR],
   # overwritten by --with-condor=<dir>
 
   if test "x$CONDOR_CONFIG" != "x"; then
-    condor_config_root=`expr $CONDOR_CONFIG : '^\(.*\)/etc/condor_config$'`
+    condor_config_root=`echo $CONDOR_CONFIG | sed -e 's/\/etc\/condor_config$//'`
   fi
 
   if test "x$want_condor" = "xyes"; then
