@@ -1720,7 +1720,7 @@ fi
   # try to find a valid SAGA_LOCATION amongst the possible candidates
 
   packages=`ls /usr/local/saga* /usr/local/package/saga* 2>>/dev/null`
-  which_saga=`which saga-config | sed -e 's/\/bin\/saga-config//'`
+  which_saga=`which saga-config 2>/dev/null | sed -e 's/\/bin\/saga-config//'`
 
   if test "$tmp_location-$SAGA_LOCATION" = "-"; then
     paths="$which_saga /usr /usr/local /opt /opt/local $packages"
