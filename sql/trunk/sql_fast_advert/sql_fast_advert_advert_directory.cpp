@@ -676,7 +676,7 @@ namespace sql_fast_advert
       dir_node = dbc->find_node(path.string());
       if (dir_node.id == 0)
       {
-        SAGA_ADAPTOR_THROW ("Directory not found", saga::IncorrectURL);
+        SAGA_ADAPTOR_THROW ("Directory not found : " + path.string(), saga::IncorrectURL);
       }
       else
       {
