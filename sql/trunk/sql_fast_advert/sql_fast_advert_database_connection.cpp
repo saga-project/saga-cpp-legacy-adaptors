@@ -83,8 +83,14 @@ namespace sql_fast_advert
     // Initialize the connection pool
     pool = new soci::connection_pool(CONNECTION_POOL_SIZE);
 
+    for (int i = 0; i != CONNECTION_POOL_SIZE; i++)
+    {
+      soci::session &sql = pool->at(i);
+      sql.open(soci::postgresql, connectString);
+    }
+    
     // Try to connect and holt at least one opend soci::session
-    grow_pool();
+    //grow_pool();
 
     // Check if there is allready a database layout
     // if not create a fresh layout 
@@ -151,7 +157,20 @@ namespace sql_fast_advert
     if (CURRENT_CONNECTION_POOL_SIZE < CONNECTION_POOL_SIZE)
     {
       soci::session &sql = pool->at(CURRENT_CONNECTION_POOL_SIZE);
-      sql.open(soci::postgresql, connectString);
+      //sql.open(soci::postgresql, connectString);
+      
+      try
+      {  
+        sql << "select * from nodes";
+      }
+      
+      catch(soci::soci_error e)
+      {
+        std::cout << "Damm" << std::endl;
+        std::cout << e.what() << std::endl;
+      }
+      
+      std::cout << "hello" << std::endl;
 
       CURRENT_CONNECTION_POOL_SIZE++;
     }
