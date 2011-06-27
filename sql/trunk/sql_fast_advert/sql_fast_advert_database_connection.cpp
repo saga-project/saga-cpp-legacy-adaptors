@@ -141,7 +141,7 @@ namespace sql_fast_advert
 
       if (layoutVersion != DATABASE_LAYOUT_VERSION)
       {
-        std::runtime_error error("Database layout version missmatch !");
+        soci::soci_error error("Database layout version missmatch !");
         throw error;
       }
     }
