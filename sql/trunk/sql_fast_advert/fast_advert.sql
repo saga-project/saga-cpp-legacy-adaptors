@@ -137,8 +137,8 @@ SET default_with_oids = false;
 
 CREATE TABLE attributes (
     node_id integer NOT NULL,
-    key character varying(256) NOT NULL,
-    value character varying(256) NOT NULL,
+    key character varying NOT NULL,
+    value character varying NOT NULL,
     is_vector boolean NOT NULL
 );
 
@@ -163,7 +163,7 @@ ALTER TABLE public.data OWNER TO "SAGA";
 
 CREATE TABLE nodes (
     id integer NOT NULL,
-    name character varying(256) NOT NULL,
+    name character varying NOT NULL,
     dir boolean NOT NULL,
     lft integer NOT NULL,
     rgt integer NOT NULL,
@@ -197,7 +197,7 @@ ALTER SEQUENCE nodes_id_seq OWNED BY nodes.id;
 -- Name: nodes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: SAGA
 --
 
-SELECT pg_catalog.setval('nodes_id_seq', 875, true);
+SELECT pg_catalog.setval('nodes_id_seq', 3264, true);
 
 
 --
@@ -242,14 +242,6 @@ INSERT INTO nodes VALUES (1, 'root', true, 1, 2, -86386329);
 --
 
 INSERT INTO version VALUES ('1.0');
-
-
---
--- Name: attributes_node_id_key; Type: CONSTRAINT; Schema: public; Owner: SAGA; Tablespace: 
---
-
-ALTER TABLE ONLY attributes
-    ADD CONSTRAINT attributes_node_id_key UNIQUE (node_id, key);
 
 
 --
