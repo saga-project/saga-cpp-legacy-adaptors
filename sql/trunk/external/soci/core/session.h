@@ -85,6 +85,12 @@ public:
     details::statement_backend * make_statement_backend();
     details::rowid_backend * make_rowid_backend();
     details::blob_backend * make_blob_backend();
+    
+    // ==============================================
+    // = is_connected() Modified SOCI by HC Wilhelm =
+    // ==============================================
+
+    bool is_connected(void);
 
 private:
     session(session const &);

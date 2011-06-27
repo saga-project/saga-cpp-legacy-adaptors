@@ -83,11 +83,11 @@ namespace sql_fast_advert
     // Initialize the connection pool
     pool = new soci::connection_pool(CONNECTION_POOL_SIZE);
 
-    for (int i = 0; i != CONNECTION_POOL_SIZE; i++)
-    {
-      soci::session &sql = pool->at(i);
-      sql.open(soci::postgresql, connectString);
-    }
+    //for (int i = 0; i != CONNECTION_POOL_SIZE; i++)
+    //{
+    //  soci::session &sql = pool->at(i);
+    //  sql.open(soci::postgresql, connectString);
+    //}
     
     // Try to connect and holt at least one opend soci::session
     //grow_pool();
@@ -180,7 +180,17 @@ namespace sql_fast_advert
   {
     std::string db_path;
     node db_node;
+    
     soci::session sql(*pool);
+    
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
 
     sql << "SELECT id, name, dir, lft, rgt FROM " << DATABASE_NODE_TABLE << " WHERE hash = :hash", 
       soci::into(db_node.id),
@@ -200,7 +210,17 @@ namespace sql_fast_advert
 
     std::string dir = is_dir ? "TRUE":"FALSE";
     int hash_value = (int) hash[node_path];
+    
     soci::session sql(*pool);
+    
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
 
     /*
     sql << "UPDATE nodes SET rgt = rgt + 2 WHERE rgt > :lft", soci::use(parent.lft);
@@ -245,6 +265,16 @@ namespace sql_fast_advert
   void database_connection::remove_node(const node db_node)
   {		
     soci::session sql(*pool);
+    
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
+    
     //sql.begin();
 
     //
@@ -307,6 +337,15 @@ namespace sql_fast_advert
     std::string result = "";
 
     soci::session sql(*pool);
+    
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
 
     //
     // Select all nodes except the root node 
@@ -335,7 +374,17 @@ namespace sql_fast_advert
   {
     node tmp_node;
     int depth = 0;
+    
     soci::session sql(*pool);
+
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
 
     // Find the parent node depth
     sql << 
@@ -390,6 +439,16 @@ namespace sql_fast_advert
     boost::optional<std::string> attribute_value;
 
     soci::session sql(*pool);
+    
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
+    
     sql << "SELECT value FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key = :key", soci::use(db_node.id), soci::use(key), soci::into(attribute_value);
 
     return (attribute_value.is_initialized());
@@ -399,8 +458,17 @@ namespace sql_fast_advert
   {
     std::string is_vector;
 
-
     soci::session sql(*pool);
+    
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
+    
     sql << "SELECT is_vector FROM " <<  DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key = :key", soci::use(db_node.id), soci::use(key), soci::into(is_vector);
 
     if (is_vector == "t")
@@ -424,6 +492,16 @@ namespace sql_fast_advert
     std::string value;
 
     soci::session sql(*pool);
+    
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
+    
     sql << "SELECT value FROM " << DATABASE_ATTRIBUTES_TABLE " WHERE node_id = :id AND key = :key", soci::use(db_node.id), soci::use(key), soci::into(value);
 
     return value;
@@ -432,6 +510,15 @@ namespace sql_fast_advert
   void database_connection::set_attribute (const node db_node, const std::string key, const std::string value)
   {
     soci::session sql(*pool);
+    
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
     
     soci::procedure stored_procedure = (sql.prepare << "set_attribute(:node_id, :key, :value, 'f')", soci::use(db_node.id), soci::use(key), soci::use(value));
     stored_procedure.execute(true);
@@ -444,6 +531,15 @@ namespace sql_fast_advert
     std::vector<std::string> values(BATCH_SIZE);
 
     soci::session sql(*pool);
+    
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
 
     soci::statement statement = 
       (
@@ -466,6 +562,15 @@ namespace sql_fast_advert
   void database_connection::set_vector_attribute (const node db_node, const std::string key, std::vector<std::string> values)
   {
     soci::session sql(*pool);
+    
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
     
     std::cout << "set_vector_attribute" << std::endl;
 
@@ -490,6 +595,16 @@ namespace sql_fast_advert
   void database_connection::remove_attribute (const node db_node, const std::string key)
   {
     soci::session sql(*pool);
+    
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
+    
     sql << "DELETE FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key = :key", soci::use(db_node.id), soci::use(key);
   }
 
@@ -498,6 +613,15 @@ namespace sql_fast_advert
     std::vector<std::string> keys(BATCH_SIZE);
 
     soci::session sql(*pool);
+    
+    // ======================================
+    // = Check if the session is connected  =
+    // ======================================
+    
+    if (!sql.is_connected())
+    {
+      sql.open(soci::postgresql, connectString);
+    }
 
     soci::statement statement = 
       (

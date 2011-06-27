@@ -47,6 +47,25 @@ void ensureConnected(session_backend * backEnd)
 
 } // namespace anonymous
 
+
+// ==============================================
+// = is_connected() Modified SOCI by HC Wilhelm =
+// ==============================================
+
+bool session::is_connected(void)
+{
+  if (backEnd_ == NULL)
+  {
+    return false;
+  }
+  
+  else
+  {
+    return true;
+  }
+}
+
+
 session::session()
     : once(this), prepare(this), logStream_(NULL),
       lastFactory_(NULL), uppercaseColumnNames_(false), backEnd_(NULL),
