@@ -12,6 +12,20 @@
 // adaptor includes
 #include "sql_fast_advert_advert.hpp"
 
+// ===========================================================
+// = Wrap db calls and catch all soci::scoi_error execptions =
+// ===========================================================
+
+#define SAGA_ADVERT_DBCALL(function_name, function)                                                                         \
+  try                                                                                                                       \
+  {                                                                                                                         \
+    (function);                                                                                                             \
+  }                                                                                                                         \
+                                                                                                                            \
+  catch (soci::soci_error const &error)                                                                                     \
+  {                                                                                                                         \
+    SAGA_ADAPTOR_THROW("advert::advert_cpi_impl::" + function_name + " : " + error.what(), saga::NoSuccess);                \
+  }                                                                                                                         \
 
 ////////////////////////////////////////////////////////////////////////
 //  Namespace sql_fast_advert 
@@ -178,8 +192,8 @@ namespace sql_fast_advert
     // 
     //  Try to find the directory node
     // 
-
-    dir_node = dbc->find_node(path.string());
+    
+    SAGA_ADVERT_DBCALL("advert_cpi_impl", dir_node = dbc->find_node(path.string()) )
 
     // 
     // If there is no node we work through the flags 
@@ -202,7 +216,8 @@ namespace sql_fast_advert
 
       if ( (idata->mode_ & saga::advert::Create) & !(idata->mode_ & saga::advert::CreateParents) )
       {
-        node parent_node = dbc->find_node((path.parent_path()).string());
+        node parent_node;
+        SAGA_ADVERT_DBCALL("advert_cpi_impl", parent_node = dbc->find_node((path.parent_path()).string()) )
 
         if (parent_node.id == 0)
         {
@@ -212,9 +227,9 @@ namespace sql_fast_advert
         else
         {
           #if BOOST_FILESYSTEM_VERSION > 2
-            dir_node = dbc->insert_node(parent_node, (*(--path.end())).string(), false);
+            SAGA_ADVERT_DBCALL("advert_cpi_impl", dir_node = dbc->insert_node(parent_node, (*(--path.end())).string(), false) )
           #else
-            dir_node = dbc->insert_node(parent_node, (*(--path.end())), false);
+            SAGA_ADVERT_DBCALL("advert_cpi_impl", dir_node = dbc->insert_node(parent_node, (*(--path.end())), false) )
           #endif
         }
       }
@@ -247,7 +262,8 @@ namespace sql_fast_advert
   
   void advert_cpi_impl::create_parents(boost::filesystem::path path_)
   {
-    node parent_node = dbc->find_node((path_.parent_path()).string());
+    node parent_node;
+    SAGA_ADVERT_DBCALL("create_parents", parent_node = dbc->find_node((path_.parent_path()).string()) )
 
     // 
     // The parent node must be a Directory
@@ -261,21 +277,21 @@ namespace sql_fast_advert
     {
       create_parents(path_.parent_path());
 
-      parent_node = dbc->find_node((path_.parent_path()).string());
+       SAGA_ADVERT_DBCALL("create_parents", parent_node = dbc->find_node((path_.parent_path()).string()) )
 
       #if BOOST_FILESYSTEM_VERSION > 2
-        dir_node = dbc->insert_node(parent_node, (*(--path_.end())).string());
-      #else
-        dir_node = dbc->insert_node(parent_node, (*(--path_.end())));
+         SAGA_ADVERT_DBCALL("create_parents", dir_node = dbc->insert_node(parent_node, (*(--path_.end())).string()) )
+      #else     
+         SAGA_ADVERT_DBCALL("create_parents", dir_node = dbc->insert_node(parent_node, (*(--path_.end()))) )
       #endif
     }
 
     else
     {
-      #if BOOST_FILESYSTEM_VERSION > 2
-        dir_node = dbc->insert_node(parent_node, (*(--path_.end())).string(), false);
-      #else
-        dir_node = dbc->insert_node(parent_node, (*(--path_.end())), false);
+      #if BOOST_FILESYSTEM_VERSION > 2       
+        SAGA_ADVERT_DBCALL("create_parents", dir_node = dbc->insert_node(parent_node, (*(--path_.end())).string(), false) )
+      #else        
+        SAGA_ADVERT_DBCALL("create_parents", dir_node = dbc->insert_node(parent_node, (*(--path_.end())), false) )
       #endif
     }
   }
@@ -286,7 +302,7 @@ namespace sql_fast_advert
 
   void advert_cpi_impl::sync_attribute_exists (bool &ret, std::string key)
   {
-    ret = dbc->attribute_exists(dir_node, key);
+    SAGA_ADVERT_DBCALL("sync_attribute_exists", ret = dbc->attribute_exists(dir_node, key) )
   }
 
   void advert_cpi_impl::sync_attribute_is_readonly (bool &ret, std::string key)
@@ -303,7 +319,7 @@ namespace sql_fast_advert
 
   void advert_cpi_impl::sync_attribute_is_vector (bool &ret, std::string key)
   {
-    ret = dbc->attribute_is_vector(dir_node, key);
+    SAGA_ADVERT_DBCALL("sync_attribute_is_vector",  ret = dbc->attribute_is_vector(dir_node, key) )
   }
 
   void advert_cpi_impl::sync_attribute_is_extended (bool &ret, std::string key)
@@ -313,33 +329,33 @@ namespace sql_fast_advert
   }
 
   void advert_cpi_impl::sync_get_attribute (std::string &ret, std::string key)
-  {
-    ret = dbc->get_attribute(dir_node, key);
+  { 
+    SAGA_ADVERT_DBCALL("sync_get_attribute",  ret = dbc->get_attribute(dir_node, key) )
   }
 
   void advert_cpi_impl::sync_get_vector_attribute (std::vector <std::string> &ret, std::string key)
-  {
-    dbc->get_vector_attribute(dir_node, ret, key);
+  { 
+    SAGA_ADVERT_DBCALL("sync_get_vector_attribute", dbc->get_vector_attribute(dir_node, ret, key) )
   }
 
   void advert_cpi_impl::sync_set_attribute (saga::impl::void_t &ret, std::string key, std::string val)
   {
-    dbc->set_attribute(dir_node, key, val);
+    SAGA_ADVERT_DBCALL("sync_set_attribute", dbc->set_attribute(dir_node, key, val) )
   }
 
   void advert_cpi_impl::sync_set_vector_attribute (saga::impl::void_t &ret, std::string key, std::vector <std::string> val)
-  {
-    dbc->set_vector_attribute(dir_node, key, val);
+  { 
+    SAGA_ADVERT_DBCALL("sync_set_vector_attribute", dbc->set_vector_attribute(dir_node, key, val) )
   }
 
   void advert_cpi_impl::sync_remove_attribute (saga::impl::void_t &ret, std::string key)
   {
-    dbc->remove_attribute(dir_node, key);
+    SAGA_ADVERT_DBCALL("sync_remove_attribute", dbc->remove_attribute(dir_node, key) )
   }
 
   void advert_cpi_impl::sync_list_attributes (std::vector <std::string> &ret)
   {
-    dbc->list_attributes(ret, dir_node);
+    SAGA_ADVERT_DBCALL("sync_list_attributes", dbc->list_attributes(ret, dir_node) )
   }
 
     ////////////////////////////////////////////////////////////////////////
@@ -410,7 +426,7 @@ namespace sql_fast_advert
 
   void advert_cpi_impl::sync_remove (saga::impl::void_t & ret, int flags)
   {
-    dbc->remove_node(dir_node);
+    SAGA_ADVERT_DBCALL("sync_remove", dbc->remove_node(dir_node) )
   }
 
   void advert_cpi_impl::sync_close (saga::impl::void_t & ret, double timeout)
