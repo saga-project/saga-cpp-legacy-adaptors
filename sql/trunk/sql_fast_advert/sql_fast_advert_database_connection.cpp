@@ -643,9 +643,46 @@ namespace sql_fast_advert
 
   }
 
-
-  void database_connection::find_attributes (std::vector<std::string> &ret, const node db_node)
+  void database_connection::find_attributes (std::vector<std::string> &ret, const node db_node, const std::string key_pattern, const std::string value_pattern)
   {
+      soci::session sql(*pool);
 
+      // ======================================
+      // = Check if the session is connected  =
+      // ======================================
+
+      if (!sql.is_connected())
+      {
+        sql.open(soci::postgresql, connectString);
+      }
+      
+      // ===================================
+      // = Prepare the batch result vector =
+      // ===================================
+      std::vector<std::string> keys(BATCH_SIZE);
+      
+      // ==============================
+      // = Prepare the soci statement =
+      // ==============================
+      soci::statement statement = 
+        (
+          sql.prepare << "SELECT DISTINCT key FROM " << DATABASE_ATTRIBUTES_TABLE << " WHERE node_id = :id AND key SIMILAR TO :key_pattern OR value SIMILAR TO :value_pattern",
+          soci::use(db_node.id), 
+          soci::use(key_pattern), 
+          soci::use(value_pattern),
+          soci::into(keys)
+        );
+      
+      statement.execute();
+      
+      while(statement.fetch())
+      {
+        for (std::vector<std::string>::iterator i = keys.begin(); i != keys.end(); i++)
+        {
+          ret.push_back(*i);
+        }
+        
+        keys.resize(BATCH_SIZE);
+      }
   }
 }

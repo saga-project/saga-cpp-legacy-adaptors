@@ -93,7 +93,7 @@ namespace sql_fast_advert
 		
 		void list_attributes (std::vector<std::string> &ret, const node db_node);
 		
-		void find_attributes (std::vector<std::string> &ret, const node db_node);
+		void find_attributes (std::vector<std::string> &ret, const node db_node, const std::string key_pattern, const std::string value_pattern);
 		 
 	};
 

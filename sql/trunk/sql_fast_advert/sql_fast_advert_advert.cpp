@@ -361,7 +361,17 @@ namespace sql_fast_advert
     ////////////////////////////////////////////////////////////////////////
   void advert_cpi_impl::sync_find_attributes (std::vector<std::string> &ret, std::string pattern)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    std::string::size_type split_pos = pattern.find_first_of("=");
+    
+    if (std::string::npos == split_pos)
+    {
+      SAGA_ADAPTOR_THROW ("Invalid Pattern format", saga::BadParameter);
+    }
+    
+    std::string key_pattern   = pattern.substr(0, split_pos);
+    std::string value_pattern = pattern.substr(split_pos + 1);
+    
+    SAGA_ADVERT_DBCALL("sync_find_attributes", dbc->find_attributes(ret, dir_node, key_pattern, value_pattern) )
   }
 
   ////////////////////////////////////////////////////////////////////////
