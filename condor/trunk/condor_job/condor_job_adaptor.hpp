@@ -89,7 +89,7 @@ namespace saga { namespace adaptors { namespace condor {
             if (url.get_string().empty() && initialized_)
                 return default_rm_;
 
-            if (!url.get_userinfo().empty()
+            /*if (!url.get_userinfo().empty()
                     || -1 != url.get_port()
                     || !(url.get_path().empty() || "/" == url.get_path())
                     || !url.get_query().empty()
@@ -97,21 +97,34 @@ namespace saga { namespace adaptors { namespace condor {
                 SAGA_ADAPTOR_THROW_NO_CONTEXT("Information overload. Don't "
                     "know what to do with user, port, path, query or "
                     "fragment information provided in URL: "
-                    + url.get_string() + ".", saga::BadParameter);
+                    + url.get_string() + ".", saga::BadParameter);*/
 
             std::string const & scheme = url.get_scheme();
-            if (scheme.empty() || scheme == "any")
-                url.set_scheme("condor");
-            else if (scheme != "condor")
-                SAGA_ADAPTOR_THROW_NO_CONTEXT("Adaptor supports 'condor' "
-                    "and 'any' URL schemes, '" + scheme + "' requested.",
-                    saga::adaptors::AdaptorDeclined);
+            //if (scheme.empty() || scheme == "any")
+            //    url.set_scheme("condor");
 
-            if (url.get_host().empty())
+            if (scheme == "condor")
+            {
+              if (url.get_host().empty())
                 url.set_host("localhost");
-            else if (!saga::adaptors::utils::is_local_address(url))
+                
+              else if (!saga::adaptors::utils::is_local_address(url))
                 SAGA_ADAPTOR_THROW_NO_CONTEXT("Job submission to remote "
-                    "pools not implemented.", saga::NotImplemented);
+                  "pools not implemented. Try condorg://HOSTNAME instead if you want to submit to a Condor-G resource.", 
+                  saga::BadParameter);
+            }
+            else if (scheme == "condorg")
+            {
+              if (url.get_host().empty())
+                SAGA_ADAPTOR_THROW_NO_CONTEXT("Condor-G (condorg://) requires a hostname.",
+                saga::BadParameter);
+            }
+            else
+            {
+              SAGA_ADAPTOR_THROW_NO_CONTEXT("Adaptor supports 'condor' "
+                "and 'condorg' URL schemes, '" + scheme + "' is not supported.",
+                saga::BadParameter);
+            }
 
             return url.get_string();
         }

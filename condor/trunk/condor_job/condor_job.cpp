@@ -256,6 +256,7 @@ namespace saga { namespace adaptors { namespace condor {
 
                 BOOST_ASSERT(data->jd_is_valid_);
                 desc = detail::saga_to_condor(data->jd_,
+                        data->rm_,
                         this->proxy_->get_session().list_contexts(),
                         get_adaptor()->get_default_job_attributes());
             }

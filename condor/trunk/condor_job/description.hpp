@@ -14,6 +14,9 @@
 #include <boost/algorithm/string/case_conv.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/replace.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
+
 
 // Boost.Filesystem
 #include <saga/saga/adaptors/utils/filesystem.hpp>
@@ -75,10 +78,12 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
         : ::condor::job::description
     {
         saga_to_condor(saga::job::description const & jd,
+                       saga::url const & resource_manager,
                        std::vector <saga::context> const & context_list,
                        attributes_type preset_attributes = attributes_type())
             : description(preset_attributes)
             , saga_description_(jd)
+            , saga_resource_manager_(resource_manager)
             , context_list_(context_list)
         {
             using namespace saga::job::attributes;
@@ -118,6 +123,8 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
             map_attribute(description_number_of_processes, "queue", "1");
 
             process_x509_certs();
+            
+            process_condorG_host();
           
             process_file_transfer();
 
@@ -264,6 +271,24 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
               ++it;
             }
             return true;
+        }
+        
+        bool process_condorG_host()
+        {
+          std::string scheme(saga_resource_manager_.get_scheme()); 
+          
+          if(scheme == "condorg")
+          {            
+            std::string url(saga_resource_manager_.get_url());
+            boost::replace_first(url, "condorg://", "");
+
+            attributes_["Universe"] = "grid";            
+            attributes_["grid_resource"] = url;
+            
+            SAGA_LOG_INFO("Adding Condor-G host into ClassAd: " + url);
+          }
+        
+          return true;
         }
 
       
@@ -495,6 +520,7 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
 
     private:
         saga::job::description const &     saga_description_;
+        saga::url const &                saga_resource_manager_;
         std::vector<std::string>           requirements_;
         std::vector<saga::context> const & context_list_;
     };

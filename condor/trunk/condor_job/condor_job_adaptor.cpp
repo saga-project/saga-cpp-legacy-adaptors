@@ -33,7 +33,7 @@ namespace saga { namespace adaptors { namespace condor {
 
         typedef std::pair<std::string const, std::string> entry;
 
-        default_rm_ = validate_rm(adap_ini.get_entry("resource_manager", ""));
+        //default_rm_ = validate_rm(adap_ini.get_entry("resource_manager", ""));
 
         // Default settings for Job classad. Settings defined on the application
         // override the ones here.
