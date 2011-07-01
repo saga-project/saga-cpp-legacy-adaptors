@@ -280,7 +280,7 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
           if(scheme == "condorg")
           {            
             std::string url(saga_resource_manager_.get_url());
-            boost::replace_first(url, "condorg://", "");
+            boost::replace_first(url, "condorg://", "gt2 ");
 
             attributes_["Universe"] = "grid";            
             attributes_["grid_resource"] = url;
