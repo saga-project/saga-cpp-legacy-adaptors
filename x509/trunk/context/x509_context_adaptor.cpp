@@ -77,10 +77,10 @@ void context_cpi_impl::sync_set_defaults (saga::impl::void_t &)
     {
       // this call looks for a valid proxy file in the location described by
       // saga::attributes::context_userproxy
-      SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
-        std::cerr << "x.509 Adaptor: UserProxy attribute set to: " 
-                  << attr.get_attribute(saga::attributes::context_userproxy) << std::endl;
-      }
+      SAGA_OSSTREAM strm;
+      strm << "UserProxy attribute set to: " 
+           << attr.get_attribute(saga::attributes::context_userproxy);
+      SAGA_LOG_INFO(strm.str());
 
       ci = get_cert_info (attr.get_attribute (saga::attributes::context_userproxy));
     }
@@ -94,17 +94,19 @@ void context_cpi_impl::sync_set_defaults (saga::impl::void_t &)
       {
         std::string tmp = "/tmp/x509up_u";
         certfile = (std::string&)tmp + boost::str( boost::format("%d") % ::getuid() );
-        SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
-          std::cerr << "x.509 Adaptor: UserProxy attribute not set. "
-                    << "Using default location: " << certfile << std::endl;
-        }
+
+        SAGA_OSSTREAM strm;
+        strm << "UserProxy attribute not set. "
+                    << "Using default location: " << certfile;
+        SAGA_LOG_INFO(strm.str());
       } 
       else 
       {
-        SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
-          std::cerr << "x.509 Adaptor: UserProxy attribute not set. Using " 
-                    << "X509_USER_PROXY env variable: " << _cert << std::endl;
-        }
+        SAGA_OSSTREAM strm;
+        strm << "UserProxy attribute not set. Using " 
+                    << "X509_USER_PROXY env variable: " << _cert;
+        SAGA_LOG_INFO(strm.str());
+
         certfile = _cert;
       }
       // settting the userproxy path attribute
@@ -122,10 +124,9 @@ void context_cpi_impl::sync_set_defaults (saga::impl::void_t &)
     }
     else
     {
-      SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
-        std::cerr << "x.509 Adaptor: " << ci.errormessage << std::endl;
-      }
-      //SAGA_ADAPTOR_THROW (ci.errormessage, saga::NoSuccess);
+        SAGA_OSSTREAM strm;
+        strm << ci.errormessage << std::endl;
+        SAGA_LOG_WARN(strm.str());
     }
   }
 }
