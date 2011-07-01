@@ -40,6 +40,22 @@ A possible (if minimal) such script is:
 With this approach all file staging will happen on the remote (ssh) host,
 though.
 
+Condor-G
+--------
+
+It is possible to use the adaptor with Condor-G resources
+
+If you would work with Condor-G directly, you would add something like this 
+into your Condor submit script in order to use a Condor-G resource:
+
+Universe        = grid
+grid_resource   = gt2 belhaven-1.renci.org:2119/jobmanager-condor
+
+You can do the same thing through the SAGA Job API, simply by using the 
+following URL in the job service constructor:
+
+saga::job::service js("condorg://belhaven-1.renci.org:2119/jobmanager-condor");
+
 
 Security issues and mitigation strategy
 ---------------------------------------
