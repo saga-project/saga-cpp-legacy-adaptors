@@ -1,0 +1,62 @@
+\documentclass[a4paper,10pt,twocolumn]{article}
+%\documentclass[a4paper,10pt]{article}
+\usepackage[pdftex]{graphicx}
+\usepackage{float}
+\usepackage{times}
+\usepackage{color}
+%\usepackage{fancyheadings}
+%\restylefloat{figure}
+
+%\oddsidemargin=0.1in
+\topmargin=-0.8in
+\textheight=9.8in
+\textwidth=6.25in
+
+\parskip 10pt
+\parindent 0in
+
+%\parskip 0pt
+%\parindent 0.25in
+\newif\ifdraft
+%\drafttrue
+
+
+\ifdraft
+\newcommand{\fixme}[1]{ { \bf{ ***FIXME: #1 }} }
+\newcommand{\note}[1]{ {\textcolor{red} { ***Jha: #1 }}}
+\else
+\newcommand{\jhanote}[1]{}
+\newcommand{\note}[1]{}
+\fi
+
+
+\begin{document}
+\thispagestyle{plain}
+\title{The SAGA Advert Service: Concepts, Implementations and Usage Modes}
+\author{Hans-Christian~Wilhelm \footnotemark, Ole~Weidner\footnotemark \\ {\em \small{Center for Computation and Technology, Louisiana State University,}} \\ {\em {\small 216 Johnston Hall, Baton Rouge, LA 70803, USA}}
+\\ {\footnotesize $^*$ hcwilhelm@cct.lsu.edu, $^\dag$ oweidner@cct.lsu.edu}}
+
+\date{}
+
+\maketitle
+
+
+\begin{abstract}
+In general we need to lower the emphasis on SAGA, at least in
+the opening part as it has already been published. We want to use this
+abstract to i) Define the Scientific Problem that we will be addressing, 
+ii) 
+\end{abstract}
+
+\section{Introduction} 
+
+\section{Implementations} 
+
+\subsection{Old}
+
+\subsection{New}
+
+\subsection{Comparison}
+
+\thispagestyle{plain}
+\end{document} 
