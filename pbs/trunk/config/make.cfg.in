@@ -9,18 +9,9 @@
 ifndef MAKE_CFG_IN
        MAKE_CFG_IN=yes
 
-TMP_SAGA_LOCATION = @TMP_SAGA_LOCATION@
-TMP_SAGA_INSTTYPE = @TMP_SAGA_INSTTYPE@
+SAGA_LOCATION = @SAGA_LOCATION@
 
-ifeq "$(TMP_SAGA_INSTTYPE)" "source"
-  SAGA_ROOT              = $(TMP_SAGA_LOCATION)
-  SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/make
-else
-  SAGA_LOCATION          = $(TMP_SAGA_LOCATION)
-  SAGA_MAKE_INCLUDE_ROOT = $(TMP_SAGA_LOCATION)/share/saga/make
-endif
-
-include $(SAGA_MAKE_INCLUDE_ROOT)/saga.util.mk
+include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 
 endif # guard
 
