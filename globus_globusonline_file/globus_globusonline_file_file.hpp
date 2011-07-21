@@ -60,9 +60,9 @@ namespace globus_globusonline_file_adaptor
 //       void sync_is_link   (bool                        & is_link);      
 //       void sync_read_link (saga::url                   & target); 
 // 
-//       void sync_copy      (saga::impl::void_t          & ret,   
-//                            saga::url                     target, 
-//                            int                           flags = saga::filesystem::None);
+       void sync_copy      (saga::impl::void_t          & ret,   
+                            saga::url                     target, 
+                            int                           flags = saga::filesystem::None);
 //       void sync_link      (saga::impl::void_t          & ret,    
 //                            saga::url                     dest, 
 //                            int                           flags = saga::filesystem::None);

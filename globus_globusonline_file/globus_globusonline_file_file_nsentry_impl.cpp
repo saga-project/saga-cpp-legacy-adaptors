@@ -48,11 +48,11 @@ namespace globus_globusonline_file_adaptor
 //     SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
 //   }
 // 
-//   void file_cpi_impl::sync_copy (saga::impl::void_t & ret, 
-//                                  saga::url dest, int flags)
-//   {
-//     SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//   }
+   void file_cpi_impl::sync_copy (saga::impl::void_t & ret, 
+                                  saga::url dest, int flags)
+   {
+     SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+   }
 // 
 //   void file_cpi_impl::sync_link (saga::impl::void_t & ret,    
 //                                  saga::url            dest, 

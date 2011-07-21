@@ -25,7 +25,21 @@ namespace globus_globusonline_file_adaptor
     adaptor_data_t       adata (this);
     file_instance_data_t idata (this);
 
-    SAGA_ADAPTOR_THROW ("Not Implemented (yet), but soon will be!", saga::NotImplemented);
+    //SAGA_ADAPTOR_THROW ("Not Implemented (yet), but soon will be!", saga::NotImplemented);
+  
+    saga::url location(idata->location_);
+    std::string host(location.get_host());
+    std::string scheme(location.get_scheme());
+
+    // make sure that we only allow globusonline:// URLs
+
+    if (scheme != "globusonline")
+    {
+       SAGA_OSSTREAM strm;
+       strm << "Could not initialize file object for [" << idata->location_ << "]. "
+            << "Only globusonline:// schemes are supported.";
+       SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////////
