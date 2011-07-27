@@ -51,8 +51,11 @@ namespace globus_globusonline_file_adaptor
    void file_cpi_impl::sync_copy (saga::impl::void_t & ret, 
                                   saga::url dest, int flags)
    {
+		
+		 std::cout<<"Hello World"<<dest.get_url()<<std::endl;
      SAGA_ADAPTOR_THROW ("Not Implemented, yet just wait!", saga::NotImplemented);
    }
+
 // 
 //   void file_cpi_impl::sync_link (saga::impl::void_t & ret,    
 //                                  saga::url            dest, 
