@@ -2,8 +2,8 @@
 
 namespace sql_async_advert
 {
-  server_connection::server_connection (saga::url const &url)
-    : _resolver(_io_service), _socket(_io_service), _response_stream(&_response), _request_stream(&_request)
+  server_connection::server_connection (saga::url const &url, boost::asio::io_service &io_service, boost::thread &thread)
+    : _resolver(io_service), _socket(io_service), _response_stream(&_response), _request_stream(&_request)
   {
     _url = url.clone();
    
@@ -65,9 +65,8 @@ namespace sql_async_advert
     // = Start async read =
     // ====================
     boost::asio::async_read_until(_socket, _response, "\r\n", boost::bind(&server_connection::read_handler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
-    
-    _thread = boost::thread(boost::bind(&boost::asio::io_service::run, &_io_service));
-    //_thread.join();
+        
+    thread = boost::thread(boost::bind(&boost::asio::io_service::run, &io_service));
   }
   
   server_connection::~server_connection (void)
@@ -83,6 +82,8 @@ namespace sql_async_advert
       _node = JsonBox::Value(_response_stream);
       _response.consume(_response.size());
       _mutex.unlock();
+     
+      std::cout << _node << std::endl;
       
       boost::asio::async_read_until(_socket, _response, "\r\n", boost::bind(&server_connection::read_handler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
     }

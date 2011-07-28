@@ -3,8 +3,6 @@
 
 // Boost Includes
 #include <boost/asio.hpp>
-#include <boost/array.hpp>
-#include <boost/thread.hpp>
 #include <boost/lexical_cast.hpp>
 
 // STL Includes
@@ -30,7 +28,7 @@ namespace sql_async_advert
     // = Constructor =
     // ===============
     
-    server_connection (saga::url const &url);
+    server_connection (saga::url const &url, boost::asio::io_service &io_service, boost::thread &thread);
     
     // ==============
     // = Destructor =
@@ -44,10 +42,8 @@ namespace sql_async_advert
     // = Private members =
     // ===================
     
-    boost::thread                   _thread;
     boost::mutex                    _mutex;
     
-    boost::asio::io_service         _io_service;
     boost::asio::ip::tcp::resolver  _resolver;
     boost::asio::ip::tcp::socket    _socket;
     
@@ -56,7 +52,6 @@ namespace sql_async_advert
     
     std::istream                    _response_stream;
     std::ostream                    _request_stream;
-    
     
     saga::url                       _url;
     JsonBox::Value                  _node;

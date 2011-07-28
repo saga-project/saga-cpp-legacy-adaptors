@@ -11,6 +11,9 @@
 // saga adaptor includes
 #include <saga/saga/adaptors/adaptor.hpp>
 
+// boost includes
+#include <boost/thread.hpp>
+#include <boost/asio.hpp>
 
 ////////////////////////////////////////////////////////////////////////
 namespace sql_async_advert
@@ -31,6 +34,25 @@ namespace sql_async_advert
     { 
       return BOOST_PP_STRINGIZE (SAGA_ADAPTOR_NAME);
     }
+    
+    // ===============
+    // = Constructor =
+    // ===============
+    
+    adaptor();
+    
+    // ==============
+    // = Destructor =
+    // ==============
+    
+    ~adaptor();
+    
+    // ==========
+    // = member =
+    // ==========
+    
+    boost::thread             thread;
+    boost::asio::io_service   io_service;
   };
 
 } // namespace sql_async_advert

@@ -44,6 +44,17 @@ namespace sql_async_advert
     // and return list
     return list;
   }
+  
+  adaptor::adaptor()
+  {
+    std::cout << "adaptor constructor" << std::endl;
+  }
+  
+  adaptor::~adaptor()
+  {
+    std::cout << "adaptor destructor" << std::endl;
+    io_service.stop();
+  }
 
 } // namespace sql_async_advert
 ////////////////////////////////////////////////////////////////////////
