@@ -65,6 +65,8 @@ namespace sql_async_advert
     // = Start async read =
     // ====================
     boost::asio::async_read_until(_socket, _response, "\r\n", boost::bind(&server_connection::read_handler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+    
+    std::cout << "loop is running : " << io_service.stopped() << std::endl;
         
     thread = boost::thread(boost::bind(&boost::asio::io_service::run, &io_service));
   }
