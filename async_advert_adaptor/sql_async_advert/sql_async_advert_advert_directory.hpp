@@ -40,21 +40,32 @@ namespace sql_async_advert
   
 	typedef saga::adaptors::adaptor_data<sql_async_advert::adaptor> adaptor_data;
   
-  ////////////////////////////////////////////////////////////////////
-  //  This adaptor implements the functionality of the Saga API "advert".
-  //  It defines the functions declared in its base class, advertdirectory_cpi.
-  class advertdirectory_cpi_impl 
-    : public saga::adaptors::v1_0::advert_directory_cpi <advertdirectory_cpi_impl>
+  
+  // ======================================================================
+  // = This adaptor implements the functionality of the Saga API "advert" =
+  // ======================================================================
+  
+  class advertdirectory_cpi_impl : public saga::adaptors::v1_0::advert_directory_cpi <advertdirectory_cpi_impl>
   {
-    public:    
-      // constructor of the advert adaptor 
-      advertdirectory_cpi_impl (proxy                           * p, 
-                                cpi_info const                  & info, 
-                                saga::ini::ini const            & glob_ini, 
-                                saga::ini::ini const            & adap_ini,
-                                TR1::shared_ptr <saga::adaptor>   adaptor);
+  public:    
+    
+    // ===============
+    // = Constructor =
+    // ===============
+     
+    advertdirectory_cpi_impl
+      (
+        proxy                             *p, 
+        cpi_info const                    &info, 
+        saga::ini::ini const              &glob_ini, 
+        saga::ini::ini const              &adap_ini,
+        TR1::shared_ptr <saga::adaptor>   adaptor
+      );
 
-      // destructor of the advert adaptor 
+      // ==============
+      // = Destructor =
+      // ==============
+      
       ~advertdirectory_cpi_impl  (void);
 
 //      // attribute functions
@@ -106,12 +117,18 @@ namespace sql_async_advert
 //      void sync_close                 (saga::impl::void_t          & ret, 
 //                                       double                        timeout);
 //
-//      // namespace_dir functions      
+
+  // ===========================
+  // = namespace_dir functions =
+  // ===========================
+
+
+      
 //      void sync_change_dir            (saga::impl::void_t          & ret, 
 //                                       saga::url                     target);
-//      void sync_list                  (std::vector <saga::url>     & ret, 
-//                                       std::string                   pattern, 
-//                                       int                           flags);
+      
+      void sync_list (std::vector <saga::url> &ret, std::string pattern, int flags);
+      
 //      void sync_find                  (std::vector <saga::url>     & ret, 
 //                                       std::string                   pattern, 
 //                                       int                           flags);
@@ -119,8 +136,9 @@ namespace sql_async_advert
 //                                       saga::url                     target);
 //      void sync_exists                (bool                        & ret, 
 //                                       saga::url                     target);
-//      void sync_is_dir                (bool                        & ret, 
-//                                       saga::url                     target);
+
+      void sync_is_dir (bool &ret, saga::url target);
+                                        
 //      void sync_is_entry              (bool                        & ret, 
 //                                       saga::url                     target);
 //      void sync_is_link               (bool                        & ret, 
@@ -244,7 +262,8 @@ namespace sql_async_advert
   // ================
     
   private:
-    boost::filesystem::path path;
+    boost::filesystem::path   _path;
+    server_connection         *_connection;
 
   }; // class advertdirectory_cpi_impl
 

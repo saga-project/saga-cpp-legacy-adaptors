@@ -54,22 +54,38 @@ namespace sql_async_advert
   // = Constructor =
   // ===============
   
-  advertdirectory_cpi_impl::advertdirectory_cpi_impl (proxy                           * p, 
-                                                      cpi_info const                  & info,
-                                                      saga::ini::ini const            & glob_ini, 
-                                                      saga::ini::ini const            & adap_ini,
-                                                      TR1::shared_ptr <saga::adaptor>   adaptor)
-    : saga::adaptors::v1_0::advert_directory_cpi <advertdirectory_cpi_impl> (p, info, adaptor, cpi::Noflags) 
+  advertdirectory_cpi_impl::advertdirectory_cpi_impl (
+        proxy                           * p, 
+        cpi_info const                  & info,
+        saga::ini::ini const            & glob_ini, 
+        saga::ini::ini const            & adap_ini,
+        TR1::shared_ptr <saga::adaptor>   adaptor ) : saga::adaptors::v1_0::advert_directory_cpi <advertdirectory_cpi_impl> (p, info, adaptor, cpi::Noflags) 
   {
     instance_data idata(this);
     adaptor_data  adata(this);
     
     saga::url url(idata->location_);
-    path = normalize_boost_path(boost::filesystem::path(url.get_path()));
+    _path = normalize_boost_path(boost::filesystem::path(url.get_path()));
     
-    std::string t = "{\"command\":\"open\", \"path\":\"/wilhelm\"}";
+    // =====================================
+    // = We understand absolute paths only =
+    // =====================================
     
-    server_connection connection(url);
+    if ('/' != url.get_path()[0])
+    {
+      SAGA_ADAPTOR_THROW("cannot handle relative advert directory name : " + url.get_string(), saga::IncorrectURL);
+    }
+    
+    // ==============================================
+    // = We understand only 'sqlasyncadvert' scheme =
+    // ==============================================
+    
+    if (url.get_scheme() != "sqlasyncadvert")
+    {
+      SAGA_ADAPTOR_THROW("cannot handle advert directory name : " + url.get_string(), saga::adaptors::AdaptorDeclined);
+    }
+    
+    _connection = new server_connection(url);
     
     //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
@@ -264,16 +280,33 @@ namespace sql_async_advert
 //  }
 //
 //
-//  ////////////////////////////////////////////////////////////////////////
-//  //  namespace_dir functions
-//  ////////////////////////////////////////////////////////////////////////
-//  void 
-//    advertdirectory_cpi_impl::sync_list (std::vector <saga::url> & ret, 
-//                                         std::string               pattern, 
-//                                         int                       flags)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
+  ////////////////////////////////////////////////////////////////////////
+  //  namespace_dir functions
+  ////////////////////////////////////////////////////////////////////////
+
+  void advertdirectory_cpi_impl::sync_list
+  (
+    std::vector <saga::url> &ret, 
+    std::string             pattern, 
+    int                     flags
+  )
+  
+  {
+    _connection->getMutex().lock();
+    
+    JsonBox::Object obj = _connection->getNode().getObject();
+    JsonBox::Array array = obj["nodeList"].getArray();
+    
+    for(std::deque<JsonBox::Value>::iterator i = array.begin(); i != array.end(); i++)
+    {
+      JsonBox::Object element = i->getObject();
+      
+      ret.push_back( saga::url(element["nodeName"].getString()) );
+    }
+    
+    _connection->getMutex().unlock();
+  }
+
 //
 //  void 
 //    advertdirectory_cpi_impl::sync_find (std::vector <saga::url> & ret, 
@@ -290,13 +323,37 @@ namespace sql_async_advert
 //    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
 //  }
 //
-//  void 
-//    advertdirectory_cpi_impl::sync_is_dir (bool      & ret, 
-//                                           saga::url   entry)
-//  {
-//    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
-//  }
-//
+
+  void advertdirectory_cpi_impl::sync_is_dir
+  (
+    bool        &ret, 
+    saga::url   entry
+  )
+  
+  {
+    ret = false;
+    
+    _connection->getMutex().lock();
+    
+    JsonBox::Object obj = _connection->getNode().getObject();
+    JsonBox::Array array = obj["nodeList"].getArray();
+    
+    for(std::deque<JsonBox::Value>::iterator i = array.begin(); i != array.end(); i++)
+    {
+      JsonBox::Object element = i->getObject();
+      
+      if (entry.get_path() == element["nodeName"].getString())
+      {
+        ret = element["isDir"].getBoolean();
+      }
+      
+    }
+    
+    _connection->getMutex().unlock();
+
+  }
+
+
 //  void 
 //    advertdirectory_cpi_impl::sync_is_entry (bool      & ret, 
 //                                             saga::url   entry)

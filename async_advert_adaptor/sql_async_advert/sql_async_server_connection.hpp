@@ -17,6 +17,8 @@
 
 // Saga Includes
 #include <saga/url.hpp>
+#include <saga/saga/exception.hpp>
+#include <saga/impl/exception.hpp>
 
 namespace sql_async_advert
 {
@@ -42,16 +44,22 @@ namespace sql_async_advert
     // = Private members =
     // ===================
     
-    boost::thread                   io_service_thread;
+    boost::thread                   _thread;
+    boost::mutex                    _mutex;
     
-    boost::asio::io_service         io_service;
-    boost::asio::ip::tcp::resolver  resolver;
-    boost::asio::ip::tcp::socket    socket;
+    boost::asio::io_service         _io_service;
+    boost::asio::ip::tcp::resolver  _resolver;
+    boost::asio::ip::tcp::socket    _socket;
     
-    boost::array<char, 4096>        buffer;
+    boost::asio::streambuf          _response;
+    boost::asio::streambuf          _request;
     
-    saga::url url;
-    JsonBox::Value node;
+    std::istream                    _response_stream;
+    std::ostream                    _request_stream;
+    
+    
+    saga::url                       _url;
+    JsonBox::Value                  _node;
     
     // ===================
     // = Private methods =
@@ -69,11 +77,15 @@ namespace sql_async_advert
      // = Public methods =
      // ==================
      
+     const JsonBox::Value& getNode(void) const;
+     
+     boost::mutex& getMutex(void);
+     
      void open_node (const std::string path);
      
      void insert_node (const std::string node_name, const bool is_dir = true);
      
-     void child_nodes (std::vector<std::string> &ret);
+     void list_nodes (std::vector<std::string> &result);
      
      void set_attribute(const std::string key, const std::string value);
      
