@@ -1,0 +1,47 @@
+# Copyright (c) 2005-2007 Andre Merzky (andre@merzky.net)
+# Copyright (c)      2008 Ole Weidner (oweidner@cct.lsu.ed)
+# 
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying Afile LICENSE_1_0.txt or copy at 
+#  http://www.boost.org/LICENSE_1_0.txt)
+
+# find saga.m4
+
+m4_include([saga.m4])
+
+AC_INIT()
+
+AX_SAGA_CONFIG()
+
+# create output files
+AC_CONFIG_FILES([config/make.cfg])
+
+ADAPTOR_ROOT=`pwd`
+ADAPTOR_CONFDIR=$ADAPTOR_ROOT/config/
+
+AC_SUBST(ADAPTOR_ROOT)
+AC_SUBST(ADAPTOR_CONFDIR)
+
+SAGA_CONFIGURE_OK=yes
+if ! test "$HAVE_SAGA"       = "yes"; then SAGA_CONFIGURE_OK=no; fi
+AC_SUBST([SAGA_CONFIGURE_OK])
+
+AC_OUTPUT()
+
+OUT=config.summary
+rm -f $OUT
+TEE="tee -a"
+
+echo "                                                                 " | $TEE $OUT
+echo " ========================================================        " | $TEE $OUT
+echo " SAGA SSH ADAPTORS                                               " | $TEE $OUT
+echo " --------------------------------------------------------        " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " Using SAGA from       : $SAGA_LOCATION                          " | $TEE $OUT
+echo "       SAGA version    : $SAGA_VERSION                           " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " Adaptor Version       : $SAGA_LIB_VERSION                       " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " --------------------------------------------------------        " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+

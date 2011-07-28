@@ -8,6 +8,8 @@ ifndef SAGA_LOCATION
  $(error "SAGA_LOCATION must be set for this Makefile to work")
 endif
 
+include ../config/make.cfg
+
 SAGA_SRC          = $(wildcard *.cpp)
 SAGA_OBJ          = $(SAGA_SRC:%.cpp=%.o)
 
