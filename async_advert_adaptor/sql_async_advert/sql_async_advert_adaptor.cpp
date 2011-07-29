@@ -45,15 +45,16 @@ namespace sql_async_advert
     return list;
   }
   
-  adaptor::adaptor()
+  adaptor::adaptor() : work(work_ptr(new boost::asio::io_service::work(io_service))), thread(boost::thread(boost::bind(&boost::asio::io_service::run, &io_service)))
   {
-    std::cout << "adaptor constructor" << std::endl;
+
   }
   
   adaptor::~adaptor()
   {
-    std::cout << "adaptor destructor" << std::endl;
+    work.reset();
     io_service.stop();
+    thread.join();
   }
 
 } // namespace sql_async_advert

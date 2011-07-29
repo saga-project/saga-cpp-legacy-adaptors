@@ -85,10 +85,14 @@ namespace sql_async_advert
       SAGA_ADAPTOR_THROW("cannot handle advert directory name : " + url.get_string(), saga::adaptors::AdaptorDeclined);
     }
     
-    _connection = new server_connection(url, adata->io_service, adata->thread);
+    _connection = new server_connection(url, adata->io_service);
     
-    server_connection *c;
-    c = new server_connection(url, adata->io_service, adata->thread);
+    
+    saga::url tmp_url(url);
+    tmp_url.set_path("/wda");
+    
+    //server_connection *c;
+    //c = new server_connection(tmp_url, adata->io_service, adata->thread);
     
     //adata->thread.join();
     

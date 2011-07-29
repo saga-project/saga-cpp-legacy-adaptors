@@ -12,6 +12,7 @@
 #include <saga/saga/adaptors/adaptor.hpp>
 
 // boost includes
+#include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
 #include <boost/asio.hpp>
 
@@ -48,11 +49,21 @@ namespace sql_async_advert
     ~adaptor();
     
     // ==========
-    // = member =
+    // = members =
     // ==========
     
-    boost::thread             thread;
     boost::asio::io_service   io_service;
+    
+    // =================================================
+    // = Dummy work item to keep the io_service allive =
+    // =================================================
+    typedef boost::shared_ptr<boost::asio::io_service::work> work_ptr;
+    work_ptr work;
+    
+    // ======================================
+    // = Thread to execute io_service.run() =
+    // ======================================
+    boost::thread             thread;
   };
 
 } // namespace sql_async_advert

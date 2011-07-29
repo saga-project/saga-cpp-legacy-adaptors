@@ -28,7 +28,7 @@ namespace sql_async_advert
     // = Constructor =
     // ===============
     
-    server_connection (saga::url const &url, boost::asio::io_service &io_service, boost::thread &thread);
+    server_connection (saga::url const &url, boost::asio::io_service &io_service);
     
     // ==============
     // = Destructor =
