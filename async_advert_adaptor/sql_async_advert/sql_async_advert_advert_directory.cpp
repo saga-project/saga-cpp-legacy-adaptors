@@ -85,16 +85,43 @@ namespace sql_async_advert
       SAGA_ADAPTOR_THROW("cannot handle advert directory name : " + url.get_string(), saga::adaptors::AdaptorDeclined);
     }
     
+    // ======================================
+    // = Connect to the Async Advert Server =
+    // ======================================
+    
     _connection = new server_connection(url, adata->io_service);
     
+    // ===============
+    // = Check Flags =
+    // ===============
+
+    saga::advert::flags mode = (saga::advert::flags) idata->mode_;
     
-    saga::url tmp_url(url);
-    tmp_url.set_path("/wda");
+    // =============
+    // = Exclusive =
+    // =============
     
-    //server_connection *c;
-    //c = new server_connection(tmp_url, adata->io_service, adata->thread);
+    if ( (mode & saga::advert::Create ) || (mode & saga::advert::CreateParents) && (mode & saga::advert::Exclusive) )
+    {
+      if (_connection->exists_directory(url))
+      {
+        SAGA_ADAPTOR_THROW("advert already exists : " + url.get_string(), saga::AlreadyExists);
+      }
+    }
     
-    //adata->thread.join();
+    // ===========================
+    // = Create || CreateParents =
+    // ===========================
+    
+    if ( (mode & saga::advert::Create) || (mode & saga::advert::CreateParents) )
+    {
+      _connection->create_directory(url, (mode & saga::advert::CreateParents) ? true : false);
+    }
+    
+    if (_connection->exists_directory(url))
+    {
+      SAGA_ADAPTOR_THROW("advert does not exists : " + url.get_string(), saga::DoesNotExist);
+    }
     
     //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }

@@ -102,14 +102,19 @@ namespace sql_async_advert
     return _mutex;
   }
   
-  void server_connection::list_nodes(std::vector<std::string> &result)
+  bool server_connection::exists_directory(const saga::url &url)
   {
-    JsonBox::Object object  = _node.getObject();
-    JsonBox::Array  array   = object["nodeList"].getArray();
-    
-    for(std::deque<JsonBox::Value>::iterator i = array.begin(); i != array.end(); i++)
-    {
-      result.push_back(i->getString());
-    }
+    // ==============
+    // = implement  =
+    // ==============
+    return true;
+  }
+  
+  void server_connection::create_directory(const saga::url &url, const bool create_parents)
+  {
+    // =============
+    // = implement =
+    // =============
+    return;
   }
 }

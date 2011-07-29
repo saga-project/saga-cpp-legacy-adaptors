@@ -76,11 +76,13 @@ namespace sql_async_advert
      
      boost::mutex& getMutex(void);
      
+     bool exists_directory(const saga::url &url);
+     
+     void create_directory(const saga::url &url, const bool create_parents = false);
+     
      void open_node (const std::string path);
      
      void insert_node (const std::string node_name, const bool is_dir = true);
-     
-     void list_nodes (std::vector<std::string> &result);
      
      void set_attribute(const std::string key, const std::string value);
      
