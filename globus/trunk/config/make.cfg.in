@@ -23,5 +23,7 @@ BUILD_ADAPTOR_LOADER       = @BUILD_ADAPTOR_LOADER@
 
 include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 
+SAGA_DEB_CONTROL           = @SAGA_DEB_CONTROL@
+
 endif # guard
 

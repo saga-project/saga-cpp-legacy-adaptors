@@ -20,17 +20,6 @@ AC_DEFUN([AX_SAGA_GLOBUS],
 [
   FAILED=0;
 
-  GLOBUS_SUBSYSTEM=$1
-
-  AC_MSG_CHECKING([for globus-subsystem])
-
-  if test "x$GLOBUS_SUBSYSTEM" != "x" ; then
-    AC_MSG_RESULT([ using $GLOBUS_SUBSYSTEM])
-  else
-    AC_MSG_RESULT([ using none])
-  fi
-  
-
   SAGA_AC_GLOBUS_LOC
 
   if test "x$HAVE_GLOBUS_LOCATION" = "xno"; then
@@ -83,8 +72,8 @@ AC_DEFUN([AX_SAGA_GLOBUS],
     GLOBUS_CFLAGS=`grep GLOBUS_CFLAGS   globus_defines | sed -e 's/^GLOBUS_CFLAGS *= *//'`
     GLOBUS_LDFLAGS=`grep GLOBUS_LDFLAGS  globus_defines | sed -e 's/^GLOBUS_LDFLAGS *= *//'`
     GLOBUS_INCLUDES=`grep GLOBUS_INCLUDES globus_defines | sed -e 's/^GLOBUS_INCLUDES *= *//'`
+    GLOBUS_INCDIR=`grep GLOBUS_INCLUDES globus_defines | sed -e 's/^GLOBUS_INCLUDES *= *-I//' | sed -e 's/ .*$//'`
     GLOBUS_LIBS=`grep GLOBUS_PKG_LIBS globus_defines | sed -e 's/^GLOBUS_PKG_LIBS *= *//'`
-
 
     globus_version_cmd=$GLOBUS_LOCATION/bin/globus-version
     
@@ -113,6 +102,8 @@ AC_DEFUN([AX_SAGA_GLOBUS],
 
   if test "$FAILED" -eq "0"; then
 
+    SAGA_GLOBUS_DEP_FILES="$GLOBUS_INCDIR/globus_common.h"
+
     ##### Check for individual packages - GRAM
     #
     GLOBUS_HAVE_GRAM=`grep GLOBUS_PKG_LIBS globus_defines | grep globus_gram_client`
@@ -122,6 +113,7 @@ AC_DEFUN([AX_SAGA_GLOBUS],
     	GLOBUS_HAVE_GRAM="yes"	
     	GLOBUS_GRAM_CLIENT_VERSION=`grep GLOBUS_GRAM_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_GRAM_CLIENT_VERSION *= *//'`
       AC_DEFINE([SAGA_HAVE_GLOBUS_GRAM], [1])
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gram_client.h"
     fi
 
     ##### Check for individual packages - GridFTP
@@ -133,6 +125,7 @@ AC_DEFUN([AX_SAGA_GLOBUS],
     	GLOBUS_HAVE_GRIDFTP="yes"	
     	GLOBUS_GRIDFTP_CLIENT_VERSION=`grep GLOBUS_FTP_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_FTP_CLIENT_VERSION *= *//'`
       AC_DEFINE([SAGA_HAVE_GLOBUS_GRIDFTP], [1])
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_ftp_client.h"
     fi
 
     ##### Check for individual packages - RLS
@@ -144,6 +137,7 @@ AC_DEFUN([AX_SAGA_GLOBUS],
     	GLOBUS_HAVE_RLS="yes"	
     	#GLOBUS_RLS_CLIENT_VERSION=`grep GLOBUS_RLS_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_RLS_CLIENT_VERSION *= *//'`
       AC_DEFINE([SAGA_HAVE_GLOBUS_RLS], [1])
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_rls_client.h"
     fi
 
     ##### Check for individual packages - GSI
@@ -155,6 +149,7 @@ AC_DEFUN([AX_SAGA_GLOBUS],
       GLOBUS_HAVE_GSI="yes"
       #GLOBUS_RLS_CLIENT_VERSION=`grep GLOBUS_RLS_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_RLS_CLIENT_VERSION *= *//'`
       AC_DEFINE([SAGA_HAVE_GLOBUS_GSI], [1])
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gsi_proxy.h"
     fi
 
 
@@ -167,6 +162,9 @@ AC_DEFUN([AX_SAGA_GLOBUS],
     	GLOBUS_HAVE_GASS_COPY="yes"	
       GLOBUS_GASS_COPY_CLIENT_VERSION=`grep GLOBUS_GASS_COPY_VERSION globus_defines | sed -e 's/^GLOBUS_GASS_COPY_VERSION *= *//'`
       AC_DEFINE([SAGA_HAVE_GLOBUS_GASS], [1])
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gass_copy.h"
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gass_server.h"
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gass_transfer.h"
     fi
 
     eval "rm globus_defines"
@@ -215,6 +213,10 @@ AC_DEFUN([SAGA_AC_GLOBUS_LOC],
 [
   AC_MSG_CHECKING([for globus-location directory])
   AC_ARG_VAR([GLOBUS_LOCATION],[Globus installation directory])
+
+  if test "$GLOBUS_LOCATION" = ""; then
+    GLOBUS_LOCATION=/usr
+  fi
 
   AC_ARG_WITH([globus-location], 
               [AC_HELP_STRING([--with-globus-location=<dir>], 
