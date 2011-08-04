@@ -21,4 +21,5 @@ config/make.cfg:
 
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
+-include $(SAGA_MAKE_INCLUDE_ROOT)/saga.dist.mk
 
