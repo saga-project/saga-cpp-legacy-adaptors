@@ -43,3 +43,6 @@ ssh_file:    ssh_context
 ssh_job:     ssh_context
 # ssh_context: ssh_suite 
 
+# enable 'make srcdist' w/o configure
+-include $(SAGA_LOCATION)/share/saga/make/saga.dist.mk
+
