@@ -23,3 +23,6 @@ SAGA_ADAPTOR_PACKAGES = filesystem namespace
 # SAGA_CPPINCS     += -I../ssh_suite
 # SAGA_LDFLAGS     += -L../ssh_suite -lsaga_adaptor_ssh_suite
 
+distclean::
+	@$(RM) $(SAGA_ADAPTOR_INI)
+

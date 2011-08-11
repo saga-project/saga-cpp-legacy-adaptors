@@ -45,3 +45,7 @@ job:     loader
 file:    loader
 replica: loader
 
+
+# allow for 'make srcdist' before configure
+-include $(SAGA_LOCATION)/share/saga/make/saga.dist.mk
+

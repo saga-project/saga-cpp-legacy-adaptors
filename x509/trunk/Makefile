@@ -6,7 +6,7 @@
 
 -include config/make.cfg
 
-SAGA_SUBDIRS += context
+SAGA_SUBDIRS += config context
 
 
 all:: config/make.cfg

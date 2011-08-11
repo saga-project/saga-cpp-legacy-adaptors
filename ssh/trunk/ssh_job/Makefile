@@ -23,3 +23,6 @@ include $(SAGA_MAKE_INCLUDE_ROOT)/saga.adaptor.mk
 # SAGA_CPPINCS     += -I../ssh_suite
 # SAGA_LDFLAGS     += -L../ssh_suite -lsaga_adaptor_ssh_suite
 
+distclean::
+	@$(RM) $(SAGA_ADAPTOR_INI)
+
