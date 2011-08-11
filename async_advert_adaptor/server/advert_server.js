@@ -6,178 +6,82 @@
    Copyright 2011. All rights reserved.
 */
 
-/* =================== */
-/* = Node.js modules = */
-/* =================== */
+// =============================================================================
+// = node.js modules                                                           =
+// =============================================================================
 
-var net   = require('net');
-var path  = require('path');
+var net         = require('net');
+var advertNode  = require('./advert_node.js');
+var advertPeers = require('./advert_peers.js');
+var murmur      = require('./murmur.js');
 
-/* ============================================= */
-/* = Initial structure to hold the advert data = */
-/* ============================================= */
 
-function advertNode (nodeName, isDir)
+// ============================================================================
+// = Local variables                                                          =
+// ============================================================================
+
+var rootNode  = advertNode.createAdvertNode("", true, null);
+var nodeIndex = {};
+var peers     = advertPeers.createAdvertPeers();
+
+// ========================
+// = Initialize nodeIndex =
+// ========================
+
+nodeIndex[murmur.getHash("")] = rootNode;
+
+// ============================================================================
+// = Helper functions                                                         =
+// ============================================================================
+
+function getPathArray (pathString)
 {
-  this.nodeName     = nodeName;
-  this.nodeList     = [];
-  this.attributes   = {};
-  this.isDir        = isDir;
+  var nodePath = pathString.split("/");
   
-  this.addNode = function (node)
-  {
-    this.nodeList.push(node);
-    peers.notifyPeers(this);
-  }
-  
-  this.removeNode = function (node)
-  {
-    for (var i in this.nodeList)
+  return nodePath.filter(function (x) {
+    if (x != "")
     {
-      if (this.nodeList[i].nodeName == node.nodeName)
-      {
-        this.nodeList.splice(i,1);
-      }
-    }
-  }
-  
-  this.nodeExist = function (nodeName)
-  {
-    var result = false;
-    
-    for (var i in this.nodeList)
-    {
-      if (this.nodeList[i].nodeName == nodeName)
-      {
-        result = true;
-        break;
-      }
+      return true;
     }
     
-    return result;
-  }
-  
-  this.getNode = function (nodeName)
-  {
-    for (var i in this.nodeList)
+    else 
     {
-      if (this.nodeList[i].nodeName == nodeName)
-      {
-        return this.nodeList[i];
-      }
+      return false;
     }
-  }
+  });
+}
+
+function deleteIndex ()
+{
+  nodeIndex = {};
+}
+
+function rebuildIndex (node, path)
+{
+  path.push(node.nodeName);
+  nodeIndex[murmur.getHash(path.join("/"))] = node;
   
-  this.getFlatNode = function ()
+  for (var i in node.nodeArray)
   {
-    var flatNode = {"nodeName":this.nodeName, "nodeList":[], "attributes":this.attributes, "isDir":this.isDir};
-  
-    for (var i in this.nodeList)
-    {
-      flatNode.nodeList.push({"nodeName": this.nodeList[i].nodeName, "isDir": this.nodeList[i].isDir});
-    }
-    
-    return flatNode;
-  }
-  
-  this.setAttribute = function (key, value)
-  {
-    this.attributes[key] = value;
-    peers.notifyPeers(this);
-  }
-  
-  this.removeAttribute = function (key)
-  {
-    delete this.attributes[key];
-    peers.notifyPeers(this);
+    rebuildIndex (node.nodeArray[i], path);
   }
 }
 
-var rootNode = new advertNode("root", true);
-
-/* =============================================== */
-/* = Clients to be notified if something changes = */
-/* =============================================== */
-
-function advertPeers ()
-{
-  this.peerList = [];
-  
-  this.addPeer = function (socket, node)
-  {
-    this.peerList.push({"socket":socket, "node":node});
-    socket.write(JSON.stringify(node.getFlatNode()) + "\r\n");
-	}
-  
-  this.removePeer = function (socket)
-  {
-    for (var i in this.peerList)
-    {
-      if (this.peerList[i].socket == socket)
-      {
-        this.peerList.splice(i, 1);
-      }
-    }
-  }
-  
-  this.getNode = function (socket)
-  {
-    for (var i in this.peerList)
-    {
-      if (this.peerList[i].socket == socket)
-      {
-        return this.peerList[i].node;
-      }
-    }
-  }
-  
-  this.notifyPeers = function (node)
-  {
-    for (var i in this.peerList)
-    {
-      if (this.peerList[i].node == node)
-      {
-        var peerNode    = this.peerList[i].node;
-        var peerSocket  = this.peerList[i].socket;
-        
-        peerSocket.write(JSON.stringify(peerNode.getFlatNode()) + "\r\n");
-      }
-    }
-  }
-}
-
-var peers = new advertPeers();
-
-/* ================================= */
-/* = Advert communication protocol = */
-/* ================================= */
-
-var advertCommands = 
-  {
-    openNode        : "openNode",
-    removeNode      : "removeNode",
-    closeNode       : "closeNode",
-    setAttribute    : "setAttribute",
-    removeAttribute : "removeAttribute"
-  };
-  
-var advertFlags = 
-  {
-    none          : "none",
-    create        : "create",
-    createParents : "createParents"
-  };
-
-  
-  
-/* ===================== */
-/* = Create the server = */
-/* ===================== */
+// ============================================================================
+// = Advert server                                                            =
+// ============================================================================
 
 var server = net.createServer(function (socket) {
+
+  // =========================
+  // = change event callback =
+  // =========================
   
-  socket.setNoDelay(true);
-	
+  var changeCallback = function (node)
+  {
+    socket.write(JSON.stringify(node) + "\r\n");
+  }
+
 	/* ============= */
 	/* = Handshake = */
 	/* ============= */
@@ -189,11 +93,18 @@ var server = net.createServer(function (socket) {
 	/* ===================== */
 
   socket.on("close", function (had_error) {
-    peers.removePeer(socket);
+    if (socket.node != undefined)
+    {
+      socket.node.removeListener("change", changeCallback);
+    }
+    
   });
   
-  //socket.setTimeout(1000 * 30, function() {
-  //  peers.removePeer(socket);
+  // ================================
+  // = Timeout close silent sockets =
+  // ================================
+  
+  //socket.setTimeout(1000 * 180, function() {
   //  socket.destroy();
   //});
   
@@ -201,11 +112,13 @@ var server = net.createServer(function (socket) {
   /* = Callback on Data = */
   /* ==================== */
 
-	socket.on("data", function (data) {
-	  
-	console.log(String(data));	
-	
+	socket.on("data", function (data) {	
+
 	  var message;
+	  
+	  // ====================================================
+	  // = Check for Valid Json data, else close the socket =
+	  // ====================================================
 	  
 	  try 
 	  {
@@ -215,43 +128,199 @@ var server = net.createServer(function (socket) {
     catch(error)
     {
       socket.destroy();
-      console.log("JSON Error");
-	return;
+	    return;
+    }
+    
+    // ==================
+    // = Message exists =
+    // ==================
+    
+    if (message.command == "exists")
+    {
+      var path = getPathArray(message.path);
+      var hash = murmur.getHash(path.join("/"));
+      
+      if (hash in nodeIndex)
+      {
+        socket.write(JSON.stringify(true) + "\r\n");
+      }
+      
+      else 
+      {
+        socket.write(JSON.stringify(false) + "\r\n");
+      } 
+    }
+    
+    // ==================
+    // = Message create =
+    // ==================
+    
+    if (message.command == "create")
+    {
+      var path = getPathArray(message.path); 
+      var hash = murmur.getHash(path.join("/"));
+      
+      if (socket.node != undefined)
+      {
+        socket.node.removeListener('change', changeCallback);
+      }
+      
+      if (hash in nodeIndex)
+      {
+        var node = nodeIndex[hash];
+        
+        socket.node = node;
+        socket.write(JSON.stringify(node) + "\r\n");
+        
+        node.on("change", changeCallback);
+      }
+      
+      else
+      {
+        var parentPath = path.slice(0,-1);
+        var parentHash = murmur.getHash(parentPath.join("/"));
+        
+        if (parentHash in nodeIndex)
+        {
+          var parentNode  = nodeIndex[parentHash];
+          var childNode   = advertNode.createAdvertNode(path.slice(-1)[0], message.isDir, parentNode);
+          
+          nodeIndex[murmur.getHash(path.join("/"))] = childNode;
+          
+          socket.node = childNode;
+          socket.write(JSON.stringify(childNode) + "\r\n");
+
+          childNode("change", changeCallback);
+          parentNode.addNode(childNode);
+        }
+        
+        else
+        {
+          socket.write(JSON.stringify({}) + "\r\n");
+        }
+      }
+      
     }
 
+    // =========================
+    // = Message createParents =
+    // =========================
+
+    if (message.command == "createParents")
+    {
+      var path = getPathArray(message.path);  
+      var hash = murmur.getHash(path.join("/"));
+
+      if (socket.node != undefined)
+      {
+        socket.node.removeListener('change', changeCallback);
+      }
+
+      if (hash in nodeIndex)
+      {
+        var node = nodeIndex[hash];
+              
+        socket.node = node;
+        socket.write(JSON.stringify(node) + "\r\n");
+        
+        node.on("change", changeCallback);
+      }
+      
+      else 
+      {
+        var currentNode = rootNode;
+        
+        for (var i in path)
+        {
+          var node = currentNode.exists(path[i]);
+          
+          if (node == undefined)
+          {
+            node = advertNode.createAdvertNode(path[i], message.isDir, currentNode);
+            
+            console.log(path.slice(0,i + 1).join("/"));
+            
+            nodeIndex[murmur.getHash(path.slice(0,i + 1).join("/"))] = node;
+            currentNode.addNode(node);
+            currentNode = node;
+          }
+          
+          else 
+          {
+            currentNode = node;
+          }
+        }
+        
+        socket.node = currentNode;
+        socket.write(JSON.stringify(currentNode) + "\r\n");
+        
+        currentNode.on("change", changeCallback);
+      }
+      
+    }
+    
     /* ================ */
     /* = Message open = */
     /* ================ */
     
     if (message.command == "open")
     {
-      peers.removePeer(socket);
+      var path = getPathArray(message.path);
+      var hash = murmur.getHash(path.join("/"));
       
-      var nodePath = message.path.split("/");
-      var currentNode = rootNode;
-
-      for (var i in nodePath)
+      if (socket.node != undefined)
       {
-        if (nodePath[i] == "")
-        {
-          continue;
-        }
-
-        if (currentNode.nodeExist(nodePath[i]))
-        {   
-          currentNode = currentNode.getNode(nodePath[i]);
-        }
-
-        else 
-        {
-          var newNode = new advertNode(nodePath[i], true);
-
-          currentNode.addNode(newNode);
-          currentNode = newNode;
-        }
+        socket.node.removeListener('change', changeCallback);
       }
       
-      peers.addPeer(socket, currentNode);
+      if (hash in nodeIndex)
+      {
+        var node = nodeIndex[hash];
+        
+        socket.node = node;
+        socket.write(JSON.stringify(node) + "\r\n");
+        
+        node.on("change", changeCallback);
+      }
+      
+      else 
+      {
+        socket.write(JSON.stringify({}) + "\r\n");
+      }
+    }
+    
+    // ==================
+    // = Message remove =
+    // ==================
+    
+    if (message.command == "remove")
+    {
+      var path = getPathArray(message.path);
+      var hash = murmur.getHash(path.join("/"));
+      
+      if (hash in nodeIndex)
+      {
+        var node        = nodeIndex[hash];
+        var parentNode  = node.parentNode;
+        
+        if (parentNode != null)
+        {
+          parentNode.removeNode(node);
+          node.deleteNode();
+          
+          deleteIndex();
+          rebuildIndex(rootNode, []);
+        }
+        
+        else
+        {
+          node.deleteNode();
+          
+          deleteIndex();
+          rebuildIndex(rootNode, []);
+        }
+        
+      }
     }
 
     /* ======================== */
@@ -260,8 +329,10 @@ var server = net.createServer(function (socket) {
     
     if (message.command == "setAttribute")
     {
-      var currentNode = peers.getNode(socket);
-      currentNode.setAttribute(message.key, message.value);
+      if (socket.node != null)
+      {
+        socket.node.addAttribute(message.key, message.value);
+      }
     }
     
     /* =========================== */
@@ -270,10 +341,10 @@ var server = net.createServer(function (socket) {
     
     if (message.command == "removeAttribute")
     {
-      console.log("removeAttribute");
-      
-      var currentNode = peers.getNode(socket);
-      currentNode.removeAttribute(message.key);
+      if (socket.node != null)
+      {
+        socket.node.removeAttribute(messsage.key);
+      }
     }
 
   });
