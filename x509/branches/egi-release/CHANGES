@@ -1,0 +1,10 @@
+                       SAGA X.509 Context Adaptor
+           <http://saga.cct.lsu.edu/software/cpp/adaptors/x509>
+            
+                           - Release Changelog -
+
+
+  Changes with SAGA X.509 Context Adaptor Version 0.9.0        18. April 2010
+  ---------------------------------------------------------------------------
+
+  o Initital release after repository split-up
