@@ -2330,6 +2330,11 @@ if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
   if test "x$SAGA_HAVE_PACKAGE_JOB" = "xyes"; then
     BUILD_ADAPTOR_JOB="yes"
   fi
+  if test "x$HAVE_GLOBUS" = "xyes"; then
+    BUILD_ADAPTOR_LOADER="yes"
+  fi
+
+
 
   if test "$GLOBUS_HAVE_GRAM" != "yes" ; then
     BUILD_ADAPTOR_JOB="no (GRAM client libs missing)"
@@ -2343,8 +2348,8 @@ if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
     BUILD_ADAPTOR_REPLICA="no (RLS client libs missing)"
   fi
 
-  if test "x$HAVE_GLOBUS" = "xyes"; then
-    BUILD_ADAPTOR_LOADER="yes"
+  if test "x$GLOBUS_HAVE_GRAM" != "xyes"; then
+    BUILD_ADAPTOR_LOADER="no"
   fi
 
   SAGA_DEP_FILES="$SAGA_DEP_FILES $SAGA_GLOBUS_DEP_FILES"
