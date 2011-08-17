@@ -4,6 +4,8 @@
 #  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
+-include $(SAGA_LOCATION)/share/saga/make/saga.dist.mk
+
 -include config/make.cfg
 
 SAGA_SUBDIRS += config context
@@ -11,6 +13,7 @@ SAGA_SUBDIRS += config context
 
 all:: config/make.cfg
 
+ifndef SAGA_IS_PACKAGING
 config/make.cfg: 
 	@echo ""
 	@echo " ================================= "
@@ -18,10 +21,10 @@ config/make.cfg:
 	@echo " ================================= "
 	@echo ""
 	@false
+endif
 
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.dist.mk
 
--include $(SAGA_LOCATION)/share/saga/make/saga.dist.mk
 
