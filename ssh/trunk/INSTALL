@@ -1,12 +1,12 @@
                     
                       SAGA SSH Adaptors - Installation
-             <http://saga.cct.lsu.edu/download/adaptors/ssh>
+             <http://www.saga-project.org/download/adaptors/ssh>
 
 
   For detailed informations on how to install SAGA, please refer 
   to the documentation section on our website:
 
-    http://saga.cct.lsu.edu/documentation 
+    http://www.saga-project.org/documentation 
 
 
   PREREQUISISTES:
@@ -60,5 +60,5 @@
 
   Please help us to improve the quality of SAGA and file a bug report if you 
   have encountered any problems with the build system. Our bug-tracking system 
-  can be found at: http://faust.cct.lsu.edu/trac/saga/ 
+  can be found at: http://www.saga-project.org/developers/bugtracking
 

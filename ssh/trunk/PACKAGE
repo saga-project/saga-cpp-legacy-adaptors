@@ -32,5 +32,5 @@ PACKAGING:
   deb-essential:      no
   deb-depends:        saga-core @SAGA_VERSION@ @DEB_DEPS@
   deb-provides:       saga-adaptors-ssh
-  deb-description:    http://www.saga-project.org/adaptors/ssh
+  deb-description:    http://www.saga-project.org/download/adaptors/ssh
 
