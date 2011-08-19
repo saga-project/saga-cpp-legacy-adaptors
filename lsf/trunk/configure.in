@@ -32,28 +32,28 @@ AC_OUTPUT()
 
 OUT=config.summary
 rm -f $OUT
-TEE="tee -a"
+touch $OUT
 
-echo "                                                                 " | $TEE $OUT
-echo " ========================================================        " | $TEE $OUT
-echo " SAGA LSF ADAPTORS - Configuration Summary                       " | $TEE $OUT
-echo " --------------------------------------------------------        " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " LSF Found             : $SAGA_HAVE_LSF                          " | $TEE $OUT
-echo " LSF Version           : $LSF_VERSION                            " | $TEE $OUT
-echo " LSF Location          : $LSF_LOCATION                           " | $TEE $OUT
-echo " LSF Binaries Path     : $LSF_PATH                               " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " Job Adaptor           : $BUILD_ADAPTOR_JOB                      " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " --------------------------------------------------------        " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
+echo "                                                                 " >> $OUT
+echo " ========================================================        " >> $OUT
+echo " SAGA LSF ADAPTORS - Configuration Summary                       " >> $OUT
+echo " --------------------------------------------------------        " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Adaptor Version       : $SAGA_PACKAGE_VERSION                   " >> $OUT
+echo " Adaptor Revision      : $SAGA_PACKAGE_REVISION                  " >> $OUT
+echo "                                                                 " >> $OUT
+echo " LSF Found             : $SAGA_HAVE_LSF                          " >> $OUT
+echo " LSF Version           : $LSF_VERSION                            " >> $OUT
+echo " LSF Location          : $LSF_LOCATION                           " >> $OUT
+echo " LSF Binaries Path     : $LSF_PATH                               " >> $OUT
+echo "                                                                 " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Job Adaptor           : $BUILD_ADAPTOR_JOB                      " >> $OUT
+echo "                                                                 " >> $OUT
+echo " --------------------------------------------------------        " >> $OUT
+echo "                                                                 " >> $OUT
 
-
-if test "$SAGA_RECURSIVE_CONFIG" = "yes" ; then
-  cat $OUT >> $SAGA_ROOT/$OUT
-fi
+cat $OUT
 

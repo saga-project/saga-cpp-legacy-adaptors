@@ -37,33 +37,32 @@ AC_OUTPUT()
 
 OUT=config.summary
 rm -f $OUT
-TEE="tee -a"
+touch $OUT
 
-echo "                                                                 " | $TEE $OUT
-echo " *******************************************************         " | $TEE $OUT
-echo " ***            THIS ADAPTOR IS DEPRECATED           ***         " | $TEE $OUT
-echo " ***       use the BES adaptor to access GridSAM     ***         " | $TEE $OUT
-echo " *** https://svn.cct.lsu.edu/repos/saga-adaptors/ogf ***         " | $TEE $OUT
-echo " *******************************************************         " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " ========================================================        " | $TEE $OUT
-echo " SAGA OMII ADAPTORS                                              " | $TEE $OUT
-echo " --------------------------------------------------------        " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " OpenSSL Found         : $HAVE_OPENSSL                           " | $TEE $OUT
-echo " OpenSSL Location      : $OPENSSL_LOCATION                       " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " Job Adaptor (GridSAM) : $BUILD_ADAPTOR_JOB                      " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " --------------------------------------------------------        " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
+echo "                                                                 " >> $OUT
+echo " *******************************************************         " >> $OUT
+echo " ***            THIS ADAPTOR IS DEPRECATED           ***         " >> $OUT
+echo " ***       use the BES adaptor to access GridSAM     ***         " >> $OUT
+echo " *** https://svn.cct.lsu.edu/repos/saga-adaptors/ogf ***         " >> $OUT
+echo " *******************************************************         " >> $OUT
+echo "                                                                 " >> $OUT
+echo "                                                                 " >> $OUT
+echo " ========================================================        " >> $OUT
+echo " SAGA OMII ADAPTORS                                              " >> $OUT
+echo " --------------------------------------------------------        " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Adaptor Version       : $SAGA_PACKAGE_VERSION                   " >> $OUT
+echo " Adaptor Revision      : $SAGA_PACKAGE_REVISION                  " >> $OUT
+echo "                                                                 " >> $OUT
+echo " OpenSSL Found         : $HAVE_OPENSSL                           " >> $OUT
+echo " OpenSSL Location      : $OPENSSL_LOCATION                       " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Job Adaptor (GridSAM) : $BUILD_ADAPTOR_JOB                      " >> $OUT
+echo "                                                                 " >> $OUT
+echo " --------------------------------------------------------        " >> $OUT
+echo "                                                                 " >> $OUT
 
-if test "$SAGA_RECURSIVE_CONFIG" = "yes" ; then
-  cat $OUT >> $SAGA_ROOT/$OUT
-fi
-
+cat $OUT
 

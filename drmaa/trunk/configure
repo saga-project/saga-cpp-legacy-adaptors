@@ -569,6 +569,7 @@ SAGA_INC_DIR
 SAGA_CONF_DIR
 SAGA_MAKE_DIR
 HAVE_SAGA
+SAGA_PACKAGE_REVISION
 SAGA_PACKAGE_VERSION
 SAGA_VERSION_SUBMINOR
 SAGA_VERSION_MINOR
@@ -1702,7 +1703,7 @@ fi
   # try to find a valid SAGA_LOCATION amongst the possible candidates
 
   packages=`ls /usr/local/saga* /usr/local/package/saga* 2>>/dev/null`
-  which_saga=`which saga-config | sed -e 's/\/bin\/saga-config//'`
+  which_saga=`which saga-config 2>/dev/null | sed -e 's/\/bin\/saga-config//'`
 
   if test "$tmp_location-$SAGA_LOCATION" = "-"; then
     paths="$which_saga /usr /usr/local /opt /opt/local $packages"
@@ -1748,9 +1749,9 @@ $as_echo "no" >&6; }
 $as_echo_n "checking saga version... " >&6; }
     SAGA_VERSION=`$SAGA_CONFIG --version`
 
-    SAGA_VERSION_MAJOR=`echo $SAGA_VERSION    | cut -f 1 -d .`
-    SAGA_VERSION_MINOR=`echo $SAGA_VERSION    | cut -f 2 -d .`
-    SAGA_VERSION_SUBMINOR=`echo $SAGA_VERSION | cut -f 3 -d .`
+    SAGA_VERSION_MAJOR=`echo $SAGA_VERSION    | cut -f 1 -d . | cut -f 1 -d '-'`
+    SAGA_VERSION_MINOR=`echo $SAGA_VERSION    | cut -f 2 -d . | cut -f 1 -d '-'`
+    SAGA_VERSION_SUBMINOR=`echo $SAGA_VERSION | cut -f 3 -d . | cut -f 1 -d '-'`
 
     if test "$SAGA_VERSION_SUBMINOR" == ""; then
       SAGA_VERSION_SUBMINOR=0
@@ -1772,17 +1773,20 @@ $as_echo "$SAGA_VERSION_MAJOR.$SAGA_VERSION_MINOR.$SAGA_VERSION_SUBMINOR" >&6; }
 
 
   # We set SAGA_LIB_VERSION to SAGA_VERSION by default.  If a local PACKAGE file is
-  # present though. for example for an adaptor, we use its version info instead.
-  # A configure is of course still able to overrule that,
+  # present though, for example for an adaptor, we use its version info instead.
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga package version" >&5
 $as_echo_n "checking saga package version... " >&6; }
   SAGA_PACKAGE_VERSION=$SAGA_VERSION
-  test -f PACKAGE && SAGA_PACKAGE_VERSION=`grep -e '^VERSION:' PACKAGE | cut -f 2 -d ' '`
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION" >&5
-$as_echo "$SAGA_PACKAGE_VERSION" >&6; }
+  test -f PACKAGE && SAGA_PACKAGE_VERSION=` grep -e '^VERSION:'  PACKAGE | rev | cut -f 1 -d ' ' | rev`
+  test -f PACKAGE && SAGA_PACKAGE_REVISION=`grep -e '^REVISION:' PACKAGE | rev | cut -f 2 -d ' ' | rev`
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&5
+$as_echo "$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
+
 
   export  SAGA_PACKAGE_VERSION
+
+  export  SAGA_PACKAGE_REVISION
 
 
 
@@ -1796,6 +1800,8 @@ $as_echo "$SAGA_PACKAGE_VERSION" >&6; }
   SAGA_INI_DIR=$SAGA_LOCATION/share/saga/
   SAGA_CONFIG=$SAGA_BIN_DIR/saga-config
   SAGA_VERSION=`$SAGA_CONFIG --version`
+
+  SAGA_CORE_DEP_FILES="$SAGA_INC_DIR/saga/saga.hpp"
 
   export SAGA_LOCATION
   export SAGA_MAKE_DIR
@@ -3028,6 +3034,9 @@ echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
 echo " Using SAGA from       : $SAGA_LOCATION                          " >> $OUT
 echo "       SAGA version    : $SAGA_VERSION                           " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Adaptor Version       : $SAGA_PACKAGE_VERSION                   " >> $OUT
+echo " Adaptor Revision      : $SAGA_PACKAGE_REVISION                  " >> $OUT
 echo "                                                                 " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT

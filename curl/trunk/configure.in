@@ -66,26 +66,26 @@ AC_OUTPUT()
 
 OUT=config.summary
 rm -f $OUT
-TEE="tee -a"
+touch $OUT
 
-echo "                                                                 " | $TEE $OUT
-echo " ========================================================        " | $TEE $OUT
-echo " SAGA CURL ADAPTORS                                              " | $TEE $OUT
-echo " --------------------------------------------------------        " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " Using SAGA from       : $SAGA_LOCATION                          " | $TEE $OUT
-echo "       SAGA version    : $SAGA_VERSION                           " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " CURL found            : $HAVE_CURL  ($CURL_LOCATION)            " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " Context Adaptor       : $BUILD_ADAPTOR_CONTEXT                  " | $TEE $OUT
-echo " File    Adaptor       : $BUILD_ADAPTOR_FILESYSTEM               " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " --------------------------------------------------------        " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
+echo "                                                                 " >> $OUT
+echo " ========================================================        " >> $OUT
+echo " SAGA CURL ADAPTORS                                              " >> $OUT
+echo " --------------------------------------------------------        " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Using SAGA from       : $SAGA_LOCATION                          " >> $OUT
+echo "       SAGA version    : $SAGA_VERSION                           " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Adaptor Version       : $SAGA_PACKAGE_VERSION                   " >> $OUT
+echo " Adaptor Revision      : $SAGA_PACKAGE_REVISION                  " >> $OUT
+echo "                                                                 " >> $OUT
+echo " CURL found            : $HAVE_CURL  ($CURL_LOCATION)            " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Context Adaptor       : $BUILD_ADAPTOR_CONTEXT                  " >> $OUT
+echo " File    Adaptor       : $BUILD_ADAPTOR_FILESYSTEM               " >> $OUT
+echo "                                                                 " >> $OUT
+echo " --------------------------------------------------------        " >> $OUT
+echo "                                                                 " >> $OUT
 
-
-if test "$SAGA_RECURSIVE_CONFIG" = "yes" ; then
-  cat $OUT >> $SAGA_ROOT/$OUT
-fi
+cat $OUT
 

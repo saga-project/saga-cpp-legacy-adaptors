@@ -572,18 +572,20 @@ TMP_SAGA_INSTTYPE
 SAGA_LIB_VERSION
 SAGA_MAKE_INCLUDE_DIR
 TMP_SAGA_LOCATION
+SAGA_CONFIG
 SAGA_INI_DIR
 SAGA_BIN_DIR
 SAGA_LIB_DIR
 SAGA_INC_DIR
 SAGA_CONF_DIR
 SAGA_MAKE_DIR
+HAVE_SAGA
+SAGA_PACKAGE_REVISION
 SAGA_PACKAGE_VERSION
 SAGA_VERSION_SUBMINOR
 SAGA_VERSION_MINOR
 SAGA_VERSION_MAJOR
 SAGA_VERSION
-SAGA_CONFIG
 SAGA_LOCATION
 target_alias
 host_alias
@@ -1790,6 +1792,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
+  HAVE_SAGA=no
 
   tmp_location=""
 
@@ -1811,9 +1814,17 @@ fi
 
 
   # try to find a valid SAGA_LOCATION amongst the possible candidates
-  packages=`ls /usr/local/saga* /usr/local/package/saga* 2>>/dev/null`
 
-  for tmp_path in $tmp_location $SAGA_LOCATION /usr /usr/local /opt /opt/local $packages; do
+  packages=`ls /usr/local/saga* /usr/local/package/saga* 2>>/dev/null`
+  which_saga=`which saga-config 2>/dev/null | sed -e 's/\/bin\/saga-config//'`
+
+  if test "$tmp_location-$SAGA_LOCATION" = "-"; then
+    paths="$which_saga /usr /usr/local /opt /opt/local $packages"
+  else
+    paths="$tmp_location $SAGA_LOCATION"
+  fi
+
+  for tmp_path in $paths; do
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for saga in $tmp_path" >&5
 $as_echo_n "checking for saga in $tmp_path... " >&6; }
@@ -1824,82 +1835,24 @@ $as_echo_n "checking for saga in $tmp_path... " >&6; }
     tmp=`$SAGA_CONFIG --prefix 2> /dev/null`
 
     if ! test "x$tmp" = "x"; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: found (prefix: $tmp)" >&5
-$as_echo "found (prefix: $tmp)" >&6; }
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
       TMP_SAGA_LOCATION=$tmp_path
       break
     else
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
-$as_echo "not found" >&6; }
-    fi
-
-  done
-
-
-
-  # if the above did not yield a SAGA__LOCATION, try to find saga-config in
-  # $PATH, and use the reported prefix
-  if test "x$TMP_SAGA_LOCATION" = "x"; then
-
-    SAGA_CONFIG=""
-    # Extract the first word of "saga-config", so it can be a program name with args.
-set dummy saga-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if test "${ac_cv_path_SAGA_CONFIG+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $SAGA_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_SAGA_CONFIG="$SAGA_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_path_SAGA_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-SAGA_CONFIG=$ac_cv_path_SAGA_CONFIG
-if test -n "$SAGA_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_CONFIG" >&5
-$as_echo "$SAGA_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-fi
-
-
-
-    if test "x$SAGA_CONFIG" != "x"; then
-
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga-config prefix" >&5
-$as_echo_n "checking saga-config prefix... " >&6; }
-
-      if test "x$SAGA_CONFIG" != "x"; then
-        TMP_SAGA_LOCATION=`$SAGA_CONFIG --prefix`
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $TMP_SAGA_LOCATION" >&5
-$as_echo "$TMP_SAGA_LOCATION" >&6; }
-      else
-        as_fn_error $? "invalid" "$LINENO" 5
-      fi
-
     fi
 
-  fi
+  done
 
+
+  # found anything?
+  if test "x$TMP_SAGA_LOCATION" = "x"; then
+    as_fn_error $? "Couldn't find SAGA installation." "$LINENO" 5
+  else
+    HAVE_SAGA=yes
+  fi
 
 
   # if we have a usable SAGA_LOCATION, try to infer all required vars
@@ -1909,9 +1862,9 @@ $as_echo "$TMP_SAGA_LOCATION" >&6; }
 $as_echo_n "checking saga version... " >&6; }
     SAGA_VERSION=`$SAGA_CONFIG --version`
 
-    SAGA_VERSION_MAJOR=`echo $SAGA_VERSION    | cut -f 1 -d .`
-    SAGA_VERSION_MINOR=`echo $SAGA_VERSION    | cut -f 2 -d .`
-    SAGA_VERSION_SUBMINOR=`echo $SAGA_VERSION | cut -f 3 -d .`
+    SAGA_VERSION_MAJOR=`echo $SAGA_VERSION    | cut -f 1 -d . | cut -f 1 -d '-'`
+    SAGA_VERSION_MINOR=`echo $SAGA_VERSION    | cut -f 2 -d . | cut -f 1 -d '-'`
+    SAGA_VERSION_SUBMINOR=`echo $SAGA_VERSION | cut -f 3 -d . | cut -f 1 -d '-'`
 
     if test "$SAGA_VERSION_SUBMINOR" == ""; then
       SAGA_VERSION_SUBMINOR=0
@@ -1932,26 +1885,21 @@ $as_echo "$SAGA_VERSION_MAJOR.$SAGA_VERSION_MINOR.$SAGA_VERSION_SUBMINOR" >&6; }
   fi
 
 
-
-  # found anything?
-  if test "x$TMP_SAGA_LOCATION" = "x"; then
-    as_fn_error $? "Couldn't find SAGA installation." "$LINENO" 5
-  fi
-
-
-
   # We set SAGA_LIB_VERSION to SAGA_VERSION by default.  If a local PACKAGE file is
-  # present though. for example for an adaptor, we use its version info instead.
-  # A configure is of course still able to overrule that,
+  # present though, for example for an adaptor, we use its version info instead.
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga package version" >&5
 $as_echo_n "checking saga package version... " >&6; }
   SAGA_PACKAGE_VERSION=$SAGA_VERSION
-  test -f PACKAGE && SAGA_PACKAGE_VERSION=`grep -e '^VERSION:' PACKAGE | cut -f 2 -d ' '`
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION" >&5
-$as_echo "$SAGA_PACKAGE_VERSION" >&6; }
+  test -f PACKAGE && SAGA_PACKAGE_VERSION=` grep -e '^VERSION:'  PACKAGE | rev | cut -f 1 -d ' ' | rev`
+  test -f PACKAGE && SAGA_PACKAGE_REVISION=`grep -e '^REVISION:' PACKAGE | rev | cut -f 2 -d ' ' | rev`
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&5
+$as_echo "$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
+
 
   export  SAGA_PACKAGE_VERSION
+
+  export  SAGA_PACKAGE_REVISION
 
 
 
@@ -1965,6 +1913,8 @@ $as_echo "$SAGA_PACKAGE_VERSION" >&6; }
   SAGA_INI_DIR=$SAGA_LOCATION/share/saga/
   SAGA_CONFIG=$SAGA_BIN_DIR/saga-config
   SAGA_VERSION=`$SAGA_CONFIG --version`
+
+  SAGA_CORE_DEP_FILES="$SAGA_INC_DIR/saga/saga.hpp"
 
   export SAGA_LOCATION
   export SAGA_MAKE_DIR
@@ -1987,11 +1937,16 @@ $as_echo "$SAGA_PACKAGE_VERSION" >&6; }
 
 
 
+
   # the adaptor and binding config files depend on the earlier findings of
   # SAGA's main configure.
   SAGA_CONF="$SAGA_CONF_DIR/saga-config.cache"
-  test -e "$SAGA_CONF" && source "$SAGA_CONF"
-  test -e "$SAGA_CONF" || as_fn_error $? "SAGA tree at $SAGA_LOCATION seems invalid, no $SAGA_CONF found." "$LINENO" 5
+
+  if test -e "$SAGA_CONF"; then
+    source "$SAGA_CONF"
+  else
+    as_fn_error $? "SAGA tree at $SAGA_LOCATION seems invalid: no $SAGA_CONF found." "$LINENO" 5
+  fi
 
 
   # be backward compatible to old versions of saga.m4
@@ -2009,13 +1964,13 @@ $as_echo "$SAGA_PACKAGE_VERSION" >&6; }
 
   TMP_SAGA_INSTTYPE=install
   export TMP_SAGA_INSTTYPE
-  Q
+
 
   # by convention, SAGA components keep configure files in a config/subdir.  We
   # set a full path to that, so that make files can find the respective includes
   CONFDIR=`pwd`/config/
   export CONFDIR
-  Q
+
 
 
 
@@ -3825,33 +3780,32 @@ fi
 
 OUT=config.summary
 rm -f $OUT
-TEE="tee -a"
+touch $OUT
 
-echo "                                                                 " | $TEE $OUT
-echo " *******************************************************         " | $TEE $OUT
-echo " ***            THIS ADAPTOR IS DEPRECATED           ***         " | $TEE $OUT
-echo " ***       use the BES adaptor to access GridSAM     ***         " | $TEE $OUT
-echo " *** https://svn.cct.lsu.edu/repos/saga-adaptors/ogf ***         " | $TEE $OUT
-echo " *******************************************************         " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " ========================================================        " | $TEE $OUT
-echo " SAGA OMII ADAPTORS                                              " | $TEE $OUT
-echo " --------------------------------------------------------        " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " OpenSSL Found         : $HAVE_OPENSSL                           " | $TEE $OUT
-echo " OpenSSL Location      : $OPENSSL_LOCATION                       " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " Job Adaptor (GridSAM) : $BUILD_ADAPTOR_JOB                      " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
-echo " --------------------------------------------------------        " | $TEE $OUT
-echo "                                                                 " | $TEE $OUT
+echo "                                                                 " >> $OUT
+echo " *******************************************************         " >> $OUT
+echo " ***            THIS ADAPTOR IS DEPRECATED           ***         " >> $OUT
+echo " ***       use the BES adaptor to access GridSAM     ***         " >> $OUT
+echo " *** https://svn.cct.lsu.edu/repos/saga-adaptors/ogf ***         " >> $OUT
+echo " *******************************************************         " >> $OUT
+echo "                                                                 " >> $OUT
+echo "                                                                 " >> $OUT
+echo " ========================================================        " >> $OUT
+echo " SAGA OMII ADAPTORS                                              " >> $OUT
+echo " --------------------------------------------------------        " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Adaptor Version       : $SAGA_PACKAGE_VERSION                   " >> $OUT
+echo " Adaptor Revision      : $SAGA_PACKAGE_REVISION                  " >> $OUT
+echo "                                                                 " >> $OUT
+echo " OpenSSL Found         : $HAVE_OPENSSL                           " >> $OUT
+echo " OpenSSL Location      : $OPENSSL_LOCATION                       " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Job Adaptor (GridSAM) : $BUILD_ADAPTOR_JOB                      " >> $OUT
+echo "                                                                 " >> $OUT
+echo " --------------------------------------------------------        " >> $OUT
+echo "                                                                 " >> $OUT
 
-if test "$SAGA_RECURSIVE_CONFIG" = "yes" ; then
-  cat $OUT >> $SAGA_ROOT/$OUT
-fi
-
+cat $OUT
 
