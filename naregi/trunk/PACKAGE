@@ -1,6 +1,7 @@
 
-PACKAGE: saga-adaptors-naregi
-VERSION: 0.9.0
+PACKAGE:  saga-adaptors-naregi
+VERSION:  0.9.0
+REVISION: $Revision$
 
 DEPENDENCIES:
   saga-core

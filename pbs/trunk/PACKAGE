@@ -1,6 +1,7 @@
 
-PACKAGE: saga-adaptors-pbs
-VERSION: 1.1
+PACKAGE:  saga-adaptors-pbs
+VERSION:  1.1
+REVISION: $Revision$
 
 DEPENDENCIES:
   saga-core

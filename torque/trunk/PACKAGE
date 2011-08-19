@@ -1,6 +1,7 @@
 
-PACKAGE: saga-adaptors-torque
-VERSION: 1.0
+PACKAGE:  saga-adaptors-torque
+VERSION:  1.0
+REVISION: $Revision$
 
 DEPENDENCIES:
   saga-core
