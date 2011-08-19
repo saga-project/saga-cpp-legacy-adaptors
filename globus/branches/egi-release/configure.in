@@ -26,7 +26,7 @@ SAGA_HAVE_ADAPTOR_X509=yes
 # first make sure that the x509 context adaptor is installed
 AC_MSG_CHECKING([for x509 adaptor])
 if ! test -f $SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini; then
-  SAGA_HAVE_ADAPTOR_X509="NO. Get it here: http://saga.cct.lsu.edu/software/cpp/download/"
+  SAGA_HAVE_ADAPTOR_X509="NO. Get it here: http://www.saga-project.org/download/adaptors/"
   AC_MSG_RESULT([missing])
   BUILD_ADAPTOR_JOB="no (x509 adaptor missing)"
   BUILD_ADAPTOR_FILE="no (x509 adaptor missing)"
@@ -49,7 +49,12 @@ if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
   if test "x$SAGA_HAVE_PACKAGE_JOB" = "xyes"; then
     BUILD_ADAPTOR_JOB="yes"
   fi
-  
+  if test "x$HAVE_GLOBUS" = "xyes"; then
+    BUILD_ADAPTOR_LOADER="yes"
+  fi
+
+
+
   if test "$GLOBUS_HAVE_GRAM" != "yes" ; then
     BUILD_ADAPTOR_JOB="no (GRAM client libs missing)"
   fi
@@ -62,8 +67,8 @@ if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
     BUILD_ADAPTOR_REPLICA="no (RLS client libs missing)"
   fi
   
-  if test "x$HAVE_GLOBUS" = "xyes"; then
-    BUILD_ADAPTOR_LOADER="yes"
+  if test "x$GLOBUS_HAVE_GRAM" != "xyes"; then
+    BUILD_ADAPTOR_LOADER="no"
   fi
 
   SAGA_DEP_FILES="$SAGA_DEP_FILES $SAGA_GLOBUS_DEP_FILES"

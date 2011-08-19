@@ -1,9 +1,14 @@
                              SAGA Globus Adaptors
-            <http://saga.cct.lsu.edu/software/cpp/adaptors/globus/>
+          <http://www.saga-project.org/download/adaptors/globus/>
             
                            - Release Changelog -
 
   
+  Changes with SAGA Globus Adaptors Version 1.0.0          01. September 2011
+  ---------------------------------------------------------------------------
+  
+  o Buildsystem preparation for Debian package generation.
+  o Fixed links in INSTALL/CHANGES files.
   
   Changes with SAGA Globus Adaptors Version 0.9.5           21. November 2010
   ---------------------------------------------------------------------------
