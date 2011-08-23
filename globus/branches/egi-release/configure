@@ -619,6 +619,7 @@ SAGA_VERSION_MAJOR
 SAGA_VERSION_MINOR
 SAGA_VERSION_SUBMINOR
 SAGA_PACKAGE_VERSION
+SAGA_PACKAGE_REVISION
 HAVE_SAGA
 SAGA_MAKE_DIR
 SAGA_CONF_DIR
@@ -1783,17 +1784,28 @@ echo "${ECHO_T}$SAGA_VERSION_MAJOR.$SAGA_VERSION_MINOR.$SAGA_VERSION_SUBMINOR" >
   fi
 
 
-  # We set SAGA_LIB_VERSION to SAGA_VERSION by default.  If a local PACKAGE file is
+  # We set SAGA_PACKAGE_VERSION to SAGA_VERSION by default.  If a local PACKAGE file is
   # present though, for example for an adaptor, we use its version info instead.
 
   { echo "$as_me:$LINENO: checking saga package version" >&5
 echo $ECHO_N "checking saga package version... $ECHO_C" >&6; }
   SAGA_PACKAGE_VERSION=$SAGA_VERSION
-  test -f PACKAGE && SAGA_PACKAGE_VERSION=`grep -e '^VERSION:' PACKAGE | cut -f 2 -d ' '`
-  { echo "$as_me:$LINENO: result: $SAGA_PACKAGE_VERSION" >&5
-echo "${ECHO_T}$SAGA_PACKAGE_VERSION" >&6; }
+  test -f PACKAGE && SAGA_PACKAGE_VERSION=` grep -e '^VERSION:'  PACKAGE | sed -e 's/^VERSION: *//'`
+  test -f PACKAGE && SAGA_PACKAGE_REVISION=`grep -e '^REVISION:' PACKAGE | cut -f 2 -d '$' | cut -f 2 -d ' '`
+  { echo "$as_me:$LINENO: result: $SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&5
+echo "${ECHO_T}$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
+
+  # svn info supercedes the revision info from the PACKAGE file
+  svnrevision=`svn info 2>&1 | grep Revision | cut -f 2 -d ' '`
+
+  if ! test "$svnrevision" = ""; then
+    SAGA_PACKAGE_REVISION=$svnrevision
+  fi
+
 
   export  SAGA_PACKAGE_VERSION
+
+  export  SAGA_PACKAGE_REVISION
 
 
 
@@ -2350,7 +2362,7 @@ fi
 
 # debian package support
 
-  headers=$SAGA_DEP_FILES
+  depfiles=$SAGA_DEP_FILES
 
   # Extract the first word of "dpkg", so it can be a program name with args.
 set dummy dpkg; ac_word=$2
@@ -2404,17 +2416,20 @@ echo "${ECHO_T}DPKG not found - not a debian system?" >&6; }
     first=yes
     oldpackage="NONE"
 
-    for  header in $headers;
+    for  depfile in $depfiles;
     do
 
-      header=`echo $header | sed -e 's|//|/|g'`
-      package=`$SAGA_DPKG -S $header 2>>/dev/null | cut -f 1 -d ':'`
+      depfile=`echo $depfile | sed -e 's|//|/|g'`
+      package=`$SAGA_DPKG -S $depfile 2>>/dev/null | cut -f 1 -d ':'`
 
       if test "" = "$package"; then
-        { echo "$as_me:$LINENO: result: Cannot find debian package for $header" >&5
-echo "${ECHO_T}Cannot find debian package for $header" >&6; }
+        { echo "$as_me:$LINENO: result: Cannot find debian package for $depfile" >&5
+echo "${ECHO_T}Cannot find debian package for $depfile" >&6; }
         continue
       fi
+
+      { echo "$as_me:$LINENO: $depfile: $package" >&5
+echo "$as_me: $depfile: $package" >&6;}
 
       if test "$oldpackage" = "$package"; then
         # avoid repetetetive entries, to some extend
@@ -2424,8 +2439,8 @@ echo "${ECHO_T}Cannot find debian package for $header" >&6; }
       version=`$SAGA_DPKG -p $package 2>>/dev/null | grep -e '^Version:' | cut -f 2 -d ' '`
 
       if test "" = "$version"; then
-        { echo "$as_me:$LINENO: result: Cannot find debian package version for $header" >&5
-echo "${ECHO_T}Cannot find debian package version for $header" >&6; }
+        { echo "$as_me:$LINENO: result: Cannot find debian package version for $depfile" >&5
+echo "${ECHO_T}Cannot find debian package version for $depfile" >&6; }
         continue
       fi
 
@@ -2484,14 +2499,14 @@ echo "${ECHO_T}$SAGA_DEB_ARCH" >&6; }
     { echo "$as_me:$LINENO: checking debian package version" >&5
 echo $ECHO_N "checking debian package version... $ECHO_C" >&6; }
     SAGA_DEB_VERSION=$SAGA_VERSION
-    test -f PACKAGE && SAGA_DEB_VERSION=`grep -e '^VERSION:' PACKAGE | cut -f 2 -d ' '`
+    test -f PACKAGE && SAGA_DEB_VERSION=`grep '^VERSION:' PACKAGE | sed -e 's/^VERSION: *//'`
     { echo "$as_me:$LINENO: result: $SAGA_DEB_VERSION" >&5
 echo "${ECHO_T}$SAGA_DEB_VERSION" >&6; }
 
     { echo "$as_me:$LINENO: checking debian package name" >&5
 echo $ECHO_N "checking debian package name... $ECHO_C" >&6; }
     SAGA_DEB_PACKAGE="NONE"
-    test -f PACKAGE && SAGA_DEB_PACKAGE=`grep -e '^PACKAGE:' PACKAGE | cut -f 2 -d ' '`
+    test -f PACKAGE && SAGA_DEB_PACKAGE=`grep '^PACKAGE:' PACKAGE | sed -e 's/^PACKAGE: *//'`
     { echo "$as_me:$LINENO: result: $SAGA_DEB_PACKAGE" >&5
 echo "${ECHO_T}$SAGA_DEB_PACKAGE" >&6; }
 
@@ -2503,14 +2518,8 @@ echo "${ECHO_T}$SAGA_DEB_PACKAGE" >&6; }
 echo $ECHO_N "checking debian package control file... $ECHO_C" >&6; }
     SAGA_DEB_CONTROL=$SAGA_DEB_PACKAGE.deb.ctrl
 
-    if test -e $SAGA_DEB_CONTROL; then
-      { echo "$as_me:$LINENO: result: overwriting $SAGA_DEB_CONTROL, saving .bak" >&5
-echo "${ECHO_T}overwriting $SAGA_DEB_CONTROL, saving .bak" >&6; }
-      cp $SAGA_DEB_CONTROL $SAGA_DEB_CONTROL.bak
-    else
-      { echo "$as_me:$LINENO: result: creating $SAGA_DEB_CONTROL" >&5
+    { echo "$as_me:$LINENO: result: creating $SAGA_DEB_CONTROL" >&5
 echo "${ECHO_T}creating $SAGA_DEB_CONTROL" >&6; }
-    fi
 
     echo "Package:        $SAGA_DEB_PACKAGE"                       >  $SAGA_DEB_CONTROL
     echo "Version:        $SAGA_DEB_VERSION"                       >> $SAGA_DEB_CONTROL
@@ -3228,6 +3237,7 @@ SAGA_VERSION_MAJOR!$SAGA_VERSION_MAJOR$ac_delim
 SAGA_VERSION_MINOR!$SAGA_VERSION_MINOR$ac_delim
 SAGA_VERSION_SUBMINOR!$SAGA_VERSION_SUBMINOR$ac_delim
 SAGA_PACKAGE_VERSION!$SAGA_PACKAGE_VERSION$ac_delim
+SAGA_PACKAGE_REVISION!$SAGA_PACKAGE_REVISION$ac_delim
 HAVE_SAGA!$HAVE_SAGA$ac_delim
 SAGA_MAKE_DIR!$SAGA_MAKE_DIR$ac_delim
 SAGA_CONF_DIR!$SAGA_CONF_DIR$ac_delim
@@ -3270,7 +3280,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 83; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 84; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
