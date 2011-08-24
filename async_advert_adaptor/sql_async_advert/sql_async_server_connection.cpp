@@ -261,7 +261,7 @@ namespace sql_async_advert
   void server_connection::remove_attribute(const std::string &url, const std::string &key)
   {
     JsonBox::Object obj;
-    obj["command"]  = JsonBox::Value("setAttribute");
+    obj["command"]  = JsonBox::Value("removeAttribute");
     obj["path"]     = JsonBox::Value(url);
     obj["key"]      = JsonBox::Value(key); 
     

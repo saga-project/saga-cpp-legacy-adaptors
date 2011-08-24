@@ -563,6 +563,8 @@ var server = net.createServer(function (socket) {
         {
           delete node.attributes[message.key];
           
+          console.log(node.attributes);
+          
           node.commit('attributes');
           node.save(function (error) {
             notifySockets(node.id);

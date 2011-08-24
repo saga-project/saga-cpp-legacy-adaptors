@@ -267,7 +267,22 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_attribute_is_extended (bool        & ret, 
                                                     std::string   key)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    JsonBox::Value value;
+    bool state = _connection->get_value(_path.string(), value);
+    
+    check_if_open(state, "advertdirectory_cpi_impl::sync_attribute_is_readonly");
+    
+    JsonBox::Object obj         = value.getObject();
+    JsonBox::Object attributes  = obj["attributes"].getObject();
+    
+    std::map<std::string, JsonBox::Value>::iterator i = attributes.find(key);
+    if (i == attributes.end())
+    {
+      SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not Exists", saga::DoesNotExist);
+    }
+    
+    instance_data idata(this);
+    ret = (idata->mode_ & saga::advert::Write);
   }
 
 //  ////////////////////////////////////////////////////////////////////////
@@ -343,7 +358,10 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_remove_attribute (saga::impl::void_t & ret,
                                                std::string    key)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    bool state = _connection->get_state(_path.string()); 
+    check_if_open(state, "advertdirectory_cpi_impl::sync_remove_attribute");
+    
+    _connection->remove_attribute(_path.string(), key);
   }
 
 //  ////////////////////////////////////////////////////////////////////////
