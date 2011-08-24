@@ -16,6 +16,13 @@
 #include <boost/thread.hpp>
 #include <boost/asio.hpp>
 
+// STL includes
+#include <string>
+#include <map>
+
+// server_connection
+#include "sql_async_server_connection.hpp"
+
 ////////////////////////////////////////////////////////////////////////
 namespace sql_async_advert
 {
@@ -58,12 +65,24 @@ namespace sql_async_advert
     // = Dummy work item to keep the io_service allive =
     // =================================================
     typedef boost::shared_ptr<boost::asio::io_service::work> work_ptr;
-    work_ptr work;
-    
-    // ======================================
-    // = Thread to execute io_service.run() =
-    // ======================================
+    work_ptr                  work;
+        
+    // =========================
+    // = ASIO execution thread =
+    // =========================
     boost::thread             thread;
+    
+    // ===================
+    // = Connection Map  =
+    // ===================
+    typedef std::map<std::string, server_connection*> connection_map_t;
+    connection_map_t*      connection_map;
+    
+    // ====================================================
+    // = Get server connection or create a new connection =
+    // ====================================================
+    server_connection* get_server_connection(saga::url url);
+    
   };
 
 } // namespace sql_async_advert

@@ -69,54 +69,66 @@ namespace sql_async_advert
       ~advertdirectory_cpi_impl  (void);
 
 //      // attribute functions
-//      void sync_attribute_exists      (bool                        & ret, 
-//                                       std::string                   key);
-//      void sync_attribute_is_readonly (bool                        & ret, 
-//                                       std::string                   key);
-//      void sync_attribute_is_writable (bool                        & ret, 
-//                                       std::string                   key);
-//      void sync_attribute_is_vector   (bool                        & ret, 
-//                                       std::string                   key);
-//      void sync_attribute_is_extended (bool                        & ret, 
-//                                       std::string                   key);
-//      void sync_get_attribute         (std::string                 & ret, 
-//                                       std::string                   key);
-//      void sync_set_attribute         (saga::impl::void_t          & ret, 
-//                                       std::string                   key, 
-//                                       std::string                   val);
-//      void sync_get_vector_attribute  (std::vector <std::string>   & ret, 
-//                                       std::string                   key);
-//      void sync_set_vector_attribute  (saga::impl::void_t          & ret,
-//                                       std::string                   key, 
-//                                       std::vector <std::string>     val);
-//      void sync_remove_attribute      (saga::impl::void_t          & ret, 
-//                                       std::string                   key);
-//      void sync_list_attributes       (std::vector <std::string>   & ret);
-//      void sync_find_attributes       (std::vector <std::string>   & ret,
-//                                       std::string                   pattern);
-//
-//      // namespace_entry functions
-//      void sync_get_url               (saga::url                   & ret);
-//      void sync_get_cwd               (saga::url                   & ret);
-//      void sync_get_name              (saga::url                   & ret);
-//      void sync_read_link             (saga::url                   & ret);
-//      void sync_is_dir                (bool                        & ret);
-//      void sync_is_entry              (bool                        & ret);
-//      void sync_is_link               (bool                        & ret);
-//      void sync_copy                  (saga::impl::void_t          & ret, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_link                  (saga::impl::void_t          & ret, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_move                  (saga::impl::void_t          & ret, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_remove                (saga::impl::void_t          & ret, 
-//                                       int                           flags);
-//      void sync_close                 (saga::impl::void_t          & ret, 
-//                                       double                        timeout);
-//
+      void sync_attribute_exists      (bool                        & ret, 
+                                       std::string                   key);
+
+      void sync_attribute_is_readonly (bool                        & ret, 
+                                       std::string                   key);
+
+      void sync_attribute_is_writable (bool                        & ret, 
+                                       std::string                   key);
+
+      void sync_attribute_is_vector   (bool                        & ret, 
+                                       std::string                   key);
+
+      void sync_attribute_is_extended (bool                        & ret, 
+                                       std::string                   key);
+
+      void sync_get_attribute         (std::string                 & ret, 
+                                       std::string                   key);
+
+      void sync_set_attribute         (saga::impl::void_t          & ret, 
+                                       std::string                   key, 
+                                       std::string                   val);
+
+      void sync_get_vector_attribute  (std::vector <std::string>   & ret, 
+                                       std::string                   key);
+
+      void sync_set_vector_attribute  (saga::impl::void_t          & ret,
+                                       std::string                   key, 
+                                       std::vector <std::string>     val);
+
+      void sync_remove_attribute      (saga::impl::void_t          & ret, 
+                                       std::string                   key);
+
+      void sync_list_attributes       (std::vector <std::string>   & ret);
+
+      void sync_find_attributes       (std::vector <std::string>   & ret,
+                                       std::string                   pattern);
+
+
+     // namespace_entry functions
+
+      void sync_get_url               (saga::url                   & ret);
+      void sync_get_cwd               (saga::url                   & ret);
+      void sync_get_name              (saga::url                   & ret);
+      void sync_read_link             (saga::url                   & ret);
+      void sync_is_dir                (bool                        & ret);
+      void sync_is_entry              (bool                        & ret);
+      void sync_is_link               (bool                        & ret);
+      void sync_copy                  (saga::impl::void_t          & ret, 
+                                       saga::url                     target, 
+                                       int                           flags);
+      void sync_link                  (saga::impl::void_t          & ret, 
+                                       saga::url                     target, 
+                                       int                           flags);
+      void sync_move                  (saga::impl::void_t          & ret, 
+                                       saga::url                     target, 
+                                       int                           flags);
+      void sync_remove                (saga::impl::void_t          & ret, 
+                                       int                           flags);
+      void sync_close                 (saga::impl::void_t          & ret, 
+                                       double                        timeout);
 
   // ===========================
   // = namespace_dir functions =
@@ -124,66 +136,66 @@ namespace sql_async_advert
 
 
       
-//      void sync_change_dir            (saga::impl::void_t          & ret, 
-//                                       saga::url                     target);
+      void sync_change_dir            (saga::impl::void_t          & ret, 
+                                       saga::url                     target);
       
       void sync_list (std::vector <saga::url> &ret, std::string pattern, int flags);
       
-//      void sync_find                  (std::vector <saga::url>     & ret, 
-//                                       std::string                   pattern, 
-//                                       int                           flags);
-//      void sync_read_link             (saga::url                   & ret, 
-//                                       saga::url                     target);
-//      void sync_exists                (bool                        & ret, 
-//                                       saga::url                     target);
+      void sync_find                  (std::vector <saga::url>     & ret, 
+                                       std::string                   pattern, 
+                                       int                           flags);
+      void sync_read_link             (saga::url                   & ret, 
+                                       saga::url                     target);
+      void sync_exists                (bool                        & ret, 
+                                       saga::url                     target);
 
       void sync_is_dir (bool &ret, saga::url target);
                                         
-//      void sync_is_entry              (bool                        & ret, 
-//                                       saga::url                     target);
-//      void sync_is_link               (bool                        & ret, 
-//                                       saga::url                     target);
-//      void sync_get_num_entries       (std::size_t                 & ret);
-//      void sync_get_entry             (saga::url                   & ret, 
-//                                       std::size_t                   idx);
-//      void sync_copy                  (saga::impl::void_t          & ret, 
-//                                       saga::url                     source, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_link                  (saga::impl::void_t          & ret, 
-//                                       saga::url                     source, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_move                  (saga::impl::void_t          & ret, 
-//                                       saga::url                     source, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_remove                (saga::impl::void_t          & ret, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_make_dir              (saga::impl::void_t          & ret, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_open                  (saga::name_space::entry     & ret, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_open_dir              (saga::name_space::directory & ret, 
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//
-//      // advert directory functi      ons
-//      void sync_open                  (saga::advert::entry         & ret,
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_open_dir              (saga::advert::directory     & ret,
-//                                       saga::url                     target, 
-//                                       int                           flags);
-//      void sync_find                  (std::vector <saga::url>     & ret,
-//                                       std::string                   pattern, 
-//                                       std::vector <std::string>     patterns,
-//                                       int                           flags);
-//
-//
+      void sync_is_entry              (bool                        & ret, 
+                                       saga::url                     target);
+      void sync_is_link               (bool                        & ret, 
+                                       saga::url                     target);
+      void sync_get_num_entries       (std::size_t                 & ret);
+      void sync_get_entry             (saga::url                   & ret, 
+                                       std::size_t                   idx);
+      void sync_copy                  (saga::impl::void_t          & ret, 
+                                       saga::url                     source, 
+                                       saga::url                     target, 
+                                       int                           flags);
+      void sync_link                  (saga::impl::void_t          & ret, 
+                                       saga::url                     source, 
+                                       saga::url                     target, 
+                                       int                           flags);
+      void sync_move                  (saga::impl::void_t          & ret, 
+                                       saga::url                     source, 
+                                       saga::url                     target, 
+                                       int                           flags);
+      void sync_remove                (saga::impl::void_t          & ret, 
+                                       saga::url                     target, 
+                                       int                           flags);
+      void sync_make_dir              (saga::impl::void_t          & ret, 
+                                       saga::url                     target, 
+                                       int                           flags);
+      void sync_open                  (saga::name_space::entry     & ret, 
+                                       saga::url                     target, 
+                                       int                           flags);
+      void sync_open_dir              (saga::name_space::directory & ret, 
+                                       saga::url                     target, 
+                                       int                           flags);
+
+      // advert directory functions
+      void sync_open                  (saga::advert::entry         & ret,
+                                       saga::url                     target, 
+                                       int                           flags);
+      void sync_open_dir              (saga::advert::directory     & ret,
+                                       saga::url                     target, 
+                                       int                           flags);
+      void sync_find                  (std::vector <saga::url>     & ret,
+                                       std::string                   pattern, 
+                                       std::vector <std::string>     patterns,
+                                       int                           flags);
+
+
 //      // This adaptor implements the async functions 
 //      // based on its own synchronous functions.
 //
@@ -256,6 +268,12 @@ namespace sql_async_advert
 //                                        std::vector <std::string>     patterns, 
 //                                        int                           flags);
 
+  // ============================
+  // = Private helper functions =
+  // ============================
+  
+  private:
+    void check_if_open(const bool state, std::string const &functionname);
 
   // ================
   // = Private data =

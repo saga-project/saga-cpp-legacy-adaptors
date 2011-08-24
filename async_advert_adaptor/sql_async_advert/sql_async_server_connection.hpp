@@ -3,12 +3,15 @@
 
 // Boost Includes
 #include <boost/asio.hpp>
+#include <boost/thread.hpp>
 #include <boost/lexical_cast.hpp>
 
 // STL Includes
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
+#include <utility>
 
 // JSON Includes
 #include <JsonBox.h>
@@ -56,6 +59,21 @@ namespace sql_async_advert
     saga::url                       _url;
     JsonBox::Value                  _node;
     
+    
+    struct promise_value
+    {
+      boost::promise<bool>        promise;
+      boost::unique_future<bool>  future;
+      JsonBox::Value              value;
+      
+      promise_value () : promise(boost::promise<bool>()), future(promise.get_future()), value(JsonBox::Value()) {}
+    };
+    
+    typedef std::map<std::string, promise_value*> node_map_t;
+    
+    node_map_t*                     _node_map;
+    boost::promise<bool>            _node_exists;
+      
     // ===================
     // = Private methods =
     // ===================
@@ -72,21 +90,25 @@ namespace sql_async_advert
      // = Public methods =
      // ==================
      
-     const JsonBox::Value& getNode(void) const;
+     boost::mutex& get_mutex();
      
-     boost::mutex& getMutex(void);
+     const bool get_value(const std::string &url, JsonBox::Value &ret);
      
-     bool exists_directory(const saga::url &url);
+     const bool get_state(const std::string &url);
      
-     void create_directory(const saga::url &url, const bool create_parents = false);
+     bool exists_directory(const std::string &url);
      
-     void open_node (const std::string path);
+     void create_directory(const std::string &url);
      
-     void insert_node (const std::string node_name, const bool is_dir = true);
+     void create_parents_directory(const std::string &url);
      
-     void set_attribute(const std::string key, const std::string value);
+     void open_directory(const std::string &url);
      
-     std::string get_attribute(const std::string key);
+     void set_attribute(const std::string &url, const std::string &key, const std::string &value);
+     
+     void set_vector_attribute(const std::string &url, const std::string &key, std::vector<std::string> &value);
+     
+     void remove_attribute(const std::string &url, const std::string &key);
    };
 }
 
