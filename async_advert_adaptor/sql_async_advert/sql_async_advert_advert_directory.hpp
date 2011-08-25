@@ -273,13 +273,15 @@ namespace sql_async_advert
   // ============================
   
   private:
-    void check_if_open(const bool state, std::string const &functionname);
+    void check_if_open(std::string const &functionname);
+    void check_permissions(saga::advert::flags flags, std::string const &functionname);
 
   // ================
   // = Private data =
   // ================
     
   private:
+    bool                      _opened;
     boost::filesystem::path   _path;
     server_connection         *_connection;
 

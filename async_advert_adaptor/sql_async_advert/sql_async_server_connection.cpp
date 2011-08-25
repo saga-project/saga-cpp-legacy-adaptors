@@ -223,6 +223,33 @@ namespace sql_async_advert
     boost::asio::write(_socket, _request);
   }
   
+  void server_connection::remove_directory(const std::string &url)
+  {
+    JsonBox::Object obj;
+    obj["command"]  = JsonBox::Value("remove");
+    obj["path"]     = JsonBox::Value(url);
+    
+    JsonBox::Value json_request(obj);
+
+    _request_stream << json_request;
+    boost::asio::write(_socket, _request);
+  }
+  
+  void server_connection::close_directory(const std::string &url)
+  {
+    JsonBox::Object obj;
+    obj["command"]  = JsonBox::Value("close");
+    obj["path"]     = JsonBox::Value(url);
+    
+    JsonBox::Value json_request(obj);
+
+    _request_stream << json_request;
+    boost::asio::write(_socket, _request);
+    
+    node_map_t::iterator i = _node_map->find(url);
+    _node_map->erase(i);
+  }
+  
   void server_connection::set_attribute(const std::string &url, const std::string &key, const std::string &value)
   {
     JsonBox::Object obj;

@@ -104,6 +104,10 @@ namespace sql_async_advert
      
      void open_directory(const std::string &url);
      
+     void remove_directory(const std::string &url);
+     
+     void close_directory(const std::string &url);
+     
      void set_attribute(const std::string &url, const std::string &key, const std::string &value);
      
      void set_vector_attribute(const std::string &url, const std::string &key, std::vector<std::string> &value);
