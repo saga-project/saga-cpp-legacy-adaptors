@@ -1802,8 +1802,8 @@ $as_echo "$SAGA_VERSION_MAJOR.$SAGA_VERSION_MINOR.$SAGA_VERSION_SUBMINOR" >&6; }
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga package version" >&5
 $as_echo_n "checking saga package version... " >&6; }
   SAGA_PACKAGE_VERSION=$SAGA_VERSION
-  test -f PACKAGE && SAGA_PACKAGE_VERSION=` grep -e '^VERSION:'  PACKAGE | sed -e 's/^.*\s\(\S*\)\s*/\1/'`
-  test -f PACKAGE && SAGA_PACKAGE_REVISION=`grep -e '^REVISION:' PACKAGE | sed -e 's/^.*$Revision:\s\(\S*\)\s.*$/\1/'`
+  test -f PACKAGE && SAGA_PACKAGE_VERSION=` grep -e '^VERSION:'  PACKAGE | sed -e 's/^VERSION: *//'`
+  test -f PACKAGE && SAGA_PACKAGE_REVISION=`grep -e '^REVISION:' PACKAGE | cut -f 2 -d '$' | cut -f 2 -d ' '`
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&5
 $as_echo "$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
 
@@ -2326,14 +2326,14 @@ $as_echo "$SAGA_DEB_ARCH" >&6; }
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking debian package version" >&5
 $as_echo_n "checking debian package version... " >&6; }
     SAGA_DEB_VERSION=$SAGA_VERSION
-    test -f PACKAGE && SAGA_DEB_VERSION=`grep '^VERSION:' PACKAGE | sed -e 's/^.*\s\(\S*\)\s*/\1/'`
+    test -f PACKAGE && SAGA_DEB_VERSION=`grep '^VERSION:' PACKAGE | sed -e 's/^VERSION: *//'`
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_DEB_VERSION" >&5
 $as_echo "$SAGA_DEB_VERSION" >&6; }
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking debian package name" >&5
 $as_echo_n "checking debian package name... " >&6; }
     SAGA_DEB_PACKAGE="NONE"
-    test -f PACKAGE && SAGA_DEB_PACKAGE=`grep '^PACKAGE:' PACKAGE | sed -e 's/^.*\s\(\S*\)\s*/\1/'`
+    test -f PACKAGE && SAGA_DEB_PACKAGE=`grep '^PACKAGE:' PACKAGE | sed -e 's/^PACKAGE: *//'`
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_DEB_PACKAGE" >&5
 $as_echo "$SAGA_DEB_PACKAGE" >&6; }
 
@@ -2345,14 +2345,8 @@ $as_echo "$SAGA_DEB_PACKAGE" >&6; }
 $as_echo_n "checking debian package control file... " >&6; }
     SAGA_DEB_CONTROL=$SAGA_DEB_PACKAGE.deb.ctrl
 
-    if test -e $SAGA_DEB_CONTROL; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: overwriting $SAGA_DEB_CONTROL, saving .bak" >&5
-$as_echo "overwriting $SAGA_DEB_CONTROL, saving .bak" >&6; }
-      cp $SAGA_DEB_CONTROL $SAGA_DEB_CONTROL.bak
-    else
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: creating $SAGA_DEB_CONTROL" >&5
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: creating $SAGA_DEB_CONTROL" >&5
 $as_echo "creating $SAGA_DEB_CONTROL" >&6; }
-    fi
 
     echo "Package:        $SAGA_DEB_PACKAGE"                       >  $SAGA_DEB_CONTROL
     echo "Version:        $SAGA_DEB_VERSION"                       >> $SAGA_DEB_CONTROL
