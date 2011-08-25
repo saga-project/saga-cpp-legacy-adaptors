@@ -181,6 +181,11 @@ namespace sql_async_advert
   
   void server_connection::create_directory(const std::string &url)
   {
+    if (get_state(url))
+    {
+      return;
+    }
+    
     (*_node_map)[url] = new promise_value();
     
     JsonBox::Object obj;
@@ -196,6 +201,11 @@ namespace sql_async_advert
    
   void server_connection::create_parents_directory(const std::string &url)
   {
+    if (get_state(url))
+    {
+      return;
+    }
+    
     (*_node_map)[url] = new promise_value();
     
     JsonBox::Object obj;
@@ -211,6 +221,11 @@ namespace sql_async_advert
    
   void server_connection::open_directory(const std::string &url)
   {
+    if (get_state(url))
+    {
+      return;
+    }
+    
     (*_node_map)[url] = new promise_value();
     
     JsonBox::Object obj;
@@ -246,8 +261,12 @@ namespace sql_async_advert
     _request_stream << json_request;
     boost::asio::write(_socket, _request);
     
-    node_map_t::iterator i = _node_map->find(url);
-    _node_map->erase(i);
+    _mutex.lock();
+    {
+      node_map_t::iterator i = _node_map->find(url);
+      _node_map->erase(i);
+    }
+    _mutex.unlock();
   }
   
   void server_connection::set_attribute(const std::string &url, const std::string &key, const std::string &value)

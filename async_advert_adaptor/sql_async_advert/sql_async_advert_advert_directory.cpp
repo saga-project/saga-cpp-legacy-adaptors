@@ -731,11 +731,10 @@ namespace sql_async_advert
                                            saga::url      entry, 
                                            int            flags)
   {
-    _opened = _connection->get_state(_path.string()); 
+    _opened = _connection->get_state(_path.string());
     
     check_if_open("advertdirectory_cpi_impl::sync_remove");
     check_permissions(saga::advert::Write, "advertdirectory_cpi_impl::sync_remove");
-    
     
     boost::filesystem::path entry_path = normalize_boost_path(boost::filesystem::path(entry.get_path()));
     
@@ -747,15 +746,7 @@ namespace sql_async_advert
     {
       entry_path = _path / entry_path;
     }
-    
-    if (!(flags & saga::advert::Recursive))
-    {
-      SAGA_ADAPTOR_THROW(
-                  "advert::advertdirectory_cpi_impl::sync_remove: "
-                  "Recursive flag was not specified while attempting to delete a "
-                  "directory", saga::BadParameter);
-    }
-    
+      
     _connection->remove_directory(entry_path.string());
   }
 
