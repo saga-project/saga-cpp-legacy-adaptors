@@ -893,7 +893,29 @@ namespace sql_async_advert
                                          saga::url                 entry, 
                                          int                       flags)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    _opened = _connection->get_state(_path.string());
+    
+    check_if_open("advertdirectory_cpi_impl::sync_remove");
+    check_permissions(saga::advert::Write, "advertdirectory_cpi_impl::sync_remove");
+    
+    boost::filesystem::path entry_path = normalize_boost_path(boost::filesystem::path(entry.get_path()));
+
+    // =================
+    // = Relative path =
+    // =================
+
+    if (entry_path.string()[0] != '/')
+    {
+      entry_path = _path / entry_path;
+    }
+    
+    instance_data idata(this);
+    
+    saga::url adname; 
+    adname = idata->location_.clone();
+    adname.set_path(entry_path.string());
+    
+    ret = saga::advert::entry(this->get_proxy()->get_session(), adname.get_url(), flags);
   }
 
   void 
@@ -901,7 +923,29 @@ namespace sql_async_advert
                                              saga::url                     entry,
                                              int                           flags)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    _opened = _connection->get_state(_path.string());
+    
+    check_if_open("advertdirectory_cpi_impl::sync_remove");
+    check_permissions(saga::advert::Write, "advertdirectory_cpi_impl::sync_remove");
+    
+    boost::filesystem::path entry_path = normalize_boost_path(boost::filesystem::path(entry.get_path()));
+
+    // =================
+    // = Relative path =
+    // =================
+
+    if (entry_path.string()[0] != '/')
+    {
+      entry_path = _path / entry_path;
+    }
+    
+    instance_data idata(this);
+    
+    saga::url adname;
+    adname = idata->location_.clone();
+    adname.set_path(entry_path.string());
+    
+    ret = saga::advert::directory(this->get_proxy()->get_session(), adname.get_url(), flags);
   }
 
   void 
