@@ -5,7 +5,6 @@ namespace sql_async_advert
   server_connection::server_connection (saga::url const &url, boost::asio::io_service &io_service)
     : _resolver(io_service), _socket(io_service), _response_stream(&_response), _request_stream(&_request)
   {
-    
     _node_map = new node_map_t();
     _url = url.clone();
    
@@ -58,7 +57,7 @@ namespace sql_async_advert
   
   server_connection::~server_connection (void)
   {
-    
+    delete _node_map; 
   }
   
   void server_connection::read_handler(const boost::system::error_code &error, std::size_t bytes)
@@ -70,6 +69,8 @@ namespace sql_async_advert
       
       JsonBox::Object obj = data.getObject();
       
+      //std::cout << obj << std::endl;
+      
       if (obj["command"].getString() == "exists")
       {
         _node_exists.set_value(obj["data"].getBoolean());
@@ -79,27 +80,34 @@ namespace sql_async_advert
       {
         JsonBox::Object nodeObj = obj["data"].getObject();
         
-        _mutex.lock();
+        write_lock lock(_mutex);
+        (*_node_map)[nodeObj["path"].getString()] = nodeObj;
+        
+        if (_node_opened_url == nodeObj["path"].getString())
         {
-          node_map_t::iterator i = _node_map->find(nodeObj["path"].getString());
-          
-          if (i != _node_map->end())
-          {
-            i->second->value = nodeObj;
-          
-            if ( !(i->second->future.is_ready()) )
-            {
-              i->second->promise.set_value(true);
-            }
-          }  
+          _node_opened.set_value(true);
         }
-        _mutex.unlock();
       }
 
       if (obj["command"].getString() == "removed")
       {
+        write_lock lock(_mutex);
+        
         node_map_t::iterator i = _node_map->find(obj["data"].getString());
         _node_map->erase(i);
+      }
+      
+      if (obj["command"].getString() == "error")
+      {
+        write_lock lock(_mutex);
+        
+        node_map_t::iterator i = _node_map->find(obj["data"].getString());
+        _node_map->erase(i);
+        
+        if (_node_opened_url == obj["data"].getString())
+        {
+          _node_opened.set_value(false);
+        }
       }
 
       boost::asio::async_read_until(_socket, _response, "\r\n", boost::bind(&server_connection::read_handler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
@@ -110,12 +118,7 @@ namespace sql_async_advert
       SAGA_ADAPTOR_THROW_NO_CONTEXT(error.message(), saga::NoSuccess);
     }
   }
-  
-  boost::mutex& server_connection::get_mutex()
-  {
-    return _mutex;
-  }
-  
+   
   // =================================================================================
   // = Get a copy of the JsonBox::Value and return if the value is in a opend state  =
   // =================================================================================
@@ -123,21 +126,16 @@ namespace sql_async_advert
   const bool server_connection::get_value(const std::string &url, JsonBox::Value &ret)
   {
     bool state = false;
+
+    read_lock lock(_mutex);
+    node_map_t::iterator i = _node_map->find(url);
     
-    _mutex.lock();
+    if ( i != _node_map->end())
     {
-      node_map_t::iterator i = _node_map->find(url);
-      
-      if ( i != _node_map->end())
-      {
-        i->second->future.get();
-        
-        state = true; 
-        ret   = JsonBox::Value(i->second->value);
-      }
-      
+      state = true;
+      ret   = JsonBox::Value(i->second);
     }
-    _mutex.unlock();
+      
     
     return state;
   }
@@ -146,19 +144,14 @@ namespace sql_async_advert
   {
     bool state = false;
     
-    _mutex.lock();
-    {
-      node_map_t::iterator i = _node_map->find(url);
-      
-      if ( i != _node_map->end())
-      {
-        i->second->future.get();
-        state = true; 
-      }
-      
-    }
-    _mutex.unlock();
+    read_lock lock(_mutex);
+    node_map_t::iterator i = _node_map->find(url);
     
+    if ( i != _node_map->end())
+    {
+      state = true;
+    }
+
     return state; 
   }
   
@@ -169,24 +162,20 @@ namespace sql_async_advert
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("exists");
     obj["path"]     = JsonBox::Value(url);
-    
+
     JsonBox::Value json_request(obj);
-    
+
     _request_stream << json_request;
     boost::asio::write(_socket, _request);
-    
+
     boost::unique_future<bool> future = _node_exists.get_future();
     return future.get();
   }
   
   void server_connection::create_directory(const std::string &url)
   {
-    if (get_state(url))
-    {
-      return;
-    }
-    
-    (*_node_map)[url] = new promise_value();
+    _node_opened_url = url;
+    _node_opened = boost::promise<bool>();
     
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("create");
@@ -197,16 +186,15 @@ namespace sql_async_advert
     
     _request_stream << json_request;
     boost::asio::write(_socket, _request);
+    
+    boost::unique_future<bool> future = _node_opened.get_future();
+    future.get();
   }
    
   void server_connection::create_parents_directory(const std::string &url)
   {
-    if (get_state(url))
-    {
-      return;
-    }
-    
-    (*_node_map)[url] = new promise_value();
+    _node_opened_url = url;
+    _node_opened = boost::promise<bool>();
     
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("createParents");
@@ -217,16 +205,15 @@ namespace sql_async_advert
     
     _request_stream << json_request;
     boost::asio::write(_socket, _request);
+    
+    boost::unique_future<bool> future = _node_opened.get_future();
+    future.get();
   }
    
   void server_connection::open_directory(const std::string &url)
   {
-    if (get_state(url))
-    {
-      return;
-    }
-    
-    (*_node_map)[url] = new promise_value();
+    _node_opened_url = url;
+    _node_opened = boost::promise<bool>();
     
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("open");
@@ -236,6 +223,9 @@ namespace sql_async_advert
     
     _request_stream << json_request;
     boost::asio::write(_socket, _request);
+    
+    boost::unique_future<bool> future = _node_opened.get_future();
+    future.get();
   }
   
   void server_connection::remove_directory(const std::string &url)
@@ -261,12 +251,11 @@ namespace sql_async_advert
     _request_stream << json_request;
     boost::asio::write(_socket, _request);
     
-    _mutex.lock();
-    {
-      node_map_t::iterator i = _node_map->find(url);
-      _node_map->erase(i);
-    }
-    _mutex.unlock();
+
+    write_lock lock(_mutex);
+    node_map_t::iterator i = _node_map->find(url);
+    _node_map->erase(i);
+
   }
   
   void server_connection::set_attribute(const std::string &url, const std::string &key, const std::string &value)

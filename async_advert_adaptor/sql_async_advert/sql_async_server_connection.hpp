@@ -45,8 +45,11 @@ namespace sql_async_advert
     // = Private members =
     // ===================
     
-    boost::mutex                    _mutex;
+    typedef boost::unique_lock<boost::shared_mutex> write_lock;
+    typedef boost::shared_lock<boost::shared_mutex> read_lock;
     
+    boost::shared_mutex             _mutex;
+      
     boost::asio::ip::tcp::resolver  _resolver;
     boost::asio::ip::tcp::socket    _socket;
     
@@ -57,22 +60,16 @@ namespace sql_async_advert
     std::ostream                    _request_stream;
     
     saga::url                       _url;
-    JsonBox::Value                  _node;
     
     
-    struct promise_value
-    {
-      boost::promise<bool>        promise;
-      boost::unique_future<bool>  future;
-      JsonBox::Value              value;
-      
-      promise_value () : promise(boost::promise<bool>()), future(promise.get_future()), value(JsonBox::Value()) {}
-    };
-    
-    typedef std::map<std::string, promise_value*> node_map_t;
+    typedef std::map<std::string, JsonBox::Value> node_map_t;
     
     node_map_t*                     _node_map;
+    
     boost::promise<bool>            _node_exists;
+    
+    boost::promise<bool>            _node_opened;
+    std::string                     _node_opened_url;
       
     // ===================
     // = Private methods =
@@ -89,8 +86,6 @@ namespace sql_async_advert
      // ==================
      // = Public methods =
      // ==================
-     
-     boost::mutex& get_mutex();
      
      const bool get_value(const std::string &url, JsonBox::Value &ret);
      

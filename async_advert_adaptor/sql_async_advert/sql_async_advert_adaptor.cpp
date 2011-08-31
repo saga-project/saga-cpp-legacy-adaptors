@@ -54,7 +54,7 @@ namespace sql_async_advert
   {
     work.reset();
     io_service.stop();
-    thread.join();
+    //thread.join();
     
     delete connection_map;
   }

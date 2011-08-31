@@ -221,6 +221,24 @@ function responseRemoved (socket, node)
   catch (error) { socket.destroy(); }
 }
 
+function responseError (socket, path)
+{
+  var response = {
+    command : "error",
+    data    : path
+  }
+  
+  var responseString = JSON.stringify(response);
+  responseString += "\r\n";
+  
+  try 
+  {
+    socket.write(responseString);
+  }
+  
+  catch (error) { socket.destroy(); }
+}
+
 // =============================================================================
 // = Server                                                                    =
 // =============================================================================
@@ -298,6 +316,11 @@ var server = net.createServer(function (socket) {
       var pathArray = getPathArray(message.path);
       
       AdvertNode.findOne({path: "/" + pathArray.join("/")}, function (error, node) {
+        if(node == null)
+        {
+          responseError(socket, message.path);
+        }
+        
         if (node != null)
         {
           responseUpdated(socket, node);
@@ -327,6 +350,11 @@ var server = net.createServer(function (socket) {
           var parentPathArray = pathArray.slice(0,-1);
           
           AdvertNode.findOne({path: "/" + parentPathArray.join("/")}, function (error, node) {
+            
+            if (node == null)
+            {
+              responseError(socket, message.path);
+            }
             
             if (node != null)
             {
