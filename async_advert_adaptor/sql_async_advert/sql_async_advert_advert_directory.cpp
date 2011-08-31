@@ -1004,7 +1004,29 @@ namespace sql_async_advert
                                              saga::url      dir, 
                                              int            flags)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+     _opened = _connection->get_state(_path.string());
+
+     check_if_open("advertdirectory_cpi_impl::sync_change_dir");
+     check_permissions(saga::advert::Write, "advertdirectory_cpi_impl::sync_change_dir");
+     
+     boost::filesystem::path entry_path = normalize_boost_path(boost::filesystem::path(dir.get_path()));
+
+     // =================
+     // = Relative path =
+     // =================
+
+     if (entry_path.string()[0] != '/')
+     {
+       entry_path = _path / entry_path;
+     }
+     
+     instance_data idata(this);
+
+     saga::url adname;
+     adname = idata->location_.clone();
+     adname.set_path(entry_path.string());
+
+     saga::advert::directory advert_dir = saga::advert::directory(this->get_proxy()->get_session(), adname.get_url(), flags);
   }
 
 
@@ -1015,7 +1037,7 @@ namespace sql_async_advert
                                          saga::url             entry, 
                                          int                   flags)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+     sync_open((saga::name_space::entry&)ret, entry, flags);
   }
 
   void 
@@ -1023,7 +1045,7 @@ namespace sql_async_advert
                                              saga::url                 entry, 
                                              int                       flags)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    sync_open_dir((saga::name_space::directory&)ret, entry, flags);
   }
 
   void 
