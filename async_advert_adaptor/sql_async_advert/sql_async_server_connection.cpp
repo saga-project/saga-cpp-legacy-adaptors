@@ -177,6 +177,7 @@ namespace sql_async_advert
     _request_stream << json_request;
     boost::asio::write(_socket, _request);
 
+	read_lock read_lock(_mutex);
     boost::unique_future<bool> future = _node_exists.get_future();
     return future.get();
   }
