@@ -68,6 +68,11 @@ namespace sql_async_advert
     
     boost::promise<bool>            _node_exists;
     
+    boost::mutex					_exists_mutex;
+    boost::condition_variable		_exists_condition;
+    
+    bool							_exists_value;
+    
     boost::promise<bool>            _node_opened;
     std::string                     _node_opened_url;
       

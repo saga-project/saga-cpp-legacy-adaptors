@@ -73,8 +73,11 @@ namespace sql_async_advert
       
       if (obj["command"].getString() == "exists")
       {
-      	write_lock lock(_mutex);
-        _node_exists.set_value(obj["data"].getBoolean());
+    
+    	_exists_value = obj["data"].getBoolean();
+    	_exists_condition.notify_one();
+    	
+        //_node_exists.set_value(obj["data"].getBoolean());
       }
       
       if (obj["command"].getString() == "updated")
@@ -158,15 +161,18 @@ namespace sql_async_advert
   
   bool server_connection::exists_directory(const std::string &url)
   {
+  	_exists_value = false;
   
   	if (get_state(url))
   	{
   		return true;
   	}
   
-	write_lock lock(_mutex);  
-    	_node_exists = boost::promise<bool>();
-    lock.unlock();
+	//write_lock lock(_mutex);  
+    //	_node_exists = boost::promise<bool>();
+    //lock.unlock();
+    
+	boost::unique_lock<boost::mutex> lock(_exists_mutex);
     
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("exists");
@@ -177,9 +183,12 @@ namespace sql_async_advert
     _request_stream << json_request;
     boost::asio::write(_socket, _request);
 
-	read_lock read_lock(_mutex);
-    boost::unique_future<bool> future = _node_exists.get_future();
-    return future.get();
+	//read_lock read_lock(_mutex);
+    //boost::unique_future<bool> future = _node_exists.get_future();
+    //return future.get();
+  
+  	_exists_condition.wait(lock);
+  	return _exists_value;
   }
   
   void server_connection::create_directory(const std::string &url)
