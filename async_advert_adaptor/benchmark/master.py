@@ -23,11 +23,38 @@ class BenchmarkMaster (Exception):
 
   def start(self):
     """Document Me"""
-    d = saga.advert.directory(self.adverturl)
-    print d.is_dir(".")
-    
-    del d
+    base_path = self.adverturl.path
+    self.adverturl.path = ""
+    print "Benchmark base path: "+base_path
+    if base_path == "/":
+      print "Benchmark base path can't be the advert root. please define a subdirectory.\n"
+      sys.exit(-1)
 
+    d = saga.advert.directory(self.adverturl)
+    if d.exists(base_path) :
+      print "Base path already exists. Purging..."
+      d.remove(base_path, saga.advert.Recursive)
+    
+    print "XXX"
+    
+    base_url = self.adverturl
+    base_url.path = base_path
+    master_dir = d.open_dir(base_url, saga.advert.CreateParents | saga.advert.Create)
+    
+    print "YYY"
+    
+    # create subdirectories 
+    for i in range(self.numworkers):
+      s = saga.url(base_url.url)
+      s.path += "/"+str(i)
+      print "Creating dir: "+s.url
+      x = master_dir.open_dir(s,saga.advert.Create)
+      x.close()
+
+      y = master_dir.open_dir(s,saga.advert.ReadWrite)      
+      y.set_attribute("WORK", "0")
+      
+    
 if __name__ == "__main__":
   """Program entry point"""
   
@@ -36,7 +63,7 @@ if __name__ == "__main__":
   # add program parameter / options
   parser.add_option("-u", "--url", dest="adverturl",
                   help="The url of the advert server", metavar="URL")  
-  parser.add_option("-n", "--numworker", dest="numworker",
+  parser.add_option("-n", "--numworker", dest="numworker", type="int",
                   help="Number of worker agents", metavar="COUNT")
   parser.add_option("-i", "--increment", dest="increment",
                   help="Document me ", metavar="COUNT", default=10)
@@ -56,7 +83,7 @@ if __name__ == "__main__":
     
   # now we're good to start the master
   try:
-    bm = BenchmarkMaster(adverturl=options.adverturl, numworkers=16)
+    bm = BenchmarkMaster(adverturl=options.adverturl, numworkers=options.numworker)
     bm.start()
   
   except:
