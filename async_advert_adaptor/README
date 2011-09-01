@@ -1,0 +1,15 @@
+Installing and running the Server :
+====================================
+
+1. Install Node.js 
+http://nodejs.org/#download
+Download and install version node-v0.5.5
+
+2. Install Node Package Manager (NPM)
+curl http://npmjs.org/install.sh | sh
+
+3. Install Mongoose
+npm install mongoose
+
+4. Install MongoDB
+
