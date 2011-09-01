@@ -73,6 +73,7 @@ namespace sql_async_advert
       
       if (obj["command"].getString() == "exists")
       {
+      	write_lock lock(_mutex);
         _node_exists.set_value(obj["data"].getBoolean());
       }
       
