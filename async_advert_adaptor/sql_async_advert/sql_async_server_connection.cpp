@@ -157,7 +157,15 @@ namespace sql_async_advert
   
   bool server_connection::exists_directory(const std::string &url)
   {
-    _node_exists = boost::promise<bool>();
+  
+  	if (get_state(url))
+  	{
+  		return true;
+  	}
+  
+	write_lock lock(_mutex);  
+    	_node_exists = boost::promise<bool>();
+    lock.unlock();
     
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("exists");
