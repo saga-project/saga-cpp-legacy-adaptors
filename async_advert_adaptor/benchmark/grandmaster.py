@@ -39,17 +39,17 @@ class BenchmarkMaster (Exception):
     base_url = self.adverturl
     base_url.path = base_path
     master_dir = d.open_dir(base_url, saga.advert.CreateParents | saga.advert.Create)
-        
+    master_dir.set_attribute("POLL_INTERVAL", "1000")
+    master_dir.set_attribute("MAX_COUNT", "10")
+
     # create subdirectories 
     for i in range(self.numworkers):
       s = saga.url(base_url.url)
       s.path += "/"+str(i)
       print "Creating dir: "+s.url
 
-      master_dir.make_dir(s, saga.advert.None)
-      print "YYY"
-
-      #worker_dir.set_vector_attribute("WORK", ["ss","tt"])
+      worker_dir = master_dir.open_dir(s, saga.advert.Create)
+      worker_dir.set_attribute("WORK", "0")
       
     
 if __name__ == "__main__":
