@@ -88,12 +88,12 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
         {
             using namespace saga::job::attributes;
 
-            map_attribute(description_queue, "universe");
+            /*map_attribute(description_queue, "universe");
             {
                 //  FIXME!
                 //  supported values: Vanilla, Standard, Scheduler, Local,
                 //  Grid, MPI, Java, VM
-            }
+            }*/
 
             require_attribute   (description_executable,    "executable");
             map_attribute_vector(description_arguments,     "arguments");
@@ -282,12 +282,16 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
             std::string url(saga_resource_manager_.get_url());
             boost::replace_first(url, "condorg://", "gt2 ");
 
-            attributes_["Universe"] = "grid";            
+            attributes_["universe"] = "grid";            
             attributes_["grid_resource"] = url;
             
             SAGA_LOG_INFO("Adding Condor-G host into ClassAd: " + url);
           }
-        
+          else 
+          {
+            attributes_["Universe"] = "vanilla";
+          }      
+         
           return true;
         }
 
