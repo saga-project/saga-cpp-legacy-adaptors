@@ -268,6 +268,9 @@ namespace sql_async_advert
   
   void server_connection::set_attribute(const std::string &url, const std::string &key, const std::string &value)
   {
+  	_node_opened_url = url;
+    _node_opened = boost::promise<bool>();
+  
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("setAttribute");
     obj["path"]     = JsonBox::Value(url);
@@ -278,10 +281,16 @@ namespace sql_async_advert
     
     _request_stream << json_request;
     boost::asio::write(_socket, _request);
+    
+    boost::unique_future<bool> future = _node_opened.get_future();
+    future.get();
   }
   
   void server_connection::set_vector_attribute(const std::string &url, const std::string &key, std::vector<std::string> &value)
   {
+    _node_opened_url = url;
+    _node_opened = boost::promise<bool>();
+  
     JsonBox::Array array;
     
     for (std::vector<std::string>::iterator i = value.begin(); i != value.end(); ++i)
@@ -299,10 +308,16 @@ namespace sql_async_advert
     
     _request_stream << json_request;
     boost::asio::write(_socket, _request); 
+    
+    boost::unique_future<bool> future = _node_opened.get_future();
+    future.get();
   }
   
   void server_connection::remove_attribute(const std::string &url, const std::string &key)
   {
+  	_node_opened_url = url;
+    _node_opened = boost::promise<bool>();
+  
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("removeAttribute");
     obj["path"]     = JsonBox::Value(url);
@@ -312,5 +327,8 @@ namespace sql_async_advert
     
     _request_stream << json_request;
     boost::asio::write(_socket, _request);
+    
+    boost::unique_future<bool> future = _node_opened.get_future();
+    future.get();
   }
 }
