@@ -35,24 +35,21 @@ class BenchmarkMaster (Exception):
       print "Base path already exists. Purging..."
       d.remove(base_path, saga.advert.Recursive)
     
-    print "XXX"
     
     base_url = self.adverturl
     base_url.path = base_path
     master_dir = d.open_dir(base_url, saga.advert.CreateParents | saga.advert.Create)
-    
-    print "YYY"
-    
+        
     # create subdirectories 
     for i in range(self.numworkers):
       s = saga.url(base_url.url)
       s.path += "/"+str(i)
       print "Creating dir: "+s.url
-      x = master_dir.open_dir(s,saga.advert.Create)
-      x.close()
 
-      y = master_dir.open_dir(s,saga.advert.ReadWrite)      
-      y.set_attribute("WORK", "0")
+      worker_dir = master_dir.open_dir(s, saga.advert.Create)
+      print "YYY"
+
+      worker_dir.set_vector_attribute("WORK", ["ss","tt"])
       
     
 if __name__ == "__main__":

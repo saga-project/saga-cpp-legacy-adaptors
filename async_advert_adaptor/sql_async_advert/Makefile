@@ -22,5 +22,5 @@ SAGA_ADAPTOR_PACKAGES = namespace advert
 include $(SAGA_LOCATION)/share/saga/make/saga.adaptor.mk
 
 SAGA_CXXFLAGS += -I$(SAGA_LOCATION)/include/saga/
-
+SAGA_LDFLAGS += -lpthread
 

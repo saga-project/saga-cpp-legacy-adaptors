@@ -94,7 +94,8 @@ namespace sql_async_advert
         write_lock lock(_mutex);
         
         node_map_t::iterator i = _node_map->find(obj["data"].getString());
-        _node_map->erase(i);
+        if(i != _node_map->end())
+            _node_map->erase(i);
       }
       
       if (obj["command"].getString() == "error")
@@ -102,7 +103,8 @@ namespace sql_async_advert
         write_lock lock(_mutex);
         
         node_map_t::iterator i = _node_map->find(obj["data"].getString());
-        _node_map->erase(i);
+        if(i != _node_map->end())
+            _node_map->erase(i);
         
         if (_node_opened_url == obj["data"].getString())
         {

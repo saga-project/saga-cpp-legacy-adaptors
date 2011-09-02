@@ -66,16 +66,6 @@ namespace sql_async_advert
     
     saga::url url(idata->location_);
     _path = normalize_boost_path(boost::filesystem::path(url.get_path()));
-
-    
-    // =====================================
-    // = We understand absolute paths only =
-    // =====================================
-    
-    if ('/' != url.get_path()[0])
-    {
-      SAGA_ADAPTOR_THROW("cannot handle relative advert directory name : " + url.get_string(), saga::IncorrectURL);
-    }
     
     // ==============================================
     // = We understand only 'sqlasyncadvert' scheme =
@@ -84,6 +74,15 @@ namespace sql_async_advert
     if (url.get_scheme() != "sqlasyncadvert")
     {
       SAGA_ADAPTOR_THROW("cannot handle advert directory name : " + url.get_string(), saga::adaptors::AdaptorDeclined);
+    }
+    
+    // =====================================
+    // = We understand absolute paths only =
+    // =====================================
+    
+    if ('/' != url.get_path()[0])
+    {
+      SAGA_ADAPTOR_THROW("cannot handle relative advert directory name : " + url.get_string(), saga::IncorrectURL);
     }
     
     // ======================================
@@ -104,10 +103,10 @@ namespace sql_async_advert
     
     if ( (mode & saga::advert::Create ) || (mode & saga::advert::CreateParents) && (mode & saga::advert::Exclusive) )
     {
-      if (_connection->exists_directory(_path.string()))
-      {
-        SAGA_ADAPTOR_THROW("advert already exists : " + url.get_string(), saga::AlreadyExists);
-      }
+     // if (_connection->exists_directory(_path.string()))
+     // {
+     //   SAGA_ADAPTOR_THROW("advert already exists : " + url.get_string(), saga::AlreadyExists);
+     // }
     }
     
     // ===========================
