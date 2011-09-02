@@ -11,5 +11,18 @@ curl http://npmjs.org/install.sh | sh
 3. Install Mongoose
 npm install mongoose
 
-4. Install MongoDB
+4. Download and install MongoDB
+http://www.mongodb.org/downloads
+
+5. Launch MongoDB
+/MongoDB_Install_path/bin/mongod
+
+6. Download and Install Advert Server
+svn co https://svn.cct.lsu.edu/repos/saga-adaptors/async_advert_adaptor/server/
+
+7. Launch the server 
+
+bound to shell mode :  /opt/nodeJS_xy/bin/node advert_mongodb.js
+nohup mode 			: nohup /opt/nodeJS_xy/bin/node advert_mongodb.js &
+
 
