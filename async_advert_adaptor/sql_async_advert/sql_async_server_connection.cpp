@@ -65,6 +65,9 @@ namespace sql_async_advert
     if(!error)
     {
       JsonBox::Value data = JsonBox::Value(_response_stream);
+  
+  		//std::cout << data << std::endl;
+		  
       _response.consume(_response.size());
       
       JsonBox::Object obj = data.getObject();
@@ -197,6 +200,8 @@ namespace sql_async_advert
     
     boost::unique_future<bool> future = _node_opened.get_future();
     future.get();
+    
+    _node_opened_url = "";
   }
    
   void server_connection::create_parents_directory(const std::string &url)
@@ -216,6 +221,8 @@ namespace sql_async_advert
     
     boost::unique_future<bool> future = _node_opened.get_future();
     future.get();
+    
+    _node_opened_url = "";
   }
    
   void server_connection::open_directory(const std::string &url)
@@ -234,6 +241,8 @@ namespace sql_async_advert
     
     boost::unique_future<bool> future = _node_opened.get_future();
     future.get();
+    
+    _node_opened_url = "";
   }
   
   void server_connection::remove_directory(const std::string &url)
@@ -284,6 +293,8 @@ namespace sql_async_advert
     
     boost::unique_future<bool> future = _node_opened.get_future();
     future.get();
+    
+     _node_opened_url = "";
   }
   
   void server_connection::set_vector_attribute(const std::string &url, const std::string &key, std::vector<std::string> &value)
@@ -311,6 +322,8 @@ namespace sql_async_advert
     
     boost::unique_future<bool> future = _node_opened.get_future();
     future.get();
+    
+     _node_opened_url = "";
   }
   
   void server_connection::remove_attribute(const std::string &url, const std::string &key)
@@ -330,5 +343,7 @@ namespace sql_async_advert
     
     boost::unique_future<bool> future = _node_opened.get_future();
     future.get();
+    
+     _node_opened_url = "";
   }
 }
