@@ -1025,7 +1025,7 @@ namespace sql_async_advert
      adname = idata->location_.clone();
      adname.set_path(entry_path.string());
 
-     saga::advert::directory advert_dir = saga::advert::directory(this->get_proxy()->get_session(), adname.get_url(), flags);
+     saga::advert::directory advert_dir = saga::advert::directory(this->get_proxy()->get_session(), adname.get_url(), (flags | saga::advert::Create));
   }
 
 

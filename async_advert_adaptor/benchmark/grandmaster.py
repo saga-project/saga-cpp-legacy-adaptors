@@ -46,10 +46,10 @@ class BenchmarkMaster (Exception):
       s.path += "/"+str(i)
       print "Creating dir: "+s.url
 
-      worker_dir = master_dir.open_dir(s, saga.advert.Create)
+      master_dir.make_dir(s, saga.advert.None)
       print "YYY"
 
-      worker_dir.set_vector_attribute("WORK", ["ss","tt"])
+      #worker_dir.set_vector_attribute("WORK", ["ss","tt"])
       
     
 if __name__ == "__main__":
