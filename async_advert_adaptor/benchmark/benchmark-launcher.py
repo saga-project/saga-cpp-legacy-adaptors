@@ -46,7 +46,9 @@ if __name__ == "__main__":
 
 
   except saga.exception:
-    traceback.print_exc(file=sys.stderr)
+    f = open("/tmp/advert_benchmark_###COMPONENT_ID###.exception", "w")
+    traceback.print_exc(file=f)
+    f.close()
 
 """
 
