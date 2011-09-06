@@ -151,7 +151,7 @@ namespace sql_async_advert
   //  destructor
   advert_cpi_impl::~advert_cpi_impl (void)
   {
-    _connection->close_directory(_path.string());
+    //_connection->close_directory(_path.string());
   }
 
 // =========================================================================

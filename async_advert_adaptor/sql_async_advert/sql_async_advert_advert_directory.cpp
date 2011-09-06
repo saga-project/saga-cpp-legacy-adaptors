@@ -154,7 +154,7 @@ namespace sql_async_advert
   
   advertdirectory_cpi_impl::~advertdirectory_cpi_impl (void)
   {
-    _connection->close_directory(_path.string());
+    //_connection->close_directory(_path.string());
   }
 
 // =========================================================================
@@ -574,6 +574,8 @@ namespace sql_async_advert
   )
   
   {
+    //std::cout << "list dir" << std::endl;
+    
     JsonBox::Value value;
     _opened = _connection->get_value(_path.string(), value);
     
@@ -587,7 +589,8 @@ namespace sql_async_advert
     {
       JsonBox::Object node = i->getObject();
       ret.push_back(node["name"].getString());
-    }   
+    }
+    
   }
 
 

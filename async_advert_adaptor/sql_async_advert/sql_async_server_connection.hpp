@@ -107,6 +107,8 @@ namespace sql_async_advert
      
      void open_directory(const std::string &url);
      
+     void async_open_directory(const std::string &url);
+     
      void remove_directory(const std::string &url);
      
      void close_directory(const std::string &url);

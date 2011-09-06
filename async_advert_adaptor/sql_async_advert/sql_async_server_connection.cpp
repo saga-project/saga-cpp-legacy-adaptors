@@ -73,6 +73,8 @@ namespace sql_async_advert
       JsonBox::Value data = JsonBox::Value(_response_stream);
       _response.consume(_response.size());
       
+      //std::cout << data << std::endl;
+      
       JsonBox::Object obj = data.getObject();
       
       // ==================
@@ -176,6 +178,16 @@ namespace sql_async_advert
   
   bool server_connection::exists_directory(const std::string &url)
   {
+    // =======================================================
+    // = Return true if the node is allready in the node_map =
+    // =======================================================
+    
+    if (get_state(url)) return true;
+    
+    // ======================================
+    // = Else sync query if the node exists =
+    // ======================================
+    
 	  _node_exists = boost::promise<bool>();
         
     JsonBox::Object obj;
@@ -193,6 +205,8 @@ namespace sql_async_advert
   
   void server_connection::create_directory(const std::string &url, const bool dir)
   {
+    if (get_state(url)) return;
+    
     set_opened(url);
     
     JsonBox::Object obj;
@@ -206,6 +220,8 @@ namespace sql_async_advert
    
   void server_connection::create_parents_directory(const std::string &url, const bool dir)
   {
+    if (get_state(url)) return;
+    
     set_opened(url);
     
     JsonBox::Object obj;
@@ -219,6 +235,9 @@ namespace sql_async_advert
    
   void server_connection::open_directory(const std::string &url)
   {
+    
+    if (get_state(url)) return;
+    
     set_opened(url);
     
     JsonBox::Object obj;
@@ -227,6 +246,18 @@ namespace sql_async_advert
     
     send_message(obj);
     reset_opened();
+  }
+  
+  void server_connection::async_open_directory(const std::string &url)
+  {
+    
+    if (get_state(url)) return;
+    
+    JsonBox::Object obj;
+    obj["command"]  = JsonBox::Value("open");
+    obj["path"]     = JsonBox::Value(url);
+    
+    send_message(obj);
   }
   
   void server_connection::remove_directory(const std::string &url)
@@ -329,9 +360,12 @@ namespace sql_async_advert
   }
   
   void server_connection::reset_opened(void)
-  {
+  { 
     boost::unique_future<bool> future = _node_opened.get_future();
-    future.get();
+    //future.get();
+    
+    boost::posix_time::time_duration td = boost::posix_time::seconds(30);
+    future.timed_wait(td);
     
     _node_opened_url = "";
   }
