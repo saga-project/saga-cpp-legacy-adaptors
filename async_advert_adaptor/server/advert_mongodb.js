@@ -448,7 +448,7 @@ var server = net.createServer(function (socket) {
                 var newNode   = new AdvertNode();
                 newNode.path  = nodePath;
                 newNode.name  = pathArray.slice(i - 1, i);
-                newNode.dir   = message.dir;
+                newNode.dir   = true;
                 
                 parentNode.nodes.push({ name: newNode.name, dir: newNode.dir });
                 
