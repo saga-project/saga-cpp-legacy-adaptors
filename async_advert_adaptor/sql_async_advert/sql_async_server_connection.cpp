@@ -7,6 +7,7 @@ namespace sql_async_advert
   {
     _node_map = new node_map_t();
     _url = url.clone();
+    _node_opened_url = "";
    
     //
     // Connect to the server in sync mode
@@ -60,24 +61,32 @@ namespace sql_async_advert
     delete _node_map; 
   }
   
+  
+  // ===================================================================================================================================
+  // = ASIO read_handler                                                                                                               =
+  // ===================================================================================================================================
+  
   void server_connection::read_handler(const boost::system::error_code &error, std::size_t bytes)
   {
     if(!error)
     {
       JsonBox::Value data = JsonBox::Value(_response_stream);
-  
-  		//std::cout << data << std::endl;
-		  
       _response.consume(_response.size());
       
       JsonBox::Object obj = data.getObject();
       
-      //std::cout << obj << std::endl;
+      // ==================
+      // = Message exists =
+      // ==================
       
       if (obj["command"].getString() == "exists")
       {
-    	_node_exists.set_value(obj["data"].getBoolean());
+    	  _node_exists.set_value(obj["data"].getBoolean());
       }
+      
+      // ===================
+      // = Message updated =
+      // ===================
       
       if (obj["command"].getString() == "updated")
       {
@@ -92,22 +101,22 @@ namespace sql_async_advert
         }
       }
 
+      // ===================
+      // = Message removed =
+      // ===================
+      
       if (obj["command"].getString() == "removed")
       {
-        write_lock lock(_mutex);
-        
-        node_map_t::iterator i = _node_map->find(obj["data"].getString());
-        if(i != _node_map->end())
-            _node_map->erase(i);
+        erase_node(obj["data"].getString());
       }
+      
+      // =================
+      // = Message error =
+      // =================
       
       if (obj["command"].getString() == "error")
       {
-        write_lock lock(_mutex);
-        
-        node_map_t::iterator i = _node_map->find(obj["data"].getString());
-        if(i != _node_map->end())
-            _node_map->erase(i);
+        erase_node(obj["data"].getString());
         
         if (_node_opened_url == obj["data"].getString())
         {
@@ -116,6 +125,10 @@ namespace sql_async_advert
         }
       }
 
+      // =========================
+      // = Read the next Message =
+      // =========================
+      
       boost::asio::async_read_until(_socket, _response, "\r\n", boost::bind(&server_connection::read_handler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
     }
     
@@ -125,9 +138,9 @@ namespace sql_async_advert
     }
   }
    
-  // =================================================================================
-  // = Get a copy of the JsonBox::Value and return if the value is in a opend state  =
-  // =================================================================================
+  // ===================================================================================================================================
+  // = Public methods                                                                                                                  =
+  // ===================================================================================================================================
   
   const bool server_connection::get_value(const std::string &url, JsonBox::Value &ret)
   {
@@ -163,12 +176,7 @@ namespace sql_async_advert
   
   bool server_connection::exists_directory(const std::string &url)
   {
-  	//if (get_state(url))
-  	//{
-  	//	return true;
-  	//}
-  
-	_node_exists = boost::promise<bool>();
+	  _node_exists = boost::promise<bool>();
         
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("exists");
@@ -179,70 +187,46 @@ namespace sql_async_advert
     _request_stream << json_request;
     boost::asio::write(_socket, _request);
 
-	boost::unique_future<bool> future = _node_exists.get_future();
+	  boost::unique_future<bool> future = _node_exists.get_future();
     return future.get();
   }
   
   void server_connection::create_directory(const std::string &url)
   {
-    _node_opened_url = url;
-    _node_opened = boost::promise<bool>();
+    set_opened(url);
     
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("create");
     obj["path"]     = JsonBox::Value(url);
     obj["dir"]      = JsonBox::Value(true);
     
-    JsonBox::Value json_request(obj);
-    
-    _request_stream << json_request;
-    boost::asio::write(_socket, _request);
-    
-    boost::unique_future<bool> future = _node_opened.get_future();
-    future.get();
-    
-    _node_opened_url = "";
+    send_message(obj);
+    reset_opened();
   }
    
   void server_connection::create_parents_directory(const std::string &url)
   {
-    _node_opened_url = url;
-    _node_opened = boost::promise<bool>();
+    set_opened(url);
     
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("createParents");
     obj["path"]     = JsonBox::Value(url);
     obj["dir"]      = JsonBox::Value(true);
     
-    JsonBox::Value json_request(obj);
-    
-    _request_stream << json_request;
-    boost::asio::write(_socket, _request);
-    
-    boost::unique_future<bool> future = _node_opened.get_future();
-    future.get();
-    
-    _node_opened_url = "";
+    send_message(obj);
+    reset_opened();
   }
    
   void server_connection::open_directory(const std::string &url)
   {
-    _node_opened_url = url;
-    _node_opened = boost::promise<bool>();
+    set_opened(url);
     
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("open");
     obj["path"]     = JsonBox::Value(url);
     
-    JsonBox::Value json_request(obj);
-    
-    _request_stream << json_request;
-    boost::asio::write(_socket, _request);
-    
-    boost::unique_future<bool> future = _node_opened.get_future();
-    future.get();
-    
-    _node_opened_url = "";
+    send_message(obj);
+    reset_opened();
   }
   
   void server_connection::remove_directory(const std::string &url)
@@ -251,10 +235,7 @@ namespace sql_async_advert
     obj["command"]  = JsonBox::Value("remove");
     obj["path"]     = JsonBox::Value(url);
     
-    JsonBox::Value json_request(obj);
-
-    _request_stream << json_request;
-    boost::asio::write(_socket, _request);
+    send_message(obj);
   }
   
   void server_connection::close_directory(const std::string &url)
@@ -263,22 +244,13 @@ namespace sql_async_advert
     obj["command"]  = JsonBox::Value("close");
     obj["path"]     = JsonBox::Value(url);
     
-    JsonBox::Value json_request(obj);
-
-    _request_stream << json_request;
-    boost::asio::write(_socket, _request);
-    
-
-    write_lock lock(_mutex);
-    node_map_t::iterator i = _node_map->find(url);
-    _node_map->erase(i);
-
+    send_message(obj);
+    erase_node(url);
   }
   
   void server_connection::set_attribute(const std::string &url, const std::string &key, const std::string &value)
   {
-  	_node_opened_url = url;
-    _node_opened = boost::promise<bool>();
+    set_opened(url);
   
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("setAttribute");
@@ -288,19 +260,13 @@ namespace sql_async_advert
     
     JsonBox::Value json_request(obj);
     
-    _request_stream << json_request;
-    boost::asio::write(_socket, _request);
-    
-    boost::unique_future<bool> future = _node_opened.get_future();
-    future.get();
-    
-     _node_opened_url = "";
+    send_message(obj);
+    reset_opened();
   }
   
   void server_connection::set_vector_attribute(const std::string &url, const std::string &key, std::vector<std::string> &value)
   {
-    _node_opened_url = url;
-    _node_opened = boost::promise<bool>();
+    set_opened(url);
   
     JsonBox::Array array;
     
@@ -315,35 +281,58 @@ namespace sql_async_advert
     obj["key"]      = JsonBox::Value(key);
     obj["value"]    = array;
     
-    JsonBox::Value json_request(obj);
-    
-    _request_stream << json_request;
-    boost::asio::write(_socket, _request); 
-    
-    boost::unique_future<bool> future = _node_opened.get_future();
-    future.get();
-    
-     _node_opened_url = "";
+    send_message(obj);
+    reset_opened();
   }
   
   void server_connection::remove_attribute(const std::string &url, const std::string &key)
   {
-  	_node_opened_url = url;
-    _node_opened = boost::promise<bool>();
+    set_opened(url);
   
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("removeAttribute");
     obj["path"]     = JsonBox::Value(url);
     obj["key"]      = JsonBox::Value(key); 
     
+    send_message(obj);
+    reset_opened();
+  }
+  
+  // ===================================================================================================================================
+  // = Private methods                                                                                                                 =
+  // ===================================================================================================================================
+  
+  void server_connection::erase_node(const std::string &url)
+  { 
+    write_lock lock(_mutex);
+    
+    node_map_t::iterator i = _node_map->find(url);
+    
+    if (i != _node_map->end())
+    {
+      _node_map->erase(i);
+    }
+  }
+  
+  void server_connection::send_message(const JsonBox::Object &obj)
+  {
     JsonBox::Value json_request(obj);
     
     _request_stream << json_request;
     boost::asio::write(_socket, _request);
-    
+  }
+  
+  void server_connection::set_opened(const std::string &url)
+  {
+    _node_opened_url = url;
+    _node_opened = boost::promise<bool>();
+  }
+  
+  void server_connection::reset_opened(void)
+  {
     boost::unique_future<bool> future = _node_opened.get_future();
     future.get();
     
-     _node_opened_url = "";
+    _node_opened_url = "";
   }
 }

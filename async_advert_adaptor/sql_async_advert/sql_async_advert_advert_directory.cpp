@@ -154,6 +154,7 @@ namespace sql_async_advert
   
   advertdirectory_cpi_impl::~advertdirectory_cpi_impl (void)
   {
+    _connection->close_directory(_path.string());
   }
 
 // =========================================================================

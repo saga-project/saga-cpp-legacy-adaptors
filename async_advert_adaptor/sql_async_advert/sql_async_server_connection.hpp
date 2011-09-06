@@ -80,6 +80,14 @@ namespace sql_async_advert
     void connect_handler(const boost::system::error_code &error);
     
     void read_handler(const boost::system::error_code &error, std::size_t bytes);
+    
+    void erase_node(const std::string &url);
+    
+    void send_message(const JsonBox::Object &obj);
+    
+    void set_opened(const std::string &url);
+
+    void reset_opened(void);
    
    public:
      
