@@ -245,6 +245,8 @@ function responseError (socket, path)
 
 var server = net.createServer(function (socket) {
   
+  socket.setNoDelay(true);
+  
   // ====================================
   // = Handshake                        =
   // ====================================
