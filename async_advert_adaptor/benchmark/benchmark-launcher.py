@@ -4,23 +4,70 @@ from optparse import OptionParser
 from optparse import OptionGroup
 
 import traceback
-import sys
-import time
-import os
 import logging
-
+import time
 import saga
+import sys
+import os
+
+CODE_TEMPLATE = """#!/usr/bin/env python
+
+from time import gmtime, strftime
+
+import traceback
+import logging
+import time
+import saga
+import sys
+import os
+
+
+if __name__ == "__main__":
+
+  try:
+    jobstat_dir = saga.advert.directory("###JOBSTAT_URL###")
+    status = list(jobstat_dir.get_vector_attribute("###COMPONENT_ID###"))
+  
+    workspace = status[0] # the url of our working directory     
+    
+    t = strftime("STIME:%a, %d %b %Y %H:%M:%S +0000", gmtime())
+    status[1] = "STATUS:ONLINE"
+    status[2] = t
+    jobstat_dir.set_vector_attribute("###COMPONENT_ID###", status)
+    
+    time.sleep(5)
+    
+    t = strftime("ETIME:%a, %d %b %Y %H:%M:%S +0000", gmtime())
+    status[1] = "STATUS:DONE"
+    status[3] = t
+    jobstat_dir.set_vector_attribute("###COMPONENT_ID###", status)
+  
+    jobstat_dir.close()
+
+
+  except saga.exception:
+    traceback.print_exc(file=sys.stderr)
+
+"""
 
 ################################################################################
 ##
 class Component (Exception):
   """Represents a component"""
   
-  def __init__(self, id, advertendpoint):
+  def __init__(self, id, manager):
     """Constructor"""
     self.id        = id
-    self.state     = "new" 
-    self.advertendpoint = advertendpoint
+    self.manager = manager
+
+    # Create the source code
+    self.sourcecode = CODE_TEMPLATE
+    self.sourcecode = self.sourcecode.replace("###JOBSTAT_URL###", manager.master_dir.get_url().url)
+    self.sourcecode = self.sourcecode.replace("###COMPONENT_ID###", id)
+    
+  def getPythonSource(self):
+    """Introspection: Returns the "worker" Python code"""
+    return self.sourcecode
     
   def getState(self):
     """Returns the current component state"""
@@ -34,13 +81,27 @@ class Component (Exception):
     """Returns the advert endpoint for this component"""
     return self.advertendpoint
     
-  def run(self, jobmanager):
+  def start(self, jobmanager):
     """Runs the component via SAGA as a job on a given jobmanager"""
     try:
-      print "RUN"
+      jd = saga.job.description()
+      jd.set_attribute("Executable", "python")
+      args = list()
+      args.append("-c")
+      args.append(self.getPythonSource())
+      jd.set_vector_attribute("Arguments", args)
+      
+      js = saga.job.service(jobmanager)
+      j = js.create_job(jd)
+      j.run()
+      
+      logging.info(self.id+': Launching on ' + jobmanager)
+
     
-    except saga.exception:
-      print "ERROR"
+    except saga.exception, e:
+      for err in e.get_all_messages():
+        print err
+
     
 
 
@@ -49,15 +110,32 @@ class Component (Exception):
 class ComponentManager (Exception):
   """Launches the components."""
   
-  def __init__(self, jobmanager, count): 
+  def __init__(self, adverturl): 
     """Constructor"""
-    self.jobmanager = jobmanager
-    self.count = count
+    self.adverturl = adverturl
+    self.complist = []
     
-    self.complist = [] # holds the components 
-    for c in range(count): 
-      component = Component(id=c, advertendpoint="advert")
-      self.complist.append(component)
+    logging.info('CM: Connecting to advert endpoint: '+self.adverturl)
+    self.master_dir = saga.advert.directory(self.adverturl+"/jobstats")
+    
+  def __del__(self):
+    """Destructor"""
+    self.master_dir.close()
+    
+      
+  def createComponent(self, id):
+    """Creates a new component"""
+    comp_id = "comp"+id
+    logging.info('CM: Creating component object for: '+comp_id)
+    component = Component(id=comp_id, manager=self)
+    self.complist.append(component)
+    return component
+
+      
+  def startAll(self, jobmanager):
+    """Launch (start) the components using the given jobmanager""" 
+    for c in self.complist:
+      c.start(jobmanager=jobmanager)
       
   def listComponents(self):
     return self.complist
@@ -79,6 +157,8 @@ class BenchmarkMaster (Exception):
   def setup(self, numcomponents, numattributes, numiterations, purge=False):
     """Document Me"""
     
+    logging.info("================== BEGIN SETUP PHASE ==================")
+
     logging.info('Setting up advert benchmark at: ' + self.adverturl.url)
 
     base_path = self.adverturl.path
@@ -115,26 +195,19 @@ class BenchmarkMaster (Exception):
     jobstatus = master_dir.open("jobstats", saga.advert.Create)
 
     for i in range(numcomponents):
-      vector = ["OFFLINE", "STIME:0","ETIME:0"]
-      logging.info('Adding namespace for component comp' + str(i) + ' to \'jobstats\': ' + str(vector))
-      params.set_vector_attribute("comp"+str(i), vector)
+      workspace = master_dir.get_url()
+      workspace.path += "/comp"+str(i)
       
-
-    
-    #master_dir.set_attribute("POLL_INTERVAL", "1000")
-    #master_dir.set_attribute("MAX_COUNT", "10")
-
-    # create subdirectories 
-    #for i in range(self.numworkers):
-    #  s = saga.url(base_url.url)
-    #  s.path += "/"+str(i)
-      #print "Creating dir: "+s.url
-
-    #  worker_dir = master_dir.open_dir(s, saga.advert.Create)
-    #  worker_dir.set_attribute("WORK", "0")
+      vector = ["WORKSPACE:"+workspace.url, "STATUS:OFFLINE", "STIME:0","ETIME:0"]
+      logging.info('Adding \'comp' + str(i) + ' \'to \'jobstats\': ' + str(vector))
+      jobstatus.set_vector_attribute("comp"+str(i), vector)
       
+    logging.info("================== END SETUP PHASE ==================")
     
+    params.close()
+    master_dir.close()
     
+
 if __name__ == "__main__":
   """Program entry point"""
   
@@ -197,13 +270,18 @@ if __name__ == "__main__":
   try:
   
     bm = BenchmarkMaster(adverturl=options.adverturl)
-    
     bm.setup(purge=options.purge, numcomponents=options.numcomponents,
              numattributes=options.numattributes, numiterations=options.numiterations)
   
-    cm = ComponentManager(jobmanager=options.jobmanager, count=options.numcomponents)
-    for c in cm.listComponents():
-      print "Component: " + str(c.getID()) + " - state: " + c.getState() + " - endpoint: " + c.getAdvertEndpoint();
+    cm = ComponentManager(adverturl=options.adverturl)
+    for c in range(options.numcomponents):
+        cm.createComponent(str(c))
+    
+    cm.startAll(jobmanager=options.jobmanager);
+    
+    
+    #for c in cm.listComponents():
+    #  print "Component: " + str(c.getID()) + " - state: " + c.getState() + " - endpoint: " + c.getAdvertEndpoint();
   
   except:
     traceback.print_exc(file=sys.stderr)
