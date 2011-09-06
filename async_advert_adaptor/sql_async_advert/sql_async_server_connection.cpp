@@ -40,7 +40,7 @@ namespace sql_async_advert
     _response_stream >> handshake;
     _response.consume(_response.size());
     
-    std::cout << handshake << std::endl;
+    //std::cout << handshake << std::endl;
 
     // ===============================================
     // = Check if the server is a AsyncAdvert server =

@@ -67,7 +67,6 @@ namespace sql_async_advert
     if (i == connection_map->end())
     {
       (*connection_map)[url.get_host()] = new server_connection(url, io_service);
-      std::cout << "created new connection map: " << (*connection_map)[url.get_host()] << std::endl;
     }
     
     return (*connection_map)[url.get_host()];
