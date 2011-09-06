@@ -200,7 +200,17 @@ namespace sql_async_advert
     boost::asio::write(_socket, _request);
 
 	  boost::unique_future<bool> future = _node_exists.get_future();
-    return future.get();
+	  boost::posix_time::time_duration td = boost::posix_time::seconds(30);
+      
+    if (future.timed_wait(td))
+    {
+      return future.get();
+    }
+    
+    else 
+    {
+      return false;
+    }
   }
   
   void server_connection::create_directory(const std::string &url, const bool dir)
