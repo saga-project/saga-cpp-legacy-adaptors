@@ -101,12 +101,12 @@ namespace sql_async_advert
     // = Exclusive =
     // =============
     
-    if ( (mode & saga::advert::Create ) || (mode & saga::advert::CreateParents) && (mode & saga::advert::Exclusive) )
+    if ( ((mode & saga::advert::Create ) || (mode & saga::advert::CreateParents)) && (mode & saga::advert::Exclusive) )
     {
-     // if (_connection->exists_directory(_path.string()))
-     // {
-     //   SAGA_ADAPTOR_THROW("advert already exists : " + url.get_string(), saga::AlreadyExists);
-     // }
+      if (_connection->exists_directory(_path.string()))
+      {
+        SAGA_ADAPTOR_THROW("advert already exists : " + url.get_string(), saga::AlreadyExists);
+      }
     }
     
     // ===========================
@@ -117,12 +117,12 @@ namespace sql_async_advert
     {
       if (mode & saga::advert::CreateParents)
       {
-        _connection->create_parents_directory(_path.string());
+        _connection->create_parents_directory(_path.string(), true);
       }
       
       else 
       {     
-        _connection->create_directory(_path.string());
+        _connection->create_directory(_path.string(), true);
       }
     }
 

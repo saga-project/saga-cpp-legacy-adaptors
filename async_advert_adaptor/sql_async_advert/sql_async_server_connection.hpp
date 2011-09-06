@@ -101,9 +101,9 @@ namespace sql_async_advert
      
      bool exists_directory(const std::string &url);
      
-     void create_directory(const std::string &url);
+     void create_directory(const std::string &url, const bool dir);
      
-     void create_parents_directory(const std::string &url);
+     void create_parents_directory(const std::string &url, const bool dir);
      
      void open_directory(const std::string &url);
      

@@ -191,27 +191,27 @@ namespace sql_async_advert
     return future.get();
   }
   
-  void server_connection::create_directory(const std::string &url)
+  void server_connection::create_directory(const std::string &url, const bool dir)
   {
     set_opened(url);
     
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("create");
     obj["path"]     = JsonBox::Value(url);
-    obj["dir"]      = JsonBox::Value(true);
+    obj["dir"]      = JsonBox::Value(dir);
     
     send_message(obj);
     reset_opened();
   }
    
-  void server_connection::create_parents_directory(const std::string &url)
+  void server_connection::create_parents_directory(const std::string &url, const bool dir)
   {
     set_opened(url);
     
     JsonBox::Object obj;
     obj["command"]  = JsonBox::Value("createParents");
     obj["path"]     = JsonBox::Value(url);
-    obj["dir"]      = JsonBox::Value(true);
+    obj["dir"]      = JsonBox::Value(dir);
     
     send_message(obj);
     reset_opened();

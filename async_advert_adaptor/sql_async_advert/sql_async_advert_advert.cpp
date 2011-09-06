@@ -65,16 +65,6 @@ namespace sql_async_advert
     
     saga::url url(idata->location_);
     _path = normalize_boost_path(boost::filesystem::path(url.get_path()));
-
-    
-    // =====================================
-    // = We understand absolute paths only =
-    // =====================================
-    
-    if ('/' != url.get_path()[0])
-    {
-      SAGA_ADAPTOR_THROW("cannot handle relative advert directory name : " + url.get_string(), saga::IncorrectURL);
-    }
     
     // ==============================================
     // = We understand only 'sqlasyncadvert' scheme =
@@ -83,6 +73,15 @@ namespace sql_async_advert
     if (url.get_scheme() != "sqlasyncadvert")
     {
       SAGA_ADAPTOR_THROW("cannot handle advert directory name : " + url.get_string(), saga::adaptors::AdaptorDeclined);
+    }
+    
+    // =====================================
+    // = We understand absolute paths only =
+    // =====================================
+    
+    if ('/' != url.get_path()[0])
+    {
+      SAGA_ADAPTOR_THROW("cannot handle relative advert directory name : " + url.get_string(), saga::IncorrectURL);
     }
     
     // ======================================
@@ -101,7 +100,7 @@ namespace sql_async_advert
     // = Exclusive =
     // =============
     
-    if ( (mode & saga::advert::Create ) || (mode & saga::advert::CreateParents) && (mode & saga::advert::Exclusive) )
+    if ( ((mode & saga::advert::Create ) || (mode & saga::advert::CreateParents)) && (mode & saga::advert::Exclusive) )
     {
       if (_connection->exists_directory(_path.string()))
       {
@@ -117,12 +116,12 @@ namespace sql_async_advert
     {
       if (mode & saga::advert::CreateParents)
       {
-        _connection->create_parents_directory(_path.string());
+        _connection->create_parents_directory(_path.string(), false);
       }
       
       else 
       {     
-        _connection->create_directory(_path.string());
+        _connection->create_directory(_path.string(), false);
       }
     }
 
@@ -139,10 +138,12 @@ namespace sql_async_advert
     // = make sure directory exists  =
     // ===============================
     
-    if (!_connection->exists_directory(_path.string()))
+    if (!_connection->get_state(_path.string()))
     {
       SAGA_ADAPTOR_THROW("advert does not exists : " + url.get_string(), saga::DoesNotExist); 
     }
+    
+    _opened = true;
   }
 
 
@@ -150,6 +151,7 @@ namespace sql_async_advert
   //  destructor
   advert_cpi_impl::~advert_cpi_impl (void)
   {
+    _connection->close_directory(_path.string());
   }
 
 // =========================================================================
@@ -157,19 +159,34 @@ namespace sql_async_advert
 // =========================================================================
 
   void
-    advert_cpi_impl::check_if_open(const bool state, std::string const &functionname)
+    advert_cpi_impl::check_if_open(std::string const &functionname)
     {
       instance_data idata(this);
       
-      if (!state)
+      if (!_opened)
       {
         SAGA_OSSTREAM strm;
-        strm << functionname << ": advert directory is not in open state: "
+        strm << functionname << ": advert entry is not in open state: "
              << idata->location_;
         SAGA_ADAPTOR_THROW (SAGA_OSSTREAM_GETSTRING (strm), saga::IncorrectState);
       }
     }
 
+  void
+     advert_cpi_impl::check_permissions(saga::advert::flags flags, std::string const &functionname)
+    {
+      instance_data idata(this);
+
+      if (!(idata->mode_ & flags))
+      {
+        SAGA_OSSTREAM strm;
+        strm << functionname << ": could not access ("
+             << ((flags & saga::advert::Read) ? "read" : "write")
+             << ") attribute for advert: " 
+             << idata->location_;
+        SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING (strm), saga::PermissionDenied);
+      }
+    }
 
   ////////////////////////////////////////////////////////////////////////
   //  SAGA CPI functions 
@@ -181,33 +198,33 @@ namespace sql_async_advert
                                                std::string   key)
   {
     JsonBox::Value value;
-    bool state = _connection->get_value(_path.string(), value);
+    _opened = _connection->get_value(_path.string(), value);
     
-    check_if_open(state, "advertdirectory_cpi_impl::sync_attribute_exists");
+    check_if_open("advertdirectory_cpi_impl::sync_attribute_exists");
 
     JsonBox::Object obj         = value.getObject();
     JsonBox::Object attributes  = obj["attributes"].getObject();
     
     std::map<std::string, JsonBox::Value>::iterator i = attributes.find(key);
-    
     if (i != attributes.end())
     {
       ret = true;
     }
-    
     else
     {
       ret = false;
     }
   }
 
+////////////////////////////////////////////////////////////////////////////
+
   void advert_cpi_impl::sync_attribute_is_readonly (bool        & ret, 
                                                     std::string   key)
   {
     JsonBox::Value value;
-    bool state = _connection->get_value(_path.string(), value);
+    _opened = _connection->get_value(_path.string(), value);
     
-    check_if_open(state, "advertdirectory_cpi_impl::sync_attribute_is_readonly");
+    check_if_open("advertdirectory_cpi_impl::sync_attribute_is_readonly");
     
     JsonBox::Object obj         = value.getObject();
     JsonBox::Object attributes  = obj["attributes"].getObject();
@@ -219,16 +236,18 @@ namespace sql_async_advert
     }
     
     instance_data idata(this);
-    ret = !(idata->mode_ & saga::advert::Read);
+    ret = (idata->mode_ & saga::advert::Read) ? false : true;
   }
+
+////////////////////////////////////////////////////////////////////////////
 
   void advert_cpi_impl::sync_attribute_is_writable (bool        & ret, 
                                                     std::string   key)
   {
     JsonBox::Value value;
-    bool state = _connection->get_value(_path.string(), value);
+    _opened = _connection->get_value(_path.string(), value);
     
-    check_if_open(state, "advertdirectory_cpi_impl::sync_attribute_is_readonly");
+    check_if_open("advertdirectory_cpi_impl::sync_attribute_is_readonly");
     
     JsonBox::Object obj         = value.getObject();
     JsonBox::Object attributes  = obj["attributes"].getObject();
@@ -240,37 +259,19 @@ namespace sql_async_advert
     }
     
     instance_data idata(this);
-    ret = (idata->mode_ & saga::advert::Write);
+    ret = (idata->mode_ & saga::advert::Write) ? true : false;
   }
+
+////////////////////////////////////////////////////////////////////////////
 
   void advert_cpi_impl::sync_attribute_is_vector (bool        & ret, 
                                                   std::string   key)
   {
     JsonBox::Value value;
-    bool state = _connection->get_value(_path.string(), value);
+    _opened = _connection->get_value(_path.string(), value);
     
-    check_if_open(state, "advertdirectory_cpi_impl::sync_attribute_exists");
-
-    JsonBox::Object obj         = value.getObject();
-    JsonBox::Object attributes  = obj["attributes"].getObject();
-    
-    std::map<std::string, JsonBox::Value>::iterator i = attributes.find(key);
-    
-    if (i == attributes.end())
-    {
-      SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not exists", saga::DoesNotExist);
-    }
-    
-    ret = i->second.isArray();
-  }
-
-  void advert_cpi_impl::sync_attribute_is_extended (bool        & ret, 
-                                                    std::string   key)
-  {
-    JsonBox::Value value;
-    bool state = _connection->get_value(_path.string(), value);
-    
-    check_if_open(state, "advertdirectory_cpi_impl::sync_attribute_is_readonly");
+    check_if_open("advertdirectory_cpi_impl::sync_attribute_is_vector");
+    check_permissions(saga::advert::Read, "advertdirectory_cpi_impl::sync_attribute_is_vector");
     
     JsonBox::Object obj         = value.getObject();
     JsonBox::Object attributes  = obj["attributes"].getObject();
@@ -281,40 +282,60 @@ namespace sql_async_advert
       SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not Exists", saga::DoesNotExist);
     }
     
+    ret = i->second.isArray();
+  }
+  
+////////////////////////////////////////////////////////////////////////////
+
+  void advert_cpi_impl::sync_attribute_is_extended (bool        & ret, 
+                                                    std::string   key)
+  {
     instance_data idata(this);
-    ret = (idata->mode_ & saga::advert::Write);
+    
+    _opened = _connection->get_state(_path.string()); 
+    check_if_open("advertdirectory_cpi_impl::sync_attribute_is_extended");
+    
+    ret = (idata->mode_ & saga::advert::Write) ? true : false;
   }
 
-//  ////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
   void advert_cpi_impl::sync_get_attribute (std::string & ret, 
                                             std::string   key)
   {
     JsonBox::Value value;
-    bool state = _connection->get_value(_path.string(), value);
+    _opened = _connection->get_value(_path.string(), value);
     
-    check_if_open(state, "advertdirectory_cpi_impl::sync_attribute_exists");
-
+    check_if_open("advertdirectory_cpi_impl::sync_get_attribute");
+    check_permissions(saga::advert::Read, "advertdirectory_cpi_impl::sync_get_attribute");
+    
     JsonBox::Object obj         = value.getObject();
     JsonBox::Object attributes  = obj["attributes"].getObject();
     
     std::map<std::string, JsonBox::Value>::iterator i = attributes.find(key);
-    
     if (i == attributes.end())
     {
-      SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not exists", saga::DoesNotExist);
+      SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not Exists", saga::DoesNotExist);
+    }
+    
+    if (i->second.isArray())
+    {
+      SAGA_ADAPTOR_THROW ("Attribute " + key + " is a vector attribute", saga::IncorrectState);
     }
     
     ret = i->second.getString();
   }
 
-//  ////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
   void advert_cpi_impl::sync_get_vector_attribute (std::vector <std::string> & ret, 
                                                    std::string                 key)
   {
     JsonBox::Value value;
-    bool state = _connection->get_value(_path.string(), value);
+    _opened = _connection->get_value(_path.string(), value);
     
-    check_if_open(state, "advertdirectory_cpi_impl::sync_attribute_is_readonly");
+    check_if_open("advertdirectory_cpi_impl::sync_get_vector_attribute");
+    check_permissions(saga::advert::Read, "advertdirectory_cpi_impl::sync_get_vector_attribute");
     
     JsonBox::Object obj         = value.getObject();
     JsonBox::Object attributes  = obj["attributes"].getObject();
@@ -338,40 +359,57 @@ namespace sql_async_advert
     }
   }
 
-//  ////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
   void advert_cpi_impl::sync_set_attribute (saga::impl::void_t & ret, 
                                             std::string    key, 
                                             std::string    val)
   {
+    _opened = _connection->get_state(_path.string()); 
+    
+    check_if_open("advertdirectory_cpi_impl::sync_set_attribute");
+    check_permissions(saga::advert::Write, "advertdirectory_cpi_impl::sync_get_vector_attribute");
+    
     _connection->set_attribute(_path.string(), key, val);
   }
 
-//  ////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
   void advert_cpi_impl::sync_set_vector_attribute (saga::impl::void_t            & ret, 
                                                    std::string               key, 
                                                    std::vector <std::string> val)
   {
-     _connection->set_vector_attribute(_path.string(), key, val);
+    _opened = _connection->get_state(_path.string()); 
+    
+    check_if_open("advertdirectory_cpi_impl::sync_set_vector_attribute");
+    check_permissions(saga::advert::Write, "advertdirectory_cpi_impl::sync_set_vector_attribute");
+    
+    _connection->set_vector_attribute(_path.string(), key, val);
   }
 
-//  ////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
   void advert_cpi_impl::sync_remove_attribute (saga::impl::void_t & ret,
                                                std::string    key)
   {
-    bool state = _connection->get_state(_path.string()); 
-    check_if_open(state, "advertdirectory_cpi_impl::sync_remove_attribute");
+    _opened = _connection->get_state(_path.string()); 
+    
+    check_if_open("advertdirectory_cpi_impl::sync_remove_attribute");
+    check_permissions(saga::advert::Write, "advertdirectory_cpi_impl::sync_remove_attribute");
     
     _connection->remove_attribute(_path.string(), key);
   }
 
-//  ////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
   void advert_cpi_impl::sync_list_attributes (std::vector <std::string> & ret)
   {
     JsonBox::Value value;
-    bool state = _connection->get_value(_path.string(), value);
+    _opened = _connection->get_value(_path.string(), value);
     
-    check_if_open(state, "advertdirectory_cpi_impl::sync_attribute_exists");
-
+    check_if_open("advertdirectory_cpi_impl::sync_list_attributes");
+    check_permissions(saga::advert::Read, "advertdirectory_cpi_impl::sync_list_attributes");
+    
     JsonBox::Object obj         = value.getObject();
     JsonBox::Object attributes  = obj["attributes"].getObject();
     
@@ -379,32 +417,32 @@ namespace sql_async_advert
     {
       ret.push_back(i->first);
     }
-    
-    //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
 
-//  ////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
   void advert_cpi_impl::sync_find_attributes (std::vector<std::string> & ret, 
                                               std::string                pattern)
   {
     SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
 
-//  ////////////////////////////////////////////////////////////////////////
-//  // namespace_entry functions
+////////////////////////////////////////////////////////////////////////
+// namespace_entry functions
+
   void advert_cpi_impl::sync_get_url (saga::url & url)
   {
-     bool state = _connection->get_state(_path.string()); 
-     check_if_open(state, "advertdirectory_cpi_impl::sync_get_url");
-     
-     instance_data idata(this);
-     url = idata->location_.clone();
+    _opened = _connection->get_state(_path.string()); 
+    check_if_open("advertdirectory_cpi_impl::sync_get_url");
+    
+    instance_data idata(this);
+    url = idata->location_;
   }
 
   void advert_cpi_impl::sync_get_cwd(saga::url& url)
   {
-    bool state = _connection->get_state(_path.string()); 
-    check_if_open(state, "advertdirectory_cpi_impl::sync_get_url");
+    _opened = _connection->get_state(_path.string()); 
+    check_if_open("advertdirectory_cpi_impl::sync_get_cwd");
     
     url.set_path(_path.parent_path().string());
   }
@@ -412,9 +450,9 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_get_name (saga::url & url)
   {
     JsonBox::Value value;
-    bool state = _connection->get_value(_path.string(), value);
+    _opened = _connection->get_value(_path.string(), value);
     
-    check_if_open(state, "advertdirectory_cpi_impl::sync_get_name");
+    check_if_open("advertdirectory_cpi_impl::sync_get_name");
     
     JsonBox::Object obj = value.getObject();
     url.set_path(obj["name"].getString());
@@ -428,9 +466,9 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_is_dir (bool & ret)
   {
     JsonBox::Value value;
-    bool state = _connection->get_value(_path.string(), value);
+    _opened = _connection->get_value(_path.string(), value);
     
-    check_if_open(state, "advertdirectory_cpi_impl::sync_is_dir");
+    check_if_open("advertdirectory_cpi_impl::sync_is_dir");
     
     JsonBox::Object obj = value.getObject();
     ret = obj["dir"].getBoolean();
@@ -439,9 +477,9 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_is_entry (bool & ret)
   {
     JsonBox::Value value;
-    bool state = _connection->get_value(_path.string(), value);
+    _opened = _connection->get_value(_path.string(), value);
     
-    check_if_open(state, "advertdirectory_cpi_impl::sync_is_entry");
+    check_if_open("advertdirectory_cpi_impl::sync_is_entry");
     
     JsonBox::Object obj = value.getObject();
     ret = !(obj["dir"].getBoolean());
@@ -476,13 +514,28 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_remove (saga::impl::void_t & ret, 
                                      int                  flags)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    _opened = _connection->get_state(_path.string()); 
+    
+    check_if_open("advertdirectory_cpi_impl::sync_remove");
+    check_permissions(saga::advert::Write, "advertdirectory_cpi_impl::sync_remove");
+    
+    if (!(flags & saga::advert::Recursive))
+    {
+      SAGA_ADAPTOR_THROW(
+                  "advert::advertdirectory_cpi_impl::sync_remove: "
+                  "Recursive flag was not specified while attempting to delete a "
+                  "directory", saga::BadParameter);
+    }
+    
+    _connection->remove_directory(_path.string());
+    _opened = false;
   }
 
   void advert_cpi_impl::sync_close (saga::impl::void_t & ret,
                                     double               timeout)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    _connection->close_directory(_path.string());
+    _opened = false;
   }
 
 
