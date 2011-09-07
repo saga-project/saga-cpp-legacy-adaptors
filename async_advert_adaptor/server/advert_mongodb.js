@@ -261,6 +261,10 @@ var server = net.createServer(function (socket) {
     removeSocket(socket);
   });
   
+  socket.on("error", function (exception) {
+    console.log(exception);
+  });
+  
   // ===================================
   // = callback on data                =
   // ===================================
