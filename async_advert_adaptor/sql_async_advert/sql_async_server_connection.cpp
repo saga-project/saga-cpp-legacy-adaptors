@@ -68,10 +68,12 @@ namespace sql_async_advert
   
   void server_connection::read_handler(const boost::system::error_code &error, std::size_t bytes)
   {
+    _readhandler.lock();
+    
     if(!error)
-    {
+    {  
       JsonBox::Value data = JsonBox::Value(_response_stream);
-      _response.consume(_response.size());
+      _response.consume(bytes);
       
       //std::cout << data << std::endl;
       
@@ -95,6 +97,7 @@ namespace sql_async_advert
         JsonBox::Object nodeObj = obj["data"].getObject();
         
         write_lock lock(_mutex);
+       
         (*_node_map)[nodeObj["path"].getString()] = nodeObj;
         
         if (_node_opened_url == nodeObj["path"].getString())
@@ -138,6 +141,8 @@ namespace sql_async_advert
     {
       SAGA_ADAPTOR_THROW_NO_CONTEXT(error.message(), saga::NoSuccess);
     }
+    
+    _readhandler.unlock();
   }
    
   // ===================================================================================================================================

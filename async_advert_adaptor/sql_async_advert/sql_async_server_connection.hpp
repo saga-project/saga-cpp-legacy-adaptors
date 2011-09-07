@@ -49,6 +49,7 @@ namespace sql_async_advert
     typedef boost::shared_lock<boost::shared_mutex> read_lock;
     
     boost::shared_mutex             _mutex;
+    boost::mutex                    _readhandler;
       
     boost::asio::ip::tcp::resolver  _resolver;
     boost::asio::ip::tcp::socket    _socket;

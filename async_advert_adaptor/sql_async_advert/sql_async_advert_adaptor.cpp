@@ -61,6 +61,9 @@ namespace sql_async_advert
   
   server_connection* adaptor::get_server_connection(saga::url url)
   {
+    
+    // Read some stuff from the .ini file
+     //     saga::ini::ini prefs = adap_ini.get_section ("preferences");
 
     connection_map_t::iterator i = connection_map->find(url.get_host());
     
