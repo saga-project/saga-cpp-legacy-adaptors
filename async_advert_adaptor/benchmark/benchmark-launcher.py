@@ -171,10 +171,7 @@ class Component (Exception):
       args.append("-c")
       args.append(self.getPythonSource())
       jd.set_vector_attribute("Arguments", args)
-      
-      jd.set_attribute("Output", self.logdir+"/"+self.id+".stdout")
-      jd.set_attribute("Error", self.logdir+"/"+self.id+".stderr")
-      
+            
       js = saga.job.service(jobmanager)
       j = js.create_job(jd)
       j.run()
