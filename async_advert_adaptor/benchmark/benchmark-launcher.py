@@ -25,24 +25,24 @@ import os
 if __name__ == "__main__":
 
   try:
-    jobstat_dir = saga.advert.directory("###JOBSTAT_URL###")
-    status = list(jobstat_dir.get_vector_attribute("###COMPONENT_ID###"))
+    jobstat = saga.advert.entry("###JOBSTAT_URL###", saga.advert.ReadWrite)
+    status = list(jobstat.get_vector_attribute("###COMPONENT_ID###"))
   
     workspace = status[0] # the url of our working directory     
     
     t = strftime("STIME:%a, %d %b %Y %H:%M:%S +0000", gmtime())
     status[1] = "STATUS:ONLINE"
     status[2] = t
-    jobstat_dir.set_vector_attribute("###COMPONENT_ID###", status)
+    jobstat.set_vector_attribute("###COMPONENT_ID###", status)
     
     time.sleep(5)
     
     t = strftime("ETIME:%a, %d %b %Y %H:%M:%S +0000", gmtime())
     status[1] = "STATUS:DONE"
     status[3] = t
-    jobstat_dir.set_vector_attribute("###COMPONENT_ID###", status)
+    jobstat.set_vector_attribute("###COMPONENT_ID###", status)
   
-    jobstat_dir.close()
+    jobstat.close()
 
 
   except saga.exception:
@@ -118,7 +118,7 @@ class ComponentManager (Exception):
     self.complist = []
     
     logging.info('CM: Connecting to advert endpoint: '+self.adverturl)
-    self.master_dir = saga.advert.directory(self.adverturl+"/jobstats")
+    self.master_dir = saga.advert.entry(self.adverturl+"/jobstats")
     
   def __del__(self):
     """Destructor"""
