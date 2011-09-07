@@ -15,10 +15,38 @@ SAGA_CONFIGURE_OK             = @SAGA_CONFIGURE_OK@
 ADAPTOR_ROOT                  = @ADAPTOR_ROOT@
 ADAPTOR_CONFDIR               = @ADAPTOR_CONFDIR@
 
+ifndef JSON_IMPLEMENTATION
+ $(warning JSON_IMPLEMENTATION unset - falling back to jsonbox)
+ JSON_IMPLEMENTATION = jsonbox
+endif
 
-# jsonbox flags
-SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/jsonbox/include/
-SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/jsonbox/src/ -ljsonbox
+SAGA_CPPFLAGS += -DJSON_IMPLEMENTATION=$(JSON_IMPLEMENTATION)
+
+ifeq "$(JSON_IMPLEMENTATION)" "jsonbox"
+
+  SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/jsonbox-0.2.2/include/
+  SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/jsonbox-0.2.2/src/ -ljsonbox
+  
+else ifeq "$(JSON_IMPLEMENTATION)" "json_cpp"
+
+  SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/jsoncpp-0.5.0/include/
+  SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/jsoncpp-0.5.0/src/ -ljson_cpp
+
+else ifeq "$(JSON_IMPLEMENTATION)" "libjson"
+
+  SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/libjson-7.4.0/ -I$(ADAPTOR_ROOT)/external/jsoncpp-0.5.0/Source/
+  SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/libjson-7.4.0/Source/ -ljson
+
+else ifeq "$(JSON_IMPLEMENTATION)" "json_sprit"
+
+  SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/json_spirit-4.04/json_spirit
+  SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/json_spirit-4.04/json_spirit/ -ljson_spirit
+
+else
+
+  $(error unknown json implementation '$(JSON_IMPLEMENTATION)')
+
+endif
 
 include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 

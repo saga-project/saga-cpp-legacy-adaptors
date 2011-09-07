@@ -8,6 +8,11 @@ ifndef SAGA_LOCATION
  $(error "SAGA_LOCATION must be set for this Makefile to work")
 endif
 
+  JSON_IMPLEMENTATION = jsonbox
+# JSON_IMPLEMENTATION = json_cpp
+# JSON_IMPLEMENTATION = libjson
+# JSON_IMPLEMENTATION = json_sprit
+
 include ../config/make.cfg
 
 SAGA_SRC          = $(wildcard *.cpp)

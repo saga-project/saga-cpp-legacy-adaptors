@@ -10,7 +10,7 @@ endif
 
 include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 
-SAGA_ARC          = jason_cpp
+SAGA_ARC          = json_cpp
 SAGA_SRC          = $(wildcard *.cpp)
 SAGA_LIB_OBJ      = $(SAGA_SRC:%.cpp=%.o)
 
