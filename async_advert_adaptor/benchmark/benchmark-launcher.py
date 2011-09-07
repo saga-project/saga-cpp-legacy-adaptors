@@ -24,7 +24,20 @@ import os
 
 if __name__ == "__main__":
 
+  logfilename = "advbench-###COMPONENT_ID###-"+str(os.getpid())+".log"
+
+  logging.basicConfig(filename="###LOGDIR###/"+logfilename,
+                      level=logging.DEBUG, 
+                      format='%(asctime)s %(message)s', 
+                      datefmt='%m/%d/%Y %I:%M:%S %p')
+
+  logging.info("================== COMPONENT START ==================")
+  
   try:
+   
+    logging.info("pid: " + str(os.getpid()))
+
+    logging.info("connecting to advert entry: ###JOBSTAT_URL###")
     jobstat = saga.advert.entry("###JOBSTAT_URL###", saga.advert.ReadWrite)
     status = list(jobstat.get_vector_attribute("###COMPONENT_ID###"))
   
@@ -33,23 +46,30 @@ if __name__ == "__main__":
     t = strftime("STIME:%a, %d %b %Y %H:%M:%S +0000", gmtime())
     status[1] = "STATUS:ONLINE"
     status[2] = t
+    logging.info("setting status to ONLINE")
     jobstat.set_vector_attribute("###COMPONENT_ID###", status)
-    
+
+    logging.info("sleeping for five seconds")
     time.sleep(5)
     
     t = strftime("ETIME:%a, %d %b %Y %H:%M:%S +0000", gmtime())
     status[1] = "STATUS:DONE"
     status[3] = t
+    logging.info("setting status to DONE")
     jobstat.set_vector_attribute("###COMPONENT_ID###", status)
   
     jobstat.close()
-
-
-  except saga.exception:
-    f = open("/tmp/advert_benchmark_###COMPONENT_ID###.exception", "w")
-    traceback.print_exc(file=f)
-    f.close()
-
+    
+  except saga.exception, e:
+    logging.error("SAGA Exception: "+str(e.get_all_messages()))
+    sys.exit(-1)
+    
+  except Exception, e:
+    logging.error("Other Exception: "+str(e))
+    sys.exit(-1)
+    
+  logging.info("================== COMPONENT STOP ==================")
+  sys.exit(-1)
 """
 
 ################################################################################
@@ -57,15 +77,17 @@ if __name__ == "__main__":
 class Component (Exception):
   """Represents a component"""
   
-  def __init__(self, id, manager):
+  def __init__(self, id, manager, logdir):
     """Constructor"""
-    self.id        = id
+    self.id      = id
     self.manager = manager
+    self.logdir  = logdir
 
     # Create the source code
     self.sourcecode = CODE_TEMPLATE
     self.sourcecode = self.sourcecode.replace("###JOBSTAT_URL###", manager.master_dir.get_url().url)
-    self.sourcecode = self.sourcecode.replace("###COMPONENT_ID###", id)
+    self.sourcecode = self.sourcecode.replace("###COMPONENT_ID###", self.id)
+    self.sourcecode = self.sourcecode.replace("###LOGDIR###", self.logdir)
     
   def getPythonSource(self):
     """Introspection: Returns the "worker" Python code"""
@@ -125,11 +147,11 @@ class ComponentManager (Exception):
     self.master_dir.close()
     
       
-  def createComponent(self, id):
+  def createComponent(self, id, logdir):
     """Creates a new component"""
     comp_id = "comp"+id
     logging.info('CM: Creating component object for: '+comp_id)
-    component = Component(id=comp_id, manager=self)
+    component = Component(id=comp_id, manager=self, logdir=logdir)
     self.complist.append(component)
     return component
 
@@ -223,40 +245,49 @@ if __name__ == "__main__":
   # add program parameter / options
   
   
+  parser.add_option("-v", "--verbose",
+                  action="store_true", dest="verbose", default=True,
+                  help="make lots of noise [default: %default]")
+
 
   group = OptionGroup(parser, "Benchmark Options",
-                    "These options control the various parameters of the benchmark.")
+                    "These options control the benchmark parameters. The benchmark is based on 'components', saga processes (jobs) which connect back to the advert service and produce specific load and access pattern.")
 
   group.add_option("-c", "--components", dest="numcomponents", type="int", metavar="COUNT",
-                  help="Number of concurrent components [default: %default]", default=2
+                  help="number of concurrent components [default: %default]", default=2
                   )
 
   group.add_option("-a", "--attributes", dest="numattributes", type="int", metavar="COUNT",
-                  help="Number of attributes per component [default: %default]", default=1
+                  help="number of attributes per component [default: %default]", default=1
                   )
 
   group.add_option("-i", "--iterations", dest="numiterations", type="int", metavar="COUNT",
-                  help="Number of iterations per component [default: %default]", default=1
+                  help="number of iterations per component [default: %default]", default=1
                   )
                   
   parser.add_option_group(group)
 
 
   group_r = OptionGroup(parser, "Run Options",
-                    "These options control were the components are executed.")
+                    "These options control how and where the components are executed.")
 
-  group_r.add_option("-v", "--verbose",
-                  action="store_true", dest="verbose", default=True,
-                  help="Make lots of noise [default: %default]")
 
-  group_r.add_option("-p", "--purge", action="store_true", dest="purge", default=False,
-                     help="Purge the advert directory before running in case it already exists."
+  parser.add_option("-p", "--purge", action="store_true", dest="purge", default=False,
+                     help="purge the advert service directory before running in case it already exists [default: %default]"
                      )
                      
-  group_r.add_option("-j", "--jobmanager", dest="jobmanager", type="string", metavar="URL",
-                  help="Endpoint URL of a remote job manager [default: %default]", default="fork://localhost"
+  group_r.add_option("--jobmanager", dest="jobmanager", type="string", metavar="URL",
+                  help="url of a (remote) job manager that is used to run the components [default: %default]", default="fork://localhost"
                   )
 
+  group_r.add_option("--logdir", dest="logdir", type="string", metavar="PATH",
+                  help="directory that is used by the components to write their local log-files [default: %default]", default="/tmp"
+                  )
+                  
+  group_r.add_option("--logprefix", dest="logprefix", type="string", metavar="STRING",
+                  help="string that is prepended to the component log files [default: %default]", default="<PID>"
+                  )
+                  
   parser.add_option_group(group_r)
 
 
@@ -277,7 +308,7 @@ if __name__ == "__main__":
   
     cm = ComponentManager(adverturl=options.adverturl)
     for c in range(options.numcomponents):
-        cm.createComponent(str(c))
+        cm.createComponent(str(c), options.logdir)
     
     cm.startAll(jobmanager=options.jobmanager);
     
