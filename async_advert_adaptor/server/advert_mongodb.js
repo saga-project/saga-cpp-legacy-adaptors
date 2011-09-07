@@ -243,9 +243,14 @@ function responseError (socket, path)
 // = Server                                                                    =
 // =============================================================================
 
+socketCount = 0;
+
 var server = net.createServer(function (socket) {
   
   socket.setNoDelay(true);
+  
+  socketCount++
+  console.log(socketCount);
   
   // ====================================
   // = Handshake                        =
@@ -259,6 +264,9 @@ var server = net.createServer(function (socket) {
   
   socket.on("close", function (had_error) {
     removeSocket(socket);
+    
+    socketCount--;
+    console.log(socketCount);
   });
   
   socket.on("error", function (exception) {
