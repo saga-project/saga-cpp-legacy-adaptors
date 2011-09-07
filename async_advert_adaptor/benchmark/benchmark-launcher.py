@@ -14,13 +14,19 @@ CODE_TEMPLATE = """#!/usr/bin/env python
 
 from time import gmtime, strftime
 
+
 import traceback
 import logging
+import random
+import string
 import time
 import saga
 import sys
 import os
 
+def random_str(n):
+    return "".join([random.choice(string.ascii_lowercase)
+        for x in xrange(n)])
 
 if __name__ == "__main__":
 
@@ -37,11 +43,17 @@ if __name__ == "__main__":
    
     logging.info("pid: " + str(os.getpid()))
 
+    logging.info("connecting to advert entry: ###PARAMS_URL###")
+    params = saga.advert.entry("###PARAMS_URL###", saga.advert.ReadWrite)
+    numiterations = params.get_attribute("numiterations")
+    numattributes = params.get_attribute("numattributes")
+    params.close()
+
     logging.info("connecting to advert entry: ###JOBSTAT_URL###")
     jobstat = saga.advert.entry("###JOBSTAT_URL###", saga.advert.ReadWrite)
     status = list(jobstat.get_vector_attribute("###COMPONENT_ID###"))
   
-    workspace = status[0] # the url of our working directory     
+    workspace = status[0].replace("WORKSPACE:","") # the url of our working directory     
     
     t = strftime("STIME:%a, %d %b %Y %H:%M:%S +0000", gmtime())
     status[1] = "STATUS:ONLINE"
@@ -49,23 +61,67 @@ if __name__ == "__main__":
     logging.info("setting status to ONLINE")
     jobstat.set_vector_attribute("###COMPONENT_ID###", status)
 
-    logging.info("sleeping for five seconds")
-    time.sleep(5)
+    logging.info("creating workspace at: " + workspace)
+    workdir = saga.advert.directory(workspace, saga.advert.Create | saga.advert.CreateParents | saga.advert.ReadWrite)
     
+    ###### STARTUP PROCESS
+    ##
+    startup_start_time = time.time()
+    
+    logging.info("populating workspace with " + str(numattributes) + " attributes")
+    for a in range(int(numattributes)):
+      key   = str(a)
+      value = random_str(16)
+      logging.info("attribute " + key + " : " + value)
+      workdir.set_attribute(key, value)
+      
+    startup_duration = (time.time() - startup_start_time)
+    logging.info("startup (workspace creation) took" + str(startup_duration) + " seconds")
+    ##
+    #########################
+
+    ###### SWAP ITERATIONS
+    ##
+    iteration_durations = []
+    
+    for i in range(int(numiterations)):
+      start_time = time.time()
+    
+      logging.info("sleeping for five seconds - iteration: " + str(i))
+      time.sleep(1)      
+      
+      duration = (time.time() - start_time)
+      logging.info("iteration took " + str(duration)+ " seconds")
+    
+      iteration_durations.append("ITERTIME"+str(i)+":"+str(duration))
+    ##
+    #########################
+
+    ###### SHUTDOWN PROCESS
+    ##
+
     t = strftime("ETIME:%a, %d %b %Y %H:%M:%S +0000", gmtime())
-    status[1] = "STATUS:DONE"
     status[3] = t
-    logging.info("setting status to DONE")
+    
+    logging.info("writing measurements to 'jobstats' advert & setting status to DONE")
+    for i in iteration_durations:
+      status.append(str(i))
+    
+    status[1] = "STATUS:DONE"
+    
     jobstat.set_vector_attribute("###COMPONENT_ID###", status)
   
     jobstat.close()
+    ##
+    #########################
+
     
   except saga.exception, e:
-    logging.error("SAGA Exception: "+str(e.get_all_messages()))
+    logging.error("OH NOES!! A SAGA Exception: "+str(e.get_all_messages()))
     sys.exit(-1)
     
   except Exception, e:
-    logging.error("Other Exception: "+str(e))
+    logging.error("OH NOES!! An Exception: "+str(e))
     sys.exit(-1)
     
   logging.info("================== COMPONENT STOP ==================")
@@ -85,7 +141,8 @@ class Component (Exception):
 
     # Create the source code
     self.sourcecode = CODE_TEMPLATE
-    self.sourcecode = self.sourcecode.replace("###JOBSTAT_URL###", manager.master_dir.get_url().url)
+    self.sourcecode = self.sourcecode.replace("###JOBSTAT_URL###", manager.getJobstatDirAsString())
+    self.sourcecode = self.sourcecode.replace("###PARAMS_URL###", manager.getParamsDirAsString())
     self.sourcecode = self.sourcecode.replace("###COMPONENT_ID###", self.id)
     self.sourcecode = self.sourcecode.replace("###LOGDIR###", self.logdir)
     
@@ -115,12 +172,14 @@ class Component (Exception):
       args.append(self.getPythonSource())
       jd.set_vector_attribute("Arguments", args)
       
+      jd.set_attribute("Output", self.logdir+"/"+self.id+".stdout")
+      jd.set_attribute("Error", self.logdir+"/"+self.id+".stderr")
+      
       js = saga.job.service(jobmanager)
       j = js.create_job(jd)
       j.run()
       
       logging.info(self.id+': Launching on ' + jobmanager)
-
     
     except saga.exception, e:
       for err in e.get_all_messages():
@@ -140,11 +199,19 @@ class ComponentManager (Exception):
     self.complist = []
     
     logging.info('CM: Connecting to advert endpoint: '+self.adverturl)
-    self.master_dir = saga.advert.entry(self.adverturl+"/jobstats")
+    self.jobstat_dir = saga.advert.entry(self.adverturl+"/jobstats")
+    self.params_dir = saga.advert.entry(self.adverturl+"/params")
+
+  def getJobstatDirAsString(self):
+    return self.jobstat_dir.get_url().url
+    
+  def getParamsDirAsString(self):
+    return self.params_dir.get_url().url
     
   def __del__(self):
     """Destructor"""
-    self.master_dir.close()
+    self.jobstat_dir.close()
+    self.params_dir.close()
     
       
   def createComponent(self, id, logdir):

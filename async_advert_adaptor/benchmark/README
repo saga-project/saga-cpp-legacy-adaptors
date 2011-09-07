@@ -1,0 +1,61 @@
+Description
+-------------------------------------------------------------------------------
+
+This is a benchmark suite for different implementations of the SAGA Advert 
+Service (http://www.ogf.org/OGF27/materials/1767/saga_adverts.pdf) and their 
+backend implementations. It takes three parameters:
+
+(1) Number of components: This describes the number of individual (potentially
+                          distributed) processes that access the advert service
+                          concurrently.
+                          
+(2) NUmber of attributes: 
+
+Example usage
+-------------------------------------------------------------------------------
+
+(1) Using the default saga advert service with 10 components (workers) 10 
+    attributes per component and 5 iterations. The components are running 
+    locally (using the default job adaptor):
+
+    $> python benchmark-launcher.py \
+       advert://SAGA:SAGA_client@advert.cct.lsu.edu:8080/benchmark \ 
+       -p -c 10 -a 10 -i5
+    
+    The results are human-readable and accessible in the advert database:
+    
+    $> saga-advert list_attributes \
+       advert://SAGA:SAGA_client@advert.cct.lsu.edu:8080/benchmark/jobstats
+    
+    An entry for an indivdual component may look like this:
+        (vector) comp0 	:
+            STATUS:DONE, 
+            STIME:Wed,  07 Sep 2011 14:59:56 +0000, 
+            ETIME:Wed,  07 Sep 2011 15:00:13 +0000, 
+            ITERTIME0:1.00112605095, 
+            ITERTIME1:1.00112605095, 
+            ITERTIME2:1.0011241436
+
+    The keys have the following meaning: 
+      STATUS:     Can be OFFLINE (not yet started), ONLINE, DONE or FAILED
+      STIME:      The component startup time
+      ETIME:      The component shutdown time
+      ITERTIME(X) The duration of the Xth iteration
+      
+    The log-files of the individual components can be found in /tmp/. The 
+    location can be changed with the --tmpfile option. 
+    
+      
+(2) The same works also with the new 'node.js/mongoDB' advert service, just by 
+    changing the advert url:
+    
+    $> python benchmark-launcher.py \
+       sqlasyncadvert://faust.cct.lsu.edu:8080/benchmark \
+       -p -c 10 -a 10 -i5
+
+    $> saga-advert list_attributes \
+       sqlasyncadvert://faust.cct.lsu.edu:8080/benchmark/jobstats
+    
+    
+    
+    
