@@ -9,16 +9,44 @@ backend implementations. It takes three parameters:
                           distributed) processes that access the advert service
                           concurrently.
                           
-(2) NUmber of attributes: 
+(2) Number of attributes: The number of attributes that "belong" to each 
+                          component. The attributes are stored in the 
+                          component's advert server entry and are accessible by
+                          other components.
 
-Example usage
+(3) Number of iterations: Number of iterations the main benchmark loop is
+                          executed and measured. More iterations usually mean
+                          a more accurate average. 
+                          
+The Main Benchmark Loop
+
+  The main benchmark loop is controlled by the parameters above. The control 
+  flow is quite simple:
+  
+  For each Iteration
+
+    (1) A component CX opens the advert workspace of another, randomly assigned 
+        component CY.
+  
+    (2) CX lists all of CY's attributes
+
+    (3) CX reads each of CY's attributes 
+        (# 'read' calls = Number of attributes)
+
+    (4) CX writes its own attributes into CY's "inbox"
+        (# 'write' calls = Number of attributes)
+    
+    (5) CX records the duration that it took to execute the above steps
+                        
+
+Example Usage
 -------------------------------------------------------------------------------
 
 (1) Using the default saga advert service with 10 components (workers) 10 
     attributes per component and 5 iterations. The components are running 
     locally (using the default job adaptor):
 
-    $> python benchmark-launcher.py \
+    $> python advert-benchmark.py \
        advert://SAGA:SAGA_client@advert.cct.lsu.edu:8080/benchmark \ 
        -p -c 10 -a 10 -i5
     
@@ -49,7 +77,7 @@ Example usage
 (2) The same works also with the new 'node.js/mongoDB' advert service, just by 
     changing the advert url:
     
-    $> python benchmark-launcher.py \
+    $> python advert-benchmark.py \
        sqlasyncadvert://faust.cct.lsu.edu:8080/benchmark \
        -p -c 10 -a 10 -i5
 
