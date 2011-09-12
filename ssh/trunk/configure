@@ -1782,9 +1782,9 @@ $as_echo "no" >&6; }
 $as_echo_n "checking saga version... " >&6; }
     SAGA_VERSION=`$SAGA_CONFIG --version`
 
-    SAGA_VERSION_MAJOR=`echo $SAGA_VERSION    | cut -f 1 -d . | cut -f 1 -d '-'`
-    SAGA_VERSION_MINOR=`echo $SAGA_VERSION    | cut -f 2 -d . | cut -f 1 -d '-'`
-    SAGA_VERSION_SUBMINOR=`echo $SAGA_VERSION | cut -f 3 -d . | cut -f 1 -d '-'`
+    SAGA_VERSION_MAJOR=`echo $SAGA_VERSION    | cut -sf 1 -d . | cut -sf 1 -d '-'`
+    SAGA_VERSION_MINOR=`echo $SAGA_VERSION    | cut -sf 2 -d . | cut -sf 1 -d '-'`
+    SAGA_VERSION_SUBMINOR=`echo $SAGA_VERSION | cut -sf 3 -d . | cut -sf 1 -d '-'`
 
     if test "$SAGA_VERSION_SUBMINOR" == ""; then
       SAGA_VERSION_SUBMINOR=0
@@ -1812,12 +1812,12 @@ $as_echo "$SAGA_VERSION_MAJOR.$SAGA_VERSION_MINOR.$SAGA_VERSION_SUBMINOR" >&6; }
 $as_echo_n "checking saga package version... " >&6; }
   SAGA_PACKAGE_VERSION=$SAGA_VERSION
   test -f PACKAGE && SAGA_PACKAGE_VERSION=` grep -e '^VERSION:'  PACKAGE | sed -e 's/^VERSION: *//'`
-  test -f PACKAGE && SAGA_PACKAGE_REVISION=`grep -e '^REVISION:' PACKAGE | cut -f 2 -d '$' | cut -f 2 -d ' '`
+  test -f PACKAGE && SAGA_PACKAGE_REVISION=`grep -e '^REVISION:' PACKAGE | cut -sf 2 -d '$' | cut -sf 2 -d ' '`
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&5
 $as_echo "$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
 
   # svn info supercedes the revision info from the PACKAGE file
-  svnrevision=`svn info 2>&1 | grep Revision | cut -f 2 -d ' '`
+  svnrevision=`svn info 2>&1 | grep Revision | cut -sf 2 -d ' '`
 
   if ! test "$svnrevision" = ""; then
     SAGA_PACKAGE_REVISION=$svnrevision
@@ -2253,7 +2253,7 @@ $as_echo "DPKG not found - not a debian system?" >&6; }
     do
 
       depfile=`echo $depfile | sed -e 's|//|/|g'`
-      package=`$SAGA_DPKG -S $depfile 2>>/dev/null | cut -f 1 -d ':'`
+      package=`$SAGA_DPKG -S $depfile 2>>/dev/null | cut -sf 1 -d ':'`
 
       if test "" = "$package"; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: Cannot find debian package for $depfile" >&5
@@ -2268,7 +2268,7 @@ $as_echo "Cannot find debian package for $depfile" >&6; }
         continue;
       fi
 
-      version=`$SAGA_DPKG -p $package 2>>/dev/null | grep -e '^Version:' | cut -f 2 -d ' '`
+      version=`$SAGA_DPKG -p $package 2>>/dev/null | grep -e '^Version:' | cut -sf 2 -d ' '`
 
       if test "" = "$version"; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: Cannot find debian package version for $depfile" >&5
@@ -2283,8 +2283,8 @@ $as_echo "Cannot find debian package version for $depfile" >&6; }
       # universally valid.  haha.
       version=`echo $version | sed -e "s/^.*\://g"`
 
-      vmajor=`echo $version | cut -f 1 -d '.'`
-      vminor=`echo $version | cut -f 2 -d '.'`
+      vmajor=`echo $version | cut -sf 1 -d '.'`
+      vminor=`echo $version | cut -sf 2 -d '.'`
       vmin="$vmajor.$vminor"
 
       # boost version can only differ by sub-minor version, other packages can
@@ -2317,11 +2317,11 @@ $as_echo "$SAGA_DEB_DEPENDENCIES" >&6; }
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking debian architecture" >&5
 $as_echo_n "checking debian architecture... " >&6; }
-    debarch=`$SAGA_DPKG --print-architecture`
+    deb_arch=`$SAGA_DPKG --print-architecture`
     if test "$deb_arch" == ""; then
       SAGA_DEB_ARCH=$SAGA_ARCH
     else
-      SAGA_DEB_ARCH=$debarch
+      SAGA_DEB_ARCH=$deb_arch
     fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_DEB_ARCH" >&5
 $as_echo "$SAGA_DEB_ARCH" >&6; }
@@ -2494,7 +2494,7 @@ $as_echo "Cannot find redhat package for $depfile" >&6; }
         continue
       fi
 
-      package=`rpm -qi $package | grep Name | head -1 | cut -f 2 -d ':' | cut -f 2 -d ' '`
+      package=`rpm -qi $package | grep Name | head -1 | cut -sf 2 -d ':' | cut -sf 2 -d ' '`
 
       # AC_MSG_NOTICE([$depfile: $package])
 
@@ -2503,7 +2503,7 @@ $as_echo "Cannot find redhat package for $depfile" >&6; }
         continue;
       fi
 
-      version=`$SAGA_RPM -qi $package 2>>/dev/null | grep Version | cut -f 2 -d ':'  | cut -f 2 -d ' '`
+      version=`$SAGA_RPM -qi $package 2>>/dev/null | grep Version | cut -sf 2 -d ':'  | cut -sf 2 -d ' '`
 
       if test "" = "$version"; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: Cannot find redhat package version for $depfile" >&5
@@ -2518,8 +2518,8 @@ $as_echo "Cannot find redhat package version for $depfile" >&6; }
       # universally valid.  haha.
       version=`echo $version | sed -e "s/^.*\://g"`
 
-      vmajor=`echo $version | cut -f 1 -d '.'`
-      vminor=`echo $version | cut -f 2 -d '.'`
+      vmajor=`echo $version | cut -sf 1 -d '.'`
+      vminor=`echo $version | cut -sf 2 -d '.'`
       vmin="$vmajor.$vminor"
 
       # boost version can only differ by sub-minor version, other packages can
@@ -2573,9 +2573,9 @@ $as_echo_n "checking redhat package version... " >&6; }
     SAGA_RPM_VERSION=$SAGA_VERSION
     SAGA_RPM_RELEASE=""
     test -f PACKAGE && SAGA_RPM_VERSION=`grep '^VERSION:' PACKAGE | sed -e 's/^VERSION: *//' | cut -f 1 -d '-'`
-    test -f PACKAGE && SAGA_RPM_RELEASE=`grep '^VERSION:' PACKAGE | sed -e 's/^VERSION: *//' | cut -f 2 -d '-'`
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_RPM_VERSION" >&5
-$as_echo "$SAGA_RPM_VERSION" >&6; }
+    test -f PACKAGE && SAGA_RPM_RELEASE=`grep '^VERSION:' PACKAGE | sed -e 's/^VERSION: *//' | cut -sf 2 -d '-'`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_RPM_VERSION - $SAGA_RPM_RELEASE" >&5
+$as_echo "$SAGA_RPM_VERSION - $SAGA_RPM_RELEASE" >&6; }
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking redhat package license" >&5
 $as_echo_n "checking redhat package license... " >&6; }
@@ -2602,7 +2602,9 @@ $as_echo_n "checking redhat package control file... " >&6; }
 $as_echo "creating $SAGA_RPM_CONTROL" >&6; }
 
     SAGA_RPM_FULLNAME="$SAGA_RPM_PACKAGE-$SAGA_RPM_VERSION-$SAGA_RPM_RELEASE"
+
     if test "$SAGA_RPM_RELEASE" = ""; then
+      SAGA_RPM_RELEASE=0
       SAGA_RPM_FULLNAME="$SAGA_RPM_PACKAGE-$SAGA_RPM_VERSION"
     fi
 
