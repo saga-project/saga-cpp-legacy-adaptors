@@ -84,9 +84,10 @@ AC_SUBST([BUILD_ADAPTOR_JOB])
 
 ###########################################################
 #
-# debian package support
+# binary package support
 #
 AX_SAGA_CHECK_DEBDEPS([$SAGA_DEP_FILES])
+AX_SAGA_CHECK_RPMDEPS([$SAGA_DEP_FILES])
 #
 ###########################################################
 
