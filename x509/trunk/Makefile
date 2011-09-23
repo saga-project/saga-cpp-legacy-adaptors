@@ -6,7 +6,7 @@
 
 -include $(SAGA_LOCATION)/share/saga/make/saga.dist.mk
 
--include config/make.cfg
+include config/make.cfg
 
 SAGA_SUBDIRS += config context
 
