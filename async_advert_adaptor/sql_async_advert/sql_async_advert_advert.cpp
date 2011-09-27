@@ -197,18 +197,14 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_attribute_exists (bool        & ret, 
                                                std::string   key)
   {
-    JsonBox::Value value;
+    Json::Value value;
     _opened = _connection->get_value(_path.string(), value);
     
     check_if_open("advertdirectory_cpi_impl::sync_attribute_exists");
-
-    JsonBox::Object obj         = value.getObject();
-    JsonBox::Object attributes  = obj["attributes"].getObject();
     
-    std::map<std::string, JsonBox::Value>::iterator i = attributes.find(key);
-    if (i != attributes.end())
+    if (value["attributes"].isMember(key))
     {
-      ret = true;
+        ret = true;
     }
     else
     {
@@ -221,20 +217,16 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_attribute_is_readonly (bool        & ret, 
                                                     std::string   key)
   {
-    JsonBox::Value value;
+    Json::Value value;
     _opened = _connection->get_value(_path.string(), value);
     
     check_if_open("advertdirectory_cpi_impl::sync_attribute_is_readonly");
     
-    JsonBox::Object obj         = value.getObject();
-    JsonBox::Object attributes  = obj["attributes"].getObject();
-    
-    std::map<std::string, JsonBox::Value>::iterator i = attributes.find(key);
-    if (i == attributes.end())
+    if (!value["attributes"].isMember(key))
     {
-      SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not Exists", saga::DoesNotExist);
+     SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not Exists", saga::DoesNotExist);
     }
-    
+     
     instance_data idata(this);
     ret = (idata->mode_ & saga::advert::Read) ? false : true;
   }
@@ -244,20 +236,16 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_attribute_is_writable (bool        & ret, 
                                                     std::string   key)
   {
-    JsonBox::Value value;
+    Json::Value value;
     _opened = _connection->get_value(_path.string(), value);
-    
+     
     check_if_open("advertdirectory_cpi_impl::sync_attribute_is_readonly");
-    
-    JsonBox::Object obj         = value.getObject();
-    JsonBox::Object attributes  = obj["attributes"].getObject();
-    
-    std::map<std::string, JsonBox::Value>::iterator i = attributes.find(key);
-    if (i == attributes.end())
+
+    if (!value["attributes"].isMember(key))
     {
       SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not Exists", saga::DoesNotExist);
     }
-    
+       
     instance_data idata(this);
     ret = (idata->mode_ & saga::advert::Write) ? true : false;
   }
@@ -267,22 +255,18 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_attribute_is_vector (bool        & ret, 
                                                   std::string   key)
   {
-    JsonBox::Value value;
+    Json::Value value;
     _opened = _connection->get_value(_path.string(), value);
-    
+     
     check_if_open("advertdirectory_cpi_impl::sync_attribute_is_vector");
     check_permissions(saga::advert::Read, "advertdirectory_cpi_impl::sync_attribute_is_vector");
-    
-    JsonBox::Object obj         = value.getObject();
-    JsonBox::Object attributes  = obj["attributes"].getObject();
-    
-    std::map<std::string, JsonBox::Value>::iterator i = attributes.find(key);
-    if (i == attributes.end())
+     
+    if (!value["attributes"].isMember(key))
     {
-      SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not Exists", saga::DoesNotExist);
+     SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not Exists", saga::DoesNotExist);
     }
-    
-    ret = i->second.isArray();
+     
+    ret = value["attributes"][key].isArray();
   }
   
 ////////////////////////////////////////////////////////////////////////////
@@ -303,27 +287,23 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_get_attribute (std::string & ret, 
                                             std::string   key)
   {
-    JsonBox::Value value;
+    Json::Value value;
     _opened = _connection->get_value(_path.string(), value);
     
     check_if_open("advertdirectory_cpi_impl::sync_get_attribute");
     check_permissions(saga::advert::Read, "advertdirectory_cpi_impl::sync_get_attribute");
     
-    JsonBox::Object obj         = value.getObject();
-    JsonBox::Object attributes  = obj["attributes"].getObject();
-    
-    std::map<std::string, JsonBox::Value>::iterator i = attributes.find(key);
-    if (i == attributes.end())
+    if (!value["attributes"].isMember(key))
     {
       SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not Exists", saga::DoesNotExist);
     }
     
-    if (i->second.isArray())
+    if (value["attributes"][key].isArray())
     {
       SAGA_ADAPTOR_THROW ("Attribute " + key + " is a vector attribute", saga::IncorrectState);
     }
     
-    ret = i->second.getString();
+    ret = value["attributes"][key].asString();
   }
 
 ////////////////////////////////////////////////////////////////////////
@@ -331,31 +311,25 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_get_vector_attribute (std::vector <std::string> & ret, 
                                                    std::string                 key)
   {
-    JsonBox::Value value;
+    Json::Value value;
     _opened = _connection->get_value(_path.string(), value);
-    
+     
     check_if_open("advertdirectory_cpi_impl::sync_get_vector_attribute");
     check_permissions(saga::advert::Read, "advertdirectory_cpi_impl::sync_get_vector_attribute");
-    
-    JsonBox::Object obj         = value.getObject();
-    JsonBox::Object attributes  = obj["attributes"].getObject();
-    
-    std::map<std::string, JsonBox::Value>::iterator i = attributes.find(key);
-    if (i == attributes.end())
+     
+    if (!value["attributes"].isMember(key))
     {
-      SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not Exists", saga::DoesNotExist);
+     SAGA_ADAPTOR_THROW ("Attribute " + key + " dose not Exists", saga::DoesNotExist);
+    }
+     
+    if (!value["attributes"][key].isArray())
+    {
+     SAGA_ADAPTOR_THROW ("Attribute " + key + " is not a vector attribute", saga::IncorrectState);
     }
     
-    if (!(i->second.isArray()))
+    for (unsigned int i = 0; i < value["attributes"][key].size(); ++i)
     {
-      SAGA_ADAPTOR_THROW ("Attribute " + key + " is not a vector attribute", saga::IncorrectState);
-    }
-    
-    JsonBox::Array array = i->second.getArray();
-    
-    for (std::deque<JsonBox::Value>::iterator j = array.begin(); j != array.end(); ++j)
-    {
-      ret.push_back(j->getString());
+      ret.push_back(value["attributes"][key][i].asString());
     }
   }
 
@@ -404,19 +378,13 @@ namespace sql_async_advert
 
   void advert_cpi_impl::sync_list_attributes (std::vector <std::string> & ret)
   {
-    JsonBox::Value value;
+    Json::Value value;
     _opened = _connection->get_value(_path.string(), value);
     
     check_if_open("advertdirectory_cpi_impl::sync_list_attributes");
     check_permissions(saga::advert::Read, "advertdirectory_cpi_impl::sync_list_attributes");
     
-    JsonBox::Object obj         = value.getObject();
-    JsonBox::Object attributes  = obj["attributes"].getObject();
-    
-    for (std::map<std::string, JsonBox::Value>::iterator i = attributes.begin(); i != attributes.end(); ++i)
-    {
-      ret.push_back(i->first);
-    }
+    ret = value["attributes"].getMemberNames();
   }
 
 ////////////////////////////////////////////////////////////////////////
@@ -449,13 +417,12 @@ namespace sql_async_advert
 
   void advert_cpi_impl::sync_get_name (saga::url & url)
   {
-    JsonBox::Value value;
+    Json::Value value;
     _opened = _connection->get_value(_path.string(), value);
     
     check_if_open("advertdirectory_cpi_impl::sync_get_name");
-    
-    JsonBox::Object obj = value.getObject();
-    url.set_path(obj["name"].getString());
+
+    url.set_path(value["name"].asString());
   }
 
   void advert_cpi_impl::sync_read_link (saga::url & url)
@@ -465,24 +432,22 @@ namespace sql_async_advert
 
   void advert_cpi_impl::sync_is_dir (bool & ret)
   {
-    JsonBox::Value value;
+    Json::Value value;
     _opened = _connection->get_value(_path.string(), value);
     
     check_if_open("advertdirectory_cpi_impl::sync_is_dir");
-    
-    JsonBox::Object obj = value.getObject();
-    ret = obj["dir"].getBoolean();
+
+    ret = value["dir"].asBool();
   }
 
   void advert_cpi_impl::sync_is_entry (bool & ret)
   {
-    JsonBox::Value value;
+    Json::Value value;
     _opened = _connection->get_value(_path.string(), value);
     
-    check_if_open("advertdirectory_cpi_impl::sync_is_entry");
-    
-    JsonBox::Object obj = value.getObject();
-    ret = !(obj["dir"].getBoolean());
+    check_if_open("advertdirectory_cpi_impl::sync_is_dir");
+
+    ret = !value["dir"].asBool();
   }
 
   void advert_cpi_impl::sync_is_link (bool & ret)

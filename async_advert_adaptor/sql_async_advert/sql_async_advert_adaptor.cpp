@@ -45,17 +45,14 @@ namespace sql_async_advert
     return list;
   }
   
-  adaptor::adaptor() : work(work_ptr(new boost::asio::io_service::work(io_service))), thread(boost::thread(boost::bind(&boost::asio::io_service::run, &io_service)))
+  adaptor::adaptor()
   {
+    std::cout << "ASYNC Advert Constructor" << std::endl;
     connection_map = new connection_map_t();
   }
   
   adaptor::~adaptor()
-  {
-    work.reset();
-    io_service.stop();
-    thread.join();
-    
+  { 
     delete connection_map;
   }
   
@@ -69,7 +66,7 @@ namespace sql_async_advert
     
     if (i == connection_map->end())
     {
-      (*connection_map)[url.get_host()] = new server_connection(url, io_service);
+      (*connection_map)[url.get_host()] = new server_connection(url);
     }
     
     return (*connection_map)[url.get_host()];

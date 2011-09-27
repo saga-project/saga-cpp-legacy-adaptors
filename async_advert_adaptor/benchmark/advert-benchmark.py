@@ -3,6 +3,7 @@
 from optparse import OptionParser
 from optparse import OptionGroup
 
+import random
 import traceback
 import logging
 import time

@@ -30,7 +30,7 @@ ifeq "$(JSON_IMPLEMENTATION)" "jsonbox"
 else ifeq "$(JSON_IMPLEMENTATION)" "json_cpp"
 
   SAGA_CXXFLAGS += -I$(ADAPTOR_ROOT)/external/jsoncpp-0.5.0/include/
-  SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/jsoncpp-0.5.0/src/ -ljson_cpp
+  SAGA_LDFLAGS  += -L$(ADAPTOR_ROOT)/external/jsoncpp-0.5.0/src/lib_json/ -ljson_cpp
 
 else ifeq "$(JSON_IMPLEMENTATION)" "libjson"
 

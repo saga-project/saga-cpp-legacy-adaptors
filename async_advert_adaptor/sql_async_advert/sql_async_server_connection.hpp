@@ -2,19 +2,14 @@
 #define SQL_ASYNC_SERVER_CONNECTION_HPP
 
 // Boost Includes
-#include <boost/asio.hpp>
 #include <boost/thread.hpp>
 #include <boost/lexical_cast.hpp>
 
-// STL Includes
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
-#include <utility>
-
 // JSON Includes
-#include <JsonBox.h>
+#include <json/json.h>
+
+// ZMQ
+#include <zmq.hpp>
 
 // Saga Includes
 #include <saga/url.hpp>
@@ -31,7 +26,7 @@ namespace sql_async_advert
     // = Constructor =
     // ===============
     
-    server_connection (saga::url const &url, boost::asio::io_service &io_service);
+    server_connection (saga::url const &url);
     
     // ==============
     // = Destructor =
@@ -45,58 +40,36 @@ namespace sql_async_advert
     // = Private members =
     // ===================
     
-    typedef boost::unique_lock<boost::shared_mutex> write_lock;
-    typedef boost::shared_lock<boost::shared_mutex> read_lock;
+    saga::url         _url;
+    std::string       _connect_string;
     
-    boost::shared_mutex             _mutex;
-    boost::mutex                    _readhandler;
-      
-    boost::asio::ip::tcp::resolver  _resolver;
-    boost::asio::ip::tcp::socket    _socket;
+    zmq::context_t    _context;
+    zmq::socket_t     _socket;
+    zmq::socket_t     _socket_rh;
     
-    boost::asio::streambuf          _response;
-    boost::asio::streambuf          _request;
+    boost::mutex      _mutex;
+    boost::thread     _thread;
     
-    std::istream                    _response_stream;
-    std::ostream                    _request_stream;
-    
-    saga::url                       _url;
-    
-    
-    typedef std::map<std::string, JsonBox::Value> node_map_t;
-    
-    node_map_t*                     _node_map;
-    
-    boost::promise<bool>            _node_exists;
-        
-    boost::promise<bool>            _node_opened;
-    std::string                     _node_opened_url;
+    typedef std::map<std::string, Json::Value> node_map_t;  
+    node_map_t*     _node_map;
       
     // ===================
     // = Private methods =
     // ===================
     
-    void resolve_handler(const boost::system::error_code &error, boost::asio::ip::tcp::resolver::iterator i);
-    
-    void connect_handler(const boost::system::error_code &error);
-    
-    void read_handler(const boost::system::error_code &error, std::size_t bytes);
+    void read_handler(zmq::context_t *context);
     
     void erase_node(const std::string &url);
     
-    void send_message(const JsonBox::Object &obj);
+    void send_message(const std::string &command, const Json::Value &value);
     
-    void set_opened(const std::string &url);
-
-    void reset_opened(void);
-   
    public:
      
      // ==================
      // = Public methods =
      // ==================
      
-     const bool get_value(const std::string &url, JsonBox::Value &ret);
+     const bool get_value(const std::string &url, Json::Value &ret);
      
      const bool get_state(const std::string &url);
      
@@ -107,8 +80,6 @@ namespace sql_async_advert
      void create_parents_directory(const std::string &url, const bool dir);
      
      void open_directory(const std::string &url);
-     
-     void async_open_directory(const std::string &url);
      
      void remove_directory(const std::string &url);
      

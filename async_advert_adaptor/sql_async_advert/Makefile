@@ -8,8 +8,8 @@ ifndef SAGA_LOCATION
  $(error "SAGA_LOCATION must be set for this Makefile to work")
 endif
 
-  JSON_IMPLEMENTATION = jsonbox
-# JSON_IMPLEMENTATION = json_cpp
+# JSON_IMPLEMENTATION = jsonbox
+  JSON_IMPLEMENTATION = json_cpp
 # JSON_IMPLEMENTATION = libjson
 # JSON_IMPLEMENTATION = json_sprit
 
@@ -27,5 +27,8 @@ SAGA_ADAPTOR_PACKAGES = namespace advert
 include $(SAGA_LOCATION)/share/saga/make/saga.adaptor.mk
 
 SAGA_CXXFLAGS += -I$(SAGA_LOCATION)/include/saga/
-SAGA_LDFLAGS += -lpthread
+SAGA_CXXFLAGS += -I/opt/zeromq-2.1.9/include
 
+SAGA_LDFLAGS += -lpthread
+SAGA_LDFLAGS += -L/opt/zeromq-2.1.9/lib
+SAGA_LDFLAGS += -lzmq
