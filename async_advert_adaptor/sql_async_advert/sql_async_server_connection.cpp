@@ -14,7 +14,7 @@ namespace sql_async_advert
     // =============================
     // = Connect to Node.js server =
     // =============================
-    _socket.connect(connect_string.c_str());
+    //_socket.connect(connect_string.c_str());
     
     // ========================================
     // = Bind socket for thread communication =
@@ -41,7 +41,7 @@ namespace sql_async_advert
     zmq::socket_t subscriber(*context, ZMQ_SUB);
     
     std::string connect_string = "tcp://" + _url.get_host() + ":" + "5556";
-    _socket.connect(connect_string.c_str());
+    subscriber.connect(connect_string.c_str());
     
     zmq::socket_t receiver(*context, ZMQ_PAIR);
     receiver.connect("inproc://read_handler");
@@ -61,26 +61,32 @@ namespace sql_async_advert
       if (items [0].revents & ZMQ_POLLIN)
       {
         std::string path = s_recv(subscriber);
+        std::string type = s_recv(subscriber);
+        std::string data = s_recv(subscriber);
         
-        std::cout << "sub received " << path << std::endl;
+        //std::cout << "sub received path : " << path << std::endl;
+        //std::cout << "sub received type : " << type << std::endl;
+        //std::cout << "sub received data : " << data << std::endl;
         
-        if (s_recv(subscriber) == "updated")
+        if (type == "updated")
         {
           _mutex.lock();
           {
             Json::Value node;
             Json::Reader reader;
             
-            reader.parse(s_recv(subscriber), node);
+            reader.parse(data, node);
 
             (*_node_map)[path] = node;
           }
           _mutex.unlock();
         }
         
-        if (s_recv(subscriber) == "removed")
+        if (type == "removed")
         {
-          erase_node(path); 
+          erase_node(path);
+          subscriber.setsockopt(ZMQ_UNSUBSCRIBE, path.c_str(), path.size());
+          //std::cout << "unsub to channel " << path << std::endl;    
         }
       }
       

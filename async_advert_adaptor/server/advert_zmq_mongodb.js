@@ -232,7 +232,7 @@ responder.bind("tcp://*:5557", function () {
                     responder.send("ok", JSON.stringify(newNode));
                   });
                   
-                  publisher.send(parentPath, "updated", JSON.stringify(node));
+                  publisher.send(parentPath, "updated", JSON.stringify(parentNode));
                 });
               }
               
@@ -292,18 +292,19 @@ responder.bind("tcp://*:5557", function () {
       
       var recursiveRemove = function (node)
       {
-        for (var i in node.nodes)
+        for (var i = 0;  i < node.nodes.length; ++i)
         {
-          var pathString = node.path + "/" + node.nodes[i].name;
+          var _pathString = node.path + "/" + node.nodes[i].name;
           
-          AdvertNode.findOne({path: pathString}, function (error, node) {
+          AdvertNode.findOne({path: _pathString}, function (error, node) {
             if (node != null)
             {
-              recursiveRemove(node)
-              
               node.remove(function (error) {
-                publisher.send(pathString, "removed");
+                publisher.send(node.path, "removed", JSON.stringify({}));
+                
               });
+
+              recursiveRemove(node)
             }
           });
         }
@@ -317,7 +318,7 @@ responder.bind("tcp://*:5557", function () {
           if (node.path != "/")
           {
             node.remove(function (error) {
-              publisher.send(pathString, "removed");
+              publisher.send(pathString, "removed", JSON.stringify({}));
             });
             
             var parentNodeArray   = pathArray.slice(0,-1);
@@ -326,7 +327,7 @@ responder.bind("tcp://*:5557", function () {
             AdvertNode.findOne({path: parentPathString}, function (error, parentNode) {
               if (parentNode != null)
               {
-                for (var i in parentNode.nodes)
+                for (var i = 0; i < parentNode.nodes.length; ++i)
                 {
                   if (parentNode.nodes[i].name == node.name)
                   {
@@ -335,7 +336,7 @@ responder.bind("tcp://*:5557", function () {
                 }
                
                parentNode.save(function (error) {
-                 publisher.send(parentPathString, "updated", JSON.stringify(node));
+                 publisher.send(parentPathString, "updated", JSON.stringify(parentNode));
                }); 
                 
               }
