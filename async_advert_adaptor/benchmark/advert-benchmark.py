@@ -183,7 +183,10 @@ class Component (Exception):
       for err in e.get_all_messages():
         print err
 
-    
+  def wait(self):
+    return self.id
+    entry = saga.advert.entry(self.manager.getJobstatDirAsString())
+    return entry.get_vector_attribute(self.id)
 
 
 ################################################################################
@@ -229,6 +232,22 @@ class ComponentManager (Exception):
   def listComponents(self):
     return self.complist
 
+  def waitAll(self):
+    entry = saga.advert.entry(self.getJobstatDirAsString())
+    alldone = True
+    
+    while 1:
+      for c in self.complist:
+        if (entry.get_vector_attribute(c.getID())[1] != "STATUS:DONE"):
+          alldone = False
+      
+      if (alldone):
+        return
+        
+      else:
+        alldone = True
+            
+      time.sleep(0.1)
 
 ################################################################################
 ##
@@ -366,7 +385,9 @@ if __name__ == "__main__":
     options.adverturl = args[0]
   
   try:
-  
+    
+    start = time.time();
+    
     bm = BenchmarkMaster(adverturl=options.adverturl)
     bm.setup(purge=options.purge, numcomponents=options.numcomponents,
              numattributes=options.numattributes, numiterations=options.numiterations)
@@ -376,7 +397,10 @@ if __name__ == "__main__":
         cm.createComponent(str(c), options.logdir)
     
     cm.startAll(jobmanager=options.jobmanager);
+    cm.waitAll();
     
+    end = time.time();
+    print "Execution time : %.3f seconds" % (end - start);
     
     #for c in cm.listComponents():
     #  print "Component: " + str(c.getID()) + " - state: " + c.getState() + " - endpoint: " + c.getAdvertEndpoint();

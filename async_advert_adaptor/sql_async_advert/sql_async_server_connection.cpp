@@ -14,7 +14,7 @@ namespace sql_async_advert
     // =============================
     // = Connect to Node.js server =
     // =============================
-    //_socket.connect(connect_string.c_str());
+    _socket.connect(connect_string.c_str());
     
     // ========================================
     // = Bind socket for thread communication =
@@ -46,19 +46,17 @@ namespace sql_async_advert
     zmq::socket_t receiver(*context, ZMQ_PAIR);
     receiver.connect("inproc://read_handler");
     
-    std::cout << "read_handler running " << std::endl;
-    
     zmq::pollitem_t items [] = 
     {
-      { subscriber, 0, ZMQ_POLLIN, 0}, 
-      { receiver  , 0, ZMQ_POLLIN, 0}
+      { receiver, 0, ZMQ_POLLIN, 0}, 
+      { subscriber, 0, ZMQ_POLLIN, 0}
     };
     
     while(1)
     {
-      zmq::poll (&items[0], 2, -1);
+      zmq::poll (items, 2);
       
-      if (items [0].revents & ZMQ_POLLIN)
+      if (items [1].revents & ZMQ_POLLIN)
       {
         std::string path = s_recv(subscriber);
         std::string type = s_recv(subscriber);
@@ -85,24 +83,22 @@ namespace sql_async_advert
         if (type == "removed")
         {
           erase_node(path);
-          subscriber.setsockopt(ZMQ_UNSUBSCRIBE, path.c_str(), path.size());
-          //std::cout << "unsub to channel " << path << std::endl;    
+          subscriber.setsockopt(ZMQ_UNSUBSCRIBE, path.c_str(), path.size()); 
         }
       }
       
-      if (items [1].revents & ZMQ_POLLIN)
-      {
-        if (s_recv(receiver) == "subscribe")
+      if (items [0].revents & ZMQ_POLLIN)
+      { 
+        std::string type = s_recv(receiver);
+        std::string path = s_recv(receiver);
+        
+        if ( type == "subscribe")
         {
-          std::string path = s_recv(receiver);
           subscriber.setsockopt(ZMQ_SUBSCRIBE, path.c_str(), path.size());
-          
-          std::cout << "sub to channel " << path << std::endl;
         }
         
-        if (s_recv(receiver) == "unsubscribe")
+        if (type == "unsubscribe")
         {
-          std::string path = s_recv(receiver);
           subscriber.setsockopt(ZMQ_UNSUBSCRIBE, path.c_str(), path.size());
         }
       }
@@ -163,13 +159,13 @@ namespace sql_async_advert
     
     value["path"]     = Json::Value(url);
     
-    zmq::socket_t socket(_context, ZMQ_REQ);
-    socket.connect(_connect_string.c_str());
+    //zmq::socket_t socket(_context, ZMQ_REQ);
+    //socket.connect(_connect_string.c_str());
     
-    s_sendmore(socket, "exists");
-    s_send(socket, writer.write(value));
+    s_sendmore(_socket, "exists");
+    s_send(_socket, writer.write(value));
 
-    std::string status= s_recv(socket);
+    std::string status= s_recv(_socket);
     
     if (status == "true")
     {
@@ -192,16 +188,14 @@ namespace sql_async_advert
     value["path"]     = Json::Value(url);
     value["dir"]      = Json::Value(dir);
      
-    zmq::socket_t socket(_context, ZMQ_REQ);
-    socket.connect(_connect_string.c_str());
+    //zmq::socket_t socket(_context, ZMQ_REQ);
+    //socket.connect(_connect_string.c_str());
     
-    s_sendmore(socket, "create");
-    s_send(socket, writer.write(value));
+    s_sendmore(_socket, "create");
+    s_send(_socket, writer.write(value));
     
-    std::string status  = s_recv(socket);
-    std::string data    = s_recv(socket);
-
-    std::cout << status << data << std::endl;
+    std::string status  = s_recv(_socket);
+    std::string data    = s_recv(_socket);
 
     if (status == "ok")
     {
@@ -234,14 +228,14 @@ namespace sql_async_advert
     value["path"]     = Json::Value(url);
     value["dir"]      = Json::Value(dir);
     
-    zmq::socket_t socket(_context, ZMQ_REQ);
-    socket.connect(_connect_string.c_str());
+    //zmq::socket_t socket(_context, ZMQ_REQ);
+    //socket.connect(_connect_string.c_str());
     
-    s_sendmore(socket, "createParents");
-    s_send(socket, writer.write(value));
+    s_sendmore(_socket, "createParents");
+    s_send(_socket, writer.write(value));
     
-    std::string status  = s_recv(socket);
-    std::string data    = s_recv(socket);
+    std::string status  = s_recv(_socket);
+    std::string data    = s_recv(_socket);
     
     if (status == "ok")
     {
@@ -270,14 +264,14 @@ namespace sql_async_advert
     
     value["path"]     = Json::Value(url);
     
-    zmq::socket_t socket(_context, ZMQ_REQ);
-    socket.connect(_connect_string.c_str());
+    //zmq::socket_t socket(_context, ZMQ_REQ);
+    //socket.connect(_connect_string.c_str());
     
-    s_sendmore(socket, "open");
-    s_send(socket, writer.write(value));
+    s_sendmore(_socket, "open");
+    s_send(_socket, writer.write(value));
     
-    std::string status  = s_recv(socket);
-    std::string data    = s_recv(socket);
+    std::string status  = s_recv(_socket);
+    std::string data    = s_recv(_socket);
     
     if (status == "ok")
     {
@@ -306,13 +300,13 @@ namespace sql_async_advert
     
     value["path"]     = Json::Value(url);
     
-    zmq::socket_t socket(_context, ZMQ_REQ);
-    socket.connect(_connect_string.c_str());
+    //zmq::socket_t socket(_context, ZMQ_REQ);
+    //socket.connect(_connect_string.c_str());
     
-    s_sendmore(socket, "remove");
-    s_send(socket, writer.write(value));
+    s_sendmore(_socket, "remove");
+    s_send(_socket, writer.write(value));
     
-    std::string status  = s_recv(socket);
+    std::string status  = s_recv(_socket);
     
     s_sendmore(_socket_rh, "unsubscribe");
     s_send(_socket_rh, url);
@@ -337,14 +331,14 @@ namespace sql_async_advert
     value["key"]      = Json::Value(key);
     value["value"]    = Json::Value(_value);
     
-    zmq::socket_t socket(_context, ZMQ_REQ);
-    socket.connect(_connect_string.c_str());
+    //zmq::socket_t socket(_context, ZMQ_REQ);
+    //socket.connect(_connect_string.c_str());
     
-    s_sendmore(socket, "setAttribute");
-    s_send(socket, writer.write(value));
+    s_sendmore(_socket, "setAttribute");
+    s_send(_socket, writer.write(value));
     
-    std::string status  = s_recv(socket);
-    std::string data    = s_recv(socket);
+    std::string status  = s_recv(_socket);
+    std::string data    = s_recv(_socket);
     
     if (status == "ok")
     {
@@ -377,14 +371,14 @@ namespace sql_async_advert
     value["key"]      = Json::Value(key);
     value["value"]    = array;
     
-    zmq::socket_t socket(_context, ZMQ_REQ);
-    socket.connect(_connect_string.c_str());
+    //zmq::socket_t socket(_context, ZMQ_REQ);
+    //socket.connect(_connect_string.c_str());
     
-    s_sendmore(socket, "setAttribute");
-    s_send(socket, writer.write(value));
+    s_sendmore(_socket, "setAttribute");
+    s_send(_socket, writer.write(value));
     
-    std::string status  = s_recv(socket);
-    std::string data    = s_recv(socket);
+    std::string status  = s_recv(_socket);
+    std::string data    = s_recv(_socket);
     
     if (status == "ok")
     {
@@ -409,14 +403,14 @@ namespace sql_async_advert
     value["path"]     = Json::Value(url);
     value["key"]      = Json::Value(key); 
     
-    zmq::socket_t socket(_context, ZMQ_REQ);
-    socket.connect(_connect_string.c_str());
+    //zmq::socket_t socket(_context, ZMQ_REQ);
+    //socket.connect(_connect_string.c_str());
     
-    s_sendmore(socket, "removeAttribute");
-    s_send(socket, writer.write(value));
+    s_sendmore(_socket, "removeAttribute");
+    s_send(_socket, writer.write(value));
     
-    std::string status  = s_recv(socket);
-    std::string data    = s_recv(socket);
+    std::string status  = s_recv(_socket);
+    std::string data    = s_recv(_socket);
     
     if (status == "ok")
     {

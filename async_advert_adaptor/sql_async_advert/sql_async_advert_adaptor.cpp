@@ -47,7 +47,6 @@ namespace sql_async_advert
   
   adaptor::adaptor()
   {
-    std::cout << "ASYNC Advert Constructor" << std::endl;
     connection_map = new connection_map_t();
   }
   
