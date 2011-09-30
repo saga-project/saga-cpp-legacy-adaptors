@@ -50,8 +50,14 @@ namespace sql_async_advert
     boost::mutex      _mutex;
     boost::thread     _thread;
     
+    typedef std::map<std::string, bool> update_map_t;
+    update_map_t*     _update_map;
+    
+    typedef std::map<std::string, std::string> id_map_t;
+    id_map_t*         _id_map;
+    
     typedef std::map<std::string, Json::Value> node_map_t;  
-    node_map_t*     _node_map;
+    node_map_t*       _node_map;
       
     // ===================
     // = Private methods =

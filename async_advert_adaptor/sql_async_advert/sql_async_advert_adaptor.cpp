@@ -52,6 +52,12 @@ namespace sql_async_advert
   
   adaptor::~adaptor()
   { 
+    for (connection_map_t::iterator i = connection_map->begin(); i != connection_map->end(); i++)
+    {
+      //delete i->second;
+    }
+    
+    std::cout << "Advert Adaptor destructor" << std::endl;
     delete connection_map;
   }
   

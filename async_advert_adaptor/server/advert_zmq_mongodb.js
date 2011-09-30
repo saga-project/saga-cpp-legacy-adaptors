@@ -84,12 +84,38 @@ function getPathArray (pathString)
   });
 }
 
+// =====================
+// = Pub Message Queue =
+// =====================
+
+var messageQueue = {};  // {"id": "u" | "r"}
+
 // ===================================
 // = ZeroMQ Sockets ZMQ_PUB, ZMQ_REP =
 // ===================================
 
-var publisher = zmq.createSocket("pub");
-publisher.bind("tcp://*:5556", function () {});
+
+// ====================
+// = Async publisher  =
+// ====================
+
+var pubSocket = zmq.createSocket("pub");
+pubSocket.bind("tcp://*:5558", function () {});
+
+setInterval(function() {
+  
+  for (var i in messageQueue)
+  {
+    pubSocket.send(i, messageQueue[i]);
+  }
+  
+  messageQueue = {};
+  
+}, 200);
+
+// ======================
+// = Syncrone responer  =
+// ======================
 
 var responder = zmq.createSocket("rep");
 
@@ -102,6 +128,26 @@ responder.bind("tcp://*:5557", function () {
   responder.on('message', function (command, data) {
     
     var message = JSON.parse(data);
+    
+    // ===============
+    // = Command get =
+    // ===============
+    
+    if (command.toString('utf8') == "get")
+    {
+      AdvertNode.findOne({_id: message.id}, function (error, node) {
+        if (node != null)
+        {
+          responder.send("ok", JSON.stringify(node));
+        }
+        
+        else
+        {
+          responder.send("error", "");
+        }
+        
+      });
+    }
     
     // ==================
     // = Command exists =
@@ -137,12 +183,12 @@ responder.bind("tcp://*:5557", function () {
       AdvertNode.findOne({path: pathString}, function (error, node) {
         if (node == null)
         {
-          responder.send("error", JSON.stringify({}));
+          responder.send("error", "");
         }
         
         else 
         {
-          responder.send("ok", JSON.stringify(node));
+          responder.send("ok", node.id);
         }
       });
     }
@@ -159,7 +205,7 @@ responder.bind("tcp://*:5557", function () {
       AdvertNode.findOne({path: pathString}, function (error, node) {
         if (node != null)
         {
-          responder.send("ok", JSON.stringify(node));
+          responder.send("ok", node.id);
         }
         
         else 
@@ -179,16 +225,17 @@ responder.bind("tcp://*:5557", function () {
               
               node.save(function (error) {
                 newNode.save(function (error) {
-                  responder.send("ok", JSON.stringify(newNode));
+                  responder.send("ok", newNode.id);
                 });
                 
-                publisher.send(parentPathString, "updated", JSON.stringify(node));
+                //publisher.send(parentPathString, "updated", JSON.stringify(node));
+                messageQueue[node.id] = "updated";
               });
             }
             
             else 
             {
-              responder.send("error");
+              responder.send("error", "");
             }
           });
         }
@@ -215,7 +262,7 @@ responder.bind("tcp://*:5557", function () {
               
               if (node != null)
               {
-                responder.send("ok", JSON.stringify(node));
+                responder.send("ok", node.id);
               }
               
               else 
@@ -229,10 +276,11 @@ responder.bind("tcp://*:5557", function () {
                 
                 parentNode.save(function (error) {
                   newNode.save(function (error) {
-                    responder.send("ok", JSON.stringify(newNode));
+                    responder.send("ok", newNode.id);
                   });
                   
-                  publisher.send(parentPath, "updated", JSON.stringify(parentNode));
+                  //publisher.send(parentPath, "updated", JSON.stringify(parentNode));
+                   messageQueue[parentNode.id] = "updated";
                 });
               }
               
@@ -269,7 +317,8 @@ responder.bind("tcp://*:5557", function () {
                     createParents(i + 1);
                   });
                   
-                  publisher.send(parentPath, "updated", JSON.stringify(node));
+                  //publisher.send(parentPath, "updated", JSON.stringify(node));
+                   messageQueue[node.id] = "updated";
                 });
               }
               
@@ -300,8 +349,8 @@ responder.bind("tcp://*:5557", function () {
             if (node != null)
             {
               node.remove(function (error) {
-                publisher.send(node.path, "removed", JSON.stringify({}));
-                
+                //publisher.send(node.path, "removed", JSON.stringify({}));
+                messageQueue[node.id] = "removed";
               });
 
               recursiveRemove(node)
@@ -318,7 +367,8 @@ responder.bind("tcp://*:5557", function () {
           if (node.path != "/")
           {
             node.remove(function (error) {
-              publisher.send(pathString, "removed", JSON.stringify({}));
+              //publisher.send(pathString, "removed", JSON.stringify({}));
+              messageQueue[node.id] = "removed";
             });
             
             var parentNodeArray   = pathArray.slice(0,-1);
@@ -336,7 +386,8 @@ responder.bind("tcp://*:5557", function () {
                 }
                
                parentNode.save(function (error) {
-                 publisher.send(parentPathString, "updated", JSON.stringify(parentNode));
+                 //publisher.send(parentPathString, "updated", JSON.stringify(parentNode));
+                 messageQueue[parentNode.id] = "updated";
                }); 
                 
               }
@@ -369,8 +420,9 @@ responder.bind("tcp://*:5557", function () {
           
           node.commit('attributes');
           node.save(function (error) {
-            responder.send("ok", JSON.stringify(node));
-            publisher.send(pathString, "updated", JSON.stringify(node));
+            responder.send("ok", node.id);
+            //publisher.send(pathString, "updated", JSON.stringify(node));
+            messageQueue[node.id] = "updated";
           });
         }
       });  
@@ -392,8 +444,9 @@ responder.bind("tcp://*:5557", function () {
           
           node.commit('attributes');
           node.save(function (error) {
-            responder.send("ok", JSON.stringify(node));
-            publisher.send(pathString, "updated", JSON.stringify(node));
+            responder.send("ok", node.id);
+            //publisher.send(pathString, "updated", JSON.stringify(node));
+            messageQueue[node.id] = "updated";
           });
         }
       });

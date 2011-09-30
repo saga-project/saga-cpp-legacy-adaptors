@@ -235,6 +235,7 @@ class ComponentManager (Exception):
   def waitAll(self):
     entry = saga.advert.entry(self.getJobstatDirAsString())
     alldone = True
+    count   = 0
     
     while 1:
       for c in self.complist:
@@ -246,8 +247,13 @@ class ComponentManager (Exception):
         
       else:
         alldone = True
+        
+      #if (count == 100):
+      entry = saga.advert.entry(self.getJobstatDirAsString())
+      #  count = 0
             
-      time.sleep(0.1)
+      time.sleep(0.5)
+      ++count
 
 ################################################################################
 ##

@@ -4,9 +4,12 @@
 namespace sql_async_advert
 {
   server_connection::server_connection (saga::url const &url)
-    : _url(url), _context(1), _socket(_context, ZMQ_REQ), _socket_rh(_context, ZMQ_PAIR)   
+    : _url(url), _context(1), _socket(_context, ZMQ_REQ), _socket_rh(_context, ZMQ_PAIR)
   {
-    _node_map = new node_map_t();
+    
+    _update_map   = new update_map_t();
+    _id_map       = new id_map_t();
+    _node_map     = new node_map_t();
     
     std::string connect_string = "tcp://" + _url.get_host() + ":" + "5557";
     _connect_string = connect_string;
@@ -19,7 +22,7 @@ namespace sql_async_advert
     // ========================================
     // = Bind socket for thread communication =
     // ========================================
-    _socket_rh.bind("inproc://read_handler");
+    _socket_rh.bind("inproc://#1");
     
     // ================================
     // = create the subscriber thread =
@@ -29,6 +32,14 @@ namespace sql_async_advert
   
   server_connection::~server_connection (void)
   {
+    std::cout << "server_connection destructor" << std::endl;
+    
+    s_sendmore(_socket_rh, "");
+    s_send(_socket_rh, "kill");
+    
+    _thread.join();
+    
+    delete _update_map;
     delete _node_map;
   }
     
@@ -40,68 +51,88 @@ namespace sql_async_advert
   {
     zmq::socket_t subscriber(*context, ZMQ_SUB);
     
-    std::string connect_string = "tcp://" + _url.get_host() + ":" + "5556";
+    std::string connect_string = "tcp://" + _url.get_host() + ":" + "5558";
     subscriber.connect(connect_string.c_str());
     
     zmq::socket_t receiver(*context, ZMQ_PAIR);
-    receiver.connect("inproc://read_handler");
+    receiver.connect("inproc://#1");
     
     zmq::pollitem_t items [] = 
     {
-      { receiver, 0, ZMQ_POLLIN, 0}, 
-      { subscriber, 0, ZMQ_POLLIN, 0}
+      { subscriber, 0, ZMQ_POLLIN, 0}, 
+      { receiver,   0, ZMQ_POLLIN, 0}
     };
     
     while(1)
     {
       zmq::poll (items, 2);
       
-      if (items [1].revents & ZMQ_POLLIN)
+      if (items [0].revents & ZMQ_POLLIN)
       {
-        std::string path = s_recv(subscriber);
+        std::string id   = s_recv(subscriber);
         std::string type = s_recv(subscriber);
-        std::string data = s_recv(subscriber);
         
-        //std::cout << "sub received path : " << path << std::endl;
+        //std::cout << "sub received path : " << id   << std::endl;
         //std::cout << "sub received type : " << type << std::endl;
-        //std::cout << "sub received data : " << data << std::endl;
         
         if (type == "updated")
         {
           _mutex.lock();
           {
-            Json::Value node;
-            Json::Reader reader;
-            
-            reader.parse(data, node);
-
-            (*_node_map)[path] = node;
+            (*_update_map)[id] = true;
           }
           _mutex.unlock();
         }
         
         if (type == "removed")
         {
-          erase_node(path);
-          subscriber.setsockopt(ZMQ_UNSUBSCRIBE, path.c_str(), path.size()); 
+          subscriber.setsockopt(ZMQ_UNSUBSCRIBE, id.c_str(), id.size());
+          
+          _mutex.lock();
+          {
+            update_map_t::iterator i = _update_map->find(id);
+            
+            if (i != _update_map->end())
+            {
+              _update_map->erase(i);
+            }
+          } 
+          _mutex.unlock();
         }
       }
       
-      if (items [0].revents & ZMQ_POLLIN)
+      if (items [1].revents & ZMQ_POLLIN)
       { 
-        std::string type = s_recv(receiver);
-        std::string path = s_recv(receiver);
+        std::string id    = s_recv(receiver);
+        std::string type  = s_recv(receiver);
         
-        if ( type == "subscribe")
-        {
-          subscriber.setsockopt(ZMQ_SUBSCRIBE, path.c_str(), path.size());
+        if ( type == "sub")
+        {  
+          subscriber.setsockopt(ZMQ_SUBSCRIBE, id.c_str(), id.size());
         }
         
-        if (type == "unsubscribe")
+        if (type == "unsub")
         {
-          subscriber.setsockopt(ZMQ_UNSUBSCRIBE, path.c_str(), path.size());
+          subscriber.setsockopt(ZMQ_UNSUBSCRIBE, id.c_str(), id.size());
+          
+          _mutex.lock();
+          {
+            update_map_t::iterator i = _update_map->find(id);
+            
+            if (i != _update_map->end())
+            {
+              _update_map->erase(i);
+            }
+          } 
+          _mutex.unlock();
+        }
+      
+        if (type == "kill")
+        {
+          break;
         }
       }
+    
     }
   }
     
@@ -113,20 +144,85 @@ namespace sql_async_advert
   {
     //std::cout << "get_value" << std::endl;
     
-    bool state = false;
-
+    std::string id      = (*_id_map)[url];
+    bool needs_update   = false;
+    bool state          = true; 
+  
     _mutex.lock();
     {
-      node_map_t::iterator i = _node_map->find(url);
-
-      if ( i != _node_map->end())
+      update_map_t::iterator i = _update_map->find(id); 
+      
+      // ================================
+      // = check if the node was closed =
+      // ================================
+      
+      if (i == _update_map->end())
       {
-        state = true;
-        ret   = i->second;
+        //std::cout << "not found" << std::endl;
+        state = false;
       }
+      
+      // =========================================
+      // = check if the node needs to be updated =
+      // =========================================
+      
+      if (i != _update_map->end())
+      {
+        //std::cout << "found" << std::endl;
+        needs_update = i->second;
+        i->second = false;
+      }
+      
     }
     _mutex.unlock();
     
+    // ================================
+    // = if needs update send request =
+    // ================================
+    
+    //std::cout << needs_update << std::endl;
+    
+    if (needs_update)
+    {
+      Json::Value value;
+      Json::FastWriter writer;
+
+      value["id"]     = Json::Value(id);
+      
+      s_sendmore(_socket, "get");
+      s_send(_socket, writer.write(value));
+
+      std::string status  = s_recv(_socket);
+      std::string data    = s_recv(_socket);
+      
+      //std::cout << "status : " << status << std::endl;
+      
+      if (status == "ok")
+      {
+        Json::Value node;
+        Json::Reader reader;
+
+        reader.parse(data, node);
+
+        (*_node_map)[url] = node;
+      }
+        
+      if (status == "error") 
+      {
+        state = false;
+      } 
+    }
+    
+    // =================
+    // = deliver value =
+    // =================
+     
+    if (state)
+    {
+      ret = (*_node_map)[url];
+    } 
+    
+    //std::cout << "state : " << state << std::endl;
     return state;
   }
   
@@ -134,15 +230,21 @@ namespace sql_async_advert
   {
     //std::cout << "get_state" << std::endl;
     
-    bool state = false;
+    std::string id  = (*_id_map)[url];
+    bool state      = true;
     
     _mutex.lock();
     {
-      node_map_t::iterator i = _node_map->find(url);
-
-      if ( i != _node_map->end())
+      update_map_t::iterator i = _update_map->find(id); 
+      
+      // ================================
+      // = check if the node was closed =
+      // ================================
+      
+      if (i == _update_map->end())
       {
-        state = true;
+        //std::cout << "not found" << std::endl;
+        state = false;
       }
     }
     _mutex.unlock();
@@ -158,9 +260,6 @@ namespace sql_async_advert
     Json::FastWriter writer;
     
     value["path"]     = Json::Value(url);
-    
-    //zmq::socket_t socket(_context, ZMQ_REQ);
-    //socket.connect(_connect_string.c_str());
     
     s_sendmore(_socket, "exists");
     s_send(_socket, writer.write(value));
@@ -187,35 +286,26 @@ namespace sql_async_advert
     
     value["path"]     = Json::Value(url);
     value["dir"]      = Json::Value(dir);
-     
-    //zmq::socket_t socket(_context, ZMQ_REQ);
-    //socket.connect(_connect_string.c_str());
     
     s_sendmore(_socket, "create");
     s_send(_socket, writer.write(value));
     
     std::string status  = s_recv(_socket);
-    std::string data    = s_recv(_socket);
+    std::string id      = s_recv(_socket);
 
     if (status == "ok")
     {
+      (*_id_map)[url] = id;
+      
       _mutex.lock();
-      { 
-        Json::Value node;
-        Json::Reader reader;
-
-        reader.parse(data, node);
-        
-        (*_node_map)[url] = node;
+      {
+        (*_update_map)[id] = true;
       }
       _mutex.unlock();
     
-    
-      s_sendmore(_socket_rh, "subscribe");
-      s_send(_socket_rh, url);
+      s_sendmore(_socket_rh, id);
+      s_send(_socket_rh, "sub");
     }
-    
-
   }
    
   void server_connection::create_parents_directory(const std::string &url, const bool dir)
@@ -228,30 +318,24 @@ namespace sql_async_advert
     value["path"]     = Json::Value(url);
     value["dir"]      = Json::Value(dir);
     
-    //zmq::socket_t socket(_context, ZMQ_REQ);
-    //socket.connect(_connect_string.c_str());
-    
     s_sendmore(_socket, "createParents");
     s_send(_socket, writer.write(value));
     
     std::string status  = s_recv(_socket);
-    std::string data    = s_recv(_socket);
+    std::string id      = s_recv(_socket);
     
     if (status == "ok")
     {
+      (*_id_map)[url] = id;
+      
       _mutex.lock();
-      { 
-        Json::Value node;
-        Json::Reader reader;
-
-        reader.parse(data, node);
-        
-        (*_node_map)[url] = node;
+      {
+        (*_update_map)[id] = true;
       }
       _mutex.unlock();
       
-      s_sendmore(_socket_rh, "subscribe");
-      s_send(_socket_rh, url);
+      s_sendmore(_socket_rh, id);
+      s_send(_socket_rh, "sub");
     }
   }
    
@@ -264,30 +348,24 @@ namespace sql_async_advert
     
     value["path"]     = Json::Value(url);
     
-    //zmq::socket_t socket(_context, ZMQ_REQ);
-    //socket.connect(_connect_string.c_str());
-    
     s_sendmore(_socket, "open");
     s_send(_socket, writer.write(value));
     
     std::string status  = s_recv(_socket);
-    std::string data    = s_recv(_socket);
+    std::string id      = s_recv(_socket);
     
     if (status == "ok")
     {
+      (*_id_map)[url] = id;
+      
       _mutex.lock();
-      { 
-        Json::Value node;
-        Json::Reader reader;
-
-        reader.parse(data, node);
-        
-        (*_node_map)[url] = node;
+      {
+        (*_update_map)[id] = true;
       }
       _mutex.unlock();
       
-      s_sendmore(_socket_rh, "subscribe");
-      s_send(_socket_rh, url);
+      s_sendmore(_socket_rh, id);
+      s_send(_socket_rh, "sub");
     }
   }
   
@@ -300,26 +378,26 @@ namespace sql_async_advert
     
     value["path"]     = Json::Value(url);
     
-    //zmq::socket_t socket(_context, ZMQ_REQ);
-    //socket.connect(_connect_string.c_str());
-    
     s_sendmore(_socket, "remove");
     s_send(_socket, writer.write(value));
     
     std::string status  = s_recv(_socket);
     
-    s_sendmore(_socket_rh, "unsubscribe");
-    s_send(_socket_rh, url);
-    
-    erase_node(url);
+    if (status == "ok")
+    {
+      std::string id = (*_id_map)[url];
+      
+      s_sendmore(_socket_rh, id);
+      s_send(_socket_rh, "unsub");
+    }
   }
   
   void server_connection::close_directory(const std::string &url)
   { 
-    s_sendmore(_socket_rh, "unsubscribe");
-    s_send(_socket_rh, url);
+    std::string id = (*_id_map)[url];
     
-    erase_node(url);
+    s_sendmore(_socket_rh, id);
+    s_send(_socket_rh, "unsub");
   }
   
   void server_connection::set_attribute(const std::string &url, const std::string &key, const std::string &_value)
@@ -331,25 +409,19 @@ namespace sql_async_advert
     value["key"]      = Json::Value(key);
     value["value"]    = Json::Value(_value);
     
-    //zmq::socket_t socket(_context, ZMQ_REQ);
-    //socket.connect(_connect_string.c_str());
-    
     s_sendmore(_socket, "setAttribute");
     s_send(_socket, writer.write(value));
     
     std::string status  = s_recv(_socket);
-    std::string data    = s_recv(_socket);
+    std::string id      = s_recv(_socket);
     
     if (status == "ok")
     {
+      (*_id_map)[url] = id;
+      
       _mutex.lock();
-      { 
-        Json::Value node;
-        Json::Reader reader;
-
-        reader.parse(data, node);
-        
-        (*_node_map)[url] = node;
+      {
+        (*_update_map)[id] = true;
       }
       _mutex.unlock();
     }
@@ -371,25 +443,19 @@ namespace sql_async_advert
     value["key"]      = Json::Value(key);
     value["value"]    = array;
     
-    //zmq::socket_t socket(_context, ZMQ_REQ);
-    //socket.connect(_connect_string.c_str());
-    
     s_sendmore(_socket, "setAttribute");
     s_send(_socket, writer.write(value));
     
     std::string status  = s_recv(_socket);
-    std::string data    = s_recv(_socket);
+    std::string id      = s_recv(_socket);
     
     if (status == "ok")
     {
+      (*_id_map)[url] = id;
+      
       _mutex.lock();
-      { 
-        Json::Value node;
-        Json::Reader reader;
-
-        reader.parse(data, node);
-        
-        (*_node_map)[url] = node;
+      {
+        (*_update_map)[id] = true;
       }
       _mutex.unlock();
     }
@@ -403,25 +469,19 @@ namespace sql_async_advert
     value["path"]     = Json::Value(url);
     value["key"]      = Json::Value(key); 
     
-    //zmq::socket_t socket(_context, ZMQ_REQ);
-    //socket.connect(_connect_string.c_str());
-    
     s_sendmore(_socket, "removeAttribute");
     s_send(_socket, writer.write(value));
     
     std::string status  = s_recv(_socket);
-    std::string data    = s_recv(_socket);
+    std::string id      = s_recv(_socket);
     
     if (status == "ok")
     {
+      (*_id_map)[url] = id;
+      
       _mutex.lock();
-      { 
-        Json::Value node;
-        Json::Reader reader;
-
-        reader.parse(data, node);
-        
-        (*_node_map)[url] = node;
+      {
+        (*_update_map)[id] = true;
       }
       _mutex.unlock();
     }
