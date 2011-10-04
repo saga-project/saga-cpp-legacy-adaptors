@@ -228,6 +228,7 @@ class ComponentManager (Exception):
     """Launch (start) the components using the given jobmanager""" 
     for c in self.complist:
       c.start(jobmanager=jobmanager)
+      #time.sleep(0.2)
       
   def listComponents(self):
     return self.complist
@@ -252,7 +253,7 @@ class ComponentManager (Exception):
       entry = saga.advert.entry(self.getJobstatDirAsString())
       #  count = 0
             
-      time.sleep(0.5)
+      time.sleep(1)
       ++count
 
 ################################################################################
