@@ -29,6 +29,8 @@
 \newcommand{\note}[1]{}
 \fi
 
+\newcommand{\oldadvertservice}{\textit{OldAdvertService }}
+\newcommand{\newadvertservice}{\textit{NewAdvertService }}
 
 \begin{document}
 \thispagestyle{plain}
@@ -47,11 +49,16 @@
 
 \section{Introduction} 
 
-Figures: 
 
-- "big picture - 2/3 tier architecture"
+\begin{figure*}[ht]
+  \centering
+  \includegraphics[width=3.0in]{figures/old_technology_overview} 
+  \hspace{3 mm}
+  \includegraphics[width=3in]{figures/new_technology_overview}
 
-- applications: big-job, pilot-job, blah... 
+  \caption[Architecture comparison of the \oldadvertservice and the \newadvertservice]%
+  {Architecture comparison of the \oldadvertservice (left)and the \newadvertservice (right). The \oldadvertservice model implements direct communication between the advert adaptors and the persistence layer which is represented by a PostgreSQL database. The \newadvertservice uses \textit{node.js} as a distributed messaging service layer and  \O MQ (\textit{zero MQ}) on the transport layer. Persistency is established though a \textit{mongoDB} database below \textit{node.js}. }
+\end{figure*}
 
 \section{Specification (Andre)}
 A.M: History, etc... 
