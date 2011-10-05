@@ -331,29 +331,31 @@ namespace ssh_job
           j_ = create_local_job_ (target_hosts[i]);
         }
 
-        // check if executable exists
-        if ( ini_["ssh_test_remote"] == "yes"  ||
-             ini_["ssh_test_remote"] == "true" )
-        {
-          SAGA_LOG_DEBUG (" check if exe exists");
-
-          saga::adaptors::utils::process proc;
-
-          proc.set_cmd  (ssh_bin_);
-          proc.set_args (ssh_args_);
-
-          proc.add_arg  ("which");
-          proc.add_arg  (old_exe_);
-
-          (void) proc.run_sync ();
-
-          if ( ! proc.done () )
-          {
-            std::stringstream ss;
-            ss << "Cannot find executable " << old_exe_ << " on remote host:" << proc.get_err_s ();
-            SAGA_ADAPTOR_THROW (ss.str (), saga::BadParameter);
-          }
-        }
+        // we do not check for the executable anymore -- that way, we can run
+        // full sh command lines, like 'cd /tmp && pwd'
+        // // check if executable exists
+        // if ( ini_["ssh_test_remote"] == "yes"  ||
+        //      ini_["ssh_test_remote"] == "true" )
+        // {
+        //   SAGA_LOG_DEBUG (" check if exe exists");
+        // 
+        //   saga::adaptors::utils::process proc;
+        // 
+        //   proc.set_cmd  (ssh_bin_);
+        //   proc.set_args (ssh_args_);
+        // 
+        //   proc.add_arg  ("which");
+        //   proc.add_arg  (old_exe_);
+        // 
+        //   (void) proc.run_sync ();
+        // 
+        //   if ( ! proc.done () )
+        //   {
+        //     std::stringstream ss;
+        //     ss << "Cannot find executable " << old_exe_ << " on remote host:" << proc.get_err_s ();
+        //     SAGA_ADAPTOR_THROW (ss.str (), saga::BadParameter);
+        //   }
+        // }
 
         j_.run ();
 
