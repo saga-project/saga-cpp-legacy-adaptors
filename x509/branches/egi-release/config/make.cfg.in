@@ -15,7 +15,5 @@ SAGA_PACKAGE_VERSION   = @SAGA_PACKAGE_VERSION@
 
 include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 
-SAGA_DEB_CONTROL       = @SAGA_DEB_CONTROL@
-
 endif # guard
 
