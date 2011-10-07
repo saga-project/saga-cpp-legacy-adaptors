@@ -79,8 +79,9 @@ AC_SUBST([BUILD_ADAPTOR_FILE])
 AC_SUBST([BUILD_ADAPTOR_REPLICA])
 AC_SUBST([BUILD_ADAPTOR_LOADER])
 
-# debian package support
+# debian and redhat package support
 AX_SAGA_CHECK_DEBDEPS([$SAGA_DEP_FILES])
+AX_SAGA_CHECK_RPMDEPS([$SAGA_DEP_FILES])
 
 AC_CONFIG_HEADERS([config/saga-globus-config.hpp])
 AC_CONFIG_FILES([config/make.cfg])
