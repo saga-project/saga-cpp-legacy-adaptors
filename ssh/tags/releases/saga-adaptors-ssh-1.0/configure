@@ -2516,7 +2516,10 @@ $as_echo "Cannot find redhat package version for $depfile" >&6; }
       # Google tells me that this contains version 5.8.x of the ssh tools,
       # so we strip whatever is before the colon, and hope that scheme is
       # universally valid.  haha.
-      version=`echo $version | sed -e "s/^.*\://g"`
+      #
+      # Oy, we also need to strip the patchlevel info, as some versions
+      # of rpmbuild complain about that when evaluating the control file
+      version=`echo $version | sed -e "s/^.*\://g" | sed -e "s/p.*//g"`
 
       vmajor=`echo $version | cut -sf 1 -d '.'`
       vminor=`echo $version | cut -sf 2 -d '.'`
@@ -2539,7 +2542,7 @@ $as_echo "Cannot find redhat package version for $depfile" >&6; }
       SAGA_RPM_DEPENDENCIES="$SAGA_RPM_DEPENDENCIES$package >= $vmin"
 
       if ! test "." = `expr substr $vmax 1 1`; then
-        SAGA_RPM_DEPENDENCIES="$SAGA_RPM_DEPENDENCIES, $package << $vmax"
+        SAGA_RPM_DEPENDENCIES="$SAGA_RPM_DEPENDENCIES, $package < $vmax"
       fi
 
       first=no
@@ -2549,7 +2552,7 @@ $as_echo "Cannot find redhat package version for $depfile" >&6; }
     if test "$SAGA_RPM_DEPENDENCIES" = ""; then
       all_deps=""
     else
-      all_deps="Requires:  '$SAGA_RPM_DEPENDENCIES'"
+      all_deps="Requires:  $SAGA_RPM_DEPENDENCIES"
     fi
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_RPM_DEPENDENCIES" >&5
@@ -2558,7 +2561,7 @@ $as_echo "$SAGA_RPM_DEPENDENCIES" >&6; }
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking redhat architecture" >&5
 $as_echo_n "checking redhat architecture... " >&6; }
-    rpmarch=`$SAGA_DPKG --print-architecture`
+    rpmarch=`uname -m`
     if test "$rpm_arch" == ""; then
       SAGA_RPM_ARCH=$SAGA_ARCH
     else
@@ -2628,6 +2631,7 @@ URL:       http://www.saga-project.org/release/
 Buildroot: %{_tmppath}/%{name}-root
 
 # non-obvious software required to build the software
+Autoreq:   1
 $all_deps
 
 %description
