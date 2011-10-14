@@ -1,8 +1,16 @@
-                       SAGA PLatform LSF Adaptor
-                 <http://saga.cct.lsu.edu/software/cpp>
-                           - Release Changelog -
+                       SAGA Condor(-G) Adaptor
+          <http://saga-project.org/download/adaptor/condor>
+                        - Release Changelog -
 
-  Changes with SAGA Platform LSF Adaptor Version 0.9.0         18. April 2010
+
+  Changes with SAGA Condor Adaptor Version 0.9.0             14. October 2011
+  ---------------------------------------------------------------------------
+
+  o Implemented Condor-G capabilities
+  
+  
+
+  Changes with SAGA Condor Adaptor Version 0.9.0               18. April 2010
   ---------------------------------------------------------------------------
 
   o Initital release after repository split-up

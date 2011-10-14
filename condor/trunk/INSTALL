@@ -1,12 +1,12 @@
                     
                       SAGA Condor Adaptor - Installation
-                  <http://saga.cct.lsu.edu/software/python>
+                  <http://saga-project.org/download/adaptors/condor>
 
 
   For detailed informations on how to install SAGA, please refer 
   to the documentation section on our website:
 
-    http://saga.cct.lsu.edu/software/python/documentation 
+    http://saga-project.org/documentation 
 
 
   PREREQUISISTES:
@@ -52,5 +52,5 @@
 
   Please help us to improve the quality of SAGA and file a bug report if you 
   have encountered any problems with the build system. Our bug-tracking system 
-  can be found at: http://saga.cct.lsu.edu/software/cpp/dev/ 
+  can be found at: http://saga-project.org/bugtracking
 
