@@ -1,0 +1,141 @@
+# Copyright (c) 2005-2007 Andre Merzky (andre@merzky.net)
+#  Copyright (c) 2010 Ole Weidner (oweidner@cct.lsu.edu)
+# 
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying Afile LICENSE_1_0.txt or copy at 
+#  http://www.boost.org/LICENSE_1_0.txt)
+
+# find saga.m4
+
+m4_include([saga.m4])
+
+m4_include([config/saga_globus.m4])
+
+AC_INIT()
+
+AX_SAGA_CONFIG()
+
+SAGA_DEP_FILES="$SAGA_LOCATION/include/saga/saga.hpp"
+
+BUILD_ADAPTOR_JOB=no
+BUILD_ADAPTOR_FILE=no
+BUILD_ADAPTOR_REPLICA=no
+BUILD_ADAPTOR_LOADER=no
+SAGA_HAVE_ADAPTOR_X509=yes
+
+# first make sure that the x509 context adaptor is installed
+AC_MSG_CHECKING([for x509 adaptor])
+if ! test -f $SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini; then
+  SAGA_HAVE_ADAPTOR_X509="NO. Get it here: http://www.saga-project.org/download/adaptors/"
+  AC_MSG_RESULT([missing])
+  BUILD_ADAPTOR_JOB="no (x509 adaptor missing)"
+  BUILD_ADAPTOR_FILE="no (x509 adaptor missing)"
+  BUILD_ADAPTOR_REPLICA="no (x509 adaptor missing)"
+  BUILD_ADAPTOR_LOADER="no (x509 adaptor missing)"
+else
+  AC_MSG_RESULT([ok])
+  AX_SAGA_GLOBUS()
+fi
+SAGA_DEP_FILES="$SAGA_DEP_FILES $SAGA_LOCATION/share/saga/saga_adaptor_x509_context.ini"
+
+if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
+  if test "x$SAGA_HAVE_PACKAGE_REPLICA" = "xyes"; then
+    BUILD_ADAPTOR_REPLICA="yes"
+  fi
+
+  if test "x$SAGA_HAVE_PACKAGE_FILESYSTEM" = "xyes"; then
+    BUILD_ADAPTOR_FILE="yes"
+  fi
+  if test "x$SAGA_HAVE_PACKAGE_JOB" = "xyes"; then
+    BUILD_ADAPTOR_JOB="yes"
+  fi
+  if test "x$HAVE_GLOBUS" = "xyes"; then
+    BUILD_ADAPTOR_LOADER="yes"
+  fi
+
+
+
+  if test "$GLOBUS_HAVE_GRAM" != "yes" ; then
+    BUILD_ADAPTOR_JOB="no (GRAM client libs missing)"
+  fi
+
+  if test "$GLOBUS_HAVE_GRIDFTP" != "yes" ; then
+    BUILD_ADAPTOR_FILE="no (GridFTP client libs missing)"
+  fi
+  
+  if test "$GLOBUS_HAVE_RLS" != "yes" ; then
+    BUILD_ADAPTOR_REPLICA="no (RLS client libs missing)"
+  fi
+  
+  if test "x$GLOBUS_HAVE_GRAM" != "xyes"; then
+    BUILD_ADAPTOR_LOADER="no"
+  fi
+
+  SAGA_DEP_FILES="$SAGA_DEP_FILES $SAGA_GLOBUS_DEP_FILES"
+fi
+
+AC_SUBST([BUILD_ADAPTOR_JOB])
+AC_SUBST([BUILD_ADAPTOR_FILE])
+AC_SUBST([BUILD_ADAPTOR_REPLICA])
+AC_SUBST([BUILD_ADAPTOR_LOADER])
+
+# debian and redhat package support
+AX_SAGA_CHECK_DEBDEPS([$SAGA_DEP_FILES])
+AX_SAGA_CHECK_RPMDEPS([$SAGA_DEP_FILES])
+
+AC_CONFIG_HEADERS([config/saga-globus-config.hpp])
+AC_CONFIG_FILES([config/make.cfg])
+AC_CONFIG_FILES([config/saga.config.globus.c.mk])
+AC_CONFIG_FILES([config/saga.config.globus_gass_copy.c.mk])
+AC_CONFIG_FILES([config/saga.config.globus_gram.c.mk])
+AC_CONFIG_FILES([config/saga.config.globus_gridftp.c.mk])
+AC_CONFIG_FILES([config/saga.config.globus_gsi.c.mk])
+AC_CONFIG_FILES([config/saga.config.globus_rls.c.mk])
+
+
+SAGA_CONFIGURE_OK=yes
+if ! test "$HAVE_SAGA"   = "yes"; then SAGA_CONFIGURE_OK=no; fi
+if ! test "$HAVE_GLOBUS" = "yes"; then SAGA_CONFIGURE_OK=no; fi
+AC_SUBST([SAGA_CONFIGURE_OK])
+
+
+AC_OUTPUT()
+
+OUT=config.summary
+rm -f $OUT
+touch $OUT
+
+echo "                                                                   " >> $OUT
+echo " ========================================================          " >> $OUT
+echo " SAGA GLOBUS ADAPTORS - Required Externals                         " >> $OUT
+echo " --------------------------------------------------------          " >> $OUT
+echo "                                                                   " >> $OUT
+echo " Using SAGA from          : $SAGA_LOCATION                         " >> $OUT
+echo "       SAGA version       : $SAGA_VERSION                          " >> $OUT
+echo "                                                                   " >> $OUT
+echo " Adaptor Version          : $SAGA_PACKAGE_VERSION                  " >> $OUT
+echo " Adaptor Revision         : $SAGA_PACKAGE_REVISION                 " >> $OUT
+echo "                                                                   " >> $OUT
+echo " X.509 Adaptor Found      : $SAGA_HAVE_ADAPTOR_X509                " >> $OUT
+echo "                                                                   " >> $OUT
+echo " Globus Toolkit Found     : $HAVE_GLOBUS ($GLOBUS_VERSION)         " >> $OUT
+echo " Globus Location          : $GLOBUS_LOCATION                       " >> $OUT
+echo " Globus Flavor            : $GLOBUS_FLAVOR                         " >> $OUT
+echo "                                                                   " >> $OUT
+echo " Globus GRAM Client       : $GLOBUS_HAVE_GRAM ($GLOBUS_GRAM_CLIENT_VERSION)          " >> $OUT
+echo " Globus GASS Copy Client  : $GLOBUS_HAVE_GASS_COPY ($GLOBUS_GASS_COPY_CLIENT_VERSION)" >> $OUT
+echo " Globus GridFTP Client    : $GLOBUS_HAVE_GRIDFTP ($GLOBUS_GRIDFTP_CLIENT_VERSION)    " >> $OUT
+echo " Globus RLS Client        : $GLOBUS_HAVE_RLS ($GLOBUS_RLS_CLIENT_VERSION)            " >> $OUT
+echo " Globus GSSAPI GSI Client : $GLOBUS_HAVE_GSI ($GLOBUS_GSI_CLIENT_VERSION)            " >> $OUT
+echo "                                                                   " >> $OUT
+echo "                                                                   " >> $OUT
+echo " Globus  Loader           : $BUILD_ADAPTOR_LOADER                  " >> $OUT
+echo " Job     Adaptor          : $BUILD_ADAPTOR_JOB                     " >> $OUT
+echo " File    Adaptor          : $BUILD_ADAPTOR_FILE                    " >> $OUT
+echo " Replica Adaptor          : $BUILD_ADAPTOR_REPLICA                 " >> $OUT
+echo "                                                                   " >> $OUT
+echo " ========================================================          " >> $OUT
+echo "                                                                   " >> $OUT
+
+cat $OUT
+
