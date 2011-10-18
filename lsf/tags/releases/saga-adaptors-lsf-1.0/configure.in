@@ -1,0 +1,59 @@
+# Copyright (c) 2005-2007 Andre Merzky (andre@merzky.net)
+# Copyright (c)      2008 Ole Weidner (oweidner@cct.lsu.ed)
+#
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying Afile LICENSE_1_0.txt or copy at
+#  http://www.boost.org/LICENSE_1_0.txt)
+
+# find saga.m4
+
+m4_include([saga.m4])
+m4_include([config/saga_lsf.m4])
+
+AC_INIT()
+
+AX_SAGA_CONFIG()
+
+AX_SAGA_CHECK_LSF()
+
+BUILD_ADAPTOR_JOB=no
+
+if test "x$SAGA_HAVE_PACKAGE_JOB-$SAGA_HAVE_LSF" = "xyes-yes"; then
+  BUILD_ADAPTOR_JOB="yes"
+fi
+
+AC_SUBST([BUILD_ADAPTOR_JOB])
+
+# create output files
+AC_CONFIG_FILES([config/make.cfg])
+AC_CONFIG_FILES([lsf_job/platform_lsf_job_adaptor.ini])
+
+AC_OUTPUT()
+
+OUT=config.summary
+rm -f $OUT
+touch $OUT
+
+echo "                                                                 " >> $OUT
+echo " ========================================================        " >> $OUT
+echo " SAGA LSF ADAPTORS - Configuration Summary                       " >> $OUT
+echo " --------------------------------------------------------        " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Adaptor Version       : $SAGA_PACKAGE_VERSION                   " >> $OUT
+echo " Adaptor Revision      : $SAGA_PACKAGE_REVISION                  " >> $OUT
+echo "                                                                 " >> $OUT
+echo " LSF Found             : $SAGA_HAVE_LSF                          " >> $OUT
+echo " LSF Version           : $LSF_VERSION                            " >> $OUT
+echo " LSF Location          : $LSF_LOCATION                           " >> $OUT
+echo " LSF Binaries Path     : $LSF_PATH                               " >> $OUT
+echo "                                                                 " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Job Adaptor           : $BUILD_ADAPTOR_JOB                      " >> $OUT
+echo "                                                                 " >> $OUT
+echo " --------------------------------------------------------        " >> $OUT
+echo "                                                                 " >> $OUT
+
+cat $OUT
+

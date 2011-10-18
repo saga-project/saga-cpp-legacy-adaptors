@@ -1,0 +1,715 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		7B03D1C00BE91849005A1619 /* make_distribution_package */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7B03D1C30BE91870005A1619 /* Build configuration list for PBXAggregateTarget "make_distribution_package" */;
+			buildPhases = (
+				7B03D1C10BE91852005A1619 /* Copy Files -> lib */,
+				7B03D1C80BE9188B005A1619 /* Copy Files -> share */,
+			);
+			dependencies = (
+				7B03D1CB0BE918B8005A1619 /* PBXTargetDependency */,
+			);
+			name = make_distribution_package;
+			productName = make_distribution_package;
+		};
+		7B6DA6890B9A2DA100168752 /* ALL */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7B6DA69F0B9A2DC300168752 /* Build configuration list for PBXAggregateTarget "ALL" */;
+			buildPhases = (
+			);
+			dependencies = (
+				7B9FBA090BB1D18600E9EA8D /* PBXTargetDependency */,
+			);
+			name = ALL;
+			productName = ALL;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		7B3D95C20EA2DE1500AC2F53 /* lsf_job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B3D95B50EA2DE1500AC2F53 /* lsf_job.cpp */; };
+		7B3D95C40EA2DE1500AC2F53 /* lsf_job_adaptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B3D95B70EA2DE1500AC2F53 /* lsf_job_adaptor.cpp */; };
+		7B3D95C60EA2DE1500AC2F53 /* lsf_job_async.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B3D95BA0EA2DE1500AC2F53 /* lsf_job_async.cpp */; };
+		7B3D95C90EA2DE1500AC2F53 /* lsf_job_service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B3D95BD0EA2DE1500AC2F53 /* lsf_job_service.cpp */; };
+		7B3D95CB0EA2DE1500AC2F53 /* lsf_job_service_async.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B3D95BF0EA2DE1500AC2F53 /* lsf_job_service_async.cpp */; };
+		7B88ED4E0DE08226009C255B /* libsaga_engine.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B88ED3D0DE081E4009C255B /* libsaga_engine.dylib */; };
+		7B88ED4F0DE08226009C255B /* libsaga_package_job.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B88ED470DE081E4009C255B /* libsaga_package_job.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7B03D1CA0BE918B8005A1619 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF50DFA0B9A9AF90073E20C;
+			remoteInfo = saga_adaptor_globus_gram_job;
+		};
+		7B88ED3C0DE081E4009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFDDC0B9973DF00F9AF14;
+			remoteInfo = saga_engine;
+		};
+		7B88ED3E0DE081E4009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFE1F0B99759300F9AF14;
+			remoteInfo = saga_package_namespace;
+		};
+		7B88ED400DE081E4009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFDDD0B9973DF00F9AF14;
+			remoteInfo = saga_package_file;
+		};
+		7B88ED420DE081E4009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFE590B99771C00F9AF14;
+			remoteInfo = saga_package_advert;
+		};
+		7B88ED440DE081E4009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B6DA62A0B9A206900168752;
+			remoteInfo = saga_package_replica;
+		};
+		7B88ED460DE081E4009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFE820B9977EA00F9AF14;
+			remoteInfo = saga_package_job;
+		};
+		7B88ED480DE081E4009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B6DA6590B9A29A100168752;
+			remoteInfo = saga_package_rpc;
+		};
+		7B88ED4A0DE081E4009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B6DA67C0B9A2C8900168752;
+			remoteInfo = saga_package_stream;
+		};
+		7B88ED4C0DE081E4009C255B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B9BEA040D5A5000000DF7CB;
+			remoteInfo = saga_package_sd;
+		};
+		7B9FBA080BB1D18600E9EA8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF50DFA0B9A9AF90073E20C;
+			remoteInfo = globus_gram_job_adaptor;
+		};
+		7BF0A8B60EA2DF83000EAAA8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5552270B97C34000616724;
+			remoteInfo = saga_engine;
+		};
+		7BF0A8B80EA2DF83000EAAA8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5AFE6A0B9977EA00F9AF14;
+			remoteInfo = saga_package_job;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7B03D1C10BE91852005A1619 /* Copy Files -> lib */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(BUILD_DIR)/ReleasePackages/saga_globus_preWS_adaptor_set/lib/";
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			name = "Copy Files -> lib";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B03D1C80BE9188B005A1619 /* Copy Files -> share */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(BUILD_DIR)/ReleasePackages/saga_globus_preWS_adaptor_set/share/saga/";
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			name = "Copy Files -> share";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B7AB6670BB31916003C4CBE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(BUILD_DIR)/$(CONFIGURATION)/share/saga/";
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7B03D3550BE94597005A1619 /* saga_globus_preWS_adaptor_set.pmproj */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = saga_globus_preWS_adaptor_set.pmproj; path = ../saga_osx_installer/saga_globus_prews_adaptor_set_pkg/saga_globus_preWS_adaptor_set.pmproj; sourceTree = SOURCE_ROOT; };
+		7B03D3570BE94597005A1619 /* installer_background.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = installer_background.tiff; sourceTree = "<group>"; };
+		7B03D3580BE94597005A1619 /* installer_license.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = installer_license.rtf; sourceTree = "<group>"; };
+		7B03D3590BE94597005A1619 /* postflight */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = postflight; sourceTree = "<group>"; };
+		7B03D35A0BE94597005A1619 /* postinstall */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = postinstall; sourceTree = "<group>"; };
+		7B03D35B0BE94597005A1619 /* postupgrade */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = postupgrade; sourceTree = "<group>"; };
+		7B03D35C0BE94597005A1619 /* preflight */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = preflight; sourceTree = "<group>"; };
+		7B03D35D0BE94597005A1619 /* preinstall */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = preinstall; sourceTree = "<group>"; };
+		7B03D35E0BE94597005A1619 /* preupgrade */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = preupgrade; sourceTree = "<group>"; };
+		7B03D35F0BE94597005A1619 /* saga_globus_preWS_adaptor_set_intro.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = saga_globus_preWS_adaptor_set_intro.rtf; sourceTree = "<group>"; };
+		7B03D3600BE94597005A1619 /* saga_globus_preWS_adaptor_set_scripts.js */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.javascript; path = saga_globus_preWS_adaptor_set_scripts.js; sourceTree = "<group>"; };
+		7B23DF710B97AC6500054F67 /* index.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = index.html; path = ../../../docs/doxygen/html/index.html; sourceTree = SOURCE_ROOT; };
+		7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = saga_engine.xcodeproj; path = ../../../../project/XCode/saga_engine.xcodeproj; sourceTree = SOURCE_ROOT; };
+		7B3D95B50EA2DE1500AC2F53 /* lsf_job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lsf_job.cpp; sourceTree = "<group>"; };
+		7B3D95B60EA2DE1500AC2F53 /* lsf_job.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lsf_job.hpp; sourceTree = "<group>"; };
+		7B3D95B70EA2DE1500AC2F53 /* lsf_job_adaptor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lsf_job_adaptor.cpp; sourceTree = "<group>"; };
+		7B3D95B80EA2DE1500AC2F53 /* lsf_job_adaptor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lsf_job_adaptor.hpp; sourceTree = "<group>"; };
+		7B3D95BA0EA2DE1500AC2F53 /* lsf_job_async.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lsf_job_async.cpp; sourceTree = "<group>"; };
+		7B3D95BB0EA2DE1500AC2F53 /* lsf_job_istream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lsf_job_istream.hpp; sourceTree = "<group>"; };
+		7B3D95BC0EA2DE1500AC2F53 /* lsf_job_ostream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lsf_job_ostream.hpp; sourceTree = "<group>"; };
+		7B3D95BD0EA2DE1500AC2F53 /* lsf_job_service.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lsf_job_service.cpp; sourceTree = "<group>"; };
+		7B3D95BE0EA2DE1500AC2F53 /* lsf_job_service.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lsf_job_service.hpp; sourceTree = "<group>"; };
+		7B3D95BF0EA2DE1500AC2F53 /* lsf_job_service_async.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lsf_job_service_async.cpp; sourceTree = "<group>"; };
+		7B3D95C00EA2DE1500AC2F53 /* lsf_job_stream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lsf_job_stream.hpp; sourceTree = "<group>"; };
+		7B3D95C10EA2DE1500AC2F53 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		7B9FB95C0BB1C3BD00E9EA8D /* README.XCode */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.XCode; path = ../../../../project/XCode/README.XCode; sourceTree = "<group>"; };
+		7BEE45770C39BDEA003D8E05 /* libsaga_adaptor_platform_lsf_job.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libsaga_adaptor_platform_lsf_job.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7BF50E010B9A9AF90073E20C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B88ED4E0DE08226009C255B /* libsaga_engine.dylib in Frameworks */,
+				7B88ED4F0DE08226009C255B /* libsaga_package_job.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0867D691FE84028FC02AAC07 /* saga_engine */ = {
+			isa = PBXGroup;
+			children = (
+				7B9FB95C0BB1C3BD00E9EA8D /* README.XCode */,
+				7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */,
+				7B23DF110B978DCD00054F67 /* Source */,
+				7B23DF700B97AC3900054F67 /* Documentation */,
+				7B03D19E0BE916D1005A1619 /* Package Maker */,
+				7BEE45770C39BDEA003D8E05 /* libsaga_adaptor_platform_lsf_job.dylib */,
+			);
+			comments = "  - GLOBUS_LOCATION     (default: /usr/local/globus-4.0.3)\n    This variable must point to the root directory of you Globus Toolkit 4 \n    installation.\n    \n  - GLOBUS_FLAVOR       (default: gcc32dbg)\n    This variable must contain the name of the installed Globus flavor you \n    want to use (look in GLOBUS_LOCATION/include for installed flavors).";
+			name = saga_engine;
+			sourceTree = "<group>";
+		};
+		7B03D19E0BE916D1005A1619 /* Package Maker */ = {
+			isa = PBXGroup;
+			children = (
+				7B03D3560BE94597005A1619 /* Install_resources */,
+				7B03D3550BE94597005A1619 /* saga_globus_preWS_adaptor_set.pmproj */,
+			);
+			name = "Package Maker";
+			sourceTree = "<group>";
+		};
+		7B03D3560BE94597005A1619 /* Install_resources */ = {
+			isa = PBXGroup;
+			children = (
+				7B03D3570BE94597005A1619 /* installer_background.tiff */,
+				7B03D3580BE94597005A1619 /* installer_license.rtf */,
+				7B03D3590BE94597005A1619 /* postflight */,
+				7B03D35A0BE94597005A1619 /* postinstall */,
+				7B03D35B0BE94597005A1619 /* postupgrade */,
+				7B03D35C0BE94597005A1619 /* preflight */,
+				7B03D35D0BE94597005A1619 /* preinstall */,
+				7B03D35E0BE94597005A1619 /* preupgrade */,
+				7B03D35F0BE94597005A1619 /* saga_globus_preWS_adaptor_set_intro.rtf */,
+				7B03D3600BE94597005A1619 /* saga_globus_preWS_adaptor_set_scripts.js */,
+			);
+			name = Install_resources;
+			path = ../saga_osx_installer/saga_globus_prews_adaptor_set_pkg/Install_resources;
+			sourceTree = SOURCE_ROOT;
+		};
+		7B23DF110B978DCD00054F67 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				7B3D95B40EA2DE1500AC2F53 /* job */,
+			);
+			indentWidth = 4;
+			name = Source;
+			sourceTree = SOURCE_ROOT;
+			tabWidth = 4;
+		};
+		7B23DF700B97AC3900054F67 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				7B23DF710B97AC6500054F67 /* index.html */,
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+		7B3D95B40EA2DE1500AC2F53 /* job */ = {
+			isa = PBXGroup;
+			children = (
+				7B3D95B50EA2DE1500AC2F53 /* lsf_job.cpp */,
+				7B3D95B60EA2DE1500AC2F53 /* lsf_job.hpp */,
+				7B3D95B70EA2DE1500AC2F53 /* lsf_job_adaptor.cpp */,
+				7B3D95B80EA2DE1500AC2F53 /* lsf_job_adaptor.hpp */,
+				7B3D95BA0EA2DE1500AC2F53 /* lsf_job_async.cpp */,
+				7B3D95BB0EA2DE1500AC2F53 /* lsf_job_istream.hpp */,
+				7B3D95BC0EA2DE1500AC2F53 /* lsf_job_ostream.hpp */,
+				7B3D95BD0EA2DE1500AC2F53 /* lsf_job_service.cpp */,
+				7B3D95BE0EA2DE1500AC2F53 /* lsf_job_service.hpp */,
+				7B3D95BF0EA2DE1500AC2F53 /* lsf_job_service_async.cpp */,
+				7B3D95C00EA2DE1500AC2F53 /* lsf_job_stream.hpp */,
+				7B3D95C10EA2DE1500AC2F53 /* Makefile */,
+			);
+			name = job;
+			path = ../../job;
+			sourceTree = SOURCE_ROOT;
+		};
+		7B88ED2E0DE081E4009C255B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7B88ED3D0DE081E4009C255B /* libsaga_engine.dylib */,
+				7B88ED3F0DE081E4009C255B /* libsaga_package_namespace.dylib */,
+				7B88ED410DE081E4009C255B /* libsaga_package_file.dylib */,
+				7B88ED430DE081E4009C255B /* libsaga_package_advert.dylib */,
+				7B88ED450DE081E4009C255B /* libsaga_package_replica.dylib */,
+				7B88ED470DE081E4009C255B /* libsaga_package_job.dylib */,
+				7B88ED490DE081E4009C255B /* libsaga_package_rpc.dylib */,
+				7B88ED4B0DE081E4009C255B /* libsaga_package_stream.dylib */,
+				7B88ED4D0DE081E4009C255B /* libsaga_package_sd.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7BF50DFB0B9A9AF90073E20C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_platform_lsf_job */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7BF50E070B9A9AF90073E20C /* Build configuration list for PBXNativeTarget "libsaga_adaptor_platform_lsf_job" */;
+			buildPhases = (
+				7BF50DFB0B9A9AF90073E20C /* Headers */,
+				7BF50DFC0B9A9AF90073E20C /* Sources */,
+				7BF50E010B9A9AF90073E20C /* Frameworks */,
+				7B7AB6670BB31916003C4CBE /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7BF0A8B70EA2DF83000EAAA8 /* PBXTargetDependency */,
+				7BF0A8B90EA2DF83000EAAA8 /* PBXTargetDependency */,
+			);
+			name = libsaga_adaptor_platform_lsf_job;
+			productName = Untitled;
+			productReference = 7BEE45770C39BDEA003D8E05 /* libsaga_adaptor_platform_lsf_job.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB916408733D950010E9CD /* Build configuration list for PBXProject "saga_platform_lsf_adaptor" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* saga_engine */;
+			productRefGroup = 0867D691FE84028FC02AAC07 /* saga_engine */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7B88ED2E0DE081E4009C255B /* Products */;
+					ProjectRef = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				7B6DA6890B9A2DA100168752 /* ALL */,
+				7B03D1C00BE91849005A1619 /* make_distribution_package */,
+				7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_platform_lsf_job */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		7B88ED3D0DE081E4009C255B /* libsaga_engine.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_engine.dylib;
+			remoteRef = 7B88ED3C0DE081E4009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88ED3F0DE081E4009C255B /* libsaga_package_namespace.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_namespace.dylib;
+			remoteRef = 7B88ED3E0DE081E4009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88ED410DE081E4009C255B /* libsaga_package_file.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_file.dylib;
+			remoteRef = 7B88ED400DE081E4009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88ED430DE081E4009C255B /* libsaga_package_advert.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_advert.dylib;
+			remoteRef = 7B88ED420DE081E4009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88ED450DE081E4009C255B /* libsaga_package_replica.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_replica.dylib;
+			remoteRef = 7B88ED440DE081E4009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88ED470DE081E4009C255B /* libsaga_package_job.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_job.dylib;
+			remoteRef = 7B88ED460DE081E4009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88ED490DE081E4009C255B /* libsaga_package_rpc.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_rpc.dylib;
+			remoteRef = 7B88ED480DE081E4009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88ED4B0DE081E4009C255B /* libsaga_package_stream.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_stream.dylib;
+			remoteRef = 7B88ED4A0DE081E4009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7B88ED4D0DE081E4009C255B /* libsaga_package_sd.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_sd.dylib;
+			remoteRef = 7B88ED4C0DE081E4009C255B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7BF50DFC0B9A9AF90073E20C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B3D95C20EA2DE1500AC2F53 /* lsf_job.cpp in Sources */,
+				7B3D95C40EA2DE1500AC2F53 /* lsf_job_adaptor.cpp in Sources */,
+				7B3D95C60EA2DE1500AC2F53 /* lsf_job_async.cpp in Sources */,
+				7B3D95C90EA2DE1500AC2F53 /* lsf_job_service.cpp in Sources */,
+				7B3D95CB0EA2DE1500AC2F53 /* lsf_job_service_async.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7B03D1CB0BE918B8005A1619 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_platform_lsf_job */;
+			targetProxy = 7B03D1CA0BE918B8005A1619 /* PBXContainerItemProxy */;
+		};
+		7B9FBA090BB1D18600E9EA8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_platform_lsf_job */;
+			targetProxy = 7B9FBA080BB1D18600E9EA8D /* PBXContainerItemProxy */;
+		};
+		7BF0A8B70EA2DF83000EAAA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_engine;
+			targetProxy = 7BF0A8B60EA2DF83000EAAA8 /* PBXContainerItemProxy */;
+		};
+		7BF0A8B90EA2DF83000EAAA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_package_job;
+			targetProxy = 7BF0A8B80EA2DF83000EAAA8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB916508733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_64_BIT_PRE_XCODE_3_1 = x86_64;
+				BOOST_LOCATION = "/usr/local/boost-1.40.0/";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)/lib/";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 05;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(BOOST_LOCATION)/include/",
+					"$(HEADER_SEARCH_PATHS_SAGA)",
+					"$(HEADER_SEARCH_PATHS_BOOST_FUTURES)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PLUGIN)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PROCESS)",
+				);
+				HEADER_SEARCH_PATHS_BOOST_ASIO = "\"$(PROJECT_DIR)/../../../../external/boost/asio/\"";
+				HEADER_SEARCH_PATHS_BOOST_FUTURES = "\"$(PROJECT_DIR)/../../../../external/boost/futures/\"";
+				HEADER_SEARCH_PATHS_BOOST_PLUGIN = "\"$(PROJECT_DIR)/../../../../external/boost/plugin/\"";
+				HEADER_SEARCH_PATHS_BOOST_PROCESS = "\"$(PROJECT_DIR)/../../../../external/boost/process/\"";
+				HEADER_SEARCH_PATHS_BOOST_PYTHON = "\"$(PROJECT_DIR)/../../../../external/boost/python/\"";
+				HEADER_SEARCH_PATHS_BOOST_SPIRIT = "\"$(PROJECT_DIR)/../../../../external/boost/spirit/\"";
+				HEADER_SEARCH_PATHS_BOOST_SYSTEM = "\"$(PROJECT_DIR)/../../../../external/boost/system/\"";
+				HEADER_SEARCH_PATHS_SAGA = "\"$(PROJECT_DIR)/../../../../\"";
+				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BOOST_LOCATION)/lib/",
+					"$(GLOBUS_LOCATION)/lib",
+				);
+				OTHER_CFLAGS = (
+					"-Wall",
+					"-DSAGA_APPLE",
+					"-DSAGA_VERSION_MAJOR=1",
+					"-DSAGA_VERSION_MINOR=3",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fvisibility=default",
+					"-DSAGA_SKIP_CONFIG_HPP",
+					"-DSAGA_GCC_HAVE_VISIBILITY=1",
+					"-DSAGA_HAVE_PACKAGE_JOB=1",
+					"$(OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_1)",
+					"$(OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_2)",
+					"$(OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_1)",
+				);
+				OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_1 = "-DSAGA_PREFIX=\\\"\".\"\\\"";
+				OTHER_LDFLAGS = (
+					"-lboost_thread",
+					"-lboost_serialization",
+					"-lboost_filesystem",
+					"-lboost_regex",
+					"-lboost_iostreams",
+					"-lboost_system",
+				);
+				SYMROOT = ../../../../build/;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		1DEB916608733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_64_BIT_PRE_XCODE_3_1 = x86_64;
+				BOOST_LOCATION = "/usr/local/boost-1.40.0/";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)/lib/";
+				CURRENT_PROJECT_VERSION = 05;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = (
+					"$(BOOST_LOCATION)/include/",
+					"$(HEADER_SEARCH_PATHS_SAGA)",
+					"$(HEADER_SEARCH_PATHS_BOOST_FUTURES)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PLUGIN)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PROCESS)",
+				);
+				HEADER_SEARCH_PATHS_BOOST_ASIO = "\"$(PROJECT_DIR)/../../../../external/boost/asio/\"";
+				HEADER_SEARCH_PATHS_BOOST_FUTURES = "\"$(PROJECT_DIR)/../../../../external/boost/futures/\"";
+				HEADER_SEARCH_PATHS_BOOST_PLUGIN = "\"$(PROJECT_DIR)/../../../../external/boost/plugin/\"";
+				HEADER_SEARCH_PATHS_BOOST_PROCESS = "\"$(PROJECT_DIR)/../../../../external/boost/process/\"";
+				HEADER_SEARCH_PATHS_BOOST_PYTHON = "\"$(PROJECT_DIR)/../../../../external/boost/python/\"";
+				HEADER_SEARCH_PATHS_BOOST_SPIRIT = "\"$(PROJECT_DIR)/../../../../external/boost/spirit/\"";
+				HEADER_SEARCH_PATHS_BOOST_SYSTEM = "\"$(PROJECT_DIR)/../../../../external/boost/system/\"";
+				HEADER_SEARCH_PATHS_SAGA = "\"$(PROJECT_DIR)/../../../../\"";
+				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BOOST_LOCATION)/lib/",
+					"$(GLOBUS_LOCATION)/lib",
+				);
+				OTHER_CFLAGS = (
+					"-Wall",
+					"-DSAGA_APPLE",
+					"-DSAGA_VERSION_MAJOR=1",
+					"-DSAGA_VERSION_MINOR=3",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fvisibility=default",
+					"-DSAGA_SKIP_CONFIG_HPP",
+					"-DSAGA_GCC_HAVE_VISIBILITY=1",
+					"-DSAGA_HAVE_PACKAGE_JOB=1",
+					"$(OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_1)",
+					"$(OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_2)",
+					"$(OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_1)",
+				);
+				OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_1 = "-DSAGA_PREFIX=\".\"";
+				OTHER_LDFLAGS = (
+					"-lboost_thread",
+					"-lboost_serialization",
+					"-lboost_filesystem",
+					"-lboost_regex",
+					"-lboost_iostreams",
+					"-lboost_system",
+				);
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
+				SEPARATE_STRIP = YES;
+				SYMROOT = ../../../../build/;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		7B03D1C40BE91870005A1619 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = make_distribution_package;
+			};
+			name = Debug;
+		};
+		7B03D1C50BE91870005A1619 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				PRODUCT_NAME = make_distribution_package;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7B6DA6A00B9A2DC300168752 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = ALL;
+			};
+			name = Debug;
+		};
+		7B6DA6A10B9A2DC300168752 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				PRODUCT_NAME = ALL;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7BF50E080B9A9AF90073E20C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DSAGA_ADAPTOR_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+					"-DSAGA_ADAPTOR_LIB_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+				);
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_NAME = saga_adaptor_platform_lsf_job;
+			};
+			name = Debug;
+		};
+		7BF50E090B9A9AF90073E20C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DSAGA_ADAPTOR_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+					"-DSAGA_ADAPTOR_LIB_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+				);
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_NAME = saga_adaptor_platform_lsf_job;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB916408733D950010E9CD /* Build configuration list for PBXProject "saga_platform_lsf_adaptor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916508733D950010E9CD /* Debug */,
+				1DEB916608733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B03D1C30BE91870005A1619 /* Build configuration list for PBXAggregateTarget "make_distribution_package" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B03D1C40BE91870005A1619 /* Debug */,
+				7B03D1C50BE91870005A1619 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B6DA69F0B9A2DC300168752 /* Build configuration list for PBXAggregateTarget "ALL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B6DA6A00B9A2DC300168752 /* Debug */,
+				7B6DA6A10B9A2DC300168752 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BF50E070B9A9AF90073E20C /* Build configuration list for PBXNativeTarget "libsaga_adaptor_platform_lsf_job" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BF50E080B9A9AF90073E20C /* Debug */,
+				7BF50E090B9A9AF90073E20C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}
