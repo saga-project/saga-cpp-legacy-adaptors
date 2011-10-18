@@ -1,0 +1,17 @@
+                        SAGA PBS(Pro) Job Adaptor
+            <http://saga.cct.lsu.edu/software/cpp/adaptors/pbs/>
+                           
+                           - Release Changelog -
+
+
+  Changes with SAGA PBSPro Job Adaptor Version 1.0             20. April 2011
+  ---------------------------------------------------------------------------
+
+  o Bug-fixes for PBS script generation
+  o Renaming from 'pbspro' to 'pbs'
+  
+  
+  Changes with SAGA PBSPro Job Adaptor Version 1.0            06. August 2010
+  ---------------------------------------------------------------------------
+
+  o Initital release
