@@ -1,0 +1,47 @@
+                    
+                            SAGA TORQUE Adaptor 
+             <http://saga-project.org/download/adaptors/torque/>
+
+
+  For detailed informations on how to use SAGA in genereal, please refer 
+  to the documentation section on our website:
+
+    http://saga-project.org/documentation/ 
+
+
+  SPECIAL URL SCHEMES:
+
+  The SAGA TORQUE adaptor supports two different URL schemes: torque:// for
+  regular TORQUE systems and xt5torque:// for the TORQUE installations found
+  on Cray T5 machines. The two schemes are not interchangeable. 
+
+  To connect to a regular local TORQUE batch system, use the 
+  following construct (example in Python):
+
+    jd = saga.job.description()
+    jd.executable = "/home/alone/mysim"
+    jd.number_of_processes = 16
+    jd.processes_per_host = 4
+
+    js = saga.job.service("torque://localhost")
+    mysim_job = js.create_job(jd)
+    mysim_job.run()
+
+  If you're on an XT5 machine, do the followng:
+
+    jd = saga.job.description()
+    jd.executable = "/home/alone/mysim"
+    jd.number_of_processes = 16
+
+    js = saga.job.service("xt5torque://localhost")
+    mysim_job = js.create_job(jd)
+    mysim_job.run()
+
+  For mor information on TORQUE on XT5 systems, refer to you system's 
+  documentation, e.g., http://bit.ly/dPjRME
+
+  
+  Please help us to improve the quality of SAGA and file a bug report if you 
+  have encountered any problems with the build system. Our bug-tracking system 
+  can be found at: http://saga-project.org/bugreporting 
+

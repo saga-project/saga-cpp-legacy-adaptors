@@ -1,0 +1,23 @@
+
+PACKAGE:  saga-adaptors-torque
+VERSION:  1.1
+REVISION: $Revision$
+
+DEPENDENCIES:
+  saga-core
+
+DIRS:
+  config/
+  doc/
+  torque_job/
+
+FILES:
+  PACKAGE
+  INSTALL
+  LICENSE
+  README
+  CHANGES
+  Makefile
+  configure
+  configure.in
+

@@ -1,0 +1,16 @@
+
+                            SAGA TORQUE Adaptor 
+             <http://saga-project.org/download/adaptors/torque/>
+         
+                           - Release Changelog -
+                           
+
+  Changes with SAGA TORQUE Job Adaptor Version 1.0           18. October 2011
+  ---------------------------------------------------------------------------
+  o Imporved buildsystem 
+
+
+  Changes with SAGA TORQUE Job Adaptor Version 1.0             20. April 2011
+  ---------------------------------------------------------------------------
+  o Initital release
+  o Implemented Cray XT5 specific script options (see README)
