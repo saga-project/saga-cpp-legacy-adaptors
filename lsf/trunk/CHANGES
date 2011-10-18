@@ -1,8 +1,13 @@
-                       SAGA PLatform LSF Adaptor
-                 <http://saga.cct.lsu.edu/software/cpp>
+                             SAGA LSF Adaptor 
+               <http://saga-project.org/download/adaptors/lsf>
+
                            - Release Changelog -
+
+  Changes with SAGA Platform LSF Adaptor Version 1.0         18. October 2011
+  ---------------------------------------------------------------------------
+  o Updated buildsystem
+
 
   Changes with SAGA Platform LSF Adaptor Version 0.9.0         18. April 2010
   ---------------------------------------------------------------------------
-
   o Initital release after repository split-up
