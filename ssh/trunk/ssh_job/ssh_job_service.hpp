@@ -58,8 +58,11 @@ namespace ssh_job
       std::string                          user_;
       std::string                          local_user_;
 
+      std::string                          gsissh_bin_;
+      std::vector <std::string>            gsissh_opt_;
+
       std::string                          ssh_bin_;
-      std::string                          scp_bin_;
+      std::vector <std::string>            ssh_opt_;
 
       std::string                          parent_id_;    // id of self
       std::string                          loc_ssh_key_pub_;  // local ssh key
@@ -67,11 +70,11 @@ namespace ssh_job
       std::string                          rem_ssh_key_pub_;  // deployed ssh key
       std::string                          rem_ssh_key_priv_; // deployed ssh key
 
-      std::vector <std::string>            ssh_opt_;
-      std::vector <std::string>            scp_opt_;
 
       std::map <std::string, std::string>  ini_;
       std::vector <std::string>            env_;
+
+      bool                                 use_gsi_;
 
       void dump_context_ (saga::context c);
       void check_ini_    (void);

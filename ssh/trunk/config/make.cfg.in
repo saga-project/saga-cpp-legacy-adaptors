@@ -12,9 +12,11 @@ ifndef MAKE_CFG_SSH_IN
 SAGA_LOCATION                 = @SAGA_LOCATION@
 SAGA_CONFIGURE_OK             = @SAGA_CONFIGURE_OK@
 
+SAGA_HAVE_GSISSH              = @HAVE_GSISSH@
 SAGA_HAVE_SSH                 = @HAVE_SSH@
 SAGA_HAVE_SSHFS               = @HAVE_SSHFS@
 
+SAGA_GSISSH                   = @SAGA_GSISSH@
 SAGA_SSH                      = @SAGA_SSH@
 SAGA_SSHFS                    = @SAGA_SSHFS@
 

@@ -57,11 +57,12 @@ namespace ssh_job
       std::string                          path_;
       int                                  port_;
 
-      std::string                          ssh_bin_;
-      std::string                          scp_bin_;
+      std::string                          gsissh_bin_;
+      std::vector <std::string>            gsissh_opt_;
 
+      std::string                          ssh_bin_;
       std::vector <std::string>            ssh_opt_;
-      std::vector <std::string>            scp_opt_;
+
       std::vector <std::string>            ssh_args_;
 
       std::map <std::string, std::string>  ini_;
@@ -72,6 +73,9 @@ namespace ssh_job
       std::string                          old_exe_;  // original executable
       saga::job::description               old_jd_;   // original jd
       saga::job::description               new_jd_;   // new local job description including ssh
+
+      bool                                 use_gsi_;
+
 
       void check_ini_    (void);
 
