@@ -2343,18 +2343,17 @@ SAGA_DEP_FILES="$SAGA_DEP_FILES $SAGA_LOCATION/share/saga/saga_adaptor_x509_cont
 if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
   if test "x$SAGA_HAVE_PACKAGE_REPLICA" = "xyes"; then
     BUILD_ADAPTOR_REPLICA="yes"
+    BUILD_ADAPTOR_LOADER="yes"
   fi
 
   if test "x$SAGA_HAVE_PACKAGE_FILESYSTEM" = "xyes"; then
     BUILD_ADAPTOR_FILE="yes"
+    BUILD_ADAPTOR_LOADER="yes"
   fi
   if test "x$SAGA_HAVE_PACKAGE_JOB" = "xyes"; then
     BUILD_ADAPTOR_JOB="yes"
-  fi
-  if test "x$HAVE_GLOBUS" = "xyes"; then
     BUILD_ADAPTOR_LOADER="yes"
   fi
-
 
 
   if test "$GLOBUS_HAVE_GRAM" != "yes" ; then
@@ -2369,9 +2368,6 @@ if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
     BUILD_ADAPTOR_REPLICA="no (RLS client libs missing)"
   fi
 
-  if test "x$GLOBUS_HAVE_GRAM" != "xyes"; then
-    BUILD_ADAPTOR_LOADER="no"
-  fi
 
   SAGA_DEP_FILES="$SAGA_DEP_FILES $SAGA_GLOBUS_DEP_FILES"
 fi
@@ -2702,7 +2698,10 @@ $as_echo "Cannot find redhat package version for $depfile" >&6; }
       # Google tells me that this contains version 5.8.x of the ssh tools,
       # so we strip whatever is before the colon, and hope that scheme is
       # universally valid.  haha.
-      version=`echo $version | sed -e "s/^.*\://g"`
+      #
+      # Oy, we also need to strip the patchlevel info, as some versions
+      # of rpmbuild complain about that when evaluating the control file
+      version=`echo $version | sed -e "s/^.*\://g" | sed -e "s/p.*//g"`
 
       vmajor=`echo $version | cut -sf 1 -d '.'`
       vminor=`echo $version | cut -sf 2 -d '.'`

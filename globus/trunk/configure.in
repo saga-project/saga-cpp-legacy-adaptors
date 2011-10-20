@@ -41,18 +41,17 @@ SAGA_DEP_FILES="$SAGA_DEP_FILES $SAGA_LOCATION/share/saga/saga_adaptor_x509_cont
 if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
   if test "x$SAGA_HAVE_PACKAGE_REPLICA" = "xyes"; then
     BUILD_ADAPTOR_REPLICA="yes"
+    BUILD_ADAPTOR_LOADER="yes"
   fi
 
   if test "x$SAGA_HAVE_PACKAGE_FILESYSTEM" = "xyes"; then
     BUILD_ADAPTOR_FILE="yes"
+    BUILD_ADAPTOR_LOADER="yes"
   fi
   if test "x$SAGA_HAVE_PACKAGE_JOB" = "xyes"; then
     BUILD_ADAPTOR_JOB="yes"
-  fi
-  if test "x$HAVE_GLOBUS" = "xyes"; then
     BUILD_ADAPTOR_LOADER="yes"
   fi
-
 
 
   if test "$GLOBUS_HAVE_GRAM" != "yes" ; then
@@ -66,11 +65,8 @@ if test "x$SAGA_HAVE_ADAPTOR_X509" = "xyes"; then
   if test "$GLOBUS_HAVE_RLS" != "yes" ; then
     BUILD_ADAPTOR_REPLICA="no (RLS client libs missing)"
   fi
-  
-  if test "x$GLOBUS_HAVE_GRAM" != "xyes"; then
-    BUILD_ADAPTOR_LOADER="no"
-  fi
 
+  
   SAGA_DEP_FILES="$SAGA_DEP_FILES $SAGA_GLOBUS_DEP_FILES"
 fi
 
