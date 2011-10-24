@@ -92,7 +92,9 @@
     ./configure --with-globus-flavor=gcc64dbgpthr (or gcc32dbgpthr)
  
 
- 
+  On Debian based Linux systems, the 'make deb' target requires the
+  grid-packaging-tools package to be installed, additionally to the
+  globus devel packages.
 
 
 
