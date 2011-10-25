@@ -1,13 +1,19 @@
                              SAGA Globus Adaptors
-            <http://www.saga-project.org/download/adaptors/globus/>
-            
-                              - Installation -
 
- 
-  For detailed informations on how to install SAGA, please refer 
-  to the documentation section on our website:
+The Globus adaptors implement the SAGA job API on top of Globus GRAM (2 and 5), 
+the SAGA file API on top of Globus GridFTP and the SAGA replica API on top of 
+Globus RLS (Replica Location Service).
 
-    http://www.saga-project.org/documentation/ 
+* Latest version: 
+  http://www.saga-project.org/download/adaptors/globus/
+
+* Usage examples: 
+  http://saga-project.org/documentation/tutorials/globus-gram-adaptor
+  
+For detailed informations on how to install SAGA, please refer 
+to the documentation section on our website:
+  
+  http://www.saga-project.org/documentation/ 
 
   ATTENTION:
 
@@ -97,10 +103,7 @@
   globus devel packages.
 
 
-
- 
-
   Please help us to improve the quality of SAGA and file a bug report if you 
   have encountered any problems with the build system. Our bug-tracking system 
-  can be found at: http://www.saga-project.org/developer/bugtracking
+  can be found at: http://saga-project.org/developers/bugreporting
 
