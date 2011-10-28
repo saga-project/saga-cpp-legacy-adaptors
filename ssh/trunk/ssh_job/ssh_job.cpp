@@ -479,6 +479,23 @@ namespace ssh_job
     // FIXME: clone should not be needed according to spec
     new_jd_ = old_jd_.clone (); // save and fix for ssh
 
+    // we need to unset some jd attribs which are incorrectly eval'ed by the
+    // local job adaptor
+    if ( new_jd_.attribute_exists (saga::job::attributes::description_input) )
+    {
+      new_jd_.set_attribute (saga::job::attributes::description_input, "");
+    }
+
+    if ( new_jd_.attribute_exists (saga::job::attributes::description_output) )
+    {
+      new_jd_.set_attribute (saga::job::attributes::description_output, "");
+    }
+
+    if ( new_jd_.attribute_exists (saga::job::attributes::description_error) )
+    {
+      new_jd_.set_attribute (saga::job::attributes::description_error, "");
+    }
+
     // save old exe and args
     std::vector <std::string> old_args;
 
@@ -594,27 +611,47 @@ namespace ssh_job
 
       if ( env.size () > 0 )
       {
-        cmd += "/usr/bin/env ";
+        cmd += "/usr/bin/env";
 
         for ( unsigned int i = 0; i < env.size (); i++ )
         {
-          cmd += env[i] + " ";
+          cmd += " " + env[i];
         }
       }
     }
 
 
     // read old exe and args
-    cmd += old_exe_ + " ";
+    cmd += " " + old_exe_;
 
     for ( unsigned int i = 0; i < old_args.size (); i++ )
     {
-      cmd += old_args[i] + " ";
+      cmd += " " + old_args[i];
+    }
+
+    // add io indirection
+    if ( interactive )
+    {
+      if ( old_jd_.attribute_exists (saga::job::attributes::description_output) )
+      {
+        cmd += " 1>" + old_jd_.get_attribute (saga::job::attributes::description_output);
+      }
+
+      if ( old_jd_.attribute_exists (saga::job::attributes::description_error ) )
+      {
+        cmd += " 2>" + old_jd_.get_attribute (saga::job::attributes::description_error);
+      }
+
+      if ( old_jd_.attribute_exists (saga::job::attributes::description_input ) )
+      {
+        cmd += " <" + old_jd_.get_attribute (saga::job::attributes::description_input);
+      }
     }
 
     // close command off with '
     cmd += "'";
 
+    // add remote ssh command as argument to the job we want to start locally
     new_args.push_back (cmd);
 
     // we only want to run on localhost
