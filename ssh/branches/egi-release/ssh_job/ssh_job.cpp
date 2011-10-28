@@ -373,24 +373,6 @@ namespace ssh_job
         //   }
         // }
 
-          saga::adaptors::utils::process proc;
-
-          proc.set_cmd  (ssh_bin_);
-          proc.set_args (ssh_args_);
-
-          proc.add_arg  ("which");
-          proc.add_arg  (old_exe_);
-
-          (void) proc.run_sync ();
-
-          if ( ! proc.done () )
-          {
-            std::stringstream ss;
-            ss << "Cannot find executable " << old_exe_ << " on remote host:" << proc.get_err_s ();
-            SAGA_ADAPTOR_THROW (ss.str (), saga::BadParameter);
-          }
-        }
-
         j_.run ();
 
         success = true;
