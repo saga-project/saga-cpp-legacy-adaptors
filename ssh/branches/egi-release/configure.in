@@ -13,6 +13,7 @@ AC_INIT()
 AX_SAGA_CONFIG()
 SAGA_DEP_FILES="$SAGA_LOCATION/include/saga/saga.hpp"
 
+AX_SAGA_CHECK_GSISSH()
 AX_SAGA_CHECK_SSH()
 
 if test "$HAVE_SSH" = "yes"; then
@@ -48,10 +49,15 @@ if test "x$HAVE_SSH" = "xyes"; then
   fi
 fi
 
+if test "x$HAVE_GSISSH" = "xyes"; then
+  if test "x$SAGA_HAVE_PACKAGE_JOB" = "xyes"; then
+    BUILD_ADAPTOR_JOB="yes"
+  fi
+fi
+
 if test "x$HAVE_SSH" = "xyes"; then
   if test "x$SAGA_HAVE_PACKAGE_JOB" = "xyes"; then
     BUILD_ADAPTOR_JOB="yes"
-    BUILD_ADAPTOR_CONTEXT="yes"
   fi
 fi
 
@@ -62,6 +68,11 @@ if test "$HAVE_SSHFS-$HAVE_SCP" = "yes-yes"; then
   fi
 fi
 
+
+if test "x$HAVE_GSISSH" = "xyes"; then
+  SAGA_GSISSH_S="($SAGA_GSISSH)"
+  SAGA_DEP_FILES="$SAGA_DEP_FILES $SAGA_GSISSH"
+fi
 
 if test "x$HAVE_SSH" = "xyes"; then
   SAGA_SSH_S="($SAGA_SSH)"
@@ -118,9 +129,10 @@ echo "                                                                 " >> $OUT
 echo " Adaptor Version       : $SAGA_PACKAGE_VERSION                   " >> $OUT
 echo " Adaptor Revision      : $SAGA_PACKAGE_REVISION                  " >> $OUT
 echo "                                                                 " >> $OUT
-echo " SSH   found           : $HAVE_SSH 	$SAGA_SSH_S                  " >> $OUT
-echo " SCP   found           : $HAVE_SCP 	$SAGA_SCP_S                  " >> $OUT
-echo " SSHFS found           : $HAVE_SSHFS 	$SAGA_SSHFS_S              " >> $OUT
+echo " GSISSH found          : $HAVE_GSISSH 	$SAGA_GSISSH_S           " >> $OUT
+echo " SSH    found          : $HAVE_SSH 	$SAGA_SSH_S                  " >> $OUT
+echo " SCP    found          : $HAVE_SCP 	$SAGA_SCP_S                  " >> $OUT
+echo " SSHFS  found          : $HAVE_SSHFS 	$SAGA_SSHFS_S              " >> $OUT
 echo "                                                                 " >> $OUT
 echo "                                                                 " >> $OUT
 echo " Context Adaptor       : $BUILD_ADAPTOR_CONTEXT                  " >> $OUT

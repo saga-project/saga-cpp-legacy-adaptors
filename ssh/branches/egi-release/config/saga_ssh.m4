@@ -10,6 +10,8 @@
 #
 #   This macro calls:
 #
+#     AC_SUBST(HAVE_GSISSH)
+#     AC_SUBST(SAGA_GSISSH)
 #     AC_SUBST(HAVE_SSH)
 #     AC_SUBST(SAGA_SSH)
 #     AC_SUBST(HAVE_SCP)
@@ -28,6 +30,41 @@
 #   Copying and distribution of this file, with or without
 #   modification, are permitted in any medium without royalty 
 #   provided the copyright notice and this notice are preserved.
+
+
+AC_DEFUN([AX_SAGA_CHECK_GSISSH],
+[
+  AC_ARG_WITH([gsissh],
+              [AS_HELP_STRING([--with-gsissh],
+              [path to gsissh binary @<:@default=check@:>@])],
+              [],
+              [with_gsissh=check])
+
+  if test "x$with_gsissh" = "xcheck"; then
+  
+    AC_PATH_PROG(SAGA_GSISSH, gsissh)
+
+    HAVE_GSISSH=no
+
+    if ! test "x$SAGA_GSISSH" = "x"; then
+      HAVE_GSISSH=yes
+    fi
+  
+  else
+
+    if test -x "$with_gsissh"; then
+      HAVE_GSISSH=yes
+      SAGA_GSISSH=$with_gsissh
+    else
+      HAVE_GSISSH=no
+    fi
+
+  fi
+
+
+  AC_SUBST(HAVE_GSISSH)
+  AC_SUBST(SAGA_GSISSH)
+])
 
 
 AC_DEFUN([AX_SAGA_CHECK_SSH],

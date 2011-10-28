@@ -114,12 +114,14 @@ namespace ssh_job
     // create an url out of the first part, representing the js rm url
     saga::url rm (s_one);
 
-    if ( rm.get_scheme () == "ssh" )
+    if ( rm.get_scheme () == "gsissh" ||
+         rm.get_scheme () == "ssh"    )
     {
       return s_two;
     }
     else if ( rm.get_scheme () == "fork" )
     {
+      // we assume that gsissh is not used locally (for whatever reason)
       std::string out ("[ssh://" + host + "]-[");
 
       out += in + "]";

@@ -45,6 +45,7 @@ namespace ssh_job
                               saga::ini::ini const            & adap_ini,
                               TR1::shared_ptr <saga::adaptor>   adaptor)
     : base_cpi  (p, info, adaptor, cpi::Noflags)
+    , use_gsi_  (false)
   {
     instance_data idata (this);
     adaptor_data  adata (this);
@@ -65,17 +66,23 @@ namespace ssh_job
     if ( ! path_.empty () &&
            path_ != "/"   )
     {
-      SAGA_ADAPTOR_THROW ("Cannot handle path in ssh URLs", 
+      SAGA_ADAPTOR_THROW ("Cannot handle path in gsissh or ssh URLs", 
                           saga::adaptors::AdaptorDeclined);
     }
 
-    if (   rm_.get_scheme () != "ssh" &&
-           rm_.get_scheme () != "any" &&
+    if (   rm_.get_scheme () != "gsissh" &&
+           rm_.get_scheme () != "ssh"    &&
+           rm_.get_scheme () != "any"    &&
          ! rm_.get_scheme ().empty () )
     {
-      SAGA_ADAPTOR_THROW (std::string ("Adaptor only supports these schemas: 'ssh://', 'any://', "
+      SAGA_ADAPTOR_THROW (std::string ("Adaptor only supports these schemas: 'ssh://', 'gsissh://', 'any://', "
                                        "none, but not ") + rm_.get_scheme ().c_str (),
                           saga::adaptors::AdaptorDeclined);
+    }
+
+    if ( rm_.get_scheme () == "gsissh" )
+    {
+      use_gsi_ = true;
     }
 
     // ssh declines localhost - that is taken care of by local adaptor...
@@ -86,54 +93,73 @@ namespace ssh_job
       // candidate_hosts - but those may be invalid of course.
     }
 
-    ssh_opt_ = saga::adaptors::utils::split (ini_["ssh_opt"], ' ');
-    scp_opt_ = saga::adaptors::utils::split (ini_["scp_opt"], ' ');
+    gsissh_opt_ = saga::adaptors::utils::split (ini_["gsissh_opt"], ' ');
 
-    // trust the job service to give us a session with a valid context
-    std::vector <saga::context> contexts = p->get_session ().list_contexts ();    
-    std::vector <saga::context> ssh_contexts;
 
-    for ( unsigned int i = 0; i < contexts.size (); i++ )
+    // FIXME: we do not mess with contexts for gsissh - that relies on the
+    // default user proxy location right now
+    if ( ! use_gsi_ )
     {
-      if ( contexts[i].attribute_exists (saga::attributes::context_type) &&
-           contexts[i].get_attribute (saga::attributes::context_type) == "ssh" )
+      ssh_opt_    = saga::adaptors::utils::split (ini_["ssh_opt"],    ' ');
+
+      // trust the job service to give us a session with a valid context
+      std::vector <saga::context> contexts = p->get_session ().list_contexts ();    
+      std::vector <saga::context> ssh_contexts;
+
+      for ( unsigned int i = 0; i < contexts.size (); i++ )
       {
-        SAGA_LOG_DEBUG ("found ssh context");
-        ssh_contexts.push_back (contexts[i]);
+        if ( contexts[i].attribute_exists (saga::attributes::context_type) &&
+             contexts[i].get_attribute (saga::attributes::context_type) == "ssh" )
+        {
+          SAGA_LOG_DEBUG ("found ssh context");
+          ssh_contexts.push_back (contexts[i]);
+        }
       }
-    }
-    
-    if ( 0 == ssh_contexts.size () )
-    {
-      // ssh may be configured ok out-of-bound, so just a warning
-      SAGA_LOG_WARN ("no ssh context found for session");
-    }
-    else
-    {
-      // we should try one context after the other, just as the job service
-      // does.  For now, just use the first one available
-      ctx_ = ssh_contexts[0];
-    }
-
-
-    // sanity check
-    if ( ctx_.attribute_exists ("Type") &&
-         ctx_.get_attribute    ("Type") == "ssh" )
-    {
-      if ( ! ctx_.attribute_exists ("UserKey") )
+      
+      if ( 0 == ssh_contexts.size () )
       {
-        // _need_ key to be useful
-        SAGA_ADAPTOR_THROW_NO_CONTEXT ("ssh context has no userkey",
-                                       saga::adaptors::AdaptorDeclined);
+        // ssh may be configured ok out-of-bound, so just a warning
+        SAGA_LOG_WARN ("no ssh context found for session");
+      }
+      else
+      {
+        // we should try one context after the other, just as the job service
+        // does.  For now, just use the first one available
+        ctx_ = ssh_contexts[0];
       }
 
-      key_  = ctx_.get_attribute ("UserKey");
 
-
-      if ( ctx_.attribute_exists ("UserKey") )
+      // sanity check
+      if ( ctx_.attribute_exists ("Type") &&
+           ctx_.get_attribute    ("Type") == "ssh" )
       {
-        user_ = ctx_.get_attribute ("UserID");
-      } 
+        if ( ! ctx_.attribute_exists ("UserKey") )
+        {
+          // _need_ key to be useful
+          SAGA_ADAPTOR_THROW_NO_CONTEXT ("ssh context has no userkey",
+                                         saga::adaptors::AdaptorDeclined);
+        }
+
+        key_  = ctx_.get_attribute ("UserKey");
+
+
+        if ( ctx_.attribute_exists ("UserKey") )
+        {
+          user_ = ctx_.get_attribute ("UserID");
+        } 
+        else
+        {
+          struct passwd * p = ::getpwuid (::getuid ());
+          if ( p == NULL )
+          {
+            user_ = "root";
+          }
+          else
+          {
+            user_ = p->pw_name;
+          }
+        }
+      }
       else
       {
         struct passwd * p = ::getpwuid (::getuid ());
@@ -145,29 +171,18 @@ namespace ssh_job
         {
           user_ = p->pw_name;
         }
+        
+        key_ = "";
       }
-    }
-    else
-    {
-      struct passwd * p = ::getpwuid (::getuid ());
-      if ( p == NULL )
-      {
-        user_ = "root";
-      }
-      else
-      {
-        user_ = p->pw_name;
-      }
-      
-      key_ = "";
-    }
 
+      // the URL may actually have a userid fixed
+      if ( "" != rm_.get_userinfo () )
+      {
+        user_ = rm_.get_userinfo ();
+      }
 
-    // the URL may actually have a userid fixed
-    if ( "" != rm_.get_userinfo () )
-    {
-      user_ = rm_.get_userinfo ();
-    }
+    } // ! use_gsi_
+
 
     SAGA_LOG_DEBUG (rm_.get_string ().c_str ());
 
@@ -331,11 +346,32 @@ namespace ssh_job
           j_ = create_local_job_ (target_hosts[i]);
         }
 
-        // check if executable exists
-        if ( ini_["ssh_test_remote"] == "yes"  ||
-             ini_["ssh_test_remote"] == "true" )
-        {
-          SAGA_LOG_DEBUG (" check if exe exists");
+        // we do not check for the executable anymore -- that way, we can run
+        // full sh command lines, like 'cd /tmp && pwd'
+        //
+        // // check if executable exists
+        // if ( ini_["ssh_test_remote"] == "yes"  ||
+        //      ini_["ssh_test_remote"] == "true" )
+        // {
+        //   SAGA_LOG_DEBUG (" check if exe exists");
+        // 
+        //   saga::adaptors::utils::process proc;
+        // 
+        //   proc.set_cmd  (ssh_bin_);
+        //   proc.set_args (ssh_args_);
+        // 
+        //   proc.add_arg  ("which");
+        //   proc.add_arg  (old_exe_);
+        // 
+        //   (void) proc.run_sync ();
+        // 
+        //   if ( ! proc.done () )
+        //   {
+        //     std::stringstream ss;
+        //     ss << "Cannot find executable " << old_exe_ << " on remote host:" << proc.get_err_s ();
+        //     SAGA_ADAPTOR_THROW (ss.str (), saga::BadParameter);
+        //   }
+        // }
 
           saga::adaptors::utils::process proc;
 
@@ -381,7 +417,7 @@ namespace ssh_job
     // FIXME: this is a tricky one: at the moment, the signal goes to the local
     // ssh process, not to the remote process!  Not easy to fix...  
     // OTOH, killing the local ssh process *does* kill the remote process, too
-    // - just not the nice way...
+    // - just not the nice way, and not always...
     j_.cancel (timeout);
   }
 
@@ -406,19 +442,25 @@ namespace ssh_job
   void job_cpi_impl::check_ini_ (void)
   {
     // check if ini has required entries
-    if ( ini_.find ("ssh_bin") == ini_.end () ||
-         ini_["ssh_bin"]       == ""          )
+    if ( ( ini_.find ("gsissh_bin") == ini_.end () ||
+           ini_["gsissh_bin"]       == ""          )  
+         &&
+         ( ini_.find ("ssh_bin")    == ini_.end () ||
+           ini_["ssh_bin"]          == ""          )  )
     {
-      SAGA_ADAPTOR_THROW_NO_CONTEXT ("need path to ssh_bin specified in the SAGA ini",
+      SAGA_ADAPTOR_THROW_NO_CONTEXT ("need path to gsissh_bin or ssh_bin in the SAGA ini",
                                      saga::NoSuccess);
     }
 
-    if ( ini_.find ("scp_bin") == ini_.end () ||
-         ini_["scp_bin"]       == ""          )
+    // set default opts (none)
+    if ( ini_.find ("gsissh_opt") == ini_.end () )
     {
-      SAGA_ADAPTOR_THROW_NO_CONTEXT ("need path to scp specified in the SAGA ini",
-                                     saga::NoSuccess);
+      ini_["gsissh_opt"] = "";
     }
+
+    gsissh_bin_   = ini_["gsissh_bin"];
+    gsissh_opt_   = saga::adaptors::utils::split (ini_["gsissh_opt"], ' ');
+
 
     // set default opts (none)
     if ( ini_.find ("ssh_opt") == ini_.end () )
@@ -426,24 +468,9 @@ namespace ssh_job
       ini_["ssh_opt"] = "";
     }
 
-    if ( ini_.find ("scp_opt") == ini_.end () )
-    {
-      // set default opts (none)
-      ini_["scp_opt"] = "";
-    }
-
     ssh_bin_   = ini_["ssh_bin"];
-    scp_bin_   = ini_["scp_bin"];
     ssh_opt_   = saga::adaptors::utils::split (ini_["ssh_opt"], ' ');
-    scp_opt_   = saga::adaptors::utils::split (ini_["scp_opt"], ' ');
 
-
-    // NOTE: ssh_spread_keys is disabled - see trac
-    // // set sensible default options
-    // if ( ini_.find ("ssh_spread_keys") == ini_.end () )
-    // {
-    //   ini_["ssh_spread_keys"] = "false";
-    // }
 
     if ( ini_.find ("ssh_test_remote") == ini_.end () )
     {
@@ -508,6 +535,19 @@ namespace ssh_job
     // create new args and exe, and set them in the new jd
     std::string               new_exe  = ssh_bin_;
     std::vector <std::string> new_args = ssh_opt_;
+
+    if ( use_gsi_ )
+    {
+      new_exe  = gsissh_bin_;
+      new_args = gsissh_opt_;
+    }
+    else
+    {
+      new_exe  = ssh_bin_;
+      new_args = ssh_opt_;
+    }
+
+
     std::vector <std::string> new_hosts;
 
     // add ssh specific args
