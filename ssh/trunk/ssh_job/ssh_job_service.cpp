@@ -225,10 +225,13 @@ namespace ssh_job
 
             proc.set_cmd  (ssh_bin_);
             proc.set_args (ssh_opt_);
+            
+            // suppress warnings
+            proc.add_arg  ("-q");
 
             // FIXME: ensure that context is complete
             proc.add_args ("-i", loc_ssh_key_priv_);
-            proc.add_arg  (      user_ + "@" + host_);
+            proc.add_arg  (user_ + "@" + host_);
             proc.add_arg  ("true");
 
             (void) proc.run_sync ();
