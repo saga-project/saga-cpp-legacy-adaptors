@@ -1,0 +1,1534 @@
+\subsection{saga::name\_space::entry Specification}
+
+% \begin{mycode}[label=Prototype: saga::namespace::flags]
+%   namespace saga
+%   {
+%     namespace name_space 
+%     {
+%       enum flags
+%       {
+%         Unknown         =  -1,
+%         None            =   0,
+%         Overwrite       =   1, 
+%         Recursive       =   2,
+%         Dereference     =   4,
+%         Create          =   8,
+%         Exclusive       =  16,
+%         Lock            =  32,
+%         CreateParents   =  64
+%       };
+%    }
+%  }
+%  \end{mycode}
+ 
+ 
+  \begin{mycode}[label=saga::name\_space::entry]
+   namespace saga
+   {
+     namespace name_space 
+     {
+       class entry
+           : public saga::object,
+             public saga::monitorable,
+             public saga::permissions
+       {
+         entry  (session const & s, 
+                 saga::url       url, 
+                 int             mode = None);
+         entry  (saga::url       url, 
+                 int             mode = None);
+         entry  (void);
+         ~entry (void);
+   
+         // inspection methods
+         saga::url get_url   (void) const;
+         saga::url get_cwd   (void) const;
+         saga::url get_name  (void) const;
+         saga::url read_link (void) const;
+ 
+         bool      is_dir    (void) const;
+         bool      is_entry  (void) const;
+         bool      is_link   (void) const;
+ 
+         // management methods
+         void      copy      (saga::url target, 
+                              int flags = saga::name_space::None);
+         void      link      (saga::url target, 
+                              int flags = saga::name_space::None);
+         void      move      (saga::url target, 
+                              int flags = saga::name_space::None);
+         void      remove    (int flags = saga::name_space::None);
+         void      close     (double timeout = 0.0);
+       };
+     }
+   } 
+ 
+ \end{mycode}
+
+
+
+
+\subsection{saga::name\_space::entry Specification Detail}
+
+
+\subsubsection{saga::name\_space::entry class}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- entry
+
+Purpose:  CONSTRUCTOR; create the object
+Format:   entry     (session const &s,
+                     saga::url     url,
+                     int           mode = None)
+Inputs:   s:     session handle
+          url:   initial working dir
+          mode:  open mode
+InOuts:   N/A
+Outputs:  obj:   the newly created object
+PreCond:  N/A
+PostCond: - the entry is opened.
+          - 'Owner' of target is the id of the context
+            use to perform the opereration, if the
+            entry gets created.
+Perms:    Exec for parent directory.
+          Write for parent directory if Create is set.
+          Write for url if Write is set.
+          Read for url if Read is set.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          DoesNotExist
+          AlreadyExists
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - the default mode is 'None' (0)
+          - the constructor performs an open of the
+            entry - all notes to the respective open
+            call (on namespace_directory) apply.
+
+
+- ~entry
+
+Purpose:  DESTRUCTOR; destroy the object
+Format:   ~entry (ns_entry obj)
+Inputs:   obj:   the object to destroy
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: - the entry is closed.
+Perms:    N/A
+Throws:   N/A
+Notes:    - if the instance was not closed before, the
+            destructor performs a close() on the instance,
+            and all notes to close() apply.
+
+\end{verbatim}\hrulefill\end{quote}
+
+\subsubsection{saga::name\_space::entry::get\_url}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- saga::url get_url (void)
+
+Purpose:  obtain the complete url pointing to the entry
+Format:   saga::url get_url (void);
+Inputs:   N/A
+InOuts:   N/A
+Outputs:  url:   url pointing to the entry
+PreCond:  N/A
+PostCond: N/A
+Perms:    N/A
+Throws:   NotImplemented
+          IncorrectState
+          Timeout
+          NoSuccess
+Notes:    N/A
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::entry::get\_cwd}
+
+
+%\begin{quote}\hrulefill\begin{verbatim}
+%-saga::url get_cwd (void)
+%
+%Purpose:  obtain the current working directory for the entry
+%Format:   saga::url get_cwd (void);
+%Inputs:   N/A
+%InOuts:   N/A
+%Outputs:  cwd:   current working directory
+%PreCond:  N/A
+%PostCond: N/A
+%Perms:    N/A
+%Throws:   NotImplemented
+%          IncorrectState
+%          Timeout
+%          NoSuccess
+%Notes:    - returns the directory part of the url path element.
+%
+%\end{verbatim}\hrulefill\end{quote}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- saga::url get_cwd (void)
+
+Purpose:  Not Implemented
+Format:   saga::url get_cwd (void);
+Inputs:   N/A
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: N/A
+Perms:    N/A
+Throws:   NotImplemented
+Notes:    N/A
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::entry::get\_name}
+
+
+\begin{quote}\hrulefill\begin{verbatim}
+- saga::url get_name (void)
+
+Purpose:  obtain the name part of the url path element
+Format:   saga::url get_name (void);
+Inputs:   N/A
+InOuts:   N/A
+Outputs:  name:   last part of path element
+PreCond:  N/A
+PostCond: N/A
+Perms:    N/A
+Throws:   NotImplemented
+          IncorrectState
+          Timeout
+          NoSuccess
+Notes:    N/A
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::entry::read\_link}
+
+
+%\begin{quote}\hrulefill\begin{verbatim}
+%- saga::url read_link (void)
+%
+%Purpose:  returns the name of the link target
+%Format:   saga::url read_link (void);
+%Inputs:   N/A
+%InOuts:   N/A
+%Outputs:  link:   resolved name
+%PreCond:  N/A
+%PostCond: N/A
+%Perms:    N/A
+%Throws:   NotImplemented
+%          IncorrectState
+%          PermissionDenied
+%          AuthorizationFailed
+%          AuthenticationFailed
+%          Timeout
+%          NoSuccess
+%Notes:    - the returned name MUST be sufficient to
+%            access the link target entry 
+%          - resolves one link level only 
+%          - if the entry instance this method is called
+%            upon does not point to a link, an 
+%            ÅfIncorrectStateÅf exception is thrown. 
+%          - similar to Åfls -LÅf as defined by POSIX.
+%          
+%          
+%\end{verbatim}\hrulefill\end{quote}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- saga::url read_link (void)
+
+Purpose:  Not Implemented
+Format:   saga::url read_link (void);
+Inputs:   N/A
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: N/A
+Perms:    N/A
+Throws:   NotImplemented
+Notes:    - iRODS v2.2 does not support link.
+          
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::entry::is\_dir}
+
+
+\begin{quote}\hrulefill\begin{verbatim}
+- bool is_dir (void)
+
+Purpose:  tests the entry for being a directory
+Format:   bool is_dir (void);
+Inputs:   N/A
+InOuts:   N/A
+Outputs:  test:   boolean indicating if entry 
+                  is a directory
+PreCond:  N/A
+PostCond: N/A
+Perms:    Query
+          Query for parent directory
+Throws:   NotImplemented
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - returns true if entry is a directory, false
+            otherwise 
+          - similar to Åftest -dÅf as defined by POSIX.
+
+          
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::entry::is\_entry}
+
+
+\begin{quote}\hrulefill\begin{verbatim}
+- bool is_entry (void)
+
+Purpose:  tests the entry for being an ns_entry
+Format:   bool is_entry (void);
+Inputs:   N/A
+InOuts:   N/A
+Outputs:  test:   boolean indicating if entry 
+                  is an ns_entry
+PreCond:  N/A
+PostCond: N/A
+Perms:    Query
+          Query for parent directory
+Throws:   NotImplemented
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - the method returns false if the entry is a 
+            link or a directory (although an ns_directory 
+            IS_A ns_entry, false is returned on a test on 
+            an ns_directory) -otherwise true is returned.
+          - similar to Åftest -fÅf as defined by POSIX.
+                    
+          
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::entry::is\_link}
+
+
+%\begin{quote}\hrulefill\begin{verbatim}
+%- bool is_link (void)
+%
+%Purpose:  tests the entry for being a link
+%Format:   bool is_link (void);
+%Inputs:   N/A
+%InOuts:   N/A
+%Outputs:  test:   boolean indicating if entry 
+%                  is a link
+%PreCond:  N/A
+%PostCond: N/A
+%Perms:    Query
+%          Query for parent directory
+%Throws:   NotImplemented
+%          IncorrectState
+%          PermissionDenied
+%          AuthorizationFailed
+%          AuthenticationFailed
+%          Timeout
+%          NoSuccess
+%Notes:    - returns true if the entry is a link, false 
+%            otherwise
+%          - similar to Åftest -LÅf as defined by POSIX.
+%                    
+%          
+%\end{verbatim}\hrulefill\end{quote}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- bool is_link (void)
+
+Purpose:  Not Implemented
+Format:   bool is_link (void);
+Inputs:   N/A
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: N/A
+Perms:    N/A
+Throws:   NotImplemented
+Notes:    - iRODS v2.2 does not support link.
+          
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::entry::copy}
+
+
+\begin{quote}\hrulefill\begin{verbatim}
+- void copy (saga::url target, int flags = None);
+
+Purpose:  copy the entry to another part of the name space
+Format:   void copy (saga::url target, int mode = None);
+Inputs:   target: name to copy to
+          flags:  flags defining the operation mode
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: - an identical copy exists at target.
+          - ÅfOwnerÅf of target is the id of the context
+            use to perform the opereration, if target gets 
+            created.
+Perms:    Query
+          Exec for parent directory.
+          Query for target.
+          Query for targetÅfs parent directory.
+          Exec for targetÅfs parent directory.
+          Write for target 
+                if target does exist.
+          Write for targetÅfs parent directory 
+                if target does not exist.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          DoesNotExist
+          AlreadyExists
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - if the target is a directory, the source entry 
+            is copied into that directory
+          - a ÅfBadParameterÅf exception is thrown if the 
+            source is a directory and the ÅfRecursiveÅf flag 
+            is not set.
+          - a ÅfBadParameterÅf exception is thrown if the 
+            source is not a directory and the ÅfRecursiveÅf 
+            flag is set.
+          - if the target lies in a non-existing part of 
+            the name space, a ÅfDoesNotExistÅf exception is 
+            thrown, unless the ÅfCreateParentsÅf flag is 
+            given -then that part of the name space must 
+            be created.
+          - if the target already exists, it will be 
+            overwritten if the ÅfOverwriteÅf flag is set, 
+            otherwise it is an ÅfAlreadyExistsÅf exception.
+          - if a directory is to be copied recursively, 
+            but the target exists and is not a directory, 
+            and not a link to a directory, an 
+            ÅfAlreadyExistsÅf exception is thrown even if 
+            the ÅfOverwriteÅf flag is set.
+          - if the instance points at an symbolic link, 
+            the source is deeply dereferenced before copy. 
+            If derefencing is impossible (e.g. on a broken 
+            link), an ÅfIncorrectStateÅf exception is thrown.
+          - other flags are not allowed, and cause a
+            ÅfBadParameterÅf exception. 
+          - the default flags are ÅfNoneÅf (0). 
+          - similar to ÅfcpÅf as defined by POSIX.
+          
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::entry::link}
+
+
+\begin{quote}\hrulefill\begin{verbatim}
+- void link (saga::url target, int flags = None);
+
+Purpose:  Not Implemented
+Format:   void link (saga::url target, int flags = None);
+Inputs:   N/A
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: N/A
+Perms:    N/A
+Throws:   NotImplemented
+Notes:    - iRODS v2.2 does not support link.
+          
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::entry::move}
+
+
+\begin{quote}\hrulefill\begin{verbatim}
+- void move (saga::url target, int flags = None);
+
+Purpose:  rename source to target, or move source to 
+          target if target is a directory.
+Format:   void move (saga::url target, int flags = None);
+Inputs:   target: name to move to
+          flags:  flags defining the operation mode
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: - an identical copy exists at target.
+          - the original entry is removed.
+          - ÅfOwnerÅf of target is the id of the context
+            use to perform the opereration, if target gets 
+            created.
+Perms:    Query
+          Write
+          Exec  for parent directory.
+          Write for parent directory.
+          Query for target.
+          Exec  for targetÅfs parent directory.
+          Write for target 
+                if target does exist.
+          Write for targetÅfs parent directory 
+                if target does not exist.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          DoesNotExist
+          AlreadyExists
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - if the target is a directory, the source entry 
+            is moved into that directory
+          - a ÅfBadParameterÅf exception is thrown if the 
+            source is a directory and the ÅfRecursiveÅf flag 
+            is not set.
+          - a ÅfBadParameterÅf exception is thrown if the 
+            source is not a directory and the ÅfRecursiveÅf 
+            flag is set.
+          - if the target lies in a non-existing part of 
+            the name space, a ÅfDoesNotExistÅf exception is 
+            thrown, unless the ÅfCreateParentsÅf flag is 
+            given - then that part of the name space must 
+            be created.
+          - if the target already exists, it will be 
+            overwritten if the ÅfOverwriteÅf flag is set, 
+            otherwise it is an ÅfAlreadyExistsÅf exception.
+          - if the instance points at an symbolic link, 
+            the source is not dereferenced before moving, 
+            unless the ÅfDereferenceÅf flag is given. 
+            If derefencing is impossible (e.g. on a broken
+            link), an ÅfIncorrectStateÅf exception is thrown.
+          - other flags are not allowed, and cause a
+            ÅfBadParameterÅf exception. 
+          - the default flags are ÅfNoneÅf (0). 
+          - similar to ÅfmvÅf as defined by POSIX.
+
+          
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::entry::remove}
+
+
+\begin{quote}\hrulefill\begin{verbatim}
+- void remove (int flags = None);
+
+Purpose:  removes this entry, and closes it
+Format:   void remove (int flags = None);
+Inputs:   flags:  flags defining the operation mode
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: - the original entry is closed and removed.
+Perms:    Query
+          Write
+          Exec  for parent directory.
+          Write for parent directory.
+Throws:   NotImplemented
+          BadParameter
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - a ÅfBadParameterÅf exception is thrown if the 
+            source is a directory and the ÅfRecursiveÅf flag 
+            is not set.
+          - a ÅfBadParameterÅf exception is thrown if the 
+            source is not a directory and the ÅfRecursiveÅf 
+            flag is set.
+          - the source will not be dereferenced unless the 
+            ÅfDereferenceÅf flag is given. If derefencing is 
+            impossible (e.g. on a broken link), an 
+            ÅfIncorrectStateÅf exception is thrown.
+          - other flags are not allowed, and cause a
+          ÅfBadParameterÅf exception. 
+          - the default flags are ÅfNoneÅf (0). 
+          - if the instance was not closed before, this
+            call performs a close() on the instance, and 
+            all notes to close() apply. 
+          - similar to ÅfrmÅf as defined by POSIX.
+
+          
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::entry::close}
+
+
+\begin{quote}\hrulefill\begin{verbatim}
+- void close (float timeout = 0.0);
+
+Purpose:  closes the object
+Format:   void close (float timeout = 0.0);
+Inputs:   timeout: seconds to wait
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: - the entry instance is closed.
+Perms:    N/A
+Throws:   NotImplemented
+          IncorrectState
+          NoSuccess
+Notes:    - any subsequent method call on the object
+            MUST raise an ÅfIncorrectStateÅf exception
+            (apart from DESTRUCTOR and close()).
+          - close() can be called multiple times, with no 
+            side effects. 
+          - if close() is implicitely called in the 
+            DESTRUCTOR, it will never throw an exception. 
+          %- for resource deallocation semantics, see Section 2. 
+          %- for timeout semantics, see Section 2.
+
+          
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{saga::name\_space::directory Specification}
+
+  \begin{mycode}[label=saga::name\_space::directory]
+   namespace saga
+   {
+     namespace name_space 
+     {
+       class directory 
+           : public saga::name_space::entry
+       {
+         public:
+           directory  (session const & s, 
+                       saga::url       url, 
+                       int             mode = None);
+           directory  (saga::url       url, 
+                       int             mode = None);
+           directory  (void);
+           ~directory (void);
+ 
+           void        change_dir (saga::url    target)
+           std::vector <saga::url> 
+                       list       (std::string  pattern = "*", 
+                                   int          flags   = None) const;
+           std::vector <saga::url> 
+                       find       (std::string  pattern, 
+                                   int          flags   = Recursive) const;
+ 
+           saga::url   read_link  (saga::url    url) const;
+           bool        exists     (saga::url    url) const;
+           bool        is_dir     (saga::url    url) const;
+           bool        is_entry   (saga::url    url) const;
+           bool        is_link    (saga::url    url) const;
+           unsigned    int get_num_entries 
+                                  (void) const;
+           saga::url   get_entry  (unsigned int entry) const;
+           void        copy       (saga::url    source_url, 
+                                   saga::url    dest_url, 
+                                   int          flags = None);
+           void        link       (saga::url    source_url, 
+                                   saga::url    dest_url, 
+                                   int          flags = None);
+           void        move       (saga::url    source_url, 
+                                   saga::url    dest_url, 
+                                   int          flags = None);
+           void        remove     (saga::url    url, 
+                                   int          flags = None);
+           void        make_dir   (saga::url    url, 
+                                   int          flags = None);
+           entry       open       (saga::url    url, 
+                                   int          flags = None);
+           directory   open_dir   (saga::url    url, 
+                                   int          flags = None);
+       };
+     } // namespace_dir
+   } // namespace saga
+ 
+ \end{mycode}
+
+
+
+\subsection{saga::name\_space::directory Specification Detail}
+
+
+\subsubsection{saga::name\_space::directory class}
+
+
+\begin{quote}\hrulefill\begin{verbatim}
+- directory
+
+Purpose:  CONSTRUCTOR; create the object
+Format:   directory (session const &s,
+                     saga::url     url,
+                     int           mode = None)
+Inputs:   s:     session handle for
+          url:   initial working dir
+          mode:  open mode
+InOuts:   N/A
+Outputs:  obj:   the newly created object
+PreCond:  N/A
+PostCond: - the directory is opened.
+          - 'Owner' of target is the id of the context
+            use to perform the opereration, if the
+            directory gets created.
+Perms:    Exec for parent directory.
+          Write for parent directory if Create is set.
+          Write for url if Write is set.
+          Read for url if Read is set.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          DoesNotExist
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - the semantics of the inherited constructors 
+            apply
+          - the constructor performs an open of the 
+            entry 
+          - all notes to the respective open call apply.
+          - the default flags are ÅfNoneÅf (0).
+
+
+- ~directory
+
+Purpose:  DESTRUCTOR; destroy the object
+Format:   ~directory (ns_directory obj)
+Inputs:   obj:   the object to destroy
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: - the directory is closed.
+Perms:    N/A
+Throws:   N/A
+Notes:    - the semantics of the inherited destructors
+          apply
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::change\_dir}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- void change_dir (saga::url dir);
+
+Purpose:  change the working directory
+Format:   void change_dir (saga::url dir);
+Inputs:   dir:   directory to change to
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: - dir is the directory the instance represents.
+Perms:    Exec for dir.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          DoesNotExist
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - if ÅfdirÅf can be parsed as URL, but contains an
+            invalid directory name, a ÅfBadParameterÅf 
+            exception is thrown.
+          - if ÅfdirÅf does not exist, a ÅfDoesNotExistÅf 
+            exception is thrown.
+          - similar to the ÅfcdÅf command in the POSIX 
+            shell.
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::list}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- std::vector<saga::url> list (string name_pattern = ".",
+                               int flags = None);
+
+Purpose:  list entries in this directory
+Format:   std::vector<saga::url> 
+                         list (string name_pattern = ".",
+                               int flags = None);
+Inputs:   flags:        flags defining the operation modus
+          name_pattern: name or pattern to list
+InOuts:   N/A
+Outputs:  names:  array of names matching the name_pattern
+PreCond:  N/A
+PostCond: N/A
+Perms:    Query for entries specified by name_pattern.
+          Exec for parent directories of these entries. 
+          Query for parent directories of these entries. 
+          Read for directories specified by name_pattern. 
+          Exec for directories specified by name_pattern. 
+          Exec for parent directories of these directories. 
+          Query for parent directories of these directories.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          DoesNotExist
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - if name_pattern is not given (i.e. is an empty 
+            string), all entries in the current working 
+            directory are listed. 
+          - if name_pattern is given and points to a 
+            directory, the contents of that directory 
+            are listed. 
+          - the name_pattern follows the standard POSIX 
+            shell wildcard specification, as described
+            above.
+          - list does not follow symbolically linked 
+            directories, unless the ÅfDereferenceÅf flag 
+            is specified - otherwise list lists symbolic 
+            link entries with a matching name.
+          - if the ÅfDeReferenceÅf flag is set, list 
+            returns the name of link targets, not of the 
+            link entry itself.
+          - the default flags are ÅfNoneÅf (0). 
+          - other flags are not allowed, and cause a 
+            ÅfBadParameterÅf exception.
+          - if the name_pattern cannot be parsed, a 
+            ÅfBadParameterÅf exception with a descriptive 
+            error message is thrown.
+          - if the name_pattern does not match any entry, 
+            an empty list is returned, but no exception is 
+            raised.
+          - similar to ÅflsÅf as defined by POSIX.
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+
+\subsubsection{saga::name\_space::directory::find}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- std::vector<saga::url> find (string name_pattern,
+                               int flags = Recursive);
+
+Purpose:  find entries in the current directory and below
+Format:   std::vector<saga::url> 
+                         find (string name_pattern,
+                               int flags = Recursive);
+Inputs:   flags:        flags defining the operation modus
+          name_pattern: pattern for names of entries to be 
+                        found
+InOuts:   N/A
+Outputs:  names:  array of names matching the name_pattern
+PreCond:  N/A
+PostCond: N/A
+Perms:    Read for cwd.
+          Query for entries specified by name_pattern.
+          Exec for parent directories of these entries.
+          Query for parent directories of these entries.
+          Read for directories specified by name_pattern.
+          Exec for directories specified by name_pattern.
+          Exec for parent directories of these directories.
+          Query for parent directories of these directories.
+Throws:   NotImplemented
+          BadParameter
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - find operates recursively below the current 
+            working directory if the ÅfRecursiveÅf flag is 
+            specified (default)
+          - find does not follow symbolically linked 
+            directories, unless the ÅfDereferenceÅf flag 
+            is specified - otherwise find lists symbolic 
+            link entries with a matching name.
+          - the default flags are ÅfRecursiveÅf (1).
+          - other flags are not allowed, and cause a 
+            ÅfBadParameterÅf exception.
+          - the name_pattern follows the standard POSIX 
+            shell wildcard specification, as described above.
+          - the matching entries returned are path names 
+            relative to cwd.
+          - similar to ÅffindÅf as defined by POSIX, but 
+            limited to the -name option.
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::read\_link}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- saga::url read_link (saga::url name);
+
+Purpose:  NotImplemented
+Format:   saga::url read_link (saga::url name);
+Inputs:   N/A
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: N/A
+Perms:    N/A
+Throws:   NotImplemented
+Notes:    - iRODS v2.2 does not support link.
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::exists}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- bool exists (saga::url name);
+
+Purpose:  returns true if entry exists, false otherwise
+Format:   bool exists (saga::url name);
+Inputs:   name:   name to be tested for existence
+InOuts:   N/A
+Outputs:  exists: boolean indicating existence of name
+PreCond:  N/A
+PostCond: N/A
+Perms:    Query for name. 
+          Exec for nameÅfs parent directory. 
+          Read for nameÅfs parent directory.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          IncorrectState
+          PermissionDenied 
+          AuthorizationFailed 
+          AuthenticationFailed
+          Timeout 
+          NoSuccess
+Notes:    - if ÅfnameÅf can be parsed as URL, but contains 
+            an invalid entry name, an ÅfBadParameterÅf 
+            exception is thrown.
+          - note that no exception is thrown if the entry 
+            does not exist - the method just returns 
+            ÅffalseÅf in this case.
+          - similar to Åftest -eÅf as defined by POSIX.
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::is\_dir}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- bool is_dir (saga::url name);
+
+Purpose:  tests name for being a directory
+Format:   bool is_dir (saga::url name);
+Inputs:   name: name to be tested
+InOuts:   N/A
+Outputs:  test: boolean indicating if name is a directory
+PreCond:  N/A
+PostCond: N/A
+Perms:    Query for name. 
+          Exec for nameÅfs parent directory. 
+          Read for nameÅfs parent directory.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          DoesNotExist
+          IncorrectState
+          PermissionDenied 
+          AuthorizationFailed 
+          AuthenticationFailed
+          Timeout 
+          NoSuccess
+Notes:    - returns true if the instance represents 
+            a directory entry, false otherwise 
+          - all notes to the ns_ntry::is_dir() method apply. 
+          - if ÅfnameÅf can be parsed as URL, but contains 
+            an invalid entry name, an ÅfBadParameterÅf 
+            exception is thrown. 
+          - if ÅfnameÅf is a valid entry name but the entry 
+            does not exist, a ÅfDoesNotExistÅf exception is 
+            thrown. 
+          - similar to Åftest -dÅf as defined by POSIX.
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::is\_entry}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- bool is_entry (saga::url name);
+
+Purpose:  tests name for being an ns_entry
+Format:   bool is_entry (saga::url name);
+Inputs:   name: name to be tested
+InOuts:   N/A
+Outputs:  test: boolean indicating if name is a non-directory
+                entry
+PreCond:  N/A
+PostCond: N/A
+Perms:    Query for name. 
+          Exec for nameÅfs parent directory. 
+          Read for nameÅfs parent directory.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          DoesNotExist
+          IncorrectState
+          PermissionDenied 
+          AuthorizationFailed 
+          AuthenticationFailed
+          Timeout 
+          NoSuccess
+Notes:    - all notes to the ns_ntry::is_entry() method 
+            apply. 
+          - if ÅfnameÅf can be parsed as URL, but contains 
+            an invalid entry name, a ÅfBadParameterÅf 
+            exception is thrown. 
+          - if ÅfnameÅf is a valid entry name but the entry 
+            does not exist, a ÅfDoesNotExistÅf exception is 
+            thrown.
+          - similar to Åftest -fÅf as defined by POSIX.
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::is\_link}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- bool is_link (saga::url name);
+
+Purpose:  tests name for being a symbolic link
+Format:   bool is_link (saga::url name);
+Inputs:   name: name to be tested
+InOuts:   N/A
+Outputs:  test: boolean indicating if name is a link
+PreCond:  N/A
+PostCond: N/A
+Perms:    Query for name. 
+          Exec for nameÅfs parent directory. 
+          Read for nameÅfs parent directory.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          DoesNotExist
+          IncorrectState
+          PermissionDenied 
+          AuthorizationFailed 
+          AuthenticationFailed
+          Timeout 
+          NoSuccess
+Notes:    - all notes to the ns_ntry::is_link() method 
+            apply.
+          - if ÅfnameÅf can be parsed as URL, but contains 
+            an invalid entry name, a ÅfBadParameterÅf 
+            exception is thrown.
+          - if ÅfnameÅf is a valid entry name but the entry 
+            does not exist, a ÅfDoesNotExistÅf exception is 
+            thrown.
+          - similar to Åftest -LÅf as defined by POSIX.
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::get\_num\_entries}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- const unsigned int get_num_entries (void);
+
+Purpose:  gives the number of entries in the directory
+Format:   const unsigned int get_num_entries (void);
+Inputs:   N/A
+InOuts:   N/A
+Outputs:  num: number of entries in the directory
+PreCond:  N/A
+PostCond: N/A
+Perms:    Query for cwd.
+          Exec for cwd.
+          Read for cwd.
+Throws:   NotImplemented
+          IncorrectState
+          PermissionDenied 
+          AuthorizationFailed 
+          AuthenticationFailed
+          Timeout 
+          NoSuccess
+Notes:    - at the time of using the result of this call, 
+            the actual number of entries may already have 
+            changed (no locking is implied)
+          - vaguely similar to ÅfopendirÅf/ÅfreaddirÅf (2) as 
+            defined by POSIX.
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::get\_entry}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- const saga::url get_entry (unsigned int entry);
+
+Purpose:  gives the name of an entry in the directory
+          based upon the enumeration defined by
+          get_num_entries
+Format:   const saga::url get_entry (unsigned int entry);
+Inputs:   entry: index of entry to get
+InOuts:   N/A
+Outputs:  name:  name of entry at index
+PreCond:  N/A
+PostCond: N/A
+Perms:    Query for cwd.
+          Exec for cwd.
+          Read for cwd.
+Throws:   NotImplemented
+          IncorrectState
+          PermissionDenied 
+          AuthorizationFailed 
+          AuthenticationFailed
+          Timeout 
+          NoSuccess
+Notes:    - Åf0Åf is the first entry
+          - there is no sort order implied by the 
+            enumeration, however an underlying 
+            implementation MAY choose to sort the entries
+          - subsequent calls to get_entry and/or 
+            get_num_entries may return inconsistent data,
+            i.e. no locking or state tracking is implied. 
+            In particular, an index may be invalid - a 
+            ÅfDoesNotExistÅf exception is then thrown (not a 
+            ÅfBadParameterÅf exception).
+          - vaguely similar to ÅfopendirÅf/ÅfreaddirÅf (2) as 
+            defined by POSIX.
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::copy}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- void copy (saga::url source, saga::url target, 
+             int flags = None);
+
+Purpose:  copy the entry to another part of the name space
+Format:   void copy (saga::url source, saga::url target, 
+                     int flags = None);
+Inputs:   source: name to copy 
+          target: name to copy to 
+          flags:  flags defining the operation modus
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: - an identical copy of source exists at target.
+          - ÅfOwnerÅf of target is the id of the context 
+            used to perform the opereration if target gets 
+            created.
+Perms:    Query for source.
+          Exec for sourceÅfs parent directory.
+          Query for target.
+          Query for targetÅfs parent directory.
+          Exec for targetÅfs parent directory.
+          Write for target 
+                if target does exist.
+          Write for targetÅfs parent directory 
+                if target does not exist.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          AlreadyExists
+          DoesNotExist
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - all notes to the ns_entry::copy() method 
+            apply.
+          - the default flags are ÅfNoneÅf (0).
+          - if ÅfnameÅf can be parsed as URL, but contains 
+            an invalid entry name, a ÅfBadParameterÅf 
+            exception is thrown.
+          - if ÅfnameÅf is a valid entry name but the entry 
+            does not exist, a ÅfDoesNotExistÅf exception is 
+            thrown.
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::link}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- void link (saga::url source, saga::url target, 
+             int flags = None);
+
+Purpose:  NotImplemented
+Format:   void link (saga::url source, saga::url target, 
+                     int flags = None);
+Inputs:   N/A
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: N/A
+Perms:    N/A
+Throws:   NotImplemented
+Notes:    - iRODS v2.2 does not support link.
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::move}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- void move (saga::url source, saga::url target, 
+             int flags = None);
+
+Purpose:  rename source to target, or move source to 
+          target if target is a directory.
+Format:   void move (saga::url source, saga::url target, 
+                     int flags = None);
+Inputs:   source: name to move 
+          target: name to move to 
+          flags:  flags defining the operation modus
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: - an identical copy of source exists at target.
+          - ÅfOwnerÅf of target is the id of the context 
+            used to perform the opereration if target gets 
+            created.
+Perms:    Query for source.
+          Exec for sourceÅfs parent directory.
+          Query for target.
+          Query for targetÅfs parent directory.
+          Exec for targetÅfs parent directory.
+          Write for target 
+                if target does exist.
+          Write for targetÅfs parent directory 
+                if target does not exist.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          AlreadyExists
+          DoesNotExist
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - all notes to the ns_entry::move() method 
+            apply. 
+          - if the ÅfRecursiveÅf flag is defined, the source 
+            is recursively copied if it is a directory; 
+            otherwise this flag is ignored. 
+          - if the ÅfDereferenceÅf flag is specified, the 
+            method applies to the link target of source. 
+            The flag causes a ÅfBadParameterÅf exception 
+            if source is not a link.
+          - if the the target already exists, the
+            ÅfOverwriteÅf flag must be specified, otherwise
+            an ÅfAlreadyExistsÅf exception is thrown.
+          - the default flags are ÅfNoneÅf (0).
+          - other flags are not allowed on this method,
+            and cause a ÅfBadParameterÅf exception.
+          - if ÅfsourceÅf can be parsed as URL, but contains 
+            an invalid entry name, a ÅfBadParameterÅf 
+            exception is thrown.
+          - if ÅfsourceÅf is a valid entry name but the entry 
+            does not exist, a ÅfDoesNotExistÅf exception is 
+            thrown.
+          - moving any parent or the current directoy
+            (e.g. Åf.Åf, Åf..Åf etc.) is not allowed, 
+            and throws a ÅfBadParameterÅf exception
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::remove}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- void remove (saga::url target, int flags = None);
+
+Purpose:  removes the entry
+Format:   void remove (saga::url target, int flags = None);
+Inputs:   target: entry to be removed
+          flags:  flags defining the operation modus
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: - source is removed. 
+          - source is closed if it refers to the cwd.
+Perms:    Query for source. 
+          Write for source. 
+          Exec for sourceÅfs parent directory. 
+          Write for sourceÅfs parent directory.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          AlreadyExists
+          DoesNotExist
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - all notes to the ns_entry::remove() method 
+            apply.
+          - if the ÅfRecursiveÅf flag is defined, the source 
+            is recursively removed if it is a directory; 
+            otherwise this flag is ignored.
+          - if the ÅfDereferenceÅf flag is specified, the 
+            method applies to the link target of source. 
+            The flag causes a ÅfBadParameterÅf exception if 
+            source is not a link. 
+          - the default flags are ÅfNoneÅf (0).
+          - other flags are not allowed on this method, 
+            and cause a ÅfBadParameterÅf exception.
+          - if ÅfsourceÅf can be parsed as URL, but contains 
+            an invalid entry name, a ÅfBadParameterÅf 
+            exception is thrown.
+          - if ÅfsourceÅf is a valid entry name but the entry 
+            does not exist, a ÅfDoesNotExistÅf exception is 
+            thrown.
+          - removing any parent or the current directoy
+            (e.g. Åf.Åf, Åf..Åf etc.) is not allowed, and 
+            throws a ÅfBadParameterÅf exception
+
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::make\_dir}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- void make_dir (saga::url target, int flags = None);
+
+Purpose:  creates a new directory
+Format:   void make_dir (saga::url target, int flags = None);
+Inputs:   target: directory to create
+          flags:  flags defining the operation modus
+InOuts:   N/A
+Outputs:  N/A
+PreCond:  N/A
+PostCond: - ÅfOwnerÅf of target is the id of the context 
+            used to perform the opereration if target gets 
+            created.
+Perms:    Exec for targetÅfs parent directory. 
+          Write for targetÅfs parent directory. 
+          Write for target if Write is set. 
+          Read for target if Read is set.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          AlreadyExists
+          DoesNotExist
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - if the parent directory or directories do not 
+            exist, the ÅfCreateParentsÅf flag must be set
+            or a ÅfDoesNotExistÅf exception is thrown. 
+            If set, the parent directories are created as 
+            well.
+          - an ÅfAlreadyExistsÅf exception is thrown if the 
+            directory already exists and the ÅfExclusiveÅf 
+            flag is given.
+          - the default flags are ÅfNoneÅf (0).
+          - other flags are not allowed on this method, 
+            and cause a ÅfBadParameterÅf exception.
+          - if ÅftargetÅf can be parsed as URL, but contains 
+            an invalid entry name, a ÅfBadParameterÅf 
+            exception is thrown.
+          - similar to ÅfmkdirÅf (2) as defined by POSIX.
+            
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::open}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- entry open (saga::url name, int flags = None);
+
+Purpose:  creates a new ns_entry instance
+Format:   entry open (saga::url name, int flags = None);
+Inputs:   name:    entry
+          flags:   flags defining the operation modus
+InOuts:   N/A
+Outputs:  entry:   opened entry instance
+PreCond:  N/A
+PostCond: - the session of the returned instance is that
+            of the calling instance.
+          - ÅfOwnerÅf of name is the id of the context 
+            used to perform the opereration if name gets 
+            created.
+          - the namespace entry is created if it does not
+            yet exist, and the CREATE flag is specified.
+Perms:    Exec for nameÅfs parent directory. 
+          Write for nameÅfs parent directory if Create is set.
+          Write for name if Write is set. 
+          Read for name if Read is set.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          AlreadyExists
+          DoesNotExist
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - a ÅfBadParameterÅf exception is thrown if ÅfnameÅf 
+            points to a directory, or is an invalid entry 
+            name. 
+          - a ÅfDoesNotExistÅf exception is thrown if ÅfnameÅf 
+            does not exist, and the ÅfCreateÅf flag is not 
+            given. 
+          - a ÅfAlreadyExistsÅf exception is thrown if ÅfnameÅf 
+            does exist, and the ÅfCreateÅf and ÅfExclusiveÅf 
+            flags are given. 
+          - ÅfnameÅf is always deeply dereferenced, the cwd, 
+            however, is not changed to the link targets cwd. 
+          - parent directories are created on the fly if the 
+            ÅfCreateParentsÅf and ÅfCreateÅf flag are both 
+            given, if they donÅft exist. 
+          - the entry is locked on open if the ÅfLockÅf flag 
+            is given. If the entry is already in a locked 
+            state, the open will fail and a descriptive 
+            error will be issued. If a entry is opened in 
+            locked mode, any other open on that entry MUST 
+            fail with a ÅfNoSuccessÅf exception if the ÅfLockÅf 
+            flag is given. Note that a entry can be opened 
+            in unlocked mode, and then in locked mode, 
+            without an error getting raised. 
+            The application programmer must take precautions 
+            to avoid such situations. The lock will get 
+            removed on destruction of the entry object, and 
+            also on close. If an implementation does not 
+            support locking, a descriptive ÅfBadParameterÅf 
+            exception MUST get thrown if the ÅfLockÅf flag
+            is given. Read-locks and Write-locks are not
+            distinguished. 
+          - the default flags are ÅfNoneÅf (0). 
+          - other flags are not allowed on this method,
+            and cause a ÅfBadParameterÅf exception. 
+          - similar to ÅfopenÅf (2) as defined by POSIX.
+            
+\end{verbatim}\hrulefill\end{quote}
+
+
+
+\subsubsection{saga::name\_space::directory::open\_dir}
+
+\begin{quote}\hrulefill\begin{verbatim}
+- directory open_dir (saga::url name, int flags = None);
+
+Purpose:  creates a new ns_directory instance
+Format:   directory open_dir (saga::url target, int flags = None);
+Inputs:   name:  directory to open 
+          flags: flags defining the operation modus
+InOuts:   N/A
+Outputs:  dir:   opened directory instance
+PreCond:  N/A
+PostCond: - the session of the returned instance is that of
+            the calling instance. 
+          - ÅfOwnerÅf of name is the id of the context 
+            used to perform the opereration if name gets 
+            created. 
+          - the namespace directory is created if it 
+            does not yet exist, and the Create is set.
+Perms:    Exec for nameÅfs parent directory. 
+          Write for nameÅfs parent directory if Create is set.
+          Write for name if Write is set. 
+          Read for name if Read is set.
+Throws:   NotImplemented
+          IncorrectURL
+          BadParameter
+          AlreadyExists
+          DoesNotExist
+          IncorrectState
+          PermissionDenied
+          AuthorizationFailed
+          AuthenticationFailed
+          Timeout
+          NoSuccess
+Notes:    - the cwd of the new dir object instance is set 
+            to ÅfnameÅf
+          - a ÅfDoesNotExistÅf exception is thrown if ÅfnameÅf
+            does not exist and the ÅfCreateÅf flag is not 
+            given.
+          - a ÅfAlreadyExistÅf exception is thrown if ÅfnameÅf 
+            does exist and the ÅfCreateÅf flag and the 
+            ÅfExclusiveÅf flag are given.
+          - no exception is thrown if ÅfnameÅf does exist and 
+            the ÅfCreateÅf flag is given, and the 
+            ÅfExclusiveÅf flag is not given.
+          - if the ÅfCreateÅf flag is given, all notes to the
+            ns_directory::make_dir() method apply. 
+          - the default flags are ÅfNoneÅf (0). 
+          - other flags are not allowed on this method,
+            and cause a ÅfBadParameterÅf exception.
+          - ÅfnameÅf is always deeply dereferenced, however, 
+            the cwd is still set to ÅfnameÅf, and not to the 
+            value of the link target.
+          - parent directories are created on the fly if 
+            the ÅfCreateParentsÅf and ÅfCreateÅf flag are both 
+            given, if they donÅft exist.
+          - if ÅfnameÅf can be parsed as URL, but contains 
+            an invalid directory name,
+            
+\end{verbatim}\hrulefill\end{quote}
