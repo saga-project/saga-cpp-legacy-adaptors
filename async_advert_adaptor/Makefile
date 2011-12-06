@@ -21,3 +21,6 @@ config/make.cfg:
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
 
+# dir dependencies:
+sql_async_advert: external
+

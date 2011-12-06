@@ -8,10 +8,13 @@
 # find saga.m4
 
 m4_include([saga.m4])
+m4_include([saga_zmq.m4])
 
 AC_INIT()
 
 AX_SAGA_CONFIG()
+
+AX_SAGA_CHECK_ZMQ()
 
 # create output files
 AC_CONFIG_FILES([config/make.cfg])
@@ -41,6 +44,12 @@ echo " Using SAGA from       : $SAGA_LOCATION                          " | $TEE 
 echo "       SAGA version    : $SAGA_VERSION                           " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo " Adaptor Version       : $SAGA_LIB_VERSION                       " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " --------------------------------------------------------        " | $TEE $OUT
+echo "                                                                 " | $TEE $OUT
+echo " Found ZMQ             : $HAVE_ZMQ                               " | $TEE $OUT
+echo "       Version         : $ZMQ_VERSION                            " | $TEE $OUT
+echo "       Location        : $ZMQ_LOCATION                           " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT
 echo " --------------------------------------------------------        " | $TEE $OUT
 echo "                                                                 " | $TEE $OUT

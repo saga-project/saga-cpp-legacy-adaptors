@@ -75,7 +75,7 @@ namespace sql_async_advert
                                        std::string                 key);
       void sync_set_vector_attribute  (saga::impl::void_t        & ret, 
                                        std::string                 key, 
-                                       std::vector <std::string>   ret);
+                                       std::vector <std::string>   val);
       void sync_remove_attribute      (saga::impl::void_t        & ret,
                                        std::string                 key);
       void sync_list_attributes       (std::vector <std::string> & ret);

@@ -15,6 +15,15 @@ SAGA_CONFIGURE_OK             = @SAGA_CONFIGURE_OK@
 ADAPTOR_ROOT                  = @ADAPTOR_ROOT@
 ADAPTOR_CONFDIR               = @ADAPTOR_CONFDIR@
 
+SAGA_HAVE_ZMQ                 = @HAVE_ZMQ@
+SAGA_ZMQ_CPPFLAGS             = @ZMQ_CPPFLAGS@
+SAGA_ZMQ_LDFLAGS              = @ZMQ_LDFLAGS@
+
+ifeq "$(SAGA_HAVE_ZMQ)" "yes"
+	SAGA_CXXFLAGS  += $(SAGA_ZMQ_CPPFLAGS)
+	SAGA_LDFLAGS   += $(SAGA_ZMQ_LDFLAGS)
+endif
+
 ifndef JSON_IMPLEMENTATION
  $(warning JSON_IMPLEMENTATION unset - falling back to jsonbox)
  JSON_IMPLEMENTATION = jsonbox
