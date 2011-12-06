@@ -2521,12 +2521,12 @@ fi
 
   if test "x$want_zmq" = "xyes"; then
 
-    packages=`ls /usr/local/package/{zmq,zeromq}-* 2>>/dev/null`
+    packages=`ls -d /usr/local/packages/{zmq,zeromq}-* 2>>/dev/null`
 
     for tmp_path in $tmp_location $ZMQ_LOCATION /usr /usr/local /opt $packages; do
 
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for zmq in $tmp_path" >&5
-$as_echo_n "checking for zmq in $tmp_path... " >&6; }
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for zmq in '$tmp_path'" >&5
+$as_echo_n "checking for zmq in '$tmp_path'... " >&6; }
 
       saved_cppflags=$CPPFLAGS
       saved_ldflags=$LDFLAGS

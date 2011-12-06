@@ -9,7 +9,7 @@
 #
 #   If no path to the installed zmq library is given,
 #   the macro searchs under /usr, /usr/local, /opt and
-#   /usr/local/package/zmq-*
+#   /usr/local/packages/zmq-*
 #
 #   This macro calls:
 #
@@ -59,11 +59,11 @@ AC_DEFUN([AX_SAGA_CHECK_ZMQ],
 
   if test "x$want_zmq" = "xyes"; then
     
-    packages=`ls /usr/local/package/{zmq,zeromq}-* 2>>/dev/null`
+    packages=`ls -d /usr/local/packages/{zmq,zeromq}-* 2>>/dev/null`
   
     for tmp_path in $tmp_location $ZMQ_LOCATION /usr /usr/local /opt $packages; do
       
-      AC_MSG_CHECKING(for zmq in $tmp_path)
+      AC_MSG_CHECKING(for zmq in '$tmp_path')
 
       saved_cppflags=$CPPFLAGS
       saved_ldflags=$LDFLAGS

@@ -8,10 +8,7 @@ ifndef SAGA_LOCATION
  $(error "SAGA_LOCATION must be set for this Makefile to work")
 endif
 
-SAGA_SUBDIRS += jsonbox-0.2.2
 SAGA_SUBDIRS += jsoncpp-0.5.0
-SAGA_SUBDIRS += json_spirit-4.04
-SAGA_SUBDIRS += libjson-7.4.0
 
 include $(SAGA_LOCATION)/share/saga/make/saga.mk
 
