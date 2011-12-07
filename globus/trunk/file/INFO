@@ -44,7 +44,7 @@
   | --with-gpt-location=<dir>     use gpt at <dir> (default=auto)            |\\
   | --with-globus-flavor=<flavor> use globus flavor <flavor> (default=auto)  |\\
   |                                                                          |\\
-  |  GLOBUS_LOCATIO               Globus installation directory              |\\
+  |  GLOBUS_LOCATION              Globus installation directory              |\\
   |  GPT_LOCATION                 GPT installation directory                 |\\
   |  GLOBUS_FLAVOR                Globus installation flavor                 |\\
 
