@@ -69,7 +69,7 @@ AC_DEFUN([AX_SAGA_CHECK_ZMQ],
       saved_ldflags=$LDFLAGS
 
       ZMQ_PATH=$tmp_path
-      ZMQ_LDFLAGS="-L$tmp_path/lib/ -L$tmp_path/lib64/ -lzmq"
+      ZMQ_LDFLAGS="-L$tmp_path/lib/ -lzmq"
       ZMQ_CPPFLAGS="-I$tmp_path/include/"
 
       CPPFLAGS="$CPPFLAGS $ZMQ_CPPFLAGS"
