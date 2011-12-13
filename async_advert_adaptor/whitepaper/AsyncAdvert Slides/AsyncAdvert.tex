@@ -1,0 +1,142 @@
+\documentclass{beamer}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usetheme{Boadilla}
+
+\title{SAGA Async Advert Adaptor}
+
+\author[H.C. Wilhelm]{Hans Christian Wilhelm}
+
+\begin{document}
+  
+  \begin{frame}
+    \titlepage
+  \end{frame}
+  
+  \begin{frame}
+    \frametitle{Table of contents}
+  	\tableofcontents
+  \end{frame}
+  
+  \section{Sync vs. Async Advert Adaptor}
+    \begin{frame}{Sync Advert Adaptor}
+      \begin{figure}
+        \includegraphics[width=10cm]{old_technology_overview}
+        \caption{Default Advert and Fast Advert Adpator communication layout.}  
+      \end{figure}
+    \end{frame}
+    
+    \begin{frame}{Sync Advert Adaptor}
+      \begin{block}{Communication layout}
+        \begin{itemize}
+          \item Each Adaptor instance has a single connection to the database.
+          \item Directories / Entries are opened with recursive queries.
+          \item This leads to multiple Request/Response roundtrips.
+          \item Each Attribute needs one query.
+          \item This leads to one Request/Response roundtrip per attribute.
+          \item Polling is needed to see if something has changed.
+        \end{itemize}
+      \end{block}
+      
+      \begin{alertblock}{Fast Advert Adaptor}
+             \begin{itemize}
+               \item Reduced query count.
+               \item Still needs polling !
+             \end{itemize} 
+      \end{alertblock}
+    \end{frame}
+    
+    \begin{frame}{Async Advert Adaptor}
+      \begin{figure}
+        \includegraphics[width=10cm]{new_technology_overview}
+        \caption{Async Advert Adpator communication layout.}  
+      \end{figure}
+    \end{frame}
+    
+    \begin{frame}{Async Advert Adaptor}
+      \begin{block}{Communication layout}
+        \begin{itemize}
+          \item Two ZMQ connections per Adaptor instance.
+          \item One Request/Response connection to send commands.
+          \item One Publish/Subscribe connection to receive notifications.
+          \item No recursive database layout.
+          \item Directories / Entries are transported as a union.
+        \end{itemize}
+      \end{block}
+      
+      \begin{alertblock}{Roundtrips}
+             \begin{itemize}
+               \item Only one roundtrip to open an Diretory / Entry.
+               \item No extra roundtrip to query an attribute.
+               \item No polling to the server.
+             \end{itemize} 
+      \end{alertblock}
+    \end{frame}
+  
+  \section{Architecture and technology}
+    \begin{frame}
+      fs
+    \end{frame}
+    
+  \section{Installation}
+    \begin{frame}{Howto install the Async Advert Adaptor}
+       \begin{alertblock}{SAGA Core}
+         First make sure you have a fully working SAGA Core installation on your system ! 
+         Installation details can be found on http://www.saga-project.org/documentation/installation
+       \end{alertblock}
+    \end{frame}
+    
+    \begin{frame}{Howto install the Async Advert Adaptor}
+      \begin{block}{Get ZeroMQ}
+        Befor the installation of the Async Advert Adaptor we need to install ZeroMQ (Release 2.1). 
+        Download the POSIX tarball from http://www.zeromq.org/intro:get-the-software and install it.
+      \end{block}
+      
+      \begin{exampleblock}{Install ZeroMQ}
+         tar xvzf zeromq-2.1.10.tar.gz \newline
+         cd zeromq-2.1.10 \newline
+         ./configure --prefix=/choose/your/install/path/zeromq-2.1.10 \newline
+         make \newline
+         make install
+      \end{exampleblock}
+    \end{frame}
+    
+    \begin{frame}{Howto install the Async Advert Adaptor}
+      \begin{block}{Get AsyncAdvertAdaptor}
+        After the installation of ZeroMQ it is time to get the Async Advert Adpator
+        from the SVN repository. 
+      \end{block}
+      
+      \begin{exampleblock}{Install Async Advert Adaptor}
+        svn co https://svn.cct.lsu.edu/repos/saga-adaptors/async\_advert\_adaptor \newline
+        cd async\_advert\_adaptor \newline
+        ./configure --with\_zmq=/install/path/zeromq-2.1.10 \newline
+        make \newline
+        make install
+      \end{exampleblock}
+    \end{frame}
+    
+  \section{Testing environment}
+    \begin{frame}
+    \end{frame}
+    
+  \section{Effective usage}
+    \begin{frame}{Effective usage}
+      \begin{alertblock}{Directories / Entries are transported as unions}
+        Keep in mind that directories / entries are transported as unions over the wire. That means 
+        all attributes and vector attributes are transmitted with every directory / entry.
+      \end{alertblock}
+      
+      \begin{block}{Usage hints}
+        \begin{itemize}
+          \item Try to keep attribute count per directoy / entry as low as possible.
+          \item Don't use a single entry to coordinate all workers. 
+          \item Assign every worker to it's own entry. 
+          \item Try to keep entry count peer directory as low as possible.
+          \item Use different directories to model dependancies.
+          \end{itemize}
+       \end{block}
+    \end{frame}
+    
+\end{document}
