@@ -75,8 +75,59 @@
     \end{frame}
   
   \section{Architecture and technology}
-    \begin{frame}
-      fs
+    \begin{frame}{Architecture}
+      \begin{figure}
+        \includegraphics[width=10cm]{new_technology_overview}
+        \caption{Async Advert Adpator Architecture}  
+      \end{figure}
+    \end{frame}
+    
+    \begin{frame}{Technology}
+      \begin{block}{NodeJS}
+        \begin{itemize}
+          \item The Advert Server is implemented in the NonBlocking JavaScript framework NodeJS.
+          \item Manages incommming connections.
+          \item Publishes messages to the Advert Adaptor client.
+          \item Communicates with the DataBase.
+        \end{itemize}
+      \end{block}
+      
+      \begin{block}{MongoDB}
+        \begin{itemize}
+          \item MongoDB is used as the Database persitency layer.
+          \item Document based, each directory/entry modeled as document.
+        \end{itemize}
+      \end{block}
+    \end{frame}
+    
+    \begin{frame}{Technology}
+      \begin{block}{ZeroMQ}
+        \begin{itemize}
+          \item ZeroMQ sockets connect the Advert Adaptor to the server.
+          \item REQUEST/RESPONSE socket used so send commands to the server.
+          \item PUBLISH/SUBSCRIBE socket used to notify the Advert Adaptor clients.
+        \end{itemize}
+      \end{block}
+      
+      \begin{block}{JSON}
+        \begin{itemize}
+          \item JSON is used as a lightweight data interchange format.
+          \item The Advert Addaptor sends JSON coded commands e.g. Open, Close, Create to the Server.
+          \item The server responds with a JSON coded diretory / entry. 
+          \item The server publishes JSON coded document ID's to the Advert Adaptor Clients. 
+        \end{itemize}
+      \end{block}
+    \end{frame}
+    
+    \begin{frame}{Technology}
+      \begin{block}{Links}
+        \begin{itemize}
+          \item http://nodejs.org/
+          \item http://www.mongodb.org/
+          \item http://www.zeromq.org/
+          \item http://www.json.org/
+        \end{itemize}
+      \end{block}
     \end{frame}
     
   \section{Installation}

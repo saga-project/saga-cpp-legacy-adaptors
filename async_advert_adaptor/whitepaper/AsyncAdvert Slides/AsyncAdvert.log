@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.9.5)  1 SEP 2011 16:56
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.9.5)  1 SEP 2011 18:16
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1144,7 +1144,12 @@ Package pdftex.def Info: new_technology_overview.pdf used on input line 55.
  <./new_technology_overview.pdf>] [6
 
 ]
-[7
+File: new_technology_overview.pdf Graphic file (type pdf)
+
+<use new_technology_overview.pdf>
+Package pdftex.def Info: new_technology_overview.pdf used on input line 83.
+(pdftex.def)             Requested size: 284.52756pt x 146.7587pt.
+ [7
 
 ] [8
 
@@ -1156,6 +1161,12 @@ Package pdftex.def Info: new_technology_overview.pdf used on input line 55.
 
 ] [12
 
+] [13
+
+] [14
+
+] [15
+
 ]
 \tf@nav=\write6
 \openout6 = `AsyncAdvert.nav'.
@@ -1166,11 +1177,12 @@ Package pdftex.def Info: new_technology_overview.pdf used on input line 55.
 \tf@snm=\write8
 \openout8 = `AsyncAdvert.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 142.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 142.
- (./AsyncAdvert.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 142.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 142.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 193.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 193.
+
+(./AsyncAdvert.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 193.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 193.
 Package rerunfilecheck Info: File `AsyncAdvert.out' has not changed.
 (rerunfilecheck)             Checksum: 601C91B271F0E824EA2D63E5F6A9CE61;277.
 
@@ -1180,20 +1192,20 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 15994 strings out of 493629
- 299174 string characters out of 3143324
+ 16004 strings out of 493629
+ 299263 string characters out of 3143324
  380362 words of memory out of 3000000
- 18886 multiletter control sequences out of 15000+200000
+ 18890 multiletter control sequences out of 15000+200000
  6064 words of font info for 22 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
  49i,16n,63p,427b,682s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb
 ></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb>
 </usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb>
-Output written on AsyncAdvert.pdf (12 pages, 233637 bytes).
+Output written on AsyncAdvert.pdf (15 pages, 241795 bytes).
 PDF statistics:
- 461 PDF objects out of 1000 (max. 8388607)
- 403 compressed objects within 5 object streams
- 30 named destinations out of 1000 (max. 500000)
+ 541 PDF objects out of 1000 (max. 8388607)
+ 480 compressed objects within 5 object streams
+ 36 named destinations out of 1000 (max. 500000)
  137 words of extra memory for PDF output out of 10000 (max. 10000000)
 

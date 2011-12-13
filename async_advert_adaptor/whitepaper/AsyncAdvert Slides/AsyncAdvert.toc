@@ -2,6 +2,6 @@
 \select@language {english}
 \beamer@sectionintoc {1}{Sync vs. Async Advert Adaptor}{3}{0}{1}
 \beamer@sectionintoc {2}{Architecture and technology}{7}{0}{2}
-\beamer@sectionintoc {3}{Installation}{8}{0}{3}
-\beamer@sectionintoc {4}{Testing environment}{11}{0}{4}
-\beamer@sectionintoc {5}{Effective usage}{12}{0}{5}
+\beamer@sectionintoc {3}{Installation}{11}{0}{3}
+\beamer@sectionintoc {4}{Testing environment}{14}{0}{4}
+\beamer@sectionintoc {5}{Effective usage}{15}{0}{5}
