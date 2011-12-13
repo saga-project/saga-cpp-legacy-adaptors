@@ -71,9 +71,16 @@ AC_DEFUN([AX_SAGA_GLOBUS],
 
     GLOBUS_CFLAGS=`grep GLOBUS_CFLAGS   globus_defines | sed -e 's/^GLOBUS_CFLAGS *= *//'`
     GLOBUS_LDFLAGS=`grep GLOBUS_LDFLAGS  globus_defines | sed -e 's/^GLOBUS_LDFLAGS *= *//'`
-    GLOBUS_INCLUDES=`grep GLOBUS_INCLUDES globus_defines | sed -e 's/^GLOBUS_INCLUDES *= *//'`
-    GLOBUS_INCDIR=`grep GLOBUS_INCLUDES globus_defines | sed -e 's/^GLOBUS_INCLUDES *= *-I//' | sed -e 's/ .*$//'`
+    GLOBUS_INCLUDES=`grep GLOBUS_INCLUDES globus_defines | sed -e 's/^GLOBUS_INCLUDES *= *//' | sed -e 's/ *$//'`
+    GLOBUS_INCDIR=`grep GLOBUS_INCLUDES globus_defines | sed -e 's/^GLOBUS_INCLUDES *= *-I//' | sed -e 's/ *$//'`
     GLOBUS_LIBS=`grep GLOBUS_PKG_LIBS globus_defines | sed -e 's/^GLOBUS_PKG_LIBS *= *//'`
+
+    # it seems that globus-1.5.3 has a problem with globus-makefile-headers, which
+    # reports the wrong (incomplete) include path.  We for now manually fix it to
+    # make IGE happy, but that is hopefully fixed on globus side in the final
+    # release...
+    GLOBUS_INCLUDES="$GLOBUS_INCLUDES/$GLOBUS_FLAVOR"
+
 
     globus_version_cmd=$GLOBUS_LOCATION/bin/globus-version
     
