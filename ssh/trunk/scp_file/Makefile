@@ -12,3 +12,6 @@ SAGA_ADAPTOR_PACKAGES = filesystem namespace
 
 include $(SAGA_LOCATION)/share/saga/make/saga.adaptor.mk
 
+distclean::
+	@rm -f scp_file_adaptor.ini
+

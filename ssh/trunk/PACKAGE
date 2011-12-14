@@ -12,8 +12,9 @@ DIRS:
   config/
   external/
   ssh_context/
-  ssh_file/
   ssh_job/
+  scp_file/
+  sshfs_file/
   ssh_suite/
 
 FILES:
