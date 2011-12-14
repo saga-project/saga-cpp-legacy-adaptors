@@ -10,8 +10,13 @@
 
 SAGA_SUBDIRS       = config
 
-ifeq "x$(BUILD_ADAPTOR_FILESYSTEM)" "xyes"
-  SAGA_SUBDIRS    += ssh_file
+ifeq "x$(BUILD_ADAPTOR_FILESYSTEM_SSHFS)" "xyes"
+  SAGA_SUBDIRS    += sshfs_file
+  BUILD_SOMETHING  = yes
+endif
+
+ifeq "x$(BUILD_ADAPTOR_FILESYSTEM_SCP)" "xyes"
+  SAGA_SUBDIRS    += scp_file
   BUILD_SOMETHING  = yes
 endif
 
