@@ -2202,15 +2202,18 @@ $as_echo "$as_me: WARNING: error running globus-makefile-header ($globus_query_c
 
     GLOBUS_CFLAGS=`grep GLOBUS_CFLAGS   globus_defines | sed -e 's/^GLOBUS_CFLAGS *= *//'`
     GLOBUS_LDFLAGS=`grep GLOBUS_LDFLAGS  globus_defines | sed -e 's/^GLOBUS_LDFLAGS *= *//'`
-    GLOBUS_INCLUDES=`grep GLOBUS_INCLUDES globus_defines | sed -e 's/^GLOBUS_INCLUDES *= *//' | sed -e 's/ *$//'`
-    GLOBUS_INCDIR=`grep GLOBUS_INCLUDES globus_defines | sed -e 's/^GLOBUS_INCLUDES *= *-I//' | sed -e 's/ *$//'`
+    GLOBUS_INCDIRS=`grep GLOBUS_INCLUDES globus_defines | sed -e 's/^GLOBUS_INCLUDES *= *-I//' | sed -e 's/-I//g'`
     GLOBUS_LIBS=`grep GLOBUS_PKG_LIBS globus_defines | sed -e 's/^GLOBUS_PKG_LIBS *= *//'`
 
     # it seems that globus-1.5.3 has a problem with globus-makefile-headers, which
     # reports the wrong (incomplete) include path.  We for now manually fix it to
     # make IGE happy, but that is hopefully fixed on globus side in the final
     # release...
-    GLOBUS_INCLUDES="$GLOBUS_INCLUDES/$GLOBUS_FLAVOR"
+    GLOBUS_INCDLUDES=""
+    for d in $GLOBUS_INCDIRS; do
+      GLOBUS_INCLUDES="$GLOBUS_INCLUDES -I$d/ -I$d/$GLOBUS_FLAVOR/"
+    done
+    GLOBUS_FIRSTINCDIR=`echo $GLOBUS_INCDIRS | sed -e 's/ .*$//g'`
 
 
     globus_version_cmd=$GLOBUS_LOCATION/bin/globus-version
@@ -2242,7 +2245,7 @@ $as_echo "$as_me: running $globus_version_cmd" >&6;}
 
   if test "$FAILED" -eq "0"; then
 
-    SAGA_GLOBUS_DEP_FILES="$GLOBUS_INCDIR/globus_common.h"
+    SAGA_GLOBUS_DEP_FILES="$GLOBUS_FIRSTINCDIR/globus_common.h"
 
     ##### Check for individual packages - GRAM
     #
@@ -2254,7 +2257,7 @@ $as_echo "$as_me: running $globus_version_cmd" >&6;}
     	GLOBUS_GRAM_CLIENT_VERSION=`grep GLOBUS_GRAM_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_GRAM_CLIENT_VERSION *= *//'`
       $as_echo "#define SAGA_HAVE_GLOBUS_GRAM 1" >>confdefs.h
 
-      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gram_client.h"
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_FIRSTINCDIR/globus_gram_client.h"
     fi
 
     ##### Check for individual packages - GridFTP
@@ -2267,7 +2270,7 @@ $as_echo "$as_me: running $globus_version_cmd" >&6;}
     	GLOBUS_GRIDFTP_CLIENT_VERSION=`grep GLOBUS_FTP_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_FTP_CLIENT_VERSION *= *//'`
       $as_echo "#define SAGA_HAVE_GLOBUS_GRIDFTP 1" >>confdefs.h
 
-      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_ftp_client.h"
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_FIRSTINCDIR/globus_ftp_client.h"
     fi
 
     ##### Check for individual packages - RLS
@@ -2280,7 +2283,7 @@ $as_echo "$as_me: running $globus_version_cmd" >&6;}
     	#GLOBUS_RLS_CLIENT_VERSION=`grep GLOBUS_RLS_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_RLS_CLIENT_VERSION *= *//'`
       $as_echo "#define SAGA_HAVE_GLOBUS_RLS 1" >>confdefs.h
 
-      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_rls_client.h"
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_FIRSTINCDIR/globus_rls_client.h"
     fi
 
     ##### Check for individual packages - GSI
@@ -2293,7 +2296,7 @@ $as_echo "$as_me: running $globus_version_cmd" >&6;}
       #GLOBUS_RLS_CLIENT_VERSION=`grep GLOBUS_RLS_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_RLS_CLIENT_VERSION *= *//'`
       $as_echo "#define SAGA_HAVE_GLOBUS_GSI 1" >>confdefs.h
 
-      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gsi_proxy.h"
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_FIRSTINCDIR/globus_gsi_proxy.h"
     fi
 
 
@@ -2307,9 +2310,9 @@ $as_echo "$as_me: running $globus_version_cmd" >&6;}
       GLOBUS_GASS_COPY_CLIENT_VERSION=`grep GLOBUS_GASS_COPY_VERSION globus_defines | sed -e 's/^GLOBUS_GASS_COPY_VERSION *= *//'`
       $as_echo "#define SAGA_HAVE_GLOBUS_GASS 1" >>confdefs.h
 
-      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gass_copy.h"
-      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gass_server.h"
-      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gass_transfer.h"
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_FIRSTINCDIR/globus_gass_copy.h"
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_FIRSTINCDIR/globus_gass_server.h"
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_FIRSTINCDIR/globus_gass_transfer.h"
     fi
 
     eval "rm globus_defines"
