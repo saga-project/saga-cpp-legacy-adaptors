@@ -111,7 +111,7 @@ setInterval(function() {
   
   messageQueue = {};
   
-}, 200);
+}, 1000);
 
 // ======================
 // = Syncrone responer  =
