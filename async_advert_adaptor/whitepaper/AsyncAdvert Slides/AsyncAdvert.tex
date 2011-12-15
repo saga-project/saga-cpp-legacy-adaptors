@@ -7,6 +7,7 @@
 \title{SAGA Async Advert Adaptor}
 
 \author[H.C. Wilhelm]{Hans Christian Wilhelm}
+\institute[hcwilhelm@mac.com]{}
 
 \begin{document}
   
@@ -85,10 +86,10 @@
     \begin{frame}{Technology}
       \begin{block}{NodeJS}
         \begin{itemize}
-          \item The Advert Server is implemented in the NonBlocking JavaScript framework NodeJS.
-          \item Manages incommming connections.
+          \item The Advert Server is implemented in the non-blocking JavaScript framework NodeJS.
+          \item Manages incoming connections.
           \item Publishes messages to the Advert Adaptor client.
-          \item Communicates with the DataBase.
+          \item Communicates with the Database.
         \end{itemize}
       \end{block}
       
@@ -183,7 +184,7 @@
       
       \begin{block}{Getting started}
         \begin{itemize}
-          \item Got to your SAGA Core install path /bin
+          \item Go to your SAGA Core install path /bin
           \item Play around with the saga-advert-... commands.
           \item Try the Async Advert Adaptor in your own projects.
           \end{itemize}
@@ -198,7 +199,7 @@
       \begin{block}{Python Benchmark Tool}
         \begin{itemize}
           \item Install the SAGA Python bindings.
-          \item Checkout the Benckmark tool from https://svn.cct.lsu.edu/repos/saga-adaptors/async\_advert\_adaptor/benchmark/
+          \item Checkout the benckmark tool from https://svn.cct.lsu.edu/repos/saga-adaptors/async\_advert\_adaptor/benchmark/
           \item Have a look at the README file and start testing.
           \end{itemize}
       \end{block}
@@ -225,7 +226,7 @@
           \item Try to keep attribute count per directoy / entry as low as possible.
           \item Don't use a single entry to coordinate all workers. 
           \item Assign every worker to it's own entry. 
-          \item Try to keep entry count peer directory as low as possible.
+          \item Try to keep entry count per directory as low as possible.
           \item Use different directories to model dependancies.
           \end{itemize}
        \end{block}
