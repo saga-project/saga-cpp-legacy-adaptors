@@ -45,7 +45,7 @@ Install the zmq binding for nodeJs.
 Go back to your /server path and do 
 
 export PKG_CONFIG_PATH=/install/path/lib/pkgconfig 
-npm install zmq
+npm install zmq@1.0.4
 
 Don't forget to expand your LD_LIBRARY_PATH to 
 
