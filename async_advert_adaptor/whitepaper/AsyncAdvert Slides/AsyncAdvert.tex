@@ -126,6 +126,9 @@
           \item http://www.mongodb.org/
           \item http://www.zeromq.org/
           \item http://www.json.org/
+          \item https://github.com/JustinTulloss/zeromq.node
+          \item https://github.com/LearnBoost/mongoose
+          
         \end{itemize}
       \end{block}
     \end{frame}
@@ -169,7 +172,45 @@
     \end{frame}
     
   \section{Testing environment}
-    \begin{frame}
+    \begin{frame}{Testing environment}
+      \begin{block}{Testing Server}
+        \begin{itemize}
+          \item Async Advert testing server gw68.quarry.iu.teragrid.org
+          \item sqlasyncadvert://gw68.quarry.iu.teragrid.org/
+          \item Ports are hardcoded at the moment ! (5557/5558)
+          \end{itemize}
+      \end{block}
+      
+      \begin{block}{Getting started}
+        \begin{itemize}
+          \item Got to your SAGA Core install path /bin
+          \item Play around with the saga-advert-... commands.
+          \item Try the Async Advert Adaptor in your own projects.
+          \end{itemize}
+      \end{block}
+    
+      \begin{exampleblock}{Example}
+        ./saga-advert-dump-directory sqlasyncadvert://gw68.quarry.iu.teragrid.org/
+      \end{exampleblock}
+    \end{frame}
+    
+    \begin{frame}{Optional Benchmark Tool}
+      \begin{block}{Python Benchmark Tool}
+        \begin{itemize}
+          \item Install the SAGA Python bindings.
+          \item Checkout the Benckmark tool from https://svn.cct.lsu.edu/repos/saga-adaptors/async\_advert\_adaptor/benchmark/
+          \item Have a look at the README file and start testing.
+          \end{itemize}
+      \end{block}
+      
+      \begin{exampleblock}{Example}
+        \begin{itemize}
+          \item svn co https://svn.cct.lsu.edu/repos/saga-adaptors/async\_advert\_adaptor/benchmark/
+          \item cd benchmark
+          \item python advert-benchmark.py sqlasyncadvert://gw68.quarry.iu.teragrid.org/your/benchmark/dir -p -c 10 -a 10 -i5
+          \end{itemize}
+      \end{exampleblock}
+    
     \end{frame}
     
   \section{Effective usage}
