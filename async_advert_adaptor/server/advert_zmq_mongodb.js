@@ -318,7 +318,7 @@ responder.bind("tcp://*:5557", function () {
                   });
                   
                   //publisher.send(parentPath, "updated", JSON.stringify(node));
-                   messageQueue[node.id] = "updated";
+                   messageQueue[parentNode.id] = "updated";
                 });
               }
               
