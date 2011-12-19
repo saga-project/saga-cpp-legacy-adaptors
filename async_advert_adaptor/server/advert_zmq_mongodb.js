@@ -451,5 +451,50 @@ responder.bind("tcp://*:5557", function () {
         }
       });
     }
+    
+    // ===========================
+    // = Command setString       =
+    // ===========================
+    
+    if (command.toString('utf8') == "setString")
+    {
+      var pathArray   = getPathArray(message.path);
+      var pathString  = "/" + pathArray.join("/");
+      
+      AdvertNode.findOne({path: pathString}, function (error, node) {
+        if (node != null)
+        { 
+          node.data = message;
+
+          node.save(function (error) {
+            responder.send("ok", node.id);
+            messageQueue[node.id] = "updated";
+          });
+        }
+      });  
+    }
+    
+    // ===========================
+    // = Command removeString    =
+    // ===========================
+    
+    if (command.toString('utf8') == "removeString")
+    {
+      var pathArray = getPathArray(message.path);
+      var pathString  = "/" + pathArray.join("/");
+      
+      AdvertNode.findOne({path: pathString}, function (error, node) {
+        if (node != null)
+        {
+          node.data = "";
+          
+          node.save(function (error) {
+            responder.send("ok", node.id);
+            messageQueue[node.id] = "updated";
+          });
+        }
+      });
+    }
+    
   });
 });
