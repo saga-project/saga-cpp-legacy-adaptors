@@ -8,6 +8,7 @@
 
 // saga includes
 #include <saga/saga.hpp>
+#include <saga/saga/adaptors/serialization.hpp>
 
 // adaptor includes
 #include "sql_async_advert_advert.hpp"
@@ -509,24 +510,54 @@ namespace sql_async_advert
   void advert_cpi_impl::sync_store_object (saga::impl::void_t & ret, 
                                            saga::object         obj)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    _opened = _connection->get_state(_path.string()); 
+    
+    check_if_open("advertdirectory_cpi_impl::sync_store_object");
+    check_permissions(saga::advert::Write, "advertdirectory_cpi_impl::sync_store_object");
+    
+    _connection->set_string(_path.string(), saga::adaptors::serialize(obj));
+    
+    //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
 
   void advert_cpi_impl::sync_retrieve_object (saga::object & ret, 
                                               saga::session  s)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    Json::Value value;
+    _opened = _connection->get_value(_path.string(), value);
+    
+    check_if_open("advertdirectory_cpi_impl::sync_retrieve_object");
+    check_permissions(saga::advert::Read, "advertdirectory_cpi_impl::sync_retrieve_object");
+    
+    
+    ret = saga::adaptors::deserialize(s, value["data"].asString());
+    //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
 
   void advert_cpi_impl::sync_store_string (saga::impl::void_t & ret, 
                                            std::string          str)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    _opened = _connection->get_state(_path.string()); 
+    
+    check_if_open("advertdirectory_cpi_impl::sync_store_string");
+    check_permissions(saga::advert::Write, "advertdirectory_cpi_impl::sync_store_string");
+    
+    _connection->set_string(_path.string(), str);
+    
+    //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
 
   void advert_cpi_impl::sync_retrieve_string (std::string & ret)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    Json::Value value;
+    _opened = _connection->get_value(_path.string(), value);
+    
+    check_if_open("advertdirectory_cpi_impl::sync_retrieve_string");
+    check_permissions(saga::advert::Read, "advertdirectory_cpi_impl::sync_retrieve_string");
+    
+    
+    ret = value["data"].asString();
+    //SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
 
 } // namespace sql_async_advert

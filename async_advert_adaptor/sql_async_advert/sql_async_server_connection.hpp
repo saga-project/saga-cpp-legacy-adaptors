@@ -96,7 +96,12 @@ namespace sql_async_advert
      void set_vector_attribute(const std::string &url, const std::string &key, std::vector<std::string> &value);
      
      void remove_attribute(const std::string &url, const std::string &key);
+     
+     void set_string(const std::string &url, const std::string &data);
+     
+     void remove_string(const std::string &url);
    };
+   
 }
 
 #endif // SQL_ASYNC_SERVER_CONNECTION_HPP

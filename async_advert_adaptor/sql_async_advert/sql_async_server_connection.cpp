@@ -487,6 +487,57 @@ namespace sql_async_advert
     }
   }
   
+  void server_connection::set_string(const std::string &url, const std::string &data)
+  {
+    Json::Value value;
+    Json::FastWriter writer;
+    
+    value["path"]     = Json::Value(url);
+    value["data"]     = Json::Value(data);
+    
+    s_sendmore(_socket, "setString");
+    s_send(_socket, writer.write(value));
+    
+    std::string status  = s_recv(_socket);
+    std::string id      = s_recv(_socket);
+    
+    if (status == "ok")
+    {
+      (*_id_map)[url] = id;
+      
+      _mutex.lock();
+      {
+        (*_update_map)[id] = true;
+      }
+      _mutex.unlock();
+    }
+  }
+  
+  void server_connection::remove_string(const std::string &url)
+  {
+    Json::Value value;
+    Json::FastWriter writer;
+    
+    value["path"]     = Json::Value(url);
+    
+    s_sendmore(_socket, "removeString");
+    s_send(_socket, writer.write(value));
+    
+    std::string status  = s_recv(_socket);
+    std::string id      = s_recv(_socket);
+    
+    if (status == "ok")
+    {
+      (*_id_map)[url] = id;
+      
+      _mutex.lock();
+      {
+        (*_update_map)[id] = true;
+      }
+      _mutex.unlock();
+    }
+  }
+  
   // ===================================================================================================================================
   // = Private methods                                                                                                                 =
   // ===================================================================================================================================
