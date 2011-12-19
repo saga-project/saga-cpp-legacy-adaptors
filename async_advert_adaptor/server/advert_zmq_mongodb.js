@@ -464,7 +464,7 @@ responder.bind("tcp://*:5557", function () {
       AdvertNode.findOne({path: pathString}, function (error, node) {
         if (node != null)
         { 
-          node.data = message;
+          node.data = message.data;
 
           node.save(function (error) {
             responder.send("ok", node.id);
