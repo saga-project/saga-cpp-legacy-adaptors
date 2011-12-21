@@ -236,7 +236,7 @@ namespace pbspro_job { namespace cli {
       // no list -- status deleted ?
       if (stdout.eof()) {
         pbs_state = "?"; // TODO
-        stdout.close();
+        // stdout.close();
         ret_val = true;
       }
   
