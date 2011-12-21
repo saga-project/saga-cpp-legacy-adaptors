@@ -247,7 +247,7 @@ qsub::qsub(std::string localhost, std::string bin_pth, std::string url_scheme)
       // no list -- status deleted ?
       if (stdout.eof()) {
         pbs_state = "?"; // TODO
-        stdout.close();
+        // stdout.close();
         ret_val =  true;
       }
   
