@@ -1,0 +1,386 @@
+
+###########################################################
+# 
+# @file: globus.m4
+# 
+# @description: 
+#   Autoconf macros for detecting Globus settings
+#
+# Contributed by Andre Merzky   <merzky@cs.vu.nl>.
+# 
+###########################################################
+
+### LICENSE ###
+
+###########################################################
+#
+# AC Macro for determining the GLOBUS_LOCATION
+#
+AC_DEFUN([AX_SAGA_GLOBUS],
+[
+  FAILED=0;
+
+  SAGA_AC_GLOBUS_LOC
+
+  if test "x$HAVE_GLOBUS_LOCATION" = "xno"; then
+    FAILED=1
+  fi
+
+
+  if test "$FAILED" -eq "0"; then
+
+    globus_query_cmd="$GLOBUS_LOCATION/bin/globus-makefile-header"
+
+    if test ! -x "$globus_query_cmd"; then
+      AC_MSG_WARN([globus-makefile-header not in $GLOBUS_LOCATION])
+      FAILED=1
+    fi
+
+  fi # ! FAILED
+
+
+  if test "$FAILED" -eq "0"; then
+
+    rm -f globus_defines
+
+    for flavor in $GLOBUS_FLAVOR; do
+      globus_query_flags="--flavor=$flavor globus_gram_client globus_gass_copy globus_gass_server_ez globus_rls_client globus_ftp_client"
+
+      AC_MSG_NOTICE([running $globus_query_cmd $globus_query_flags])
+      eval "$globus_query_cmd $globus_query_flags >> globus_defines"
+
+      if test $? != 0; then
+
+        globus_flavors=`ls /usr/share/globus/packages/*/pkg_data_* | rev | cut -f 1 -d "/" | rev | cut -f 3 -d "_" | sort -u | xargs echo -n`
+        AC_MSG_WARN([error running globus-makefile-header ($globus_query_cmd $globus_query_flags > globus_defines), 
+                      maybe invalid GLOBUS_FLAVOR in '$GLOBUS_FLAVOR', 
+                      use --with-globus-flavor=<flavor>.
+                      Available flavors: $globus_flavors])
+      fi
+
+    done
+	  
+  fi # ! FAILED
+
+
+  if test "$FAILED" -eq "0"; then
+
+    GLOBUS_CFLAGS=`grep GLOBUS_CFLAGS   globus_defines | sed -e 's/^GLOBUS_CFLAGS *= *//' | xargs echo -n`
+    GLOBUS_LDFLAGS=`grep GLOBUS_LDFLAGS  globus_defines | sed -e 's/^GLOBUS_LDFLAGS *= *//' | xargs echo -n`
+    GLOBUS_INCLUDES=`grep GLOBUS_INCLUDES globus_defines | sed -e 's/^GLOBUS_INCLUDES *= *//' | xargs echo -n`
+    GLOBUS_INCDIR=`grep GLOBUS_INCLUDES globus_defines | sed -e 's/^GLOBUS_INCLUDES *= *-I//' | sed -e 's/ .*$//'`
+    GLOBUS_LIBS=`grep GLOBUS_PKG_LIBS globus_defines | sed -e 's/^GLOBUS_PKG_LIBS *= *//' | xargs echo -n`
+
+    globus_version_cmd=$GLOBUS_LOCATION/bin/globus-version
+    
+    if ! test -x $globus_version_cmd ; then
+      AC_MSG_WARN([Cannot run globus_version_cmd: $globus_version_cmd])
+      GLOBUS_VERSION=unknown
+    else
+    
+      # check for version
+      AC_MSG_NOTICE([running $globus_version_cmd])
+    
+      GLOBUS_VERSION=`$globus_version_cmd`
+    
+      if test $? != 0; then
+
+        globus_flavors=`ls /usr/share/globus/packages/*/pkg_data_* | rev | cut -f 1 -d "/" | rev | cut -f 3 -d "_" | sort -u | xargs echo -n`
+        AC_MSG_ERROR([error running globus-version ($globus_version_cmd), 
+                      maybe invalid GLOBUS_FLAVOR in '$GLOBUS_FLAVOR', 
+                      use --with-globus-flavor=<flavor>.
+                      Available flavors: $globus_flavors])
+      fi
+    
+    fi  # have globus-version
+
+  fi # ! FAILED
+
+
+  if test "$FAILED" -eq "0"; then
+
+    SAGA_GLOBUS_DEP_FILES="$GLOBUS_INCDIR/globus_common.h"
+
+    ##### Check for individual packages - GRAM
+    #
+    GLOBUS_HAVE_GRAM=`grep GLOBUS_PKG_LIBS globus_defines | grep globus_gram_client`
+    if test -z "$GLOBUS_HAVE_GRAM" ; then
+      GLOBUS_HAVE_GRAM="no"
+    else
+    	GLOBUS_HAVE_GRAM="yes"	
+    	GLOBUS_GRAM_CLIENT_VERSION=`grep GLOBUS_GRAM_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_GRAM_CLIENT_VERSION *= *//'`
+      AC_DEFINE([SAGA_HAVE_GLOBUS_GRAM], [1])
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gram_client.h"
+    fi
+
+    ##### Check for individual packages - GridFTP
+    #
+    GLOBUS_HAVE_GRIDFTP=`grep GLOBUS_PKG_LIBS globus_defines | grep globus_ftp_client`
+    if test -z "$GLOBUS_HAVE_GRIDFTP" ; then
+      GLOBUS_HAVE_GRIDFTP="no"
+    else
+    	GLOBUS_HAVE_GRIDFTP="yes"	
+    	GLOBUS_GRIDFTP_CLIENT_VERSION=`grep GLOBUS_FTP_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_FTP_CLIENT_VERSION *= *//'`
+      AC_DEFINE([SAGA_HAVE_GLOBUS_GRIDFTP], [1])
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_ftp_client.h"
+    fi
+
+    ##### Check for individual packages - RLS
+    #
+    GLOBUS_RLS_CLIENT_VERSION=`grep GLOBUS_RLS_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_RLS_CLIENT_VERSION *= *//'`
+    if test -z "$GLOBUS_RLS_CLIENT_VERSION" ; then
+      GLOBUS_HAVE_RLS="no"
+    else
+    	GLOBUS_HAVE_RLS="yes"	
+    	#GLOBUS_RLS_CLIENT_VERSION=`grep GLOBUS_RLS_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_RLS_CLIENT_VERSION *= *//'`
+      AC_DEFINE([SAGA_HAVE_GLOBUS_RLS], [1])
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_rls_client.h"
+    fi
+
+    ##### Check for individual packages - GSI
+    #
+    GLOBUS_GSI_CLIENT_VERSION=`grep GLOBUS_GSSAPI_GSI_VERSION globus_defines | sed -e 's/^GLOBUS_GSSAPI_GSI_VERSION *= *//'`
+    if test -z "$GLOBUS_GSI_CLIENT_VERSION" ; then
+      GLOBUS_HAVE_GSI="no"
+    else
+      GLOBUS_HAVE_GSI="yes"
+      #GLOBUS_RLS_CLIENT_VERSION=`grep GLOBUS_RLS_CLIENT_VERSION globus_defines | sed -e 's/^GLOBUS_RLS_CLIENT_VERSION *= *//'`
+      AC_DEFINE([SAGA_HAVE_GLOBUS_GSI], [1])
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gsi_proxy.h"
+    fi
+
+
+    ##### Check for individual packages - GASS Copy
+    #
+    GLOBUS_HAVE_GASS_COPY=`grep GLOBUS_PKG_LIBS globus_defines | grep globus_gass_copy`
+    if test -z "$GLOBUS_HAVE_GASS_COPY" ; then
+      GLOBUS_HAVE_GASS_COPY="no"
+    else
+    	GLOBUS_HAVE_GASS_COPY="yes"	
+      GLOBUS_GASS_COPY_CLIENT_VERSION=`grep GLOBUS_GASS_COPY_VERSION globus_defines | sed -e 's/^GLOBUS_GASS_COPY_VERSION *= *//'`
+      AC_DEFINE([SAGA_HAVE_GLOBUS_GASS], [1])
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gass_copy.h"
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gass_server.h"
+      SAGA_GLOBUS_DEP_FILES="$SAGA_GLOBUS_DEP_FILES $GLOBUS_INCDIR/globus_gass_transfer.h"
+    fi
+
+    eval "rm globus_defines"
+
+  fi # ! FAILED
+
+
+  if test "$FAILED" -eq "0"; then
+    HAVE_GLOBUS=yes
+  else
+    HAVE_GLOBUS=no
+  fi
+
+#  AC_MSG_NOTICE([ ================================================ ])
+#  AC_MSG_NOTICE([ HAVE_GLOBUS:           $HAVE_GLOBUS              ])
+#  AC_MSG_NOTICE([ GLOBUS_LDFLAGS:        $GLOBUS_LDFLAGS           ])
+#  AC_MSG_NOTICE([ GLOBUS_INCLUDES:       $GLOBUS_INCLUDES          ])
+#  AC_MSG_NOTICE([ GLOBUS_LIBS:           $GLOBUS_LIBS              ])
+#  AC_MSG_NOTICE([ GLOBUS_HAVE_GRAM:      $GLOBUS_HAVE_GRAM         ])
+#  AC_MSG_NOTICE([ GLOBUS_HAVE_GRIDFTP:   $GLOBUS_HAVE_GRIDFTP      ])
+#  AC_MSG_NOTICE([ GLOBUS_HAVE_GASS_COPY: $GLOBUS_HAVE_GASS_COPY    ])
+#  AC_MSG_NOTICE([ GLOBUS_HAVE_RLS:       $GLOBUS_HAVE_RLS          ])
+#  AC_MSG_NOTICE([ ================================================ ])
+#
+  AC_SUBST(HAVE_GLOBUS)
+  AC_SUBST(GLOBUS_HAVE_GRAM)
+  AC_SUBST(GLOBUS_HAVE_GRIDFTP)
+  AC_SUBST(GLOBUS_HAVE_GASS_COPY)
+  AC_SUBST(GLOBUS_HAVE_RLS)
+  AC_SUBST(GLOBUS_CFLAGS)
+  AC_SUBST(GLOBUS_LDFLAGS)
+  AC_SUBST(GLOBUS_INCLUDES)
+  AC_SUBST(GLOBUS_LIBS)
+])
+#
+###########################################################
+
+###########################################################
+#
+# AC Macro for determining the GLOBUS_LOCATION and 
+# GlOBUS_FLAVOR
+# 
+# Contributed by Konrad Karczewski <xeno@icis.pcz.pl>
+#
+AC_DEFUN([SAGA_AC_GLOBUS_LOC],
+[
+  AC_MSG_CHECKING([for globus-location directory])
+  AC_ARG_VAR([GLOBUS_LOCATION],[Globus installation directory])
+
+  if test "$GLOBUS_LOCATION" = ""; then
+    GLOBUS_LOCATION=/usr
+  fi
+
+  AC_ARG_WITH([globus-location], 
+              [AC_HELP_STRING([--with-globus-location=<dir>], 
+                              [use globus ......... at <dir> (default=auto)])],
+                              [GLOBUS_LOCATION=$withval],
+                              [GLOBUS_LOCATION=$GLOBUS_LOCATION])
+
+  FAILED=0
+  
+  if test -d "$GLOBUS_LOCATION" ; then
+    GLOBUS_LOCATION=$GLOBUS_LOCATION
+    AC_MSG_RESULT([ found $GLOBUS_LOCATION])
+  else
+    AC_MSG_WARN([ no globus at $GLOBUS_LOCATION])
+    FAILED=1
+  fi
+
+    
+  # GPT_LOCATION 
+  if test "$FAILED" -eq "0"; then
+    
+    AC_MSG_CHECKING([for gpt-location directory])
+    AC_ARG_VAR([GPT_LOCATION],[GPT installation directory])
+    AC_ARG_WITH([gpt-location], 
+                [AC_HELP_STRING([--with-gpt-location=<dir>], 
+                                [use gpt ......... at <dir> (default=auto)])],
+                                [GPT_LOCATION=$withval],
+                                [GPT_LOCATION=$GPT_LOCATION])
+    
+    if test "x$GPT_LOCATION" = "x" ; then
+      GPT_LOCATION=${GLOBUS_LOCATION}
+    fi
+    
+    if test -d "$GPT_LOCATION" ; then
+      GPT_LOCATION=$GPT_LOCATION
+      AC_MSG_RESULT([ found $GPT_LOCATION])
+    else
+      AC_MSG_WARN([ no such directory $GPT_LOCATION])
+      FAILED=1
+    fi
+  
+  fi # ! FAILED
+
+
+  # Globus flavors
+  if test "$FAILED" -eq "0"; then
+    
+    AC_ARG_VAR([GLOBUS_FLAVOR],[Globus installation flavor])
+    
+    AC_MSG_CHECKING([for globus flavors])
+
+    AC_ARG_WITH([globus-flavor], 
+                [AC_HELP_STRING([--with-globus-flavor=<flavor>], 
+                                [use globus flavor .. <flavor> (default=auto)])],
+                                [GLOBUS_FLAVOR=$withval],
+                                [GLOBUS_FLAVOR=auto])
+    
+    
+    if test "x$GLOBUS_FLAVOR" = "xyes" ; then
+      GLOBUS_FLAVOR=""
+    fi
+    
+    if test "x$GLOBUS_FLAVOR" = "xno" ; then
+      GLOBUS_FLAVOR="none"
+    fi
+
+    if test "x$GLOBUS_FLAVOR" = "xauto" ; then
+      GLOBUS_FLAVOR=""
+    fi
+
+
+    if test "x$GLOBUS_FLAVOR" != "x" ; then
+        
+      echo " ===== flavor set"
+      AC_MSG_RESULT([ $GLOBUS_FLAVOR])
+
+    else
+
+      echo " ===== no flavor set"
+      # what is the globus version?
+      globus_version=`$GLOBUS_LOCATION/bin/globus-version`
+      globus_version_maj=`echo $globus_version | cut -f 1 -d '.'`
+      globus_version_min=`echo $globus_version | cut -f 2 -d '.'`
+      globus_version_sub=`echo $globus_version | cut -f 3 -d '.'`
+
+      # what are the installed globus flavors?  
+      globus_flavors=`ls /usr/share/globus/packages/*/pkg_data_* | rev | cut -f 1 -d "/" | rev | cut -f 3 -d "_" | sort -u | xargs echo -n`
+
+      echo " ===== detected: $globus_flavors ($globus_version_maj $globus_version_min $globus_version_sub)"
+      # for version 5.2 or newer, and no specified flavor, we will check the flags
+      # for all found flavors, and combine the settings.  Oh the fun...
+
+      globus_check_all_flavors=no
+
+      if test "$GLOBUS_FLAVOR" = "" ; then
+        if test "$globus_version_maj" > 5; then
+          globus_check_all_flavors=yes
+        else
+          if test "$globus_version_maj" = 5; then
+            if test "$globus_version_min" > 1; then
+              globus_check_all_flavors=yes
+            fi
+          fi
+        fi
+      fi
+
+      if test "$globus_check_all_flavors" = "no"; then
+
+        echo " ===== picking random flavor"
+
+        TMP_GLOBUS_FLAVOR=`echo $globus_flavors \
+                   | sed -e 's/ /\n/g' \
+                   | grep -v pthr \
+                   | head -1`
+
+        TMP_GLOBUS_FLAVOR_THREADS=`echo $globus_flavors \
+                   | sed -e 's/ /\n/g' \
+                   | grep pthr \
+                   | head -1`
+
+        # prefer threaded flavors
+        if test "x$TMP_GLOBUS_FLAVOR_THREADS" != "x"; then
+          GLOBUS_FLAVOR=$TMP_GLOBUS_FLAVOR_THREADS
+        else
+          GLOBUS_FLAVOR=$TMP_GLOBUS_FLAVOR
+        fi
+
+      else
+
+        GLOBUS_FLAVOR=$globus_flavors
+
+      fi
+
+      if test "x${GLOBUS_FLAVOR}" != "x" ; then
+
+        AC_MSG_RESULT([ ======= $GLOBUS_FLAVOR])
+
+      else
+
+        AC_MSG_RESULT([- not found])
+        AC_MSG_WARN([please provide proper globus flavor names])
+        FAILED=1
+
+      fi
+
+    fi  # GLOBUS_FLAVOR ! defined
+
+  fi # ! FAILED
+
+
+  if test "$FAILED" -eq "0"; then
+    HAVE_GLOBUS_LOCATION=yes
+  else
+    HAVE_GLOBUS_LOCATION=no
+  fi
+
+  AC_SUBST(HAVE_GLOBUS_LOCATION)
+
+  AC_SUBST(GPT_LOCATION)
+  AC_SUBST(GLOBUS_LOCATION)
+  AC_SUBST(GLOBUS_FLAVOR)
+
+#  AC_MSG_NOTICE([ ================================================ ])
+#  AC_MSG_NOTICE([ GLOBUS_LOCATION:       $GLOBUS_LOCATION          ])
+#  AC_MSG_NOTICE([ GLOBUS_FLAVOR:         $GLOBUS_FLAVOR            ])
+#  AC_MSG_NOTICE([ =============================================== ])
+])
+
+
+
