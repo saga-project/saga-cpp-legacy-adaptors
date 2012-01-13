@@ -340,7 +340,7 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
                                 "(FileTransfer entry: '" + *it + "').",
                                 saga::NotImplemented);
 
-                        if (!r.root_name().empty()
+                        /*if (!r.root_name().empty()
                                 || !r.root_directory().empty()
                                 || ("./" != r.relative_path().string()
                                     && "." != r.relative_path().string()))
@@ -348,7 +348,7 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
                                 "does not support placing files outside the "
                                 "remote working directory "
                                 "(FileTransfer entry: '" + *it + "').",
-                                saga::NotImplemented);
+                                saga::NotImplemented); */
 
                         if (!exists(l_status))
                             SAGA_ADAPTOR_THROW_NO_CONTEXT("File not found on "
@@ -362,7 +362,7 @@ namespace saga { namespace adaptors { namespace condor { namespace detail {
                                 "(FileTransfer entry: '" + *it + "').",
                                 saga::BadParameter);
 
-                        input += " " + left;
+                        input += ", " + left;
                         break;
 
                     case copy_remote_local:
