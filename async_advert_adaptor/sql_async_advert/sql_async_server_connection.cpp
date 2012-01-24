@@ -4,7 +4,7 @@
 namespace sql_async_advert
 {
   server_connection::server_connection (saga::url const &url)
-    : _url(url), _context(1), _socket(_context, ZMQ_REQ), _socket_rh(_context, ZMQ_PAIR)
+    : _url(url), _context(1), _socket_rh(_context, ZMQ_PAIR)
   {
     
     _update_map   = new update_map_t();
@@ -17,7 +17,12 @@ namespace sql_async_advert
     // =============================
     // = Connect to Node.js server =
     // =============================
-    _socket.connect(connect_string.c_str());
+    
+    // =================================================================================
+    // = Cause a zmq socket is not thread safe we don't use a gloabal socket anymore ! =
+    // =================================================================================
+    
+    //_socket.connect(connect_string.c_str());
     
     // ========================================
     // = Bind socket for thread communication =
@@ -142,8 +147,6 @@ namespace sql_async_advert
   
   const bool server_connection::get_value(const std::string &url, Json::Value &ret)
   {
-    //std::cout << "get_value" << std::endl;
-    
     std::string id      = (*_id_map)[url];
     bool needs_update   = false;
     bool state          = true; 
@@ -158,7 +161,6 @@ namespace sql_async_advert
       
       if (i == _update_map->end())
       {
-        //std::cout << "not found" << std::endl;
         state = false;
       }
       
@@ -168,7 +170,6 @@ namespace sql_async_advert
       
       if (i != _update_map->end())
       {
-        //std::cout << "found" << std::endl;
         needs_update = i->second;
         i->second = false;
       }
@@ -180,27 +181,26 @@ namespace sql_async_advert
     // = if needs update send request =
     // ================================
     
-    //std::cout << needs_update << std::endl;
-    
     if (needs_update)
-    {
+    { 
       Json::Value value;
       Json::FastWriter writer;
 
       value["id"]     = Json::Value(id);
       
-      s_sendmore(_socket, "get");
-      s_send(_socket, writer.write(value));
-
-      std::string status  = s_recv(_socket);
-      std::string data    = s_recv(_socket);
+      zmq::socket_t req_socket(_context, ZMQ_REQ);
+      req_socket.connect(_connect_string.c_str());
       
-      //std::cout << "status : " << status << std::endl;
+      s_sendmore(req_socket, "get");
+      s_send(req_socket, writer.write(value));
+
+      std::string status  = s_recv(req_socket);
+      std::string data    = s_recv(req_socket);
       
       if (status == "ok")
       {
-        Json::Value node;
-        Json::Reader reader;
+        Json::Value   node;
+        Json::Reader  reader;
 
         reader.parse(data, node);
 
@@ -222,14 +222,11 @@ namespace sql_async_advert
       ret = (*_node_map)[url];
     } 
     
-    //std::cout << "state : " << state << std::endl;
     return state;
   }
   
   const bool server_connection::get_state(const std::string &url)
   {
-    //std::cout << "get_state" << std::endl;
-    
     std::string id  = (*_id_map)[url];
     bool state      = true;
     
@@ -243,7 +240,6 @@ namespace sql_async_advert
       
       if (i == _update_map->end())
       {
-        //std::cout << "not found" << std::endl;
         state = false;
       }
     }
@@ -253,18 +249,19 @@ namespace sql_async_advert
   }
   
   bool server_connection::exists_directory(const std::string &url)
-  { 
-    //std::cout << "exists_directory" << std::endl;
-        
+  {     
     Json::Value value;
     Json::FastWriter writer;
     
     value["path"]     = Json::Value(url);
     
-    s_sendmore(_socket, "exists");
-    s_send(_socket, writer.write(value));
+    zmq::socket_t req_socket(_context, ZMQ_REQ);
+    req_socket.connect(_connect_string.c_str());
+    
+    s_sendmore(req_socket, "exists");
+    s_send(req_socket, writer.write(value));
 
-    std::string status= s_recv(_socket);
+    std::string status= s_recv(req_socket);
     
     if (status == "true")
     {
@@ -279,19 +276,20 @@ namespace sql_async_advert
   
   void server_connection::create_directory(const std::string &url, const bool dir)
   {
-    //std::cout << "create_directory" << std::endl;
-    
     Json::Value value;
     Json::FastWriter writer;
     
     value["path"]     = Json::Value(url);
     value["dir"]      = Json::Value(dir);
     
-    s_sendmore(_socket, "create");
-    s_send(_socket, writer.write(value));
+    zmq::socket_t req_socket(_context, ZMQ_REQ);
+    req_socket.connect(_connect_string.c_str());
     
-    std::string status  = s_recv(_socket);
-    std::string id      = s_recv(_socket);
+    s_sendmore(req_socket, "create");
+    s_send(req_socket, writer.write(value));
+    
+    std::string status  = s_recv(req_socket);
+    std::string id      = s_recv(req_socket);
 
     if (status == "ok")
     {
@@ -310,19 +308,20 @@ namespace sql_async_advert
    
   void server_connection::create_parents_directory(const std::string &url, const bool dir)
   {
-    //std::cout << "create_parents_directory" << std::endl;
-    
     Json::Value value;
     Json::FastWriter writer;
     
     value["path"]     = Json::Value(url);
     value["dir"]      = Json::Value(dir);
     
-    s_sendmore(_socket, "createParents");
-    s_send(_socket, writer.write(value));
+    zmq::socket_t req_socket(_context, ZMQ_REQ);
+    req_socket.connect(_connect_string.c_str());
     
-    std::string status  = s_recv(_socket);
-    std::string id      = s_recv(_socket);
+    s_sendmore(req_socket, "createParents");
+    s_send(req_socket, writer.write(value));
+    
+    std::string status  = s_recv(req_socket);
+    std::string id      = s_recv(req_socket);
     
     if (status == "ok")
     {
@@ -341,18 +340,19 @@ namespace sql_async_advert
    
   void server_connection::open_directory(const std::string &url)
   {
-    //std::cout << "open_directory" << std::endl;
-    
     Json::Value value;
     Json::FastWriter writer;
     
     value["path"]     = Json::Value(url);
     
-    s_sendmore(_socket, "open");
-    s_send(_socket, writer.write(value));
+    zmq::socket_t req_socket(_context, ZMQ_REQ);
+    req_socket.connect(_connect_string.c_str());
     
-    std::string status  = s_recv(_socket);
-    std::string id      = s_recv(_socket);
+    s_sendmore(req_socket, "open");
+    s_send(req_socket, writer.write(value));
+    
+    std::string status  = s_recv(req_socket);
+    std::string id      = s_recv(req_socket);
     
     if (status == "ok")
     {
@@ -371,17 +371,18 @@ namespace sql_async_advert
   
   void server_connection::remove_directory(const std::string &url)
   {
-    //std::cout << "remove_directory" << std::endl;
-    
     Json::Value value;
     Json::FastWriter writer;
     
     value["path"]     = Json::Value(url);
     
-    s_sendmore(_socket, "remove");
-    s_send(_socket, writer.write(value));
+    zmq::socket_t req_socket(_context, ZMQ_REQ);
+    req_socket.connect(_connect_string.c_str());
     
-    std::string status  = s_recv(_socket);
+    s_sendmore(req_socket, "remove");
+    s_send(req_socket, writer.write(value));
+    
+    std::string status  = s_recv(req_socket);
     
     if (status == "ok")
     {
@@ -409,11 +410,14 @@ namespace sql_async_advert
     value["key"]      = Json::Value(key);
     value["value"]    = Json::Value(_value);
     
-    s_sendmore(_socket, "setAttribute");
-    s_send(_socket, writer.write(value));
+    zmq::socket_t req_socket(_context, ZMQ_REQ);
+    req_socket.connect(_connect_string.c_str());
     
-    std::string status  = s_recv(_socket);
-    std::string id      = s_recv(_socket);
+    s_sendmore(req_socket, "setAttribute");
+    s_send(req_socket, writer.write(value));
+    
+    std::string status  = s_recv(req_socket);
+    std::string id      = s_recv(req_socket);
     
     if (status == "ok")
     {
@@ -443,11 +447,14 @@ namespace sql_async_advert
     value["key"]      = Json::Value(key);
     value["value"]    = array;
     
-    s_sendmore(_socket, "setAttribute");
-    s_send(_socket, writer.write(value));
+    zmq::socket_t req_socket(_context, ZMQ_REQ);
+    req_socket.connect(_connect_string.c_str());
     
-    std::string status  = s_recv(_socket);
-    std::string id      = s_recv(_socket);
+    s_sendmore(req_socket, "setAttribute");
+    s_send(req_socket, writer.write(value));
+    
+    std::string status  = s_recv(req_socket);
+    std::string id      = s_recv(req_socket);
     
     if (status == "ok")
     {
@@ -469,11 +476,14 @@ namespace sql_async_advert
     value["path"]     = Json::Value(url);
     value["key"]      = Json::Value(key); 
     
-    s_sendmore(_socket, "removeAttribute");
-    s_send(_socket, writer.write(value));
+    zmq::socket_t req_socket(_context, ZMQ_REQ);
+    req_socket.connect(_connect_string.c_str());
     
-    std::string status  = s_recv(_socket);
-    std::string id      = s_recv(_socket);
+    s_sendmore(req_socket, "removeAttribute");
+    s_send(req_socket, writer.write(value));
+    
+    std::string status  = s_recv(req_socket);
+    std::string id      = s_recv(req_socket);
     
     if (status == "ok")
     {
@@ -495,11 +505,14 @@ namespace sql_async_advert
     value["path"]     = Json::Value(url);
     value["data"]     = Json::Value(data);
     
-    s_sendmore(_socket, "setString");
-    s_send(_socket, writer.write(value));
+    zmq::socket_t req_socket(_context, ZMQ_REQ);
+    req_socket.connect(_connect_string.c_str());
     
-    std::string status  = s_recv(_socket);
-    std::string id      = s_recv(_socket);
+    s_sendmore(req_socket, "setString");
+    s_send(req_socket, writer.write(value));
+    
+    std::string status  = s_recv(req_socket);
+    std::string id      = s_recv(req_socket);
     
     if (status == "ok")
     {
@@ -520,11 +533,14 @@ namespace sql_async_advert
     
     value["path"]     = Json::Value(url);
     
-    s_sendmore(_socket, "removeString");
-    s_send(_socket, writer.write(value));
+    zmq::socket_t req_socket(_context, ZMQ_REQ);
+    req_socket.connect(_connect_string.c_str());
     
-    std::string status  = s_recv(_socket);
-    std::string id      = s_recv(_socket);
+    s_sendmore(req_socket, "removeString");
+    s_send(req_socket, writer.write(value));
+    
+    std::string status  = s_recv(req_socket);
+    std::string id      = s_recv(req_socket);
     
     if (status == "ok")
     {
@@ -556,12 +572,12 @@ namespace sql_async_advert
     _mutex.unlock();
   }
   
-  void server_connection::send_message(const std::string &command, const Json::Value &value)
-  {
-    Json::FastWriter writer;
-    
-    std::cout << s_sendmore(_socket, command) << std::endl;
-    std::cout << s_send(_socket, writer.write(value)) << std::endl;
-  }
+//  void server_connection::send_message(const std::string &command, const Json::Value &value)
+//  {
+//    Json::FastWriter writer;
+//    
+//    std::cout << s_sendmore(_socket, command) << std::endl;
+//    std::cout << s_send(_socket, writer.write(value)) << std::endl;
+//  }
 
 }

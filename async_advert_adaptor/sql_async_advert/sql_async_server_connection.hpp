@@ -44,7 +44,7 @@ namespace sql_async_advert
     std::string       _connect_string;
     
     zmq::context_t    _context;
-    zmq::socket_t     _socket;
+    //zmq::socket_t     _socket;
     zmq::socket_t     _socket_rh;
     
     boost::mutex      _mutex;
