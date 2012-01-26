@@ -11,62 +11,11 @@ m4_include([config/saga_ssh.m4])
 AC_INIT()
 
 ########################################################################
-if test "$prefix" = "NONE"; then
-  prefix=$ac_default_prefix
-fi
-
-SAGA_MODULE_PREFIX=$prefix
-AC_SUBST([SAGA_MODULE_PREFIX])
-export SAGA_MODULE_PREFIX
-
-if test "$libdir" = '${exec_prefix}/lib'; then
- SAGA_LIB_ROOT=$SAGA_MODULE_PREFIX/lib
-else
- SAGA_LIB_ROOT=$libdir
-fi
-  
-if test "$bindir" = '${exec_prefix}/bin'; then
- SAGA_BIN_ROOT="$SAGA_MODULE_PREFIX/bin"
-else
- SAGA_BIN_ROOT="$bindir"
-fi
-  
-if test "$includedir" = '${prefix}/include'; then
- SAGA_INC_ROOT="$SAGA_MODULE_PREFIX/include"
-else
- SAGA_INC_ROOT="$includedir"
-fi
-  
-if test "$mandir" = '${datarootdir}/man'; then
- SAGA_MAN_ROOT="$SAGA_MODULE_PREFIX/share/man"
-else
- SAGA_MAN_ROOT="$mandir"
-fi
-
-if test "$datadir" = '${datarootdir}'; then
- if test "$datarootdir" = '${prefix}/share'; then
-  SAGA_DAT_ROOT="$SAGA_MODULE_PREFIX/share"
- else
-  SAGA_DAT_ROOT="$datarootdir"
- fi
-else
- SAGA_DAT_ROOT="$datadir"
-fi
-
-is_saga_dir=`echo $SAGA_DAT_ROOT | sed -e 's/\/$//g' | rev | cut -f 1 | rev`
-if ! test "$is_saga_dir" = "saga"; then
-  SAGA_DAT_ROOT="$SAGA_DAT_ROOT/saga"
-fi
-
-AC_SUBST([SAGA_BIN_ROOT])
-AC_SUBST([SAGA_LIB_ROOT])
-AC_SUBST([SAGA_INC_ROOT])
-AC_SUBST([SAGA_MAN_ROOT])
-AC_SUBST([SAGA_DAT_ROOT])
-########################################################################
 
 
 AX_SAGA_CONFIG()
+AX_SAGA_PREFIX($prefix)
+
 SAGA_DEP_FILES="$SAGA_LOCATION/include/saga/saga.hpp"
 
 AX_SAGA_CHECK_GSISSH()

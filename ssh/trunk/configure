@@ -586,6 +586,12 @@ HAVE_SSH
 SAGA_SSH
 HAVE_GSISSH
 SAGA_GSISSH
+SAGA_DAT_ROOT
+SAGA_MAN_ROOT
+SAGA_INC_ROOT
+SAGA_LIB_ROOT
+SAGA_BIN_ROOT
+SAGA_MODULE_PREFIX
 CONFDIR
 TMP_SAGA_INSTTYPE
 SAGA_LIB_VERSION
@@ -606,12 +612,6 @@ SAGA_VERSION_MINOR
 SAGA_VERSION_MAJOR
 SAGA_VERSION
 SAGA_LOCATION
-SAGA_DAT_ROOT
-SAGA_MAN_ROOT
-SAGA_INC_ROOT
-SAGA_LIB_ROOT
-SAGA_BIN_ROOT
-SAGA_MODULE_PREFIX
 target_alias
 host_alias
 build_alias
@@ -1714,59 +1714,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 ########################################################################
-if test "$prefix" = "NONE"; then
-  prefix=$ac_default_prefix
-fi
-
-SAGA_MODULE_PREFIX=$prefix
-
-export SAGA_MODULE_PREFIX
-
-if test "$libdir" = '${exec_prefix}/lib'; then
- SAGA_LIB_ROOT=$SAGA_MODULE_PREFIX/lib
-else
- SAGA_LIB_ROOT=$libdir
-fi
-
-if test "$bindir" = '${exec_prefix}/bin'; then
- SAGA_BIN_ROOT="$SAGA_MODULE_PREFIX/bin"
-else
- SAGA_BIN_ROOT="$bindir"
-fi
-
-if test "$includedir" = '${prefix}/include'; then
- SAGA_INC_ROOT="$SAGA_MODULE_PREFIX/include"
-else
- SAGA_INC_ROOT="$includedir"
-fi
-
-if test "$mandir" = '${datarootdir}/man'; then
- SAGA_MAN_ROOT="$SAGA_MODULE_PREFIX/share/man"
-else
- SAGA_MAN_ROOT="$mandir"
-fi
-
-if test "$datadir" = '${datarootdir}'; then
- if test "$datarootdir" = '${prefix}/share'; then
-  SAGA_DAT_ROOT="$SAGA_MODULE_PREFIX/share"
- else
-  SAGA_DAT_ROOT="$datarootdir"
- fi
-else
- SAGA_DAT_ROOT="$datadir"
-fi
-
-is_saga_dir=`echo $SAGA_DAT_ROOT | sed -e 's/\/$//g' | rev | cut -f 1 | rev`
-if ! test "$is_saga_dir" = "saga"; then
-  SAGA_DAT_ROOT="$SAGA_DAT_ROOT/saga"
-fi
-
-
-
-
-
-
-########################################################################
 
 
 
@@ -1931,6 +1878,11 @@ $as_echo "$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
 
 
 
+  cat >>confdefs.h <<_ACEOF
+#define SAGA_LOCATION "$SAGA_LOCATION"
+_ACEOF
+
+  export SAGA_LOCATION
 
   # the adaptor and binding config files depend on the earlier findings of
   # SAGA's main configure.
@@ -1963,6 +1915,68 @@ $as_echo "$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
   # set a full path to that, so that make files can find the respective includes
   CONFDIR=`pwd`/config/
   export CONFDIR
+
+
+
+  prefix="$prefix"
+
+
+  if test "$prefix" = "" -o "$prefix" = "NONE"; then
+    prefix=$SAGA_LOCATION
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No prefix specified -- defaulting to \$SAGA_LOCATION ($SAGA_LOCACTION)" >&5
+$as_echo "$as_me: WARNING: No prefix specified -- defaulting to \$SAGA_LOCATION ($SAGA_LOCACTION)" >&2;}
+    fi
+
+
+  SAGA_MODULE_PREFIX=$prefix
+
+  export SAGA_MODULE_PREFIX
+
+  if test "$libdir" = '${exec_prefix}/lib'; then
+   SAGA_LIB_ROOT=$SAGA_MODULE_PREFIX/lib
+  else
+   SAGA_LIB_ROOT=$libdir
+  fi
+
+  if test "$bindir" = '${exec_prefix}/bin'; then
+   SAGA_BIN_ROOT="$SAGA_MODULE_PREFIX/bin"
+  else
+   SAGA_BIN_ROOT="$bindir"
+  fi
+
+  if test "$includedir" = '${prefix}/include'; then
+   SAGA_INC_ROOT="$SAGA_MODULE_PREFIX/include"
+  else
+   SAGA_INC_ROOT="$includedir"
+  fi
+
+  if test "$mandir" = '${datarootdir}/man'; then
+   SAGA_MAN_ROOT="$SAGA_MODULE_PREFIX/share/man"
+  else
+   SAGA_MAN_ROOT="$mandir"
+  fi
+
+  if test "$datadir" = '${datarootdir}'; then
+   if test "$datarootdir" = '${prefix}/share'; then
+    SAGA_DAT_ROOT="$SAGA_MODULE_PREFIX/share"
+   else
+    SAGA_DAT_ROOT="$datarootdir"
+   fi
+  else
+   SAGA_DAT_ROOT="$datadir"
+  fi
+
+  is_saga_dir=`echo $SAGA_DAT_ROOT | sed -e 's/\/$//g' | rev | cut -f 1 | rev`
+  if ! test "$is_saga_dir" = "saga"; then
+    SAGA_DAT_ROOT="$SAGA_DAT_ROOT/saga"
+  fi
+
+
+
+
+
+
+  ########################################################################
 
 
 SAGA_DEP_FILES="$SAGA_LOCATION/include/saga/saga.hpp"
