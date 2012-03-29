@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+		The OGF takes no position regarding the validity or scope of any
+		intellectual property or other rights that might be claimed to
+		pertain to the implementation or use of the technology described in
+		this document or the extent to which any license under such rights
+		might or might not be available; neither does it represent that it has
+		made any effort to identify any such rights. Copies of claims of
+		rights made available for publication and any assurances of licenses
+		to be made available, or the result of an attempt made to obtain a
+		general license or permission for the use of such proprietary rights
+		by implementers or users of this specification can be obtained from
+		the OGF Secretariat. The OGF invites any interested party to bring to
+		its attention any copyrights, patents or patent applications, or other
+		proprietary rights which may cover technology that may be required to
+		practice this recommendation. Please address the information to the
+		OGF Executive Directory. Full Copyright Notice Copyright © Open Grid
+		Forum (2006-2008). All Rights Reserved. This document and translations
+		of it may be copied and furnished to others, and derivative works that
+		comment on or otherwise explain it or assist in its implementation may
+		be prepared, copied, published and distributed, in whole or in part,
+		without restriction of any kind, provided that the above copyright
+		notice and this paragraph are included on all such copies and
+		derivative works. However, this document itself may not be modified in
+		any way, such as by removing the copyright notice or references to the
+		OGF or other organizations, except as needed for the purpose of
+		developing Grid Recommendations in which case the procedures for
+		copyrights defined in the OGF Document process must be followed, or as
+		required to translate it into languages other than English. The
+		limited permissions granted above are perpetual and will not be
+		revoked by the OGF or its successors or assigns. This document and the
+		information contained herein is provided on an “AS IS" basis and THE
+		OPEN GRID FORUM DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+		INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE
+		INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED
+		WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+	-->
+
+<wsdl:definitions name="WSIterator"
+	xmlns="http://schemas.ogf.org/ws-iterator/2008/06/iterator"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:iterator="http://schemas.ogf.org/ws-iterator/2008/06/iterator"
+	xmlns:wsbf="http://docs.oasis-open.org/wsrf/bf-2"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:genii-common="http://vcgr.cs.virginia.edu/genii/2006/12/common"
+	xmlns:rpw-2="http://docs.oasis-open.org/wsrf/rpw-2"
+	xmlns:rw-2="http://docs.oasis-open.org/wsrf/rw-2"
+	xmlns:wsrp="http://docs.oasis-open.org/wsrf/rp-2"
+	xmlns:wsrpw="http://docs.oasis-open.org/wsrf/rpw-2"
+	xmlns:wsrf-r="http://docs.oasis-open.org/wsrf/r-2"
+	xmlns:wsrf-rw="http://docs.oasis-open.org/wsrf/rw-2"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor"
+	targetNamespace="http://schemas.ogf.org/ws-iterator/2008/06/iterator">
+
+	<wsdl:import namespace="http://docs.oasis-open.org/wsrf/rw-2"
+		location="../wsrf/resource/rw-2.wsdl" />
+	<wsdl:import namespace="http://docs.oasis-open.org/wsrf/rpw-2"
+		location="../wsrf/properties/rpw-2.wsdl" />
+	<wsdl:import namespace="http://docs.oasis-open.org/wsrf/rlw-2"
+		location="../wsrf/lifetime/rlw-2.wsdl" />
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			attributeFormDefault="unqualified" elementFormDefault="qualified"
+			targetNamespace="http://schemas.ogf.org/ws-iterator/2008/06/iterator">
+			<xsd:import namespace="http://schemas.ogf.org/ws-iterator/2008/06/iterator"
+				schemaLocation="./iterator.xsd" />
+			<xsd:import namespace="http://docs.oasis-open.org/wsrf/bf-2"
+				schemaLocation="../wsrf/faults/bf-2.xsd" />
+			<xsd:import namespace="http://docs.oasis-open.org/wsrf/rp-2"
+				schemaLocation="../wsrf/properties/rp-2.xsd" />
+			<xsd:import namespace="http://docs.oasis-open.org/wsrf/rl-2"
+				schemaLocation="../wsrf/lifetime/rl-2.xsd" />
+			<!-- == Resource Property Related === -->
+			<xsd:element name="WSIteratorRP">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" />
+						<xsd:element ref="iterator:elementCount" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element ref="iterator:preferredBlockSize"
+							minOccurs="0" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="IterateRequest">
+		<wsdl:part name="IterateRequest" element="iterator:IterateRequestType" />
+	</wsdl:message>
+	<wsdl:message name="IterateResponse">
+		<wsdl:part name="IterateResponse" element="iterator:IterateResponseType" />
+	</wsdl:message>
+	<wsdl:portType name="WSIteratorPortType"
+		wsdlpp:extends="wsrpw:GetResourceProperty
+		wsrpw:GetMultipleResourceProperties"
+		wsrp:ResourceProperties="iterator:WSIteratorRP">
+		<wsdl:operation name="iterate">
+			<wsdl:input message="iterator:IterateRequest" />
+			<wsdl:output message="iterator:IterateResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+</wsdl:definitions>

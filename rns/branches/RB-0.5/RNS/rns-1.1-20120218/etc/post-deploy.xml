@@ -1,0 +1,194 @@
+<?xml version="1.0"?>
+
+	<!--
+		===================================================================
+
+		Notes: This is a build file for use with the Jakarta Ant build tool.
+
+		Prerequisites: jakarta-ant from http://jakarta.apache.org Build
+		Instructions: This file is automatically called at the end of the
+		deployment of the corresponding component's gar (see
+		build-packages.xml).
+
+		====================================================================
+	-->
+<project default="setup" basedir=".">
+	<property environment="env" />
+	<property file="build.properties" />
+	<property file="${user.home}/build.properties" />
+	<property name="env.GLOBUS_LOCATION" value="." />
+	<property name="deploy.dir" location="${env.GLOBUS_LOCATION}" />
+	<property name="abs.deploy.dir" location="${deploy.dir}" />
+	<property name="build.launcher"
+		location="${abs.deploy.dir}/share/globus_wsrf_common/build-launcher.xml" />
+
+	<property name="default.jvm.options"
+		value="-Drns.config=$${RNS_CLIENT_CONFIG} # -Drns.command.name=`basename $$0`" />
+
+	<target name="setup">
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-version" />
+			<param name="classname" value="org.naregi.rns.command.RNS_version" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-ls" />
+			<param name="classname" value="org.naregi.rns.command.RNS_ls" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-ls-l" />
+			<param name="classname" value="org.naregi.rns.command.RNS_ls_long" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-stat" />
+			<param name="classname" value="org.naregi.rns.command.RNS_stat" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-add" />
+			<param name="classname" value="org.naregi.rns.command.RNS_add" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-getepr" />
+			<param name="classname" value="org.naregi.rns.command.RNS_getepr" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-getxml" />
+			<param name="classname" value="org.naregi.rns.command.RNS_getxml" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-gridftp-del" />
+			<param name="classname" value="org.naregi.rns.command.RNS_gridftp_delete" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-gridftp-get" />
+			<param name="classname" value="org.naregi.rns.command.RNS_gridftp_get" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-gridftp-ln" />
+			<param name="classname" value="org.naregi.rns.command.RNS_gridftp_link" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-gridftp-put" />
+			<param name="classname" value="org.naregi.rns.command.RNS_gridftp_put" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-mkdir" />
+			<param name="classname" value="org.naregi.rns.command.RNS_mkdir" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-mv" />
+			<param name="classname" value="org.naregi.rns.command.RNS_rename" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-rm" />
+			<param name="classname" value="org.naregi.rns.command.RNS_rm" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-rmdir" />
+			<param name="classname" value="org.naregi.rns.command.RNS_rmdir" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-setxml" />
+			<param name="classname" value="org.naregi.rns.command.RNS_setxml" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-ping" />
+			<param name="classname" value="org.naregi.rns.command.RNS_ping" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-xquery" />
+			<param name="classname" value="org.naregi.rns.command.RNS_xquery" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-kv-ls" />
+			<param name="classname" value="org.naregi.rns.command.KV_ls" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-kv-get" />
+			<param name="classname" value="org.naregi.rns.command.KV_get" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-kv-set" />
+			<param name="classname" value="org.naregi.rns.command.KV_set" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-kv-rm" />
+			<param name="classname" value="org.naregi.rns.command.KV_rm" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-getacl" />
+			<param name="classname" value="org.naregi.rns.command.ACL_getacl" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-setacl" />
+			<param name="classname" value="org.naregi.rns.command.ACL_setacl" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-rmacl" />
+			<param name="classname" value="org.naregi.rns.command.ACL_rmacl" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-chmod" />
+			<param name="classname" value="org.naregi.rns.command.ACL_chmod" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-chown" />
+			<param name="classname" value="org.naregi.rns.command.ACL_chown" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-chgrp" />
+			<param name="classname" value="org.naregi.rns.command.ACL_chgrp" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-callerinfo" />
+			<param name="classname" value="org.naregi.rns.command.ACL_callerinfo" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="lfcj-test" />
+			<param name="classname" value="org.naregi.rns.command.LFC_test" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="lfcj-ls" />
+			<param name="classname" value="org.glite.lfc.main.LfcLs" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="lfcj-stat" />
+			<param name="classname" value="org.glite.lfc.main.LfcStat" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="lfcj-rns-migrate" />
+			<param name="classname" value="org.naregi.rns.command.LFC_RNS_migrate" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-bench" />
+			<param name="classname" value="org.naregi.rns.test.RNSBenchmark" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-profile" />
+			<param name="classname" value="org.naregi.rns.command.RNS_profile" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-bulk-add" />
+			<param name="classname" value="org.naregi.rns.command.RNS_bulk_add" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-bulk-remove" />
+			<param name="classname" value="org.naregi.rns.command.RNS_bulk_remove" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-bulk-rename" />
+			<param name="classname" value="org.naregi.rns.command.RNS_bulk_rename" />
+		</antcall>
+		<antcall target="makecmd">
+			<param name="cmdname" value="rns-bulk-setxml" />
+			<param name="classname" value="org.naregi.rns.command.RNS_bulk_setxml" />
+		</antcall>
+	</target>
+
+	<target name="makecmd">
+		<ant antfile="${build.launcher}" target="generateLauncher">
+			<property name="launcher-name" value="${cmdname}" />
+			<property name="class.name" value="${classname}" />
+			<property name="default.jvm.options" value="${default.jvm.options}" />
+		</ant>
+	</target>
+</project>

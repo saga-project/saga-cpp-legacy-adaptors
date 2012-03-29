@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+		The OGF takes no position regarding the validity or scope of any
+		intellectual property or other rights that might be claimed to pertain
+		to the implementation or use of the technology described in this
+		document or the extent to which any license under such rights might or
+		might not be available; neither does it represent that it has made any
+		effort to identify any such rights. Copies of claims of rights made
+		available for publication and any assurances of licenses to be made
+		available, or the result of an attempt made to obtain a general
+		license or permission for the use of such proprietary rights by
+		implementers or users of this specification can be obtained from the
+		OGF Secretariat. The OGF invites any interested party to bring to its
+		attention any copyrights, patents or patent applications, or other
+		proprietary rights which may cover technology that may be required to
+		practice this recommendation. Please address the information to the
+		OGF Executive Director. Disclaimer This document and the information
+		contained herein is provided on an “As Is" basis and the OGF disclaims
+		all warranties, express or implied, including but not limited to any
+		warranty that the use of the information herein will not infringe any
+		rights or any implied warranties of merchantability or fitness for a
+		particular purpose. Full Copyright Notice Copyright (C) Open Grid
+		Forum (2006-2009). All Rights Reserved. This document and translations
+		of it may be copied and furnished to others, and derivative works that
+		comment on or otherwise explain it or assist in its implementation may
+		be prepared, copied, published and distributed, in whole or in part,
+		without restriction of any kind, provided that the above copyright
+		notice and this paragraph are included on all such copies and
+		derivative works. However, this document itself may not be modified in
+		any way, such as by removing the copyright notice or references to the
+		OGF or other organizations, except as needed for the purpose of
+		developing Grid Recommendations in which case the procedures for
+		copyrights defined in the OGF Document process must be followed, or as
+		required to translate it into languages other than English. The
+		limited permissions granted above are perpetual and will not be
+		revoked by the OGF or its successors or assignees.
+	-->
+<xsd:schema xmlns="http://schemas.ogf.org/rns/2009/12/rns"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:rns="http://schemas.ogf.org/rns/2009/12/rns"
+	xmlns:wsa="http://www.w3.org/2005/08/addressing"
+	xmlns:wsbf="http://docs.oasis-open.org/wsrf/bf-2"
+	targetNamespace="http://schemas.ogf.org/rns/2009/12/rns"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xsd:import namespace="http://docs.oasis-open.org/wsrf/bf-2"
+		schemaLocation="../wsrf/faults/bf-2.xsd" />
+
+	<xsd:import namespace="http://www.w3.org/2005/08/addressing"
+		schemaLocation="../ws/addressing/ws-addr.xsd" />
+
+	<!-- Faults -->
+	<xsd:complexType name="ReadNotPermittedFaultType">
+		<xsd:complexContent>
+			<xsd:extension base="wsbf:BaseFaultType" />
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="ReadNotPermittedFault" type="rns:ReadNotPermittedFaultType" />
+
+	<xsd:complexType name="WriteNotPermittedFaultType">
+		<xsd:complexContent>
+			<xsd:extension base="wsbf:BaseFaultType" />
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="WriteNotPermittedFault" type="rns:WriteNotPermittedFaultType" />
+
+	<xsd:complexType name="RNSEntryExistsFaultType">
+		<xsd:complexContent>
+			<xsd:extension base="wsbf:BaseFaultType">
+				<xsd:sequence>
+					<xsd:element name="entry-name" type="xsd:string"
+						minOccurs="1" maxOccurs="1" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="RNSEntryExistsFault" type="rns:RNSEntryExistsFaultType" />
+
+	<xsd:complexType name="RNSEntryDoesNotExistFaultType">
+		<xsd:complexContent>
+			<xsd:extension base="wsbf:BaseFaultType">
+				<xsd:sequence>
+					<xsd:element name="entry-name" type="xsd:string"
+						minOccurs="1" maxOccurs="1" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="RNSEntryDoesNotExistFault" type="rns:RNSEntryDoesNotExistFaultType" />
+
+	<!-- Resource Properties -->
+	<xsd:element name="elementCount" type="xsd:unsignedLong"
+		nillable="false" />
+	<xsd:element name="createTime" type="xsd:dateTime"
+		nillable="true" />
+	<xsd:element name="accessTime" type="xsd:dateTime"
+		nillable="true" />
+	<xsd:element name="modificationTime" type="xsd:dateTime"
+		nillable="true" />
+	<xsd:element name="readable" type="xsd:boolean" nillable="false" />
+	<xsd:element name="writable" type="xsd:boolean" nillable="false" />
+
+	<!-- Helper Types -->
+	<xsd:simpleType name="EntryNameType">
+		<xsd:restriction base="xsd:string" />
+	</xsd:simpleType>
+
+	<xsd:simpleType name="RNSSupportType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="true" />
+			<xsd:enumeration value="false" />
+			<xsd:enumeration value="unknown" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:complexType name="SupportsRNSType">
+		<xsd:attribute name="value" type="rns:RNSSupportType"
+			use="required" />
+	</xsd:complexType>
+
+	<xsd:complexType name="RNSMetadataType">
+		<xsd:sequence>
+			<xsd:element name="supports-rns" type="rns:SupportsRNSType"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:any namespace="##other" processContents="lax" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="RNSEntryType">
+		<xsd:sequence>
+			<xsd:element name="endpoint" type="wsa:EndpointReferenceType"
+				minOccurs="0" maxOccurs="1" nillable="true" />
+			<xsd:element name="metadata" type="rns:RNSMetadataType"
+				minOccurs="0" maxOccurs="1" nillable="true" />
+		</xsd:sequence>
+		<xsd:attribute name="entry-name" type="rns:EntryNameType"
+			use="required" />
+	</xsd:complexType>
+
+	<xsd:complexType name="RNSEntryResponseType">
+		<xsd:sequence>
+			<xsd:element name="endpoint" type="wsa:EndpointReferenceType"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="metadata" type="rns:RNSMetadataType"
+				minOccurs="0" maxOccurs="1" nillable="true" />
+			<xsd:element name="fault" type="wsbf:BaseFaultType"
+				minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute name="entry-name" type="rns:EntryNameType"
+			use="required" />
+	</xsd:complexType>
+
+	<xsd:complexType name="NameMappingType">
+		<xsd:attribute name="source-name" type="rns:EntryNameType"
+			use="required" />
+		<xsd:attribute name="target-name" type="rns:EntryNameType"
+			use="required" />
+	</xsd:complexType>
+
+	<xsd:complexType name="MetadataMappingType">
+		<xsd:complexContent>
+			<xsd:extension base="rns:RNSMetadataType">
+				<xsd:attribute name="entry-name" type="rns:EntryNameType"
+					use="required" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<!-- Messages -->
+	<xsd:complexType name="AddRequestType">
+		<xsd:sequence>
+			<xsd:element name="entry" type="rns:RNSEntryType"
+				minOccurs="1" maxOccurs="unbounded" nillable="false" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="AddRequest" type="rns:AddRequestType" />
+
+	<xsd:complexType name="AddResponseType">
+		<xsd:sequence>
+			<xsd:element name="entry-response" type="rns:RNSEntryResponseType"
+				minOccurs="1" maxOccurs="unbounded" nillable="false" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="AddResponse" type="rns:AddResponseType" />
+
+	<xsd:complexType name="LookupRequestType">
+		<xsd:sequence>
+			<xsd:element name="entry-name" type="rns:EntryNameType"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="LookupRequest" type="rns:LookupRequestType" />
+
+	<xsd:complexType name="LookupResponseType">
+		<xsd:sequence>
+			<xsd:element name="entry-response" type="rns:RNSEntryResponseType"
+				minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="iterator" type="wsa:EndpointReferenceType"
+				minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="LookupResponse" type="rns:LookupResponseType" />
+
+	<xsd:complexType name="RemoveRequestType">
+		<xsd:sequence>
+			<xsd:element name="entry-name" type="rns:EntryNameType"
+				minOccurs="1" maxOccurs="unbounded" nillable="false" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="RemoveRequest" type="rns:RemoveRequestType" />
+
+	<xsd:complexType name="RemoveResponseType">
+		<xsd:sequence>
+			<xsd:element name="entry-response" type="rns:RNSEntryResponseType"
+				minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="RemoveResponse" type="rns:RemoveResponseType" />
+
+	<xsd:complexType name="RenameRequestType">
+		<xsd:sequence>
+			<xsd:element name="rename-request" type="rns:NameMappingType"
+				minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="RenameRequest" type="rns:RenameRequestType" />
+
+	<xsd:complexType name="RenameResponseType">
+		<xsd:sequence>
+			<xsd:element name="entry-response" type="rns:RNSEntryResponseType"
+				minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="RenameResponse" type="rns:RenameResponseType" />
+
+	<xsd:complexType name="SetMetadataRequestType">
+		<xsd:sequence>
+			<xsd:element name="set-metadata-request" type="rns:MetadataMappingType"
+				minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="SetMetadataRequest" type="rns:SetMetadataRequestType" />
+
+	<xsd:complexType name="SetMetadataResponseType">
+		<xsd:sequence>
+			<xsd:element name="entry-response" type="rns:RNSEntryResponseType"
+				minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="SetMetadataResponse" type="rns:SetMetadataResponseType" />
+</xsd:schema>

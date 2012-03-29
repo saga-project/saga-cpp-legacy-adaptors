@@ -1,0 +1,288 @@
+#!/bin/bash
+
+### configuration
+GRIDFTP_URL=gsiftp://localhost:5000/tmp/gridftp_testfile
+GRIDFTP_AUTHZ=self
+
+#######################
+TESTID=TEST_`hostname`_$$
+
+### RNS directory
+TESTDIR=/_TEST_CMD_${TESTID}
+
+### local file
+TMP_EPR1=${TESTID}_EPR1
+TMP_EPR2=${TESTID}_EPR2
+TMP_XML1=${TESTID}_XML1
+TMP_XML2=${TESTID}_XML2
+TMP_XML3=${TESTID}_XML3
+TMP_XML4=${TESTID}_XML4
+TMP_XML5=${TESTID}_XML5
+TMP_VAL1=${TESTID}_VAL1
+TMP_LSXML1=${TESTID}_LSXML1
+TMP_LS1=${TESTID}_LS1
+TMP_LS2=${TESTID}_LS2
+TMP_MVMAP=${TESTID}_MVMAP
+
+if [ -n "$GLOBUS_LOCATION" ]; then
+  . ${GLOBUS_LOCATION}/etc/globus-devel-env.sh
+fi
+. `dirname $0`/rns-common.sh
+
+check () {
+    line=`expr $2 - 1`
+    if [ $1 -ne 0 ]; then
+      echo "NG: line=${line}"
+      exit 1
+    else
+      echo "OK: line=${line}"
+    fi
+}
+
+errcheck() {
+    line=`expr $2 - 1`
+    if [ $1 -eq 0 ]; then
+      echo "NG: line=${line}"
+      exit 1
+    else
+      echo "OK: line=${line}"
+    fi
+}
+
+# MODE: all, junit, cmd, ftp
+MODE=default
+if [ x$1 != x ]; then
+    MODE=$1
+fi
+
+# default
+JUNIT=1
+CMD=1
+FTP=0
+if [ x$MODE = xall ]; then
+    JUNIT=1
+    CMD=1
+    FTP=1
+elif [ x$MODE = xjunit ]; then
+    JUNIT=1
+    CMD=0
+    FTP=0
+elif [ x$MODE = xcmd ]; then
+    JUNIT=0
+    CMD=1
+    FTP=0
+elif [ x$MODE = xftp ]; then
+    JUNIT=0
+    CMD=0
+    FTP=1
+fi
+
+if [ $JUNIT -eq 1 ]; then
+  java $JAVAOPT junit.textui.TestRunner org.naregi.rns.test.RNSTest
+  check $? $LINENO
+fi
+
+if [ $CMD -eq 1 ]; then
+rns-rm +r 100 $TESTDIR 2> /dev/null
+
+### mkdir
+rns-mkdir $TESTDIR
+check $? $LINENO
+rns-ls $TESTDIR
+check $? $LINENO
+rns-rmdir $TESTDIR
+check $? $LINENO
+
+### rename
+rns-mkdir $TESTDIR
+check $? $LINENO
+rns-mkdir $TESTDIR/d1
+check $? $LINENO
+rns-mv $TESTDIR/d1 $TESTDIR/d1 2> /dev/null
+errcheck $? $LINENO
+rns-mv $TESTDIR/d1 $TESTDIR/d2
+check $? $LINENO
+rns-mv $TESTDIR $TESTDIR/d2/ 2> /dev/null
+errcheck $? $LINENO
+rns-mkdir $TESTDIR/d2/d3
+check $? $LINENO
+rns-mv $TESTDIR/d2/d3 $TESTDIR 2> /dev/null
+errcheck $? $LINENO
+rns-mv $TESTDIR/d2/d3 $TESTDIR/
+check $? $LINENO
+rns-ls $TESTDIR/d3
+check $? $LINENO
+rns-ls $TESTDIR/d2/d3 2> /dev/null
+errcheck $? $LINENO
+
+### junction
+rns-mkdir $TESTDIR/d1
+check $? $LINENO
+rns-getepr $TESTDIR/d1 > $TMP_EPR1
+check $? $LINENO
+rns-add e $TMP_EPR1 $TESTDIR/j1
+check $? $LINENO
+rns-getepr $TESTDIR/j1 > $TMP_EPR2
+check $? $LINENO
+cmp $TMP_EPR1 $TMP_EPR2
+check $? $LINENO
+
+### link directory
+rns-ls $TESTDIR/j1 > /dev/null 2>&1
+check $? $LINENO
+rns-add er $TMP_EPR1 $TESTDIR/j2
+check $? $LINENO
+rns-ls $TESTDIR/j2
+check $? $LINENO
+rns-getepr $TESTDIR/j2 > $TMP_EPR2
+check $? $LINENO
+cmp $TMP_EPR1 $TMP_EPR2
+check $? $LINENO
+
+### setxml
+cat <<EOF > $TMP_XML1
+<A>TEST XML</A>
+----
+<B/>
+EOF
+check $? $LINENO
+rns-setxml $TESTDIR/j1 < $TMP_XML1
+check $? $LINENO
+rns-getxml $TESTDIR/j1 > $TMP_XML2
+check $? $LINENO
+rns-setxml $TESTDIR/j2 $TMP_XML1
+check $? $LINENO
+rns-getxml $TESTDIR/j2 > $TMP_XML3
+check $? $LINENO
+cmp $TMP_XML2 $TMP_XML3
+check $? $LINENO
+rns-add er $TMP_EPR1 $TESTDIR/jd1 $TMP_XML1
+check $? $LINENO
+rns-getxml $TESTDIR/jd1 > $TMP_XML4
+check $? $LINENO
+cmp $TMP_XML2 $TMP_XML4
+check $? $LINENO
+rns-mkdir $TESTDIR/d4 $TMP_XML1
+check $? $LINENO
+rns-getxml $TESTDIR/d4 > $TMP_XML5
+check $? $LINENO
+cmp $TMP_XML2 $TMP_XML5
+check $? $LINENO
+
+### bulk add
+rns-ls +1 +s $TESTDIR/ > $TMP_LS1
+check $? $LINENO
+rns-ls +x $TESTDIR > $TMP_LSXML1
+check $? $LINENO
+rns-mkdir $TESTDIR/d5
+check $? $LINENO
+rns-bulk-add $TESTDIR/d5 $TMP_LSXML1 2> /dev/null
+check $? $LINENO
+rns-bulk-add $TESTDIR/d5 $TMP_LSXML1 2> /dev/null
+errcheck $? $LINENO
+rns-bulk-add ++ignore $TESTDIR/d5 $TMP_LSXML1 2> /dev/null
+check $? $LINENO
+rns-ls +1 +s $TESTDIR/d5 > $TMP_LS2
+check $? $LINENO
+diff $TMP_LS1 $TMP_LS2
+check $? $LINENO
+
+### bulk setxml
+rns-bulk-setxml $TESTDIR/d5 $TMP_LSXML1 2> /dev/null
+check $? $LINENO
+rns-rmdir $TESTDIR/d5/d3
+check $? $LINENO
+rns-bulk-setxml $TESTDIR/d5 $TMP_LSXML1 2> /dev/null
+errcheck $? $LINENO
+rns-bulk-setxml ++ignore $TESTDIR/d5 $TMP_LSXML1 2> /dev/null
+check $? $LINENO
+
+### bulk remove
+echo > $TMP_LS1
+rns-ls +1 $TESTDIR/d5 >> $TMP_LS1
+check $? $LINENO
+echo >> $TMP_LS1
+rns-bulk-remove $TESTDIR/d5 $TMP_LS1
+check $? $LINENO
+rns-bulk-remove $TESTDIR/d5 $TMP_LS1 2> /dev/null
+errcheck $? $LINENO
+rns-bulk-remove ++ignore $TESTDIR/d5 $TMP_LS1
+check $? $LINENO
+
+### bulk rename
+rns-mkdir $TESTDIR/rename1
+check $? $LINENO
+rns-mkdir $TESTDIR/rename2
+check $? $LINENO
+rns-mkdir $TESTDIR/rename3
+check $? $LINENO
+cat <<EOF > $TMP_MVMAP
+"rename1""renamed 1"
+
+rename2  renamed2
+
+  rename3 renamed3   #
+EOF
+check $? $LINENO
+rns-bulk-rename $TESTDIR/ $TMP_MVMAP 2> /dev/null
+check $? $LINENO
+rns-bulk-rename $TESTDIR/ $TMP_MVMAP 2> /dev/null
+errcheck $? $LINENO
+rns-bulk-rename ++ignore $TESTDIR/ $TMP_MVMAP 2> /dev/null
+check $? $LINENO
+rns-ls $TESTDIR/'renamed 1'
+check $? $LINENO
+rns-ls $TESTDIR/renamed2
+check $? $LINENO
+
+### force remove
+rns-rm +f $TESTDIR/j2
+check $? $LINENO
+rns-rmdir $TESTDIR/jd1
+check $? $LINENO
+
+### key value
+rns-kv-set $TESTDIR key1 value1
+check $? $LINENO
+rns-kv-get $TESTDIR key1 > $TMP_VAL1
+test x`cat $TMP_VAL1` = xvalue1
+check $? $LINENO
+rns-kv-ls $TESTDIR > $TMP_VAL1
+check $? $LINENO
+grep key1 $TMP_VAL1 > /dev/null
+check $? $LINENO
+rns-kv-rm $TESTDIR key1
+check $? $LINENO
+fi
+
+### ftp
+if [ $FTP -eq 1 ]; then
+rns-gridftp-put $GRIDFTP_URL $TESTDIR/f1 $GRIDFTP_AUTHZ < $TMP_EPR1
+check $? $LINENO
+rns-gridftp-get $TESTDIR/f1 $GRIDFTP_AUTHZ > $TMP_EPR2
+check $? $LINENO
+cmp $TMP_EPR1 $TMP_EPR2
+check $? $LINENO
+rns-gridftp-ln $GRIDFTP_URL $TESTDIR/f2 $GRIDFTP_AUTHZ
+check $? $LINENO
+rns-gridftp-get $TESTDIR/f2 $GRIDFTP_AUTHZ > $TMP_EPR2
+check $? $LINENO
+cmp $TMP_EPR1 $TMP_EPR2
+check $? $LINENO
+rns-gridftp-del $TESTDIR/f1 $GRIDFTP_AUTHZ
+check $? $LINENO
+rns-gridftp-get $TESTDIR/f2 $GRIDFTP_AUTHZ 2> /dev/null
+errcheck $? $LINENO
+fi
+
+### cleanup
+if [ $CMD -eq 1 -o $FTP -eq 1 ]; then
+rns-rm +r 3 $TESTDIR 2> /dev/null
+check $? $LINENO
+rns-ls $TESTDIR 2> /dev/null
+errcheck $? $LINENO
+fi
+
+rm -f $TMP_EPR1 $TMP_EPR2 $TMP_XML1 $TMP_XML2 $TMP_XML3 $TMP_XML4 $TMP_XML5 $TMP_VAL1 $TMP_LSXML1 $TMP_LS1 $TMP_LS2 $TMP_MVMAP
+
+exit 0

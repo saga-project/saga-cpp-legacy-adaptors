@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:rnsms="http://schemas.ogf.org/rns/2010/11/metadata-search"
+	xmlns:rns="http://schemas.ogf.org/rns/2009/12/rns"
+	xmlns:wsa="http://www.w3.org/2005/08/addressing"
+	xmlns:wsbf="http://docs.oasis-open.org/wsrf/bf-2"
+	attributeFormDefault="unqualified"
+	elementFormDefault="qualified"
+	targetNamespace="http://schemas.ogf.org/rns/2010/11/metadata-search">
+
+	<xsd:import namespace="http://docs.oasis-open.org/wsrf/bf-2"
+		schemaLocation="../wsrf/faults/bf-2.xsd" />
+
+	<xsd:import namespace="http://www.w3.org/2005/08/addressing"
+		schemaLocation="../ws/addressing/ws-addr.xsd" />
+
+	<xsd:import namespace="http://schemas.ogf.org/rns/2009/12/rns"
+		schemaLocation="./rns.xsd" />
+
+	<!-- Faults -->
+	<xsd:complexType name="SearchFaultType">
+		<xsd:complexContent>
+			<xsd:extension base="wsbf:BaseFaultType" />
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="SearchFault" type="rnsms:SearchFaultType" />
+
+	<!-- Message Types -->
+	<xsd:complexType name="SearchRequestType">
+		<xsd:sequence>
+			<xsd:element name="entry-name" type="rns:EntryNameType"
+				minOccurs="0" maxOccurs="unbounded" nillable="true" />
+			<xsd:element name="query" type="xsd:string" minOccurs="1"
+				maxOccurs="1" nillable="false" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="SearchRequest" type="rnsms:SearchRequestType" />
+
+	<xsd:complexType name="SearchResponseType">
+		<xsd:sequence>
+			<xsd:element name="entry-response" type="rns:RNSEntryResponseType"
+				minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="iterator" type="wsa:EndpointReferenceType"
+				minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="SearchResponse" type="rnsms:SearchResponseType" />
+
+</xsd:schema>

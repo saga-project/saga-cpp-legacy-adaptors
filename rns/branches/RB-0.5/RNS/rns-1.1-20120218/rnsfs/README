@@ -1,0 +1,148 @@
+RNSFS-FUSE (RNS Client via FUSE)
+
+Quick Start:
+
+  - Install RNS
+
+  - Install FUSE (with devel package)
+
+    FUSE: Filesystem in Userspace
+      http://fuse.sourceforge.net/
+
+  - Install fuse4j
+
+    http://github.com/dtrott/fuse4j/tree/master
+
+    Example (on Ubuntu Linux):
+    $ sudo apt-get install git-core maven2
+    $ cd /RNS
+    $ git clone https://github.com/dtrott/fuse4j.git
+    (or git clone git://github.com/dtrott/fuse4j.git)
+    $ cd fuse4j/maven
+    $ mvn install
+    $ cd ../native
+    $ cp make.flags.slackware-linux make.flags
+    $ vi make.flags   # Edit FUSE_HOME, JAVA_HOME, LDPATH (i386 or amd64)
+    $ make
+
+  - Copy fuse4j-core.jar
+
+    Example:
+
+    $ cp -a ~/.m2/repository/fuse4j/fuse4j-core/2.4.0.0-SNAPSHOT/fuse4j-core-2.4.0.0-SNAPSHOT.jar /RNS/fuse4j-core.jar
+
+  - Edit build.conf
+
+    Example:
+
+    FUSE4J_HOME=/RNS/fuse4j
+    FUSE4J_JAR=/RNS/fuse4j-core.jar
+
+  - Run `./install.sh' in rnsfs of RNS
+
+  - Mount
+
+    (recommend)
+    Set rns.client.cacheTimeout of ~/.rns-client.conf for a positive number.
+
+    $ rnsfs.sh /mount/point
+
+  - Create a new directory
+
+    $ mkdir dirname
+
+  - Remove an empty directory
+
+    $ rmdir dirname
+
+  - Create a new junction
+
+    $ cat EPRFILE > filename
+    or
+    $ cat EPRFILE > filename.epr
+
+    (necessary to confirm)
+    $ test -f filename
+    $ echo $?
+
+  - Create a new junction from an URL
+
+    $ echo -n URL > filename.url
+
+    (necessary to confirm)
+    $ test -f filename
+    $ echo $?
+
+  - Print an EPR
+
+    $ cat filename
+    or
+    $ cat filename.epr
+
+    $ cat dirname.epr
+
+  - Print an URL
+
+    $ cat filename.url
+    $ cat dirname.url
+
+  - Set a Metadata into an existing entry (directory or junction)
+
+    (recommend: print errors)
+    $ rnsfs-setxml XMLFILE filename
+
+    (not recommend)
+    $ cat XMLFILE > filename.xml
+    $ cat XMLFILE > dirname.xml
+    (necessary to confirm)
+    $ diff XMLFILE - < filename.xml
+    $ echo $?
+
+  - Print a Metadata
+
+    (recommend)
+    $ rnsfs-getxml filename
+
+    $ cat filename.xml
+    $ cat dirname.xml
+
+  - List keys of Key/Value operation from a Metadata
+
+    $ rnsfs-lskv filename
+    $ rnsfs-lskv dirname
+
+  - Set a value of Key/Value operation into a Metadata
+
+    $ rnsfs-setkv filename key value
+    $ rnsfs-setkv dirname key value
+
+  - Get a value of Key/Value operation from a Metadata
+
+    $ rnsfs-getkv filename key
+    $ rnsfs-getkv dirname key
+
+  - Remove a value of Key/Value operation from a Metadata
+
+    $ rnsfs-rmkv filename key
+    $ rnsfs-rmkv dirname key
+
+  - Copy a junction
+
+    $ ln fromname toname
+
+  - Rename an entry (directory or junction)
+
+    $ mv oldname newname
+
+  - Remove a junction
+
+    $ rm filename
+
+  - Note: About creation or update
+
+    An errno is not never returned in creation or update.
+    It is necessary to confirm the file after creation or update.
+
+  - Unmount
+
+    $ fusermount -u /mount/point

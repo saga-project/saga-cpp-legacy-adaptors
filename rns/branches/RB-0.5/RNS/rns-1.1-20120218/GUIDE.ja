@@ -1,0 +1,2195 @@
+RNS 操作説明書
+
+====
+概要
+====
+
+RNS サーバや RNS クライアントを利用するには、以下の手順が必要です。
+
+初めに、依存するソフトウェアをインストールします。
+
+  - 実行環境の OS を確認
+  - Java SE 6 のインストール
+  - Apache Ant のインストール
+  - Globus Toolkit のインストール
+  - Apache Tomcat のインストール (任意)
+  - Saxon-HE のダウンロード
+
+次に、RNS サーバや RNS クライアントをインストールし、設定します。
+
+  - RNS サーバのインストール
+  - RNS サーバの起動
+  - RNS クライアントのインストール
+  - RNSFS-FUSE のインストール (任意)
+  - RNSWeb のインストール (任意)
+
+  - RNS サーバの設定
+  - RNS クライアントの設定
+  - RNSWeb の設定
+
+RNS クライアントの操作方法を確認します。
+
+  - RNS コマンド操作方法
+  - RNSFS-FUSE 操作方法
+  - RNSWeb 操作方法
+  - 性能計測コマンド操作方法
+  - 動作テストコマンド操作方法
+
+その他、利用例などを確認します。
+
+  - GSI 認証利用方法
+  - GridFTP サーバの設定例
+  - RNS サーバログ設定例
+  - データベースのバックアップ方法
+
+========
+実行環境
+========
+
+Linux OS 上で実行することを想定しています。
+
+Ubuntu Linux 8.04, 10.04 上で動作確認を行なっています。
+
+RNSWeb を利用するウェブブラウザとして Firefox 上で動作を確認してい
+ます。
+
+
+========================
+Java SE 6 のインストール
+========================
+
+Java SE Development Kit 6 (JDK) をインストールします。
+RNS サーバ環境、RNS クライアント環境ともに必要です。
+
+Linux 版をダウンロードします。
+
+  http://java.sun.com/javase/ja/6/download.html
+
+インストーラを実行して展開し、一般ユーザでも読めるように配置します。
+
+以下をインストール先の例として今後の説明で扱います。
+
+  /RNS/java/
+
+
+=========================
+Apache Ant のインストール
+=========================
+
+Apache Ant をインストールします。
+RNS サーバ環境、RNS クライアント環境ともに必要です。
+
+apache-ant-1.6.5-bin を取得します。
+
+  http://archive.apache.org/dist/ant/binaries/
+
+[注意] version 1.7.x では globus-deploy-gar が動作せず、インストール
+できません。
+
+パッケージを展開し、一般ユーザでも読めるように配置します。
+
+以下をインストール先の例として今後の説明で扱います。
+
+  /RNS/ant/
+
+
+=============================
+Globus Toolkit のインストール
+=============================
+
+Globus Toolkit 4.2.x (以下 GT4) をインストールします。
+RNS サーバ環境、RNS クライアント環境ともに必要です。
+
+  http://www.globus.org/toolkit/downloads/4.2.1/
+
+RNS サーバの用途の場合、RNS サーバを起動するユーザ (一般ユーザ権限) が
+GT4 と RNS をインストールします。後述の RNS のインストーラが GT4 をイン
+ストールしたディレクトリに対してファイルをいくつか書き込むので、RNS サー
+バ用途専用に GT4 をインストールするかどうかも考慮してください。
+
+RNS クライアントのみの用途であれば、誰が GT4 をインストールしても構いま
+せんが、後述の RNS パッケージをインストールするユーザと同一である必要が
+あります。
+
+以下をインストール先の例として今後の説明で扱います。
+
+  /RNS/gt4/
+
+GT4 は Java WS Core Binary 版と Full Toolkit 版のどちらでも RNS で利用
+することができますが、それぞれ一長一短があり、環境に合わせてインストー
+ルします。
+
+RNS サーバを Java WS Core Binary 版の GT4 で動作させる場合は、以下のコ
+マンドを実行して JavaDB (derby) を有効にしてください。
+(クライアント用途のみでの RNS インストール時には不要)
+
+  $ ln -s /RNS/java/db/lib/derby.jar /RNS/gt4/lib/derby.jar
+
+
+RNS 利用上での、GT4 インストールパッケージの違いを以下にまとめます。
+
+  [Full Toolkit 版 (バイナリパッケージ、ソースパッケージ)]
+  - RNS にとって不要なアプリケーションが多い
+  - globus-start-container-detached コマンドが有るので、バックグラウン
+    ドでサービスを起動できる
+  - SimpleCA を構築できる
+  - GridFTP サーバ有り
+  - サーバ用途推奨
+
+  [Java WS Core Binary 版]
+  - インストールは小さい圧縮ファイルを展開するだけ
+  - RNS にとって不要なパッケージが少ない、ファイル数が少ない
+  - globus-start-container-detached 無し
+  - globus-start-container は有る
+  - GridFTP サーバ無し
+  - クライアント用途推奨
+
+
+============================
+Apache Tomcat のインストール
+============================
+
+必要であればインストールします。
+
+RNSWeb (後述) を利用する場合に Apache Tomcat をインストールします。
+
+RNSWeb は RNS のクライアントの一つです。RNSWeb クライアントを利用する
+ユーザごとに Tomcat を起動する必要があるので、ユーザごとに異なるディレ
+クトリへ Tomcat をインストールする必要があります。
+
+Tomcat バージョン 6.x を取得します。
+
+  http://tomcat.apache.org/
+
+RNSWeb 利用ユーザごとに異なる場所へパッケージを展開し、配置します。
+以下をインストール先の例として今後の説明で扱います。
+(username をローカルアカウント名とする例)
+
+  /RNS/username/tomcat/
+
+=======================
+Saxon-HE のダウンロード
+=======================
+
+RNS をインストールする前に、この jar ファイルが必要です。
+
+http://sourceforge.net/projects/saxon/files/
+から saxonhe9-2-1-2j.zip をダウンロードします。
+
+saxonhe9-2-1-2j.zip を unzip すると saxon9he.jar があるので、これを
+後述の RNS インストール先ディレクトリ内の lib ディレクトリ以下に配置
+します。
+
+
+========================
+RNS サーバのインストール
+========================
+
+サーバホストにインストールします。必須です。
+
+GT4 をインストールしたユーザと同一ユーザの権限で RNS を配置とインストール
+します。
+
+RNS サーバ を起動するために globus-start-container コマンドをそのユーザで
+実行することになります。
+
+バイナリ版とソース版の RNS パッケージがありますが、どちらもインストール
+方法は同じです。
+
+バイナリパッケージの GT4 を利用した場合は JavaDB (derby) を有効にして
+ください。詳しくは「Globus Toolkit のインストール」を参照してください。
+
+rns-1.1-番号.tar.gz ファイルを展開し、配置します。
+以下をインストール先の例として今後の説明で扱います。
+
+  /RNS/rns/
+
+ここで前述の saxon9he.jar を移動します。
+以下をインストール先の例として今後の説明で扱います。
+
+  /RNS/rns/lib/saxon9he.jar
+
+次に /RNS/rns/env-rns.sh を編集します。
+
+設定例
+
+  GLOBUS_LOCATION=/RNS/gt4
+  RNS_HOME=/RNS/rns
+  MY_JAVA_HOME=/RNS/java
+  MY_ANT_HOME=/RNS/ant
+
+  MY_JAVA_HOME と MY_ANT_HOME は JAVA_HOME と ANT_HOME 環境変数が設定さ
+  れている環境であれば設定不要なので、シャープ(#)でコメントアウトします。
+  そうでなければ、MY_JAVA_HOME と MY_ANT_HOME を指定します。
+
+  env-rns.sh はインストール後も、サーバを起動したり、クライアントを利用
+  する場合に bash に読み込んで利用します。
+
+インストールします。(GLOBUS_LOCATION 以下に書き込まれます)
+
+  $ cd /RNS/rns
+  $ ./install.sh
+
+必要であれば、RNS を GLOBUS_LOCATION からアンインストールもできます。
+
+  $ cd /RNS/rns
+  $ ./uninstall.sh
+
+
+================
+RNS サーバの起動
+================
+
+globus-start-container コマンドで RNS サーバを起動します。
+
+  $ bash
+  $ . /RNS/rns/env-rns.sh
+  $ globus-start-container -nosec
+
+  フォアグラウンドで実行するので、終了する場合は ctrl+c します。
+
+Full Toolkit 版の GT4 環境であれば globus-start-container-detached を使
+用することもできます。
+
+実行例
+
+  $ bash
+  $ . /RNS/rns/env-rns.sh
+  $ globus-start-container-detached -nosec
+
+この場合、サーバをバックグラウンドで実行します。終了するには、
+globus-stop-container-detached を使用します。
+
+  $ globus-stop-container-detached
+
+また、GSI 認証を使用する場合に https で通信する場合 (推奨) は -nosec
+オプションを使用しません。詳しくは後述の「GSI 認証利用方法」を参照して
+下さい。
+
+デフォルトのポート番号は、http (-nosec) の場合は 8080、https の場合は
+8443 です。ポート番号を変更するには -p オプションを利用します。
+
+実行例
+
+  $ globus-start-container-detached -nosec -p 18080
+
+また、Full Toolkit 版の GT4 には
+GLOBUS_LOCATION/etc/init.d/globus-ws-java-container に起動や停止するため
+のスクリプトがあります。これを編集して利用すると良いでしょう。
+
+また、環境変数 GLOBUS_OPTIONS に例えば -Xmx2048m を指定すると、
+Java ヒープサイズの最大値が 2048MB になります。
+ヒープサイズの最小値も -Xms2048m のように指定できます。
+空き実メモリよりも大きな値を指定すると、動作が遅くなることがあります。
+
+  $ GLOBUS_OPTIONS="-Xms2048m -Xmx2048m" globus-start-container
+
+
+==============================
+RNS クライアントのインストール
+==============================
+
+クライアントホストにインストールします。必須です。
+
+「RNS サーバのインストール」と同じ手順でインストールします。
+
+クライアントを利用する場合は下記を実行します。
+
+  $ . /RNS/rns/env-rns.sh
+
+/RNS/rns/env-rns.sh を読むことが可能ならば、他人がインストールした環境
+であっても、誰でも RNS クライアントを利用できます。
+
+ユーザごとに別々のディレクトリへインストールしても利用しても構いません。
+
+クライアントしか動かさないホストでは、サーバを起動する必要はありません。
+
+RNS 用の GT4 と他の GT4 アプリケーションのための GLOBUS_LOCATION を共用
+できない場合は、mygt4exec.sh を編集して MY_GLOBUS_LOCATION に RNS 用の
+GT4 へのパスを指定し、下記のように RNS クライアントを利用してください。
+
+  $ /RNS/rns/mygt4exec.sh rns-ls /
+
+
+=========================
+RNSFS-FUSE のインストール
+=========================
+
+必要であればインストールします。
+
+RNSFS-FUSE は、RNS ディレクトリ構造をファイルシステムとしてマウントし、
+RNS のデータ構造を操作することができます。
+
+例えば RNS に登録された参照先エンドポイントのファイルを読み書きしたり
+はできません。RNS サーバの情報のみを操作できます。
+
+RNSFS-FUSE は RNS クライアントコマンドを使用するよりも、動作が軽い利点
+があります。
+通常、RNS クライアントのコマンドは、実行するたびに GT4 ライブラリの初期
+化に時間がかかりますが、RNSFS-FUSE は、マウント後に 1 度、GT4 の初期化
+処理を行うだけなので、ディレクトリの操作をするたびに時間がかかることは
+ありません。
+
+注意点として、ユーザごとに RNSFS-FUSE を実行し、マウントする必要があり
+ます。
+
+RNSFS-FUSE は RNS のソースパッケージ内に同梱しています。
+バイナリパッケージには同梱していません。
+
+まず、RNS をインストールしておき、以下の手順でインストールします。
+
+FUSE をインストールします。なるべく Linux ディストリビューションに標準
+で用意されているパッケージを利用します。FUSE 開発パッケージも必要です。
+またはソースパッケージからインストールすることもできます。詳しくは下記
+サイトをご覧ください。
+
+  http://fuse.sourceforge.net/
+
+次に、fuse4j をインストールします。
+
+  http://github.com/dtrott/fuse4j/tree/master
+
+ダウンロードします。git コマンドが必要です。
+
+  $ git clone git://github.com/dtrott/fuse4j.git
+
+今後は以下をインストール先の例とします。
+
+  /RNS/fuse4j
+
+fuse4j をビルドします。
+fuse4j の説明書を参照してインストールしてください。
+
+make.flags ファイルを編集してから make します。
+FUSE_HOME と JAVA_HOME を指定します。
+また、x86_64 OS 環境の場合は LDPATH の i386 を amd64 に変更します。
+
+以下はインストール例です。
+
+  mvn コマンド (Maven2) が必要です。
+  $ cd /RNS/fuse4j/maven
+  $ mvn install
+  $ cd ../native
+  $ cp make.flags.slackware-linux make.flags
+  $ vi make.flags  # FUSE_HOME, JAVA_HOME, LDPATH を編集
+  $ make
+
+  FUSE のヘッダファイルが無いと make が失敗します。
+
+RNSFS-FUSE のディレクトリへ移動します。
+
+  $ cd /RNS/rns/rnsfs
+
+build.conf を編集します。
+
+  例
+  FUSE4J_HOME=/RNS/fuse4j
+  FUSE4J_JAR=${HOME}/.m2/repository/fuse4j/fuse4j-core/2.4.0.0-SNAPSHOT/fuse4j-core-2.4.0.0-SNAPSHOT.jar
+
+  例えば fuse4j-core-2.4.0.0-SNAPSHOT.jar を /RNS/fuse4j-core.jar
+  のようにコピーして置いて、FUSE4J_JAR=/RNS/fuse4j-core.jar と指定
+  すれば、全ユーザで Jar ファイルを共有できます。
+
+事前に RNS の環境変数を読み込こんでおきます。
+
+  $ . /RNS/rns/env-rns.sh
+
+RNSFS-FUSE をコンパイルします。
+
+  $ cd RNS/rns/rnsfs
+  $ ./install.sh
+
+
+=====================
+RNSWeb のインストール
+=====================
+
+必要であればインストールします。
+
+RNSWeb はウェブブラウザから RNS を操作するクライアントです。
+RNSWeb を利用する場合にインストールしてください。
+
+RNSWeb は、ユーザごとに異なるディレクトリへインストールする必要があ
+ります。複数ユーザで同時に使う場合は、ポート番号も競合しないように
+します。
+
+事前に Apache Tomcat をインストールしておきます。
+「Apache Tomcat のインストール」を参照してください。
+
+事前に RNS クライアントをインストールしておきます。
+「RNS クライアントのインストール」を参照してください。
+
+RNSWeb は RNS とは別パッケージとなっています。
+ユーザごとに rnsweb-1.1-数字.tar.gz ファイルを展開し、配置します。
+
+今後は以下をインストール先の例とします。
+
+  /RNS/username/rnsweb/
+
+/RNS/username/tomcat/conf/server.xml を編集します。
+
+そのホストで利用していない TCP のポート番号に変更し、
+useBodyEncodingForURI="true" を追加します。
+
+特に、同じホスト上で RNS サーバを動かしたり、RNSWeb がユーザごとに複数
+起動される可能性が高いので、お互いポート番号が被らないように注意します。
+
+設定例(抜粋)
+
+  <Connector port="18080" protocol="HTTP/1.1"
+      connectionTimeout="20000"
+      useBodyEncodingForURI="true"
+      redirectPort="8443" />
+
+RNSWeb のディレクトリを公開します。
+その方法の一つとして webapps の下にシンボリックリンクを作成します。
+
+    $ ln -s /RNS/username/rnsweb /RNS/username/tomcat/webapps/rnsweb
+
+または、/RNS/username/tomcat/conf/server.xml 内に、下記のような設定を
+<Host> と </Host> の間に記述します。
+
+  <Context path="/rnsweb" reloadable="true"
+      docBase="/RNS/username/rnsweb"
+      workDir="/tmp/username/rnsweb-work" />
+
+または、Tomcat トップページにある Tomcat Manager からディレクトリを追加
+も可能です。指定したディレクトリが webapps/ 以下へのコピーされるので注
+意します。(Tomcat Manager を利用するには、
+/RNS/username/tomcat/conf/tomcat-users.xml の設定が必要です。)
+
+次に、/RNS/username/rnsweb/setup.sh を実行します。
+(/RNS/rns に RNS をインストールした状態で実行します。)
+
+  $ bash
+  $ . /RNS/rns/env-rns.sh
+  $ cd /RNS/username/rnsweb
+  $ ./setup.sh
+
+RNSWeb を起動するためのファイル rnsweb.sh を編集します。
+TOMCAT_BIN として、上述に例として指定していた /RNS/username/tomcat のような
+パスを記述します。そして以下のように実行します。
+
+  $ /RNS/rnsweb/rnsweb.sh start
+
+停止する場合は以下のように実行します。
+
+  $ /RNS/rnsweb/rnsweb.sh stop
+
+
+================
+RNS サーバの設定
+================
+
+RNS サーバを起動／停止方法するには、「RNS サーバのインストール」
+を参照してください。
+
+動作を記録する方法は「RNS サーバログ設定例」を参照してください。
+
+RNS サーバの動作を変更するために、以下の設定ファイルがあります。
+
+  - rns-server.conf
+  - rns-acl-admin
+  - rns-readonly
+  - rns-readwrite
+
+(1) rns-server.conf
+
+  RNS サーバの動作を変更できます。設定を変更した場合は、
+  globus-start-container を再起動する必要があります。
+
+  ファイルの所在(優先順位)
+
+    - globus-start-container を実行するユーザの ~/.rns-server.conf
+    - 上記ファイルが無い場合: /etc/rns-server.conf
+
+  設定記述形式 (一行ごとに記述します)
+
+    設定名=値
+
+  シャープ文字 (#) 以降はコメントとして無視します。
+
+  以降、設定可能な設定名と、それに対して指定可能な値を説明します。
+
+  1. rns.server.iteratorUnit
+
+    数字を指定します。
+    デフォルト : 1000
+
+    WS-Iterator インターフェースを使ってディレクトリのリストを返す際、
+    iterate リクエスト 1 回あたりの最大エントリ数を数字で指定します。し
+    かし 0 の場合は WS-Iterator を使わず、全てのエントリを lookup のレ
+    スポンスへ格納して応答します。
+
+    ここで設定する値はクライアントに知らせるための推奨値です。この推奨
+    値を無視するクライアントがあれば、クライアントの要求通りの数を格納
+    します。本実装のクライアントとサーバを利用していれば、このサーバ側
+    の設定通りに、クライアントは動作します。
+
+    ここに 1 より大きい数字を指定すると、WS-Iterator の仕様に定義されて
+    いる preferredBlockSize 値としてクライアントが知ることができます。
+
+    クライアントが preferredBlockSize を無視して、WS-Iterator の
+    iterate リクエストに指定する elementCount の数を指定した場合、サー
+    バが返す iterate レスポンスの大きさは、クライアントが指定した
+    elementCount に従って応答します。
+
+    rns.server.iteratorUnit に 0 を指定すると、RNS サーバは常に
+    WS-Iterator を使わず、一度にリストを返します。
+
+  2. rns.server.commitAccessTime
+
+    true または false を指定します。
+    デフォルト : false
+
+    RNS ディレクトリに対する lookup 操作または WS-Iterator による
+    iterate 操作が成功した時刻として、accessTime 情報を即座にディスクへ
+    書き込むかどうかを指定します。false にすることで、性能が向上します。
+
+    accessTime を即座にデータベースへ書き込む場合は true を, 即座に書き
+    込まなくてもよい場合は false を指定します。
+
+    false の場合は、ディレクトリの accessTime 以外の情報が更新されたタ
+    イミングで一緒にディスクへ書き込むことになります。しかし、まだ書き
+    込んでいない部分を globus-start-container 終了時に書き出すことはあ
+    りません。よって、最新の accessTime 状態は、ディスクへ書き込まれな
+    いまま捨てられてしまう可能性があります。また、
+    globus-start-container を起動している間は、メモリ上の accessTime が
+    更新され、その値を返しますが、そのメモリ状態が自動的に破棄されてし
+    まうこともあります。よって false の場合は、accessTime が正確な値で
+    はない情報となることに注意してください。
+
+  3. rns.server.accessControlType
+
+    文字列を指定します。
+    デフォルト : none
+
+    アクセス制御方法を切替えます。
+    実装ごとの名前を文字列で指定します。
+    文字列指定を間違えると、誰もアクセスできません。
+    本バージョンで指定可能な文字列は以下になります。
+
+    - voms : ディレクトリ単位でアクセス制御できます。
+
+      ACL の仕組みを利用できるようになります。
+      グループの概念を利用する場合は VOMS の設定が必要になります。
+      VOMS については、別途環境設定をしてください。
+
+      VOMS 情報を利用せず、GSI のユーザ識別のみで、グループ情報を利用
+      しない運用も可能です。
+
+      この設定を有効にするには、後述の rns.server.dbType の設定を
+      derby にしてください。また、後述の rns-acl-admin ファイルに、
+      admin になるユーザを登録します。
+
+      RNS サーバを起動後、一般ユーザが書き込みできるように、admin ユー
+      ザでルートディレクトリ以下に、適切なディレクトリとそれに対するパー
+      ミッションや所有者、所有グループを設定します。
+      rns-setacl, rns-getacl, rns-chmod, rns-chown, rns-chgrp, rns-ls-l
+      などの説明を参照してください。
+
+      RNS クライアント利用ユーザは、voms-proxy-init または
+      grid-proxy-init を実行してから RNS を利用します。
+
+      grid-proxy-init または voms-proxy-init すると、RNS サーバはユーザ
+      を識別します。そうでない場合は、ユーザ名が anonymous になります。
+
+      voms-proxy-init するとグループの情報を利用します。
+      voms-proxy-init しないとグループ名は anonymous になります。
+
+      anonymous ユーザやグループのディレクトリは、名前を持ったユーザ
+      やグループに所属したユーザであれば anonymous でもあるとみなし、
+      そのパーミッションに従って操作可能です。
+
+      つまり、グループの概念を利用しない場合は grid-proxy-init でもユー
+      ザ識別できますが、グループはすべて anonymous になるので、
+      anonymous グループのパーミッションは閉じておくべきでしょう。
+
+      ディレクトリの所有者は、自分の所属グループ範囲内で rns-chgrp がで
+      きます。
+
+      ジャンクション (EPR 参照のみ) のエントリに、ACL はありません。
+
+      パーミッションは、対象のユーザ、グループごとに、r (ディレクトリ読
+      む権限)、w (ディレクトリ変更権限)、x がありますが、x の情報は
+      RNS ではアクセスコントロールに利用しません。
+
+    - simple : rns-readonly と rns-readwrite ファイルを使用して、アクセ
+      スコントロールします。
+
+      RNS サービス全体としてユーザ単位でアクセス許可を行えます。
+
+      通信時に GSI  認証が必要となります。
+
+    - none : アクセス制御を使いません。誰でも自由にアクセスできます。
+
+  4. rns.server.dbType
+
+    RNS に記録された状態を保存する形式を文字列で指定します。
+    デフォルト : derby
+
+    本バージョンで指定可能な名前は以下になります。
+
+    - derby
+
+      Apache Derby (JavaDB) に状態を記録します。
+
+      データは常に GLOBUS_LOCATION/var/rns 以下に保存します。
+      後述の rns.server.storageDir が効かないことに注意します。
+
+      また、derby を利用する場合、derby.jar が必要です。derby.jar は
+      Java SE 6 または GT4 Full Toolkit に同梱されています。つまり、サー
+      バ側の GT4 に WS Core を利用する場合は注意してください。詳細は
+      「Globus Toolkit のインストール」を参照してください。
+
+    - file
+
+      RNS ディレクトリ 1 個につき 1 個のファイルに保存します。
+      そのファイルにはリストも格納します。
+      ObjectInputStream と ObjectOutputStream を利用して出力します。
+
+    - xml
+
+      RNS ディレクトリ 1 個につき 3 個の XML ファイルに保存します。
+      XMLDecoder と XMLEncoder を利用して出力します。
+
+  5. rns.server.storageDir
+
+    データ保存先ディレクトリを指定します。
+    デフォルト : /tmp/RNS_DATA
+
+    この設定は rns.server.dbType が derby の場合に効果はありません。
+    derby のデータは GLOBUS_LOCATION/var/rns 以下に保存されます。
+
+  6. rns.server.dbCache
+
+     データベースをメモリにキャッシュする場合は true、キャッシュしない
+     場合は false を指定します。これは rns.server.dbType が derby の
+     場合に効果があります。
+
+     デフォルト : true
+
+  7. rns.server.replaceLocalHostName
+
+    サーバ自身を指すディレクトリの参照アドレスのホスト名を、本設定の
+    文字列で置換します。
+    サーバのホスト名が 127.0.0.1 となってしまったり、異なる名前で
+    クライアントからアクセスさせたい場合などに設定します。
+
+    デフォルト : 置換しません。
+
+  8. rns.server.replaceLocalPort
+
+    サーバ自身を指すディレクトリの参照アドレスのポート番号を、本設定
+    の文字列で置換します。
+
+    デフォルト : 置換しません。
+
+  9. rns.server.minFreeMemory
+
+    サーバが最低限必要な空きメモリの量をメガバイト (MB) 単位で指定し
+    ます。この値以下になると強制的に GC をし、コンテナのメモリ不足を
+    回避します。
+
+    デフォルト : 10
+
+  10. rns.server.limitMetadataSize
+
+    サーバで受け付けるメタデータ (XML) のサイズをバイト数で指定します。
+
+    一旦サーバ内で、OutOfMemoryError が起こると、その後、コンテナを再
+    起動するまで RNS を利用できなくなります。
+
+    デフォルト : 1048576
+
+  11. rns.server.tmpdir
+
+    サーバで一時的に利用するファイルを置くディレクトリのパスを指定しま
+    す。
+    コンテナの異常終了時は、このディレクトリにゴミが残ることがあります。
+
+    デフォルト : /tmp/RNS_TMP
+
+(2) rns-acl-admin 設定ファイル
+
+  rns-server.conf の rns.server.accessControl に voms と指定する場合、
+  このファイルにも設定が必要です。
+
+  ~/.rns-acl-admin ファイルがなければ /etc/rns-acl-admin を読みます。
+
+  rns-acl-admin ファイルに記述されたユーザのみが、admin になれます。
+  複数ユーザをファイルに複数行で記述できます。
+
+  admin は特別なユーザの権限で、以下の動作が可能です。
+
+    - 常にディレクトリを読める。
+    - 常に ACL を読める。
+    - 常に ACL を変更できる。
+
+  しかし、以下の制限があります。
+
+    - ACL で許可が無い限り、ディレクトリの編集ができない。
+
+  この設定ファイルを編集した場合でも、globus-start-container を再起動
+  する必要はありません。10 秒ごとに読み直しています。
+
+(3) rns-readonly / rns-readwrite 設定ファイル
+
+  rns-server.conf の rns.server.accessControl に simple と指定する場合、
+  これらファイルにも設定が必要です。
+
+  rns-readonly または rns-readwrite ファイルに記述されたユーザのみが
+  RNS にアクセスできます。どちらのファイルも作成しない場合、誰もアクセ
+  スできません。
+
+  ユーザ認証をするには、クライアント、サーバともに GSI による通信を有
+  効にしなければなりません。GSI 認証を利用するには「GSI 認証利用方法」
+  を参照してください。
+
+  rns-readonly に記述されたユーザは、この RNS サーバに保存されている全
+  リソース (ディレクトリ) に対して lookup できます。
+
+  rns-readwrite に記述されたユーザは、この RNS サーバに保存されている
+  全リソース(ディレクトリ) に対して lookup, add, setMetadata, rename,
+  remove 操作 (RNS 1.1 インターフェース) できます。
+
+  lookup 操作に関すると、rns-readonly と rns-readwrite のどちらか一方に
+  記述すれば操作許可となります。
+
+  RNS では、直接ディレクトリへの参照がわかれば、そのディレクトリにアク
+  セスが許可されているかどうか判断するだけのアクセス制御になります。よっ
+  て、パス名の中に他の RNS サーバで管理されているディレクトリが含まれ
+  ている場合は、単純にそこから先は別のアクセス制御になります。
+
+  rns-readonly と rns-readwrite ファイルの所在は下記となります。
+
+    ~/.rns-readonly になければ /etc/rns-readonly
+    ~/.rns-readwrite になければ /etc/rns-readwrite
+
+  rns-readonly または rns-readwrite ファイルに許可するユーザを登録する
+  場合、各ユーザが下記コマンドを実行した出力を、RNS 管理者に登録しても
+  らいます。
+
+  rns-readonly と rns-readwrite ファイルを編集した場合でも、
+  globus-start-container を再起動する必要はありません。
+  10 秒ごとに読み直しています。
+
+(4) ユーザ名について
+
+  rns-acl-admin, rns-readonly, rns-readwrite に記述するユーザ名は、
+  以下のコマンドで実行者自身の情報がわかります。
+
+    $ rns-callerinfo
+
+  詳細は後述の「RNS コマンド操作方法」を参照してください。
+
+  または、以下のコマンドでもわかります。
+
+    $ grid-cert-info -identity
+
+  [注意] Java WS Core 版の grid-proxy-info または grid-cert-info コマ
+  ンドは出力形式が異なります。例えば grid-cert-info -identity の結果が
+  以下の場合、
+
+    O=Grid,OU=GlobusTest,OU=simpleCA-CAhostname,CN=yourname
+
+  上記を下記
+
+    /O=Grid/OU=GlobusTest/OU=simpleCA-CAhostname/CN=yourname
+
+  の形式に変換してから、rns-readonly または rns-readwrite へ登録します。
+
+
+======================
+RNS クライアントの設定
+======================
+
+RNS のクライアントライブラリを利用したアプリケーションは、ユーザごとに
+同じ設定ファイルを利用します。つまり RNS のコマンドと RNSFS-FUSE と
+RNSWeb は同じ設定ファイルを利用します。
+
+設定ファイルの所在は ~/.rns-client.conf です。RNS_CLIENT_CONFIG 環境変
+数で設定ファイルを指定することも可能です。
+
+設定は java.util.Properties 形式で記述します。
+以下は設定できる項目です。
+
+1. rns.client.optionArgs
+
+  RNS コマンドの引数に指定可能なオプションと同じ記述方法で設定します。
+  「オプション 値 オプション 値 …」の形式で指定します。
+
+  デフォルト:
+    -s http://localhost:8080/wsrf/services/rns/ResourceNamespaceService
+
+  設定例:
+    rns.client.optionArgs=-s http://host1:8080/wsrf/services/rns/ResourceNamespaceService -d -m msg
+
+2. rns.client.maxRecursive
+
+  再帰的にエントリを削除する RNSClient の rmRecursive() メソッドの動作
+  に関して、辿るディレクトリの深さの最大値を指定します。RNS のディレク
+  トリは階層が循環する構成を作ることができるので、無限ループしないため
+  に、この設定が必要です。この制限に達した時、RNSClient API レベルでは
+  ELOOP のエラーとなります。
+
+  デフォルト: 10
+
+3. rns.client.cacheTimeout
+
+  ミリ秒をあらわす数字を指定します。
+
+  一度 lookup 操作 (ls 操作など) したディレクトリの情報をキャッシュし、
+  次回同じ操作をする場合、指定したミリ秒間、lookup しないようになります。
+
+  また、そのディレクトリに対応した ResourceProperties 取得操作
+  (stat 操作に該当) と ACL 情報も同様にキャッシュします。WS-Iterator
+  を使ってリストを取得した場合もキャッシュします。
+
+  ディレクトリに対する変更操作 (lookup 以外の操作) をすると、そのディレ
+  クトリでキャッシュしていた状態をすべてクリアします。
+
+  また、サーバ設定である rns.server.iteratorUnit よりも小さい個数のディ
+  レクトリリストであればすべてキャッシュし、それ以上のときは参照情報の
+  みをキャッシュします。
+
+  このキャッシュを有効にすると、AccessTime の更新がクライアントに見えづ
+  らくなることに注意してください。(タイムアウトするか変更操作するまでは
+  lookup 操作でキャッシュをクリアしないからです)
+
+  rns-* コマンドは、Java VM プロセスを毎回終了してしまうので、キャッシュ
+  の効果は大きくありません。RNSFS-FUSE (後述)では効果あります。
+
+  0 を指定すると、キャッシュしません。
+
+  デフォルト: 0
+
+4. rns.client.TCPMonitorPort
+
+  TCPMonitor (org.apache.axis.utils.tcpmon) を使って SOAP メッセージを
+  見る場合に、TCPMonitor のポート番号を指定します。TCPMonitor は RNS
+  サーバと同じホストで実行する必要があります。0 の場合は無効です。
+
+  デフォルト: 0
+
+
+=============
+RNSWeb の設定
+=============
+
+RNSWeb をインストールした場合に設定します。
+
+* RNSWeb のログイン名、パスワード
+
+  UNIX のユーザや Globus のユーザとは関係ありません。ウェブブラウザか
+  ら RNSWeb の利用を制限するための仕組みです。
+
+  以下のファイルに「名前=パスワード」形式で記述します。
+
+    /RNS/username/rnsweb/rnsweb.password
+
+  初期の設定状態は以下です。
+
+    test=rns
+
+  複数記述することもできますが、ログインしたあとの動作環境 (実行ユーザ、
+  設定ファイル) はどの場合でも同じです。
+
+* RNSWeb ログイン時に指定する URL について
+
+  rns-client.conf で -s オプションに指定していても、ログイン時に指定す
+  る URL を優先します。
+
+* その他 RNS クライアントの設定
+
+  「RNS クライアントの設定」を参照してください。
+
+
+====================
+RNS コマンド操作方法
+====================
+
+シェル上で実行します。
+
+* コマンド一覧
+
+  [RNS 標準コマンド]
+  - rns-stat
+  - rns-ls
+  - rns-ls-l
+  - rns-mkdir
+  - rns-rmdir
+  - rns-rm
+  - rns-rm-r
+  - rns-rm-f
+  - rns-add
+  - rns-mv
+  - rns-getepr
+  - rns-setxml
+  - rns-getxml
+
+  [RNS コマンド バルク操作]
+  - rns-bulk-add
+  - rns-bulk-remove
+  - rns-bulk-rename
+  - rns-bulk-setxml
+
+  [RNS メタデータ応用コマンド]
+  - rns-xquery
+  - rns-kv-get
+  - rns-kv-set
+  - rns-kv-ls
+  - rns-kv-rm
+
+  [RNS ACL 管理コマンド]
+  - rns-callerinfo
+  - rns-getacl
+  - rns-setacl
+  - rns-rmacl
+  - rns-chmod
+  - rns-chown
+  - rns-chgrp
+
+  [RNS 拡張コマンド]
+  - rns-version
+  - rns-ping
+
+  [RNS/GridFTP 連携コマンド]
+  - rns-gridftp-put
+  - rns-gridftp-get
+  - rns-gridftp-ln
+  - rns-gridftp-del
+
+  [LFC 関連コマンド]
+  - lfcj-rns-migrate
+  - lfcj-ls
+  - lfcj-stat
+
+* 各コマンド共通で指定可能なオプション
+
+  各コマンド名と各コマンドごとの引数の間へ指定します。
+  ハイフン(-)で始まるオプションです。
+  (コマンド固有のオプションは プラス(+)で始まるオプションです。)
+
+  -a,--anonymous
+    anonymous authentication を使います。
+    (-m 'conv' またはトランスポートセキュリティ(https)が必要です)
+    ACL 対応の RNS サーバであれば、anonymous ユーザとグループとして
+    アクセスします。
+
+  -c,--serverCertificate <file>
+    暗号化するために利用するサーバ証明書ファイルを指定します。
+    GSI Secure Message encryption の場合に利用します。
+
+  -d,--debug
+    デバッグモードを有効にします。
+
+  -e,--eprFile <file>
+    RNS ルートディレクトリとする EPR をファイルから読みます。
+
+  -f,--descriptor <file>
+    client security descriptor ファイルを指定します。
+    他の設定よりも優先されます。
+
+  -g,--delegation <mode>
+    デリゲーションのモードを設定します。
+    'limited' または 'full' を指定します。
+    (-m 'conv' が必要です)
+
+  -h,--help
+    ヘルプを表示します。
+
+  -k,--key <name value>
+    RNS のルートディレクトリを示すリソースキーとして QName と値を指定
+    します。デフォルトは、
+    {http://schemas.naregi.org/rns/2010/10/rns}RNSID ROOT
+    です。本実装と同実装の RNS ルートディレクトリを意味します。
+    他の RNS 実装へ接続する場合は、これで指定するか -e を使用します。
+
+  -l,--contextLifetime <value>
+    GSI Secure Conversation によって生成されたコンテキストの生存時間を
+    指定します。(-m 'conv' が必要です)
+
+  -m,--securityMech <type>
+    認証の仕組みを利用する場合に指定します。GSI Secure Message で通信
+    する場合は 'msg'、GSI Secure Conversation で通信する場合は 'conv'
+    を指定します。
+
+  -p,--protection <type>
+    プロテクションレベルを指定します。
+    署名のみの場合は 'sig'、暗号化する場合は 'enc' を指定します。
+
+  -s,--service <url>
+    RNS の URL を指定します。
+
+  -t,--timeout <timeout>
+    クライアント側のタイムアウト時間を秒で指定します。デフォルトは 600
+    です。
+
+  -v,--certKeyFiles <cert key>
+    証明書と暗号化されていない鍵ファイルを指定します。
+
+  -x,--proxyFileName <value>
+    プロキシ証明書ファイルを指定します。
+
+  -z,--authorization <type>
+    サーバ認可方法を指定します。'self', 'host', 'hostSelf', 'none' ま
+    たは接続相手の identity を指定します。
+
+* 設定ファイル
+
+  「RNS クライアントの設定」を参照してください。
+
+* 環境変数
+
+  RNS_CLIENT_CONFIG : クライアント設定ファイルを指定し、これを優先します。
+
+  GLOBUS_OPTIONS : たとえば -Xmx2048m を指定すると、Java ヒープサイズが
+  2048MB になります。
+  空き実メモリ以上のサイズを指定すると動作が遅くなることがあります。
+
+  $ GLOBUS_OPTIONS="-Xmx2048m" rns-ls ...
+
+* コマンド使用方法
+
+  rns-stat RNS_path
+
+    ディレクトリの ResourceProperties 情報を表示します。
+
+  rns-ls [オプション] RNS_path
+
+    ディレクトリ RNS_path のリストを表示します。
+
+   +l オプションを使用すると、rns-ls-l コマンドと同じような表示に
+   なります。
+   +l オプションを使用せずに +u オプションを使用すると名前と URL を
+   出力します。
+
+   +l (または ++long) オプションを指定すると、名前以外の情報も加えて、
+   長い形式で表示します。
+   +u (または ++url) オプションを指定すると、名前と URL (ジャンクショ
+   ンの場合) または ID (ディレクトリの場合) を表示します。
+   +s (または ++sort) オプションを指定すると、リストを名前順にソート
+   して表示します。
+   +a (または ++acl) オプションを指定すると、+l の情報に加えて、ACL
+   情報も表示します。
+   +x (または ++xml) オプションを指定すると、XML 形式で表示します。
+   rns-bulk-add コマンドへの入力と同じ形式になります。
+   +1 オプションを指定すると、1 行ごとに名前を表示します。
+
+  rns-ls-l RNS_path
+
+    rns-ls +a コマンドと同等です。
+
+  rns-mkdir RNS_path [Metadata_file(XML)]
+
+    RNS_path にディレクトリを作成します。
+    Metadata_file(XML) を指定すれば、同時にメタデータを登録できます。
+
+  rns-rmdir RNS_path
+
+    ディレクトリ RNS_path を削除します。
+
+  rns-rm RNS_path
+
+    ジャンクション RNS_path を削除します。
+
+  rns-rm-r RNS_path
+
+    RNS_path を再帰的に削除します。
+    rns.client.maxRecursive 設定の通りに動作します。
+
+  rns-rm-f RNS_path
+
+    RNS_path の参照のみを削除します。
+    ディレクトリであっても削除します。
+
+  rns-add (e EPR_file | u URL | er RNS_EPR_file | ur RNS_URL) RNS_path \
+    [Metadata_file(XML)]
+
+    Metadata_file(XML) を指定すれば、同時にメタデータを登録できます。
+    以下は、EPR または URL の指定方法の説明です。
+
+    $ rns-add e EPR_file RNS_path
+
+      EPR_file ファイルの EPR を RNS_path として登録します。
+      主に rns-getepr で取得した EPR をファイルに保存して利用することを
+      想定しています。
+
+    $ rns-add u URL RNS_path
+
+      URL を EPR に変換し、RNS_path として登録します。
+
+    $ rns-add er RNS_EPR_file RNS_path
+
+      RNS_EPR_file ファイルの EPR を RNS のディレクトリとみなして、
+      RNS_path として登録します。
+
+      ディレクトリ階層が無限ループとならないように登録すべきです。
+
+      また、他サーバのディレクトリであることがわかるように、適切なパス名を
+      つけて、わかりやすく管理することをおすすめします。
+
+      この参照情報だけを削除するには、rns-rm-f コマンドを使います。
+
+      ディレクトリが空であった場合に rns-rmdir で削除すると、複数から
+      参照されていたとしても、その実体を削除してしまいます。
+
+    $ rns-add ur RNS_URL RNS_path
+
+      RNS_URL を RNS ルートディレクトリとみなして登録します。
+      EPR を RNS として登録する場合と同様に注意します。
+      本実装と同じ実装のサーバへの URL のみ対応しています。
+
+  rns-mv RNS_from RNS_to
+
+    パス名 RNS_from を RNS_to へ改名、または移動します。RNS_to の最後が
+    "/" の場合、RNS_from の basename をつけて RNS_to の下に移動します。
+
+  rns-getepr RNS_path
+
+    RNS_path の EPR を標準出力します。
+
+  rns-setxml RNS_path
+
+    標準入力から XML 文書を読み込み、RNS_path のメタデータとして上書き
+    登録します。
+    rns-kvset で格納した内容も保護されずに上書きされます。
+
+    ---- 文字列 (ハイフン 4 個) と改行で XML 文書を区切ると、複数の XML
+    文書を格納できます。
+
+
+  rns-getxml RNS_path
+
+    RNS_path のメタデータを標準出力します。XML 文書が複数ある場合
+    は、---- 文字列 (ハイフン 4 個) と改行で区切られます。
+
+  rns-bulk-add [オプション] RNS_dir inputFile
+
+    RNS_dir に対して、inputFile に記述された構造を一度に追加します。
+    inputFile は rns-ls +x で出力された XML 形式と同じ構造が保存された
+    ファイルを想定しています。inputFile としてハイフンを指定すると、
+    標準入力から読み込みます。
+
+    inputFile では、ディレクトリエントリに関する <endpoint> タグに囲まれ
+    た部分を無視します。
+    ジャンクションのみ <endpoint> 指定が有効です。
+
+    このコマンドで他の RNS サーバにあるディレクトリの EPR を追加すること
+    はできません。その場合は rns-add コマンドを使用してください。
+
+    +i または ++ignore オプションを付けると、該当するエントリが存在する
+    場合に、エラーを出力しません。
+
+  rns-bulk-remove [オプション] RNS_dir inputFile
+
+    RNS_dir 以下の各エントリに関して、inputFile ファイルの各行に記述さ
+    れた名前のエントリを一度に削除します。改行までの文字列はスペースな
+    ども含めて名前とみなします。スラッシュ文字は利用できません。
+    inputFile としてハイフンを指定すると、標準入力から読み込みます。
+
+    +i または ++ignore オプションを付けると、該当するエントリが存在しない
+    場合に、エラーを出力しません。
+
+  rns-bulk-rename [オプション] RNS_dir inputFile
+
+    RNS_dir 以下の各エントリに関して、inputFile ファイルの各行に記述され
+    た名前のペアにしたがって、一度に改名します。名前のペアは改名元、スペ
+    ース、改名先の順に記述します。ダブルクオートで名前を囲めば、スペース
+    文字を名前に利用できます。スラッシュ文字は利用できません。
+    inputFile としてハイフンを指定すると、標準入力から読み込みます。
+
+    +i または ++ignore オプションを付けると、改名元が存在しない場合、
+    または、改名先が存在する場合に、エラーを出力しません。
+
+    以下は inputFile の例です。
+##### ここから #####
+from1 to1
+"from 2" "to 2"
+
+"from 3"   to3  # comment
+##### ここまで #####
+
+  rns-bulk-setxml [オプション] RNS_dir inputFile
+
+    RNS_dir 以下の各エントリに対して、inputFile に記述された構造のメタ
+    データ Any 部分の XML を一度に置換します。
+    inputFile ファイルは rns-ls +x で出力された XML 形式と同じ構造を
+    想定しています。
+    inputFile としてハイフンを指定すると、標準入力から読み込みます。
+
+    inputFile では、すべてのエントリの <endpoint> タグに囲まれた部分を
+    無視します。
+    メタデータ部分では <supports-rns> 部分も無視します。
+
+    +i または ++ignore オプションを付けると、該当するエントリが存在しな
+    い場合に、エラーを出力しません。
+
+  rns-gridftp-put GridFTP_URL(gsiftp://.../path/to/name) \
+    new_RNS_path [GridFTP_Authorization(self|host|hostSelf|IdString)]
+
+    標準入力から読んだデータを GridFTP サーバに転送します。
+    GridFTP_URL はファイル名までを示す URL を指定します。
+    ftp/gsiftp/gridftp のスキーム名を利用できます。
+    パス名途中のディレクトリは自動で作成しません。
+    new_RNS_path にも参照情報を登録します。
+
+    GridFTP_Authorization には GridFTP サーバを識別する方法を指定します。
+
+  rns-gridftp-get RNS_path \
+    [GridFTP_Authorization(self|host|hostSelf|IdString)]
+
+    RNS_path に登録された GridFTP サーバの URL からデータを読んで標準出
+    力します。
+
+  rns-gridftp-ln GridFTP_URL(gsiftp://.../path/to/name) RNS_path \
+    [GridFTP_Authorization(self|host|hostSelf|IdString)]
+
+    既存の GridFTP 上にあるファイルを RNS_path に登録します。
+    GridFTP_URL にファイルが存在しない場合は登録しません。
+
+  rns-gridftp-del RNS_path \
+    [GridFTP_Authorization(self|host|hostSelf|IdString)]
+
+    RNS_path に登録された GridFTP サーバの URL が指すファイルを削除し、
+    RNS_path もリストから削除します。
+
+  rns-callerinfo
+
+    RNS サーバに伝わったユーザの情報を見ることができます。Admin である
+    かどうか (true/false) と、ユーザ ID と、voms-proxy-init を実行して
+    いれば、メイングループとその他所属グループが表示されます。
+
+  rns-getacl RNS_path
+
+    RNS_path で指定したディレクトリの ACL 情報を表示します。
+
+    ディレクトリの所有者、または admin に該当していれば、常に利用できま
+    す。その他の場合、ディレクトリの読み込み権限 (r) がなければ利用でき
+    ません。
+
+    サーバに rns.server.accessControlType=voms の設定をしていなければ利
+    用できません。
+
+  rns-setacl ACL_specs RNS_path
+
+    RNS_path で指定されるディレクトリの ACL に ACL_specs を追加、または
+    上書きします。
+
+    サーバに rns.server.accessControlType=voms の設定をしていなければ利
+    用できません。
+
+    ACL_specs に指定可能な形式は以下になります。
+
+      [default(d):]owner(ou)|ownergroup(og)|user(u)|group(g)|mask(m)|other(o):[NAME]:perms(r|w|x)[,...]
+
+    default を指定すると、そのディレクトリ以降に新規ディレクトリを作成
+    する際にに継承する権限リストとなります。指定しなければ、そのディレ
+    クトリの権限リストを編集する意味になります。
+
+    owner または ou は所有者を指します。
+    admin であれば、NAME を指定すれば、所有者を変更できます。
+
+    ownergroup または og は所有グループを指します。
+    admin であれば、NAME を指定すれば、所有グループを変更できます。
+
+    user または u は指定ユーザを指します。NAME は必須です。
+
+    group または g は指定グループを指します。NAME は必須です。
+
+    mask または m はマスクを指します。mask エントリを追加すれば perms
+    には所有者以外の最大権限を指定し、制限できます。NAME は不要です。
+
+    other は指定されていないユーザや指定されたグループに該当しない者を
+    指します。NAME は不要です。
+
+    perms には、r と w と x の文字を組み合わせて、指定するユーザやグルー
+    プなどに対する権限を指定します。r はディレクトリのリストを取得可能、
+    w はディレクトリを編集・削除可能、x は RNS では利用しません。
+
+    rns-setacl は、ディレクトリの所有者、または admin に該当していれば、
+    常に利用できます。
+
+    利用例
+
+      rns-setacl ou::rwx,g:/vo1/Role=NULL/Capability=NULL:rx /test/dir
+
+  rns-rmacl ACL_type names RNS_path
+
+    RNS_path の ACL から ACL_type と names に該当するエントリを削除しま
+    す。
+
+    サーバに rns.server.accessControlType=voms の設定をしていなければ利
+    用できません。
+
+    ACL_type は以下の形式になります。
+
+      [default(d):]owner(ou)|ownergroup(og)|user(u)|group(g)|mask(m)|other(o)
+
+    rns-setacl と似た形式で、NAME や perms を指定しません。
+
+    一度の実行で一種類のみ、削除可能です。
+    default を付加しない owner, ownergroup, other は削除できません。
+
+    指定ユーザや指定グループは、names として複数の名前をカンマで区切り
+    ます。
+
+    rns-setacl は、ディレクトリの所有者、または admin に該当していれば、
+    常に利用できます。
+
+    利用例
+
+      rns-rmacl default:g \
+      /vo1/Role=NULL/Capability=NULL,/vo2/Role=NULL/Capability=NULL \
+      /test/dir
+
+  rns-chmod mode RNS_path
+
+    RNS_path の ACL から所有者、所有グループ、他人の権限を、上書きしま
+    す。
+
+    mode には 0 から 7 の数字を使い、3 桁で指定します。
+
+    1 番左の数字は所有者、2 番目は所有グループ、3 番目は他人の権限を指
+    します。
+
+    0 は権限が無し、1 は実行権限 (RNS では無意味)、2 は書き込み権限、4
+    は読み込み権限を意味し、それぞれの和で各桁を指定します。
+
+    サーバに rns.server.accessControlType=voms の設定をしていなければ利
+    用できません。
+
+  rns-chown owner RNS_path
+
+    RNS_path の所有者を owner に変更します。
+    admin のみが実行できます。
+
+    サーバに rns.server.accessControlType=voms の設定をしていなければ利
+    用できません。
+
+  rns-chgrp group RNS_path
+
+    RNS_path の所有グループを group に変更します。
+    admin は group に任意の文字列を指定できます。
+    所有者は所属グループの中から選択して指定できます。
+    その他は利用できません。
+
+    サーバに rns.server.accessControlType=voms の設定をしていなければ利
+    用できません。
+
+  rns-xquery [+r|++recursive depth] [+x|++xml] [+a|++all] [+e|++epronly] path [xqueryFile]
+
+    path に対して XQuery します。XQuery 処理はサーバ側で行います。
+    結果を標準出力します。
+
+    標準では、結果は <ns1:metadata> と </ns1:metadata> に囲まれた部分の
+    中身を返します。(後述)
+
+    +r または ++recursive オプションで depth 数を指定すると、path 以下の
+    子ディレクトリとジャンクションに対して再帰的に XQuery を適用します。
+    depth 数の深さまでディレクトリを辿ります。
+    パス名と結果を交互に出力します。
+    XQuery の結果が無いエントリは出力されません。
+    XQuery にマッチするエントリが多すぎる場合は、結果を返せない場合があり
+    ます。なるべく少なく絞り込むように検索してください。
+
+    +x または ++xml オプションを指定すると、XML 構造による出力になります。
+
+    +a または ++all オプションを指定すると、<ns1:RNSEntryResponseType>
+    の形式全体を結果として出力します。
+
+    +e または ++epronly オプションを指定すると、EPR 部分のみ出力します。
+
+    xqueryFile に XQuery 言語で記述したファイルを指定します。
+    指定しない場合は、標準入力より XQuery を入力します。
+
+    Saxon ライブラリで解釈可能な XQuery 1.0 仕様の XQuery 言語を指定する
+    ことができます。その他詳細は Saxon のドキュメントを参照してください。
+
+      http://www.saxonica.com/documentation/index.html
+
+    XQuery 1.0 の仕様書は以下にあります。
+
+      http://www.w3.org/TR/xquery/
+
+    RNS の各ディレクトリやジャンクションが、以下のような XML 構造である
+    ことを想定し、この構造に対して XQuery を実行します。
+
+    <ns1:RNSEntryResponseType
+     xmlns:ns1="http://schemas.ogf.org/rns/2009/12/rns"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     entry-name="a" xsi:type="ns1:RNSEntryResponseType">
+      <ns1:endpoint xmlns:ns2="http://www.w3.org/2005/08/addressing" xsi:type="ns2:EndpointReferenceType">
+        <ns2:Address xsi:type="ns2:AttributedURI">
+        http://localhost:8080/wsrf/services/rns/ResourceNamespaceService</ns2:Address>
+        <ns2:ReferenceParameters xsi:type="ns2:ReferenceParametersType">
+          <ns4:RNSID xmlns:ns4="http://naregi.org/rns/2010/10/rns">10147</ns4:RNSID>
+        </ns2:ReferenceParameters>
+      </ns1:endpoint>
+      <ns1:metadata xsi:type="ns1:RNSMetadataType">
+        <ns1:supports-rns value="true" xsi:type="ns1:SupportsRNSType"/>
+        <intval key="key1">1000</intval>
+        <str key="key100">some string</str>
+      </ns1:metadata>
+    </ns1:RNSEntryResponseType>
+
+    rns-setxml コマンドで、以下を入力することで、上記の構造を作成できます。
+##### ここから #####
+<intval key="key1" xmlns="">1000</intval>
+----
+<str key="key100" xmlns="">some string</str>
+##### ここまで #####
+
+    「echo / | rns-xquery +a パス名」で上記と同じ構造になったか確認できます。
+
+    - [例] 検索対象の XML 文書をすべて取得する問い合わせの XQuery 文
+
+      /
+
+    - [例] メタデータに存在する <intval key="key1"> に囲まれた値が
+      1000 以上であるエントリを問い合わせる XQuery 文
+
+##### ここから #####
+declare namespace ns1 = "http://schemas.ogf.org/rns/2009/12/rns";
+let $ent := /ns1:RNSEntryResponseType
+let $name := string($ent/@entry-name)
+let $epr := $ent/ns1:endpoint
+let $meta := $ent/ns1:metadata
+let $sptrns := $meta/ns1:supports-rns
+
+let $retv :=
+(
+  for $m in $meta/*
+  let $metatag := local-name($m)
+  let $key := string($m/@key)
+  let $value := $m/text()
+  where $key = "key1"
+    and fn:matches($value, "^[0-9]+$")
+    and xs:integer($value) >= 1000
+  return
+  $m
+)
+where exists($retv)
+return
+<ns1:RNSEntryResponseType entry-name="{$name}"
+  xmlns:ns1="http://schemas.ogf.org/rns/2009/12/rns"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:type="ns1:RNSEntryResponseType">
+  {$epr}"
+  <ns1:metadata xsi:type="ns1:RNSMetadataType">
+    {$sptrns}
+    {$retv}
+  </ns1:metadata>
+</ns1:RNSEntryResponseType>
+
+##### ここまで #####
+
+
+  rns-kv-get [+r|++recursive depth] [+x|++xml] path key
+
+    path で指定されるエントリのメタデータから、key をキーとする値を取得します。
+    rns-kv-set コマンドによって格納された特別な XML 構造を前提とします。
+
+    +r または ++recursive オプションによって depth を指定すると、depth の数
+    で指定深さのディレクトリ階層まで、key をキーとする値を持つエントリのパス
+    を表示します。
+
+    +x または ++xml オプションを指定すると、XML 構造による出力になります。
+
+  rns-kv-set path key value
+
+    path で指定されるエントリのメタデータに、key をキーとする値 value を特別な
+    構造で格納します。rns-kv-get コマンドで値を取得することを前提としています。
+
+  rns-kv-ls path
+
+    path で指定されるエントリのメタデータから、キーのリストを取得します。
+    rns-kv-set コマンドによって格納される特別な XML 構造を前提とします。
+
+  rns-kv-rm path key
+
+    path で指定されるエントリのメタデータから、key をキーとする項目を削除し
+    ます。rns-kv-set コマンドによって作られる特別な XML 構造を前提とします。
+
+  rns-version
+
+    RNS のクライアントとサーバのバージョンを表示します。
+
+  rns-ping count
+
+    サーバ側で何も処理しない操作 noop() を count + 1 回、呼び出します。
+
+    初回接続時にかかる時間と、その後 count 回にかかる時間を表示します。
+
+  lfcj-rns-migrate [+b|++bulk] [+v|++verbose] LFC_URL RNS_Path
+
+    LFC 上のディレクトリまたはファイル参照の LFC_URL 以下の構造を RNS_Path
+    ディレクトリ以下またはジャンクションとしてコピーします。
+
+    LFC_URL には lfn://host:port/path/to/entry のような形式で指定します。
+
+    LFC 上のファイルエントリとして一個目のレプリカの URL は RNS の EPR 情報
+    として登録します。レプリカの合計個数、二つ目以降のレプリカ URL、
+    ファイルサイズ、ファイル変更時刻は、以下の形式で RNS のメタデータとして
+    登録します。
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <file xmlns="">
+      <size>12345</size>
+      <mtime>Mon Jul 13 22:21:10 JST 2009</mtime>
+      <replica>
+        <url no="0">http://www.example.com/lm9e6s</url>
+        <url no="1">http://www.example.com/yk3uj5</url>
+      </replica>
+    </file>
+
+    このコマンドは LFC のパーミッション情報をコピーできません。
+
+    +b または ++bulk オプションをつけると、ディレクトリごとに、そのディレク
+    トリに所属するエントリすべてを一度の命令で RNS へ追加処理をします。
+    一つのディレクトリに多くのエントリがある場合、クライアント側でその分の
+    メモリを消費します。
+    メモリが不足する場合、export GLOBUS_OPTIONS=-Xmx512m のようにして、ヒープ
+    サイズを増やせば改善する場合もあります。
+
+    +v または ++verbose オプションをつけると、処理対象のディレクトリやジャン
+    クションのパスをすべて表示します。このオプションを付けなくても、処理が失
+    敗したエントリのパスはエラーとして別に表示されます。
+
+    RNS_Path 以下に既にエントリが存在する場合でも、エラーにならず、存在しな
+    いエントリのみをコピーします。実行途中にネットワークエラーなどで止まった
+    場合などに、再実行することにより、続きの処理を行なうことができます。
+    内容の比較までは行なわないので、LFC 側転送元データが更新されている可能性
+    がある場合は、RNS 側の転送先エントリを削除してから実行してください。
+
+    実行例:
+      $ lfcj-rns-migrate lfn://example:5010/test/testdir /test/testdir_copy
+
+  lfcj-ls
+
+    LFCJ ライブラリ内にある lfcls コマンドのサンプルを実行します。
+    RNS コマンド共通のオプションは利用できません。
+    引数なしで使用方法が表示されます。
+    URL には lfn://host:port/path/dir/ のような形式で指定します。
+    ディレクトリ以外は指定できません。
+
+  lfcj-stat
+
+    LFCJ ライブラリ内にある lfcstat コマンドのサンプルを実行します。
+    RNS コマンド共通のオプションは利用できません。
+    引数なしで使用方法が表示されます。
+    URL には lfn://host:port/path/dir/ のような形式で指定します。
+    ディレクトリ以外も指定できます。
+
+===================
+RNSFS-FUSE 操作方法
+===================
+
+* マウント方法
+
+  $ mkdir /mount/point
+  $ /RNS/rns/rnsfs/rnsfs.sh /mount/point -f
+
+  -f オプションをつけるとフォアグラウンドで実行します。
+
+  下記例ではマウントポイントへ移動してから利用します。
+
+  rnsfs.sh を編集し、HEAPSIZE=512 を変更することで、
+  Java ヒープサイズを変更することもできます。
+
+* ディレクトリ作成例
+
+  $ mkdir dirname
+
+* 空ディレクトリ削除例
+
+  $ rmdir dirname
+
+* 新規ジャンクション作成例 (EPR 登録)
+
+  $ cat EPRFILE > filename
+  または
+  $ cat EPRFILE > filename.epr
+
+* 新規ジャンクション作成例 (URL 登録)
+
+  $ echo -n URL文字列 > filename.url
+
+* EPR 表示例
+
+  $ cat filename
+  または
+  $ cat filename.epr
+
+  dirname がディレクトリの場合
+  $ cat dirname.epr
+
+* URL 表示例
+
+  $ cat filename.url
+
+  dirname がディレクトリの場合
+  $ cat dirname.url
+
+* XML メタデータを上書き登録例
+
+  (推奨)
+  $ rnsfs-setxml XMLFILE filename
+  または
+  $ cat XMLFILE > filename.xml
+
+  dirname がディレクトリの場合
+  $ cat XMLFILE > dirname.xml
+
+* メタデータ表示例
+
+  (推奨)
+  $ rnsfs-getxml filename
+  または
+  $ cat filename.xml
+
+  dirname がディレクトリの場合
+  $ cat dirname.xml
+
+* キーバリュー操作の例
+
+  セット: $ rnsfs-kv-set filename key value
+  ゲット: $ rnsfs-kv-get filename key
+  リスト: $ rnsfs-kv-ls filename
+  削除  : $ rnsfs-kv-rm filename key
+
+* ジャンクションのコピー例
+
+  ハードリンク作成操作で EPR とメタデータを一緒に複製できます。
+
+  $ ln fromname toname
+
+  cp コマンドでコピーすると、メタデータがコピーされません。
+
+  また、RNSFS-FUSE 上でディレクトリの EPR を複製できません。
+  RNSFS-FUSE では EPR を指定してディレクトリを登録できないからです。
+  rns-add コマンドでディレクトリの EPR を RNS ディレクトリとしてコピー
+  して、メタデータを登録しなおせば可能です。
+
+* 移動例
+
+  $ mv oldname newname
+
+* ジャンクション削除例
+
+  $ rm filename
+
+* エラーについて
+
+  本バージョンでは、新規ジャンクション登録、メタデータ登録時にエラーが
+  起きた場合、エラーであることを警告せず、エントリが作成されません。
+  操作のたびに正しく登録できたかどうかを確認してください。
+
+  rnsfs.sh をフォアグラウンドで実行していれば、エラーの原因がわかります。
+
+* アンマウント方法
+
+  $ fusermount -u /mount/point
+
+* ヒープサイズを増やす
+
+  rnsfs.sh の JAVA_OPTS 変数指定先にある -J-Xmx512m 部分の数字を変更します。
+  512m は 512MB の意味になります。
+
+
+===============
+RNSWeb 操作方法
+===============
+
+RNSWeb (Tomcat) を起動しておき、ウェブブラウザで以下のアドレスを開きま
+す。
+
+  http://(RNSWebを起動したホスト名):(RNSWebのポート番号)/rnsweb/
+
+* 操作項目一覧
+
+  - Login
+  - Logout
+  - Reload
+  - ディレクトリ操作モード
+    [Hide] [GetEPR] [Stat] [Mkdir] [Rmdir] [Rename]
+    [FTP-PUT] [LinkURL] [NewJunction] [GetXML] [SetXML]
+  - ジャンクション操作モード
+    [Hide] [GetEPR] [Rename] [RmJunction] [GetXML] [SetXML]
+  - リスト表示領域
+    - Name でソート
+    - ModificationTime でソート
+    - 選択して Delete
+  - ジャンクション表示または操作領域
+  - Parent Directory
+  - chdir
+
+* Login
+
+  User : RNSWeb に接続するためのユーザ名
+  Password : RNSWeb に接続するためのパスワード
+  RNS URL : RNS の URL
+
+* Logout
+
+  ログアウトします。
+
+* Reload
+
+  現在表示している状態を再実行し、表示を更新します。
+
+* ディレクトリ操作モード
+
+  ディレクトリを表示しているときに操作可能なメニューです。
+
+  [Hide] [GetEPR] [Stat] [Mkdir] [Rmdir] [Rename]
+  [FTP-PUT] [LinkURL] [NewJunction] [GetXML] [SetXML]
+
+  いずれかを選択すると、現在のパス名とそのメニューに対応した状態表示や
+  入力待ち状態になります。
+
+  他のディレクトリを辿っても、そのメニューが選択されたままの表示になり
+  ます。
+
+  画面上段は上記の表示になり、下段は常にリストが表示されます。
+
+* ジャンクション操作モード
+
+  ジャンクションを表示しているときに操作可能なメニューです。
+
+  [Hide] [GetEPR] [Rename] [RmJunction] [GetXML] [SetXML]
+
+  画面上段は、上記のいずれか選択された項目に関する表示になり、下段は常
+  にジャンクションファイル操作待機になります。FTP ファイルの場合は FTP
+  ファイルを取得、または削除できます。
+
+* [Hide]
+
+  何も表示しません。
+
+* [GetEPR]
+
+  EPR を表示します。
+
+* [Stat]
+
+  以下の形式で、現在指定されているパスの情報を表示をします。
+
+  Readable	true
+  Writable	true
+  ElementCount	4
+  Create	Fri Mar 13 08:22:08 JST 2009
+  Access	Fri Mar 13 08:22:08 JST 2009
+  Modify	Fri Mar 13 08:22:08 JST 2009
+
+* [Mkdir]
+
+  新規ディレクトリを作成します。
+
+  Path or Name :
+   現在のディレクトリに対する相対パス、または絶対パスで
+   新規ディレクトリを指定します。
+
+  mkdir ボタン : 実行します。
+
+* [Rmdir]
+
+  ディレクトリを削除します。
+
+  Path or Name :
+   現在のディレクトリに対する相対パス、または絶対パスで
+   削除するディレクトリを指定します。
+
+  ラジオボタン
+  - Normal : 空でなければ削除しません。
+  - Recursive : 再帰的に削除します。
+  - Force : 参照のみを削除し、実体を削除しません。
+
+  rmdir ボタン : 実行します。
+
+* [Rename]
+
+  移動、または改名します。
+
+  Source : 移動元
+  Destination :  移動先
+  rename ボタン : 実行します。
+
+* [FTP-PUT]
+
+  FTP サーバにファイルをアップロードし、そのファイル名を使って RNS に
+  登録します。
+
+  Local File : ローカルファイルを選択します。
+  URL : ftp/gsiftp/gridftp いづれかの URL を指定します。
+  User : ftp サーバのユーザ名です。
+  Password : ftp サーバのパスワードです。
+  overwrite : FTP サーバにファイルがあっても上書きします。
+  upload ボタン : 実行します。
+
+* [LinkURL]
+
+  任意の URL を RNS に登録します。
+
+  New Junction name : 相対パスまたは絶対パスで指定します。
+  URL (any) : URL
+  register ボタン : 実行します。
+
+* [NewJunction]
+
+  New Junction name : 相対パスまたは絶対パスで指定します。
+  EndpointReference (XML) : EPR を入力します。
+  register ボタン : 実行します。
+
+* [GetXML]
+
+  メタデータがある場合は表示します。
+
+* [SetXML]
+
+  XML をメタデータとして登録します。
+
+* [RmJunction]
+
+  参照を削除します。RNS 上のエントリのみを削除するので、参照先の実体な
+  どがある場合は注意してください。
+
+  Path or Name : 相対パスまたは絶対パスで指定します。
+
+* リスト表示領域 (下段)
+
+  現在選択されているディレクトリのリストを表示します。
+  また、以下の機能があります。
+
+  - Name でソート : 正順/逆順
+  - ModificationTime (ディレクトリのみ) でソート : 正順/逆順
+  - 選択して Delete (ディレクトリは空の場合のみ削除可能)
+
+* ジャンクション表示または操作領域 (下段)
+
+  現在選択されているジャンクションの参照先 URL が FTP または GridFTP
+  の場合のみ、以下の操作ができます。
+
+  - download : ファイルをダウンロードします。
+  - delete : FTP サーバのファイルを削除し、RNS のエントリも削除します。
+
+* Parent Directory
+
+  一つ上のディレクトリを表示します。
+
+* chdir
+
+  直接パスを指定して移動し、表示します。
+
+
+========================
+性能計測コマンド操作方法
+========================
+
+本実装の性能を計測するコマンドがあります。
+これらのコマンドは自動的にインストールされます。
+
+* rns-bench [count(default200) [RNS_path(workdir)]]
+
+  /__BENCH_ で始まる名前のディレクトリで、性能計測を行ないます。
+
+  第一引数を指定しなければ、使用するエントリ数 200 個を扱って
+  測定します。
+  第一引数を指定すると、指定したエントリ数で測定します。
+  加えて第二引数を指定すると、指定した RNS ディレクトリで
+  作業します。
+
+  以下の測定結果を出力します。
+
+  - クライアントの各メソッド
+  - サーバ側の各オペレーション
+  - サーバ側
+  - 使用メモリ (実行前、実行後)
+  - CPU 数
+
+* rns-profile [on|off]
+
+  サーバ側の処理内訳を計測します。
+  出力内容は rns-bench の出力のうち、サーバ側の内容と同等です。
+
+  on にすると、計測を開始します。
+  そして、off にすると、off にするまでの処理内訳を報告します。
+
+  実行例
+
+    $ rns-profile on; rns-ls /; rns-profile off
+
+
+==========================
+動作テストコマンド操作方法
+==========================
+
+本実装の動作を確認するコマンドは command/ ディレクトリ以下に
+あります。
+
+これらのコマンドはインストールされず、env-rns.sh では、これら
+のコマンドは PATH には追加されませんので、直接指定して、実行
+してください。
+
+* rns-test [junit|cmd|ftp|all]
+
+  RNS の各オペレーションをテストします。
+  成功すれば、エラーメッセージを出力せず、コマンド戻り値は 0
+  となります。
+
+  第一引数に以下を指定することにより、一部のテストを実行します。
+  第一引数を指定しない場合は、junit と cmd を実行します。
+
+  - junit : RNSClient ライブラリメソッドを使ってテストします。
+  - cmd : rns-* コマンドを使ってテストします。
+  - ftp : gridftp サーバとの連携コマンドをテストします。
+  - all : 上記すべてを実行します。
+
+  ftp のテストは、rns-test スクリプトを書き換え使用します。
+  GRIDFTP_URL に gridftp サーバの URL を指定します。
+  GRIDFTP_AUTHZ に、サーバ認証方法を指定します。
+  rns-gridftp-get などのコマンド使用方法を参照してください。
+
+* rns-test-loop n_loop n_para
+
+  rns-test コマンドを n_loop 回 n_para 並列で実行します。
+  エラーがあれば報告して停止します。
+
+* rns-test-stress [number [n_loop]]
+
+  /_STRESS/ ディレクトリ以下にディレクトリを多数作成して、
+  ストレステストを行ないます。
+  一つの RNSClient で、複数のオペレーションをマルチスレッドで
+  実行します。
+  実行後にディレクトリを削除せず、次回実行時に再利用します。
+
+  number のデフォルトは 10000 (1 万) です。
+  n_loop を指定すると、指定した回数繰り返します。
+
+  number 個のディレクトリを以下のように作成します。
+  /_STRESS/flat/{1,2,3,...,number}
+
+  number 個 (最大 1000 個) のディレクトリを以下のように
+  作成します。
+  /_STRESS/deep/1/2/3/.../number
+
+  以下のディレクトリに、number 回 (最大 100 回) 大きい
+  サイズのメタデータ (XML) をセットします。
+  /_STRESS/bigMetadata
+
+* tcpmonitor.sh
+
+  org.apache.axis.utils.tcpmon を起動します。
+
+  globus-start-container を実行したホストと同じホストで実行
+  することを想定しています。
+
+  ポート番号の変更は、GUI で変更するか、tcpmonitor.sh スク
+  リプトを書き換えます。
+
+* rns-n-mkdir RNS_dir number
+
+  number に指定した数のディレクトリを RNS_dir 以下に連番を
+  使った名前で作成します。
+
+* rns-test-limit [min(*100KB) [max(*100KB)]]
+
+  メタデータにセットできる XML のサイズの限界値を測定します。
+  100KB ごとに増やして試します。
+  XML のサイズは厳密なサイズではありません。
+  タグ以外の文字数です。
+
+
+================
+GSI 認証利用方法
+================
+
+RNS サーバと RNS のクライアントの間は、GSI による通信が可能です。GSI
+認証より、RNS サーバと RNS クライアントはお互いを識別することができま
+す。また、VOMS にも対応しており、グループ情報をアクセスコントロールで
+利用することもできます。
+
+(1) 認証局、証明書の設定
+
+  RNS を GSI で利用するには、ユーザごとにユーザ証明書と、サーバごとにホ
+  スト証明書(コンテナ証明書)が必要です。
+
+  認証局を自身で整えるには、SimpleCA を利用します。
+  詳細は SimpleCA の説明を参照してください。
+
+    http://www.globus.org/toolkit/docs/4.2/4.2.1/security/simpleca/
+
+(2) RNS サーバ証明書設定
+
+* ユーザ証明書を使う方法
+
+  grid-proxy-init してから globus-start-container を実行します。有効期
+  限に注意します。
+
+  $GLOBUS_LOCATION/etc/globus_wsrf_core/server-config.wsdd に
+  <parameter name="containerSecDesc" ...> の項目が存在したら、コメント
+  アウトします。
+
+  この場合、RNS クライアントの設定は、Authorization (-z オプション) を
+  self または hostSelf にします。
+
+* コンテナ証明書を使う方法
+
+  ホスト証明書と鍵をそれぞれ下記の場所にコピーし、
+  globus-start-container を実行するユーザが読めるファイルのモードにしま
+  す。
+
+    /etc/grid-security/containercert.pem
+    /etc/grid-security/containerkey.pem
+
+  $GLOBUS_LOCATION/etc/globus_wsrf_core/server-config.wsdd に以下の項
+  目がなければ、作成します。
+
+    <parameter name="containerSecDesc"
+       value="etc/globus_wsrf_core/global_security_descriptor.xml"/>
+
+  この場合、RNS クライアントの設定は、Authorization (-z オプション) を
+  host または hostSelf にします。
+
+(3) RNS サーバ設定
+
+  アクセスコントロールを有効にするには rns-server.conf の
+  rns.server.accessControlType を simple にします。詳細は「RNS サーバ
+  の設定」を参照してください。
+
+* RNS サーバ起動方法
+
+  GSI の利用に関して、globus-start-container を起動する方法が 2 通りあ
+  ります。
+
+  http プロトコルで利用する場合 (メッセージレベルセキュリティ)
+
+    $ globus-start-container -nosec
+    ポート番号は 8080 となります。
+
+  https プロトコルを利用する場合 (通信路レベルセキュリティ)
+
+    $ globus-start-container
+    ポート番号は 8443 となります。
+
+  それぞれデフォルトのポート番号が異なります。-p オプションで変更でき
+  ます。
+
+  GSI を利用する際に、通信時の負荷が少ない方法は、サーバは https で待ち
+  受けて、クライアントは -m オプションを利用しない (後述) 組合せです。
+
+  GSI を利用する場合は https (-nosec を指定しない) を推奨します。
+
+(4) RNS クライアント GSI 設定
+
+  grid-proxy-init を実行しておきます。
+  プロキシ証明書の期限を確認しておきます。
+
+  サーバが http で受け付けている場合に GSI 認証を利用するためには、
+  RNS コマンドのオプションや設定ファイルで、-m msg または -m conv オプ
+  ションを使います。-p enc で暗号化もできます。
+
+  サーバが https で受け付けているならば、クライアント側でオプションは不
+  要です。クライアント利用時に RNS の URL として https の URL を指定す
+  れば、通信路を暗号化し、かつ、お互いを識別できます。
+
+(5) RNSWeb から GridFTP を利用する場合の注意
+
+  RNSWeb から GridFTP サーバを利用する場合は、RNSWeb を起動するユーザ
+  とユーザ証明書が同一のユーザが GridFTP サーバを実行してください。
+
+  本バージョンの RNSWeb は、GridFTP サーバに対して Self Authorization
+  のみ対応です。その他の Authorization を利用して GridFTP サーバと接続
+  する場合は、rns-gridftp-* コマンドを利用してください。
+
+(6) VOMS 対応について
+
+  VOMS サーバと VOMS クライアントの環境設定が完了していることが前提です。
+
+  VOMS 関連の設定をしていないホストで RNS サーバを動かす場合は、
+
+    /etc/grid-security/vomsdir/任意の名前cert.pem
+
+  に VOMS サーバの証明書ファイルを置けば、RNS サーバで VOMS の情報を利用
+  できます。
+
+  ユーザは voms-proxy-init -voms VO名(:/グループ名) してから利用します。
+
+  rns-callerinfo コマンドで、グループ名が表示されれば、サーバに VOMS 情
+  報が伝わっていることになります。
+  この情報をアクセスコントロールで利用できます。
+
+
+======================
+GridFTP サーバの設定例
+======================
+
+以下は /etc/grid-security/gridftp.conf の設定例です。
+
+  port 5000
+  banner "Welcome to GridFTP server"
+  log_level ALL
+  #allow_anonymous 1
+  #anonymous_user foouser
+
+以下は /etc/grid-security/grid-mapfile の設定例です。
+
+  "/O=Grid/OU=GlobusTest/OU=simpleCA-host1/CN=foo" foo
+
+詳細は GridFTP System Administrator's Guide を参照してください。
+
+  http://www.globus.org/toolkit/docs/4.2/4.2.1/data/gridftp/admin/
+
+上記には例えば GLOBUS_TCP_PORT_RANGE 環境変数を指定してポートを限定した
+り、パスワードファイルを指定する方法などが説明されています。
+
+
+====================
+RNS サーバログ設定例
+====================
+
+RNS サーバは、動作ログの出力方法として log4j を使用しています。
+
+$GLOBUS_LOCATION/container-log4j.properties に出力方法を追記することで、
+ログを出力することができます。
+
+log4j の詳細は以下を参照してください。
+
+  http://logging.apache.org/log4j/
+  http://commons.apache.org/logging/
+
+RNS サーバの log4j カテゴリ名は org.naregi.rns.RNS となっています。
+
+以下は設定例です。container-log4j.properties に追記します。
+
+log4j.logger.org.naregi.rns.RNS=WARN, forRNS
+log4j.appender.forRNS=org.apache.log4j.RollingFileAppender
+log4j.appender.forRNS.File=/tmp/rns.log
+log4j.appender.forRNS.MaxBackupIndex=2
+log4j.appender.forRNS.MaxFileSize=10MB
+log4j.appender.forRNS.layout=org.apache.log4j.PatternLayout
+log4j.appender.forRNS.layout.ConversionPattern=%d{yyyy/MM/dd HH:mm:ss}:%p:%m%n
+log4j.additivity.org.naregi.rns.RNS=false
+
+
+==============================
+データベースのバックアップ方法
+==============================
+
+globus-start-container を停止してから、下記のようにバック
+アップしてください。
+
+* rns.server.dbType=derby の場合
+
+  GLOBUS_LOCATION/var/rns ディレクトリをバックアップして
+  ください。
+
+* それ以外の場合
+
+  rns.server.storageDir で指定しているディレクトリをバック
+  アップしてください。
+
+
+--
+以上

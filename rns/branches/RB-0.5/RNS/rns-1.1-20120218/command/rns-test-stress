@@ -1,0 +1,7 @@
+#!/bin/sh
+
+. `dirname $0`/rns-common.sh
+
+java $JAVAOPT ${RNSTEST_PKG}TestStress $@
+exit $?
+
