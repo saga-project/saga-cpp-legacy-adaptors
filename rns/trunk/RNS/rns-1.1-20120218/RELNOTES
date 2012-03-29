@@ -1,0 +1,263 @@
+--------------------------------------------------------------------------
+[version 1.1-20111125]
+
+New Feature:
+* rns-ls: increase checking errors
+
+Update Feature:
+* support new fuse4j version (November 25th 2011)
+
+Bugfix:
+* rnsfs.sh: not refer RNS_HOME environment variables
+* rns-chown, rns-chgrp, rns-setacl: fix a bug since RNSDBCache implemented
+
+--------------------------------------------------------------------------
+[version 1.1-20110711]
+
+New Feature:
+* move test-commands to org.naregi.rns.test
+* change the names of some variables
+
+Document:
+* add OVERVIEW.ja
+* update Javadoc pages.
+* update README and INSTALL
+
+--------------------------------------------------------------------------
+[version 1.1-20110704]
+New Command:
+* rns-bulk-remove
+* rns-bulk-rename
+* rns-bulk-setxml
+
+New Feature:
+* new server parameter: rns.server.limitMetadataSize
+* new server parameter: rns.server.tmpdir
+* rns-bulk-add ignores <endpoint> of input XML for a directory
+* new option: rns-bulk-* +i (++ignore)
+* rns-bulk-* supports standard input
+* rns-bench reports the performance of Server operations and the status of Server
+* Server can return appropriate error messages
+* simplify AccessControl implementation in Server
+* Entry names of List operation in Server are stored into a temporary file (not use memory)
+* Quick shutdown of container in Search operation
+* lfcj-rns-migrate: Existing entries are skipped quickly
+* When renaming a directory to the other level directory, the moved directory is
+  registered as a local RNS directory.
+* MT-safe: RNS Clients and RNS Servers
+* optimize Add operation (mkdir) if rns.server.accessControlType is "none" or "simple"
+* change API: RNSClient#{get,set}MaxRecursive() -> {get,set}DefaultMaxRecursiveDepth()
+* change API: RNSUtil methods
+
+New Test Command:
+* rns-test-loop
+* rns-test-limit
+* rns-test-stress
+* rns-profile
+
+Bugfix:
+* RNSClient#removeReference() cannot remove a directory
+* rns-add ur command registers unclear EPR of the root directory
+* rnsfs.sh returns irregular inode number
+
+--------------------------------------------------------------------------
+[version 1.1-20110527]
+New Feature:
+* save memory in Search operation (using a temporary file for results)
+* get an Error after RNSDirHandle or RNSSearchHandle
+* RNSProfiler for server
+
+New Client API:
+* RNSDirHandle#getError()
+* RNSSearchHandle#getError()
+
+Document:
+* simplify the README for rnsfs
+
+Bugfix:
+* rns-xquery +r exits at a junction: ignore ENOTDIR
+* deadlock in Search operation
+* possibility that Search operation returns an invalid EPR of WS-Iterator
+
+--------------------------------------------------------------------------
+[version 1.1-20110516]
+New Command:
+* rns-bulk-add
+* rns-bench (for test)
+
+New Feature:
+* rns-ls options: +s (++sort), +a (++acl), +x (++xml)
+* rns-rm options: +r (++recursive), +f (++force)
+* delete commands: rns-rm-f, rns-rm-r
+* lfcj-rns-migrate ignores EEXIST error. (lfcj-rns-migrate can try again)
+* lfcj-rns-migrate options: +v (++verbose)
+* support ".." directory
+* support ACL in case that rns.server.dbType is "file" or "xml".
+* LookupResponseType returns first some "RNSEntryResponseType"s
+  with WS-Iterator Service EPR
+* SearchResponseType returns first some "RNSEntryResponseType"s
+  with WS-Iterator Service EPR
+
+New Client API:
+* RNSClient#removeRecursive(): can specify the depth number
+* RNSClient#addBulk() (delete BulkAddHandle)
+* RNSClient#removeBulk() (delete BulkRemoveHandle)
+* RNSClient#renameBulk() (delete BulkRenameHandle)
+* RNSClient#setMetadataBulk()
+* RNSClient#list(): can specify the names of children
+* RNSClient#setMetadata() (delete setXML())
+* RNSClient#getMetadata() (delete getXML())
+* RNSClientHome#getRNSSearchClient()
+* RNSSearchClient#search()
+* RNSSearchClient#searchRecursive()
+* RNSSearchClient#searchBulk()
+* RNSSearchClient#listBySearch()
+
+Optimize:
+* avoid OutOfMemoryError in Search request
+* reduce memory usage in SearchService
+* define RNSDBCache for RNSDBDerby (at rns.server.dbCache=true)
+* improve performance of lookuping deep path
+
+Bugfix:
+* rns-ls might print incorrect list
+* rns.server.replaceLocalHostName cannot replace the local host name
+  of the URL for ListIteratorService and SearchIteratorService.
+
+--------------------------------------------------------------------------
+[version 1.1-20110414]
+* bugfix:
+  plug memory leak in RNSPortTypeCache
+* change client APIs:
+  change method name: RNSClient#copyEPR() to copyEntry()
+  change method name: RNSClient#addEPR() to addJunction()
+  change bihavior and name: DirHandle to RNSDirHandle extends Iterable
+  change namespace: org.naregi.rns.client.command to org.naregi.rns.command
+* define Search Service (from XQuery Service)
+* define /wsrf/services/rns/SearchIteratorService
+* rns-xquery searches RNSEntryResponseType XML in SearchService
+* RNSExtensionClien#xqueryBulk() use SearchIteratorService
+* new KeyValue commands (rns-*kv are obsolete):
+  rns-kv-get, rns-kv-set, rns-kv-rm, rns-kv-ls,
+  rnsfs-kv-get, rnsfs-kv-set, rnsfs-kv-rm, rnsfs-kv-ls
+* new rns-xquery option: [+a|++all] [+e|++epronly]
+* change the type of RNSKeyValue#searchChildren()'s return
+* modify env-rns.sh (CLASSPATH is not necessary)
+* update WSDL of WS-Iterator (setIteratorSize() was not defined)
+* change rns-ls-l behavior: rns-ls-l do not sort the list
+
+--------------------------------------------------------------------------
+[version 1.1-20100914]
+* support key/value operations for XML Metadata
+  API (class RNSKeyValue):
+    keySet(), size(), get(), put(), putAll(), remove(), searchChildlen()
+  Command: rns-lskv, rns-getkv, rns-setkv, rns-rmkv
+ support key/value operations for XML Metadata on rnsfs.sh
+  Command: rnsfs-lskv, rnsfs-getkv, rnsfs-setkv, rnsfs-rmkv
+* rns-xquery: StackTrace of XQuery syntax error is not printed
+* rns-xquery: add +x|++xml option
+* rns-xquery: ++recursive also get a result of the specified path for its own
+* rns-getxml: omit xml declaration
+* integrate RNSClientUtil with RNSUtil
+* change API: RNSUtil move into rns.util
+* change API: Names of some methods are renamed
+* change API: Some RNSError have a cause as Throwable
+* StarckTrace of AxisFault is usually not printed
+* rnsfs.sh: support amd64 java environment
+* rnsfs.sh: cache xattr infomations
+* fix wrong primitive data type of cacheTimeout (int -> long)
+
+--------------------------------------------------------------------------
+[version 1.1-20100820]
+* support XQuery
+  API: xquery(), xqueryBulk(), xqueryRecursive(), listByXQuery()
+  Command: rns-xquery
+* modify rns-ls command
+  print names only without option
+  add +u option
+* lfcj-rns-migrate supports that the path is a junction
+* support simultaneous creation of junctions on rnsfs.sh
+* avoid aborting in `cat *' on rnsfs.sh (use FUSE -s option)
+* update GUIDE.ja
+* support bulk rename operation (define BulkRenameHandle)
+* rename internal service name: rns/ACLService -> rns/ExtensionService
+* new dependent library: saxon9he.jar
+* modify the bundled library: org.glite.lfc-0.5.jar (long timeout: 10sec.)
+
+--------------------------------------------------------------------------
+[version 1.1-20100331]
+* rnsfs.sh: add -o use_ino option of FUSE
+* rns-ls prints non-resolved URLs of the other RNS server
+* fix a problem on RNS server when /etc/grid-security/vomsdir not exists
+* use default values of server configuration when rns-server.conf not exists
+* update the bundled library: org.glite.lfc-0.5.jar
+* rns-server.conf: add rns.server.replaceLocalHostName
+  and rns.server.replaceLocalPort
+* change API: define and use RNSClientHome#getRNSACLClient()
+* change API: RNSClientHome#initialize() -> parseArgs()
+* change API: RNSClientHome#initializeWithPlusOption()
+  -> parseArgsWithPlusOption()
+* undefine API: RNSClient#version() (use RNSVersion#getVersion())
+* undefine API: RNSClient#rmEPR(), rmdirOrEPR()
+* define API: RNSClient#rmJunction(), remove(), removeForce(),
+  removeReference()
+* change API: RNSClient#rmRecursive() -> removeRecursive()
+* implement RNS 1.1 v11 (support bulk operations: add, remove)
+
+--------------------------------------------------------------------------
+[version 1.1-20090807]
+* rnsfs.sh: depend on fuse4j
+* rnsfs.sh: use -XX:MaxPermSize=512m option
+* EndpointReferenceType: modify toString() style
+* EndpointReferenceType: Hostname of RNS directory is always resoleved
+* fix a NullpointerException in RNSListIterator
+* rns-stat: modify output messages
+* sample.rns-client.conf: modify default values
+
+--------------------------------------------------------------------------
+[version 1.1-20090727]
+* rns-add: support Metadata_file(XML) argument
+* rns-mkdir: support Metadata_file(XML) argument
+* update RNSClient: add bulkAddInit() and bulkRemoveInit() methods
+* lfcj-rns-migrate: support +b(++bulk) option (use BulkAddHandle)
+* lfcj-rns-migrate: target directory is created automatically
+* ListIteratorResponse is cached too (caching all getting operations)
+
+--------------------------------------------------------------------------
+[version 1.1-20090713]
+* bundle org.glite.lfc-0.4.jar (LFCJ: LFC for Java).
+* add new commands
+  lfcj-rns-migrate: A directory migrate(copy) from LFC to RNS
+  lfcj-ls: list LFC directory (sample of LFCJ)
+  lfcj-stat: stat LFC entry (sample of LFCJ)
+  lfcj-test: test command
+
+--------------------------------------------------------------------------
+[version 1.1-20090707]
+* support rns.server.accessControlType=voms (on using derby only).
+* add ACLService. (defined by RNSACL.wsdl)
+* ~/.rns-acl-admin lists admin users of ACL on the server
+* add new commands
+  rns-setacl: set ACL
+  rns-getacl: get ACL
+  rns-rmacl: remove ACL
+  rns-callerinfo: print the caller information
+  rns-chmod: change permissions (for owner, owner group, other)
+  rns-chown: change owner
+  rns-chgrp: change owner group
+  rns-ping: send NoopRequest
+  rnsfs-setxml (in fuse/): set Metadata via setxattr()
+  rnsfs-getxml (in fuse/): get Metadata via getxattr()
+
+--------------------------------------------------------------------------
+[version 1.1-20090617]
+* dist-bin.sh can create a binary package
+* bundle glite-security-util-java.jar
+* include VOMS test codes
+
+--------------------------------------------------------------------------
+[version 1.1-20090526]
+* add rns-version command
+* change RNS.wsdl
+* Default DB is changed into Derby (JavaDB)
+* support rollback() of DB

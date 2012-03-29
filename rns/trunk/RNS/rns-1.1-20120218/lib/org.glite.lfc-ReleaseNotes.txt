@@ -1,0 +1,42 @@
+#################################
+#      RELEASE NOTES            #
+#################################
+# Package: org.glite.lfc
+# Version: 0.5
+#
+# Piter T. de Boer 
+# Spiros Koulouzis 
+##
+
+Relase Notes 
+============
+ This distribution contains the release of the pure Java implementation
+ of the LFC API.  This code is from refactored g-Eclipse code so the 
+ Eclipse License applies to this release. 
+ See LICENCE.txt 
+
+2
+Versions
+========
+0.1 First refactored version from g-Eclipse code.
+    Added proper link detection,creation and resolving. 
+    Reduced wait times since these arn't necessary.
+
+0.2 Fixed bug in READDIR. Not all entries were read. 
+    Added EOD handling to check for more data when reading a directory. 
+    Downgraded cog-jglobus from 1.6 to 1.5 to prevent "Signing Policy" Errors. 
+
+0.3 Added support for UTF-8 encoding and other encodings.  
+    Added LISTLINKS command.
+    
+0.4 Changed ListReplica into GetReplicas ! 
+    Added new method (refactored from original C Code) which uses  new API 
+    to list replicas. Also this method is 4-5 times faster ! 
+    See LET Bug Tracker bug: #275 ! 
+
+0.5 
+ - Added set/getComment methods for metadata and annotation purposes.   
+ - ignore exceptions from CLOSEDIR after succesful READDIR (bug #284).   
+ 
+Contact: ptdeboer [curlythingy] uva [dot] nl .  
+

@@ -1,0 +1,5 @@
+org.naregi.rns
+org.naregi.rns.client
+org.naregi.rns.command
+org.naregi.rns.test
+org.naregi.rns.util
