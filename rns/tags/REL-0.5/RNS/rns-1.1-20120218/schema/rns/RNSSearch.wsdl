@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="RNSSearch"
+	xmlns:rnsms="http://schemas.ogf.org/rns/2010/11/metadata-search"
+	xmlns:rns="http://schemas.ogf.org/rns/2009/12/rns"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	targetNamespace="http://schemas.ogf.org/rns/2010/11/metadata-search">
+
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://schemas.ogf.org/rns/2010/11/metadata-search">
+
+			<xsd:import namespace="http://schemas.ogf.org/rns/2009/12/rns"
+				schemaLocation="./rns.xsd" />
+
+			<xsd:import namespace="http://schemas.ogf.org/rns/2010/11/metadata-search"
+				schemaLocation="./RNSSearch.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="SearchRequest">
+		<wsdl:part name="SearchRequest" element="rnsms:SearchRequest" />
+	</wsdl:message>
+	<wsdl:message name="SearchResponse">
+		<wsdl:part name="SearchResponse" element="rnsms:SearchResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="SearchFault">
+		<wsdl:part name="SearchFault" element="rnsms:SearchFault" />
+	</wsdl:message>
+
+	<wsdl:message name="ReadNotPermittedFault">
+		<wsdl:part name="ReadNotPermittedFault" element="rns:ReadNotPermittedFault" />
+	</wsdl:message>
+
+	<wsdl:portType name="RNSSearchPortType">
+		<wsdl:operation name="search">
+			<wsdl:input message="rnsms:SearchRequest" />
+			<wsdl:output message="rnsms:SearchResponse" />
+			<wsdl:fault name="SearchFault" message="rnsms:SearchFault" />
+			<wsdl:fault name="ReadNotPermittedFault" message="rnsms:ReadNotPermittedFault" />
+		</wsdl:operation>
+ 	</wsdl:portType>
+</wsdl:definitions>

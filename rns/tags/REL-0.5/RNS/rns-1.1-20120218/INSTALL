@@ -1,0 +1,128 @@
+======================
+Prerequisite softwares
+======================
+
+  - Java SE Development Kit (JDK) : JDK 6
+
+    http://www.oracle.com/technetwork/java/javase/overview/index.html
+
+  - Apache Ant : Version 1.6.x
+
+    http://ant.apache.org/
+
+  - Globus Toolkit : Version 4.2.x
+
+    http://www.globus.org/toolkit/
+    http://www.globus.org/toolkit/downloads/
+
+  - Saxon-HE Java : Version 9.3
+
+    The Saxon XSLT and XQuery Processor from Saxonica Limited
+    http://www.saxonica.com/
+    http://www.saxonica.com/documentation/conditions/intro.xml
+    http://sourceforge.net/projects/saxon/
+
+  - [Bundled] glite-security-util-java.jar (VOMS parsing library)
+
+    http://glite.web.cern.ch/glite/security/
+    http://jra1mw.cvs.cern.ch/cgi-bin/jra1mw.cgi/org.glite.security.util-java/
+
+    Reference information:
+    http://dev.globus.org/wiki/Incubator/VOMS/Installing#Installation-0.2
+
+  - [Bundled] LFCJ (A pure Java implementation to access LFC) : Version 0.5
+
+    http://staff.science.uva.nl/~ptdeboer/lfc/
+
+===================
+System requirements
+===================
+
+  Operating System: Linux (Ubuntu Linux, CentOS, etc.)
+  Memory: 1024MB (recommend 2048MB)
+
+==============
+How to install
+==============
+
+  - Install Java SE Development Kit 6 (JDK 6)
+
+    Installation directory for following example:
+      /RNS/java/
+
+  - Install Apache Ant version 1.6.x
+
+    Installation directory for following example:
+      /RNS/ant/
+
+  - Install Globus Toolkit version 4.2.x (Full Toolkit or Java WS Core)
+
+    Installation directory for following example:
+      /RNS/gt4/
+
+    In case of using GT4 Java WS Core package:
+    $ ln -s /RNS/java/db/lib/derby.jar /RNS/gt4/lib
+
+  - Unzip RNS
+
+    Example:
+    $ unzip rns-1.1-????????-????.zip
+    $ mv rns-1.1-????????-???? /RNS/rns
+
+  - Install Saxon-HE Java
+
+    Unzip saxonhe9-3-?-?j.zip
+    and Copy saxon9he.jar to /RNS/rns/lib/
+
+    Example:
+    $ cp saxon9he.jar /RNS/saxon9he.jar
+    $ ln -s /RNS/saxon9he.jar /RNS/rns/lib/saxon9he.jar
+
+  - Install RNS (each of server and client)
+
+    Example:
+    $ cd /RNS/rns
+    $ vi env-rns.sh
+      (Edit GLOBUS_LOCATION, RNS_HOME, MY_JAVA_HOME, MY_ANT_HOME)
+    $ ./install.sh
+
+  - (How to uninstall RNS)
+
+    $ cd /RNS/rns
+    $ ./uninstall.sh
+
+  - Start RNS server
+
+    $ cp sample.rns-server.conf ~/.rns-server.conf
+    $ vi ~/.rns-server.conf
+    $ . /RNS/rns/env-rns.sh
+    $ globus-start-container -nosec
+     (or, globus-start-container-detached
+          and globus-stop-container-detached)
+
+  - Use RNS commands (Client)
+
+    $ cp sample.rns-client.conf ~/.rns-client.conf
+    $ vi ~/.rns-client.conf
+    $ . /RNS/rns/env-rns.sh
+    $ rns-ls /
+    $ (run rns-* commands) ...
+
+  - Install RNSFS-FUSE (Client)
+    (See rnsfs/README)
+
+==================
+Set Java heap size
+==================
+
+  Set maximum Java heap size to improve the performance,
+  and to avoid "java.lang.OutOfMemoryError: Java heap space".
+  (The size should be less than free real memory.)
+
+  Example (Server):
+
+    bash$ GLOBUS_OPTIONS="-Xmx1024m" globus-start-container ...
+
+  Example (Client):
+
+    bash$ GLOBUS_OPTIONS="-Xmx1024m" rns-ls ...

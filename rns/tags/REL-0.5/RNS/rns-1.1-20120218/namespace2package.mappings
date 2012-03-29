@@ -1,0 +1,15 @@
+http\://schemas.ogf.org/rns/2009/12/rns=org.naregi.rns.stubs
+http\://schemas.ogf.org/rns/2009/12/rns/bindings=org.naregi.rns.stubs.bindings
+http\://schemas.ogf.org/rns/2009/12/rns/service=org.naregi.rns.stubs.service
+
+http\://schemas.ogf.org/ws-iterator/2008/06/iterator=org.naregi.rns.stubs
+http\://schemas.ogf.org/ws-iterator/2008/06/iterator/bindings=org.naregi.rns.stubs.bindings
+http\://schemas.ogf.org/ws-iterator/2008/06/iterator/service=org.naregi.rns.stubs.service
+
+http\://schemas.ogf.org/rns/2010/11/metadata-search=org.naregi.rns.stubs
+http\://schemas.ogf.org/rns/2010/11/metadata-search/bindings=org.naregi.rns.stubs.bindings
+http\://schemas.ogf.org/rns/2010/11/metadata-search/service=org.naregi.rns.stubs.service
+
+http\://schemas.naregi.org/rns/2010/07/extension=org.naregi.rns.stubs
+http\://schemas.naregi.org/rns/2010/07/extension/bindings=org.naregi.rns.stubs.bindings
+http\://schemas.naregi.org/rns/2010/07/extension/service=org.naregi.rns.stubs.service
