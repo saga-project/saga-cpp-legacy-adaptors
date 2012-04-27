@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="RNSExtension"
+	xmlns:rns-ext="http://schemas.naregi.org/rns/2010/07/extension"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsbf="http://docs.oasis-open.org/wsrf/bf-2"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:genii-common="http://vcgr.cs.virginia.edu/genii/2006/12/common"
+	xmlns:rpw-2="http://docs.oasis-open.org/wsrf/rpw-2"
+	xmlns:rw-2="http://docs.oasis-open.org/wsrf/rw-2"
+	xmlns:wsrp="http://docs.oasis-open.org/wsrf/rp-2"
+	xmlns:wsrpw="http://docs.oasis-open.org/wsrf/rpw-2"
+	xmlns:wsrf-r="http://docs.oasis-open.org/wsrf/r-2"
+	xmlns:wsrf-rw="http://docs.oasis-open.org/wsrf/rw-2"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsrlw="http://docs.oasis-open.org/wsrf/rlw-2"
+	xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor"
+	xmlns:rns="http://schemas.ogf.org/rns/2009/12/rns"
+	xmlns:wsa="http://www.w3.org/2005/08/addressing"
+	targetNamespace="http://schemas.naregi.org/rns/2010/07/extension">
+
+	<wsdl:import namespace="http://docs.oasis-open.org/wsrf/rpw-2"
+		location="../wsrf/properties/rpw-2.wsdl" />
+
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			attributeFormDefault="unqualified" elementFormDefault="qualified"
+			targetNamespace="http://schemas.naregi.org/rns/2010/07/extension">
+
+			<xsd:import namespace="http://schemas.ogf.org/rns/2009/12/rns"
+				schemaLocation="./rns.xsd" />
+
+			<!-- Faults -->
+			<xsd:complexType name="ACLFaultType">
+				<xsd:complexContent>
+					<xsd:extension base="wsbf:BaseFaultType" />
+				</xsd:complexContent>
+			</xsd:complexType>
+			<xsd:element name="ACLFault" type="rns-ext:ACLFaultType" />
+
+			<!-- Resource Properties -->
+			<xsd:element name="Version" type="xsd:string" />
+
+			<xsd:element name="RNSExtensionRP">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" />
+						<xsd:element ref="rns:elementCount" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element ref="rns:createTime" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element ref="rns:accessTime" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element ref="rns:modificationTime" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element ref="rns:readable" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element ref="rns:writable" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element ref="rns-ext:Version" minOccurs="1"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- Helper Types -->
+			<xsd:complexType name="ACLEntryType">
+				<xsd:sequence>
+					<xsd:element name="type" type="xsd:short" minOccurs="1"
+						maxOccurs="1" nillable="false" />
+					<xsd:element name="name" type="xsd:string" minOccurs="0"
+						maxOccurs="1" nillable="true" />
+					<xsd:element name="perm" type="xsd:short" minOccurs="1"
+						maxOccurs="1" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- Message Types -->
+			<xsd:complexType name="NoopRequestType" />
+			<xsd:element name="NoopRequest" type="rns-ext:NoopRequestType" />
+
+			<xsd:complexType name="NoopResponseType" />
+			<xsd:element name="NoopResponse" type="rns-ext:NoopResponseType" />
+
+			<xsd:complexType name="GetACLRequestType" />
+			<xsd:element name="GetACLRequest" type="rns-ext:GetACLRequestType" />
+
+			<xsd:complexType name="GetACLResponseType">
+				<xsd:sequence>
+					<xsd:element name="entries" type="rns-ext:ACLEntryType"
+						minOccurs="1" maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GetACLResponse" type="rns-ext:GetACLResponseType" />
+
+			<xsd:complexType name="SetACLRequestType">
+				<xsd:sequence>
+					<xsd:element name="entries" type="rns-ext:ACLEntryType"
+						minOccurs="1" maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="SetACLRequest" type="rns-ext:SetACLRequestType" />
+
+			<xsd:complexType name="SetACLResponseType" />
+			<xsd:element name="SetACLResponse" type="rns-ext:SetACLResponseType" />
+
+			<xsd:complexType name="RemoveACLRequestType">
+				<xsd:sequence>
+					<xsd:element name="type" type="xsd:short" minOccurs="1"
+						maxOccurs="1" nillable="false" />
+					<xsd:element name="names" type="xsd:string" minOccurs="1"
+						maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="RemoveACLRequest" type="rns-ext:RemoveACLRequestType" />
+
+			<xsd:complexType name="RemoveACLResponseType" />
+			<xsd:element name="RemoveACLResponse" type="rns-ext:RemoveACLResponseType" />
+
+			<xsd:complexType name="GetCallerInfoRequestType"/>
+			<xsd:element name="GetCallerInfoRequest" type="rns-ext:GetCallerInfoRequestType" />
+
+			<xsd:complexType name="GetCallerInfoResponseType">
+				<xsd:sequence>
+					<xsd:element name="admin" type="xsd:boolean"
+						minOccurs="1" maxOccurs="1" nillable="false" />
+					<xsd:element name="caller" type="xsd:string"
+						minOccurs="1" maxOccurs="1" nillable="false" />
+					<xsd:element name="mainGroup" type="xsd:string"
+						minOccurs="1" maxOccurs="1" nillable="false" />
+					<xsd:element name="groups" type="xsd:string"
+						minOccurs="1" maxOccurs="unbounded" nillable="true" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GetCallerInfoResponse" type="rns-ext:GetCallerInfoResponseType" />
+
+			<xsd:complexType name="StartProfileRequestType"/>
+			<xsd:element name="StartProfileRequest" type="rns-ext:StartProfileRequestType" />
+
+			<xsd:complexType name="StartProfileResponseType"/>
+			<xsd:element name="StartProfileResponse" type="rns-ext:StartProfileResponseType" />
+
+			<xsd:complexType name="StopProfileRequestType"/>
+			<xsd:element name="StopProfileRequest" type="rns-ext:StopProfileRequestType" />
+
+			<xsd:complexType name="ProfileType">
+				<xsd:sequence>
+					<xsd:element name="name" type="xsd:string"
+						minOccurs="1" maxOccurs="1" nillable="false" />
+					<xsd:element name="total" type="xsd:unsignedLong"
+						minOccurs="1" maxOccurs="1" nillable="false" />
+					<xsd:element name="count" type="xsd:unsignedInt"
+						minOccurs="1" maxOccurs="1" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="StopProfileResponseType">
+				<xsd:sequence>
+					<xsd:element name="results" type="rns-ext:ProfileType"
+						minOccurs="0" maxOccurs="unbounded" nillable="true" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="StopProfileResponse" type="rns-ext:StopProfileResponseType" />
+
+
+			<xsd:complexType name="GetServerStatusRequestType"/>
+			<xsd:element name="GetServerStatusRequest" type="rns-ext:GetServerStatusRequestType" />
+
+			<xsd:complexType name="StringMapType">
+				<xsd:sequence>
+					<xsd:element name="name" type="xsd:string"
+						minOccurs="1" maxOccurs="1" nillable="false" />
+					<xsd:element name="value" type="xsd:string"
+						minOccurs="1" maxOccurs="1" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="GetServerStatusResponseType">
+				<xsd:sequence>
+					<xsd:element name="map" type="rns-ext:StringMapType"
+						minOccurs="0" maxOccurs="unbounded" nillable="true" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GetServerStatusResponse" type="rns-ext:GetServerStatusResponseType" />
+
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="NoopRequest">
+		<wsdl:part name="NoopRequest" element="rns-ext:NoopRequest" />
+	</wsdl:message>
+	<wsdl:message name="NoopResponse">
+		<wsdl:part name="NoopResponse" element="rns-ext:NoopResponse" />
+	</wsdl:message>
+	<wsdl:message name="GetACLRequest">
+		<wsdl:part name="GetACLRequest" element="rns-ext:GetACLRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetACLResponse">
+		<wsdl:part name="GetACLResponse" element="rns-ext:GetACLResponse" />
+	</wsdl:message>
+	<wsdl:message name="SetACLRequest">
+		<wsdl:part name="SetACLRequest" element="rns-ext:SetACLRequest" />
+	</wsdl:message>
+	<wsdl:message name="SetACLResponse">
+		<wsdl:part name="SetACLResponse" element="rns-ext:SetACLResponse" />
+	</wsdl:message>
+	<wsdl:message name="RemoveACLRequest">
+		<wsdl:part name="RemoveACLRequest" element="rns-ext:RemoveACLRequest" />
+	</wsdl:message>
+	<wsdl:message name="RemoveACLResponse">
+		<wsdl:part name="RemoveACLResponse" element="rns-ext:RemoveACLResponse" />
+	</wsdl:message>
+	<wsdl:message name="GetCallerInfoRequest">
+		<wsdl:part name="GetCallerInfoRequest" element="rns-ext:GetCallerInfoRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetCallerInfoResponse">
+		<wsdl:part name="GetCallerInfoResponse" element="rns-ext:GetCallerInfoResponse" />
+	</wsdl:message>
+	<wsdl:message name="StartProfileRequest">
+		<wsdl:part name="StartProfileRequest" element="rns-ext:StartProfileRequest" />
+	</wsdl:message>
+	<wsdl:message name="StartProfileResponse">
+		<wsdl:part name="StartProfileResponse" element="rns-ext:StartProfileResponse" />
+	</wsdl:message>
+	<wsdl:message name="StopProfileRequest">
+		<wsdl:part name="StopProfileRequest" element="rns-ext:StopProfileRequest" />
+	</wsdl:message>
+	<wsdl:message name="StopProfileResponse">
+		<wsdl:part name="StopProfileResponse" element="rns-ext:StopProfileResponse" />
+	</wsdl:message>
+	<wsdl:message name="GetServerStatusRequest">
+		<wsdl:part name="GetServerStatusRequest" element="rns-ext:GetServerStatusRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetServerStatusResponse">
+		<wsdl:part name="GetServerStatusResponse" element="rns-ext:GetServerStatusResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="ACLFault">
+		<wsdl:part name="ACLFault" element="rns-ext:ACLFault" />
+	</wsdl:message>
+
+	<wsdl:message name="ReadNotPermittedFault">
+		<wsdl:part name="ReadNotPermittedFault" element="rns:ReadNotPermittedFault" />
+	</wsdl:message>
+
+	<wsdl:portType name="RNSExtensionPortType"
+		wsdlpp:extends="wsrpw:GetResourceProperty
+		wsrpw:GetMultipleResourceProperties"
+		wsrp:ResourceProperties="rns-ext:RNSExtensionRP">
+		<wsdl:operation name="noop">
+			<wsdl:input message="rns-ext:NoopRequest" />
+			<wsdl:output message="rns-ext:NoopResponse" />
+		</wsdl:operation>
+
+		<wsdl:operation name="getACL">
+			<wsdl:input message="rns-ext:GetACLRequest" />
+			<wsdl:output message="rns-ext:GetACLResponse" />
+			<wsdl:fault name="ACLFault" message="rns-ext:ACLFault" />
+		</wsdl:operation>
+
+		<wsdl:operation name="setACL">
+			<wsdl:input message="rns-ext:SetACLRequest" />
+			<wsdl:output message="rns-ext:SetACLResponse" />
+			<wsdl:fault name="ACLFault" message="rns-ext:ACLFault" />
+		</wsdl:operation>
+
+		<wsdl:operation name="removeACL">
+			<wsdl:input message="rns-ext:RemoveACLRequest" />
+			<wsdl:output message="rns-ext:RemoveACLResponse" />
+			<wsdl:fault name="ACLFault" message="rns-ext:ACLFault" />
+		</wsdl:operation>
+
+		<wsdl:operation name="getCallerInfo">
+			<wsdl:input message="rns-ext:GetCallerInfoRequest" />
+			<wsdl:output message="rns-ext:GetCallerInfoResponse" />
+		</wsdl:operation>
+
+		<wsdl:operation name="startProfile">
+			<wsdl:input message="rns-ext:StartProfileRequest" />
+			<wsdl:output message="rns-ext:StartProfileResponse" />
+			<wsdl:fault name="ReadNotPermittedFault" message="rns-ext:ReadNotPermittedFault" />
+		</wsdl:operation>
+
+		<wsdl:operation name="stopProfile">
+			<wsdl:input message="rns-ext:StopProfileRequest" />
+			<wsdl:output message="rns-ext:StopProfileResponse" />
+			<wsdl:fault name="ReadNotPermittedFault" message="rns-ext:ReadNotPermittedFault" />
+		</wsdl:operation>
+
+		<wsdl:operation name="getServerStatus">
+			<wsdl:input message="rns-ext:GetServerStatusRequest" />
+			<wsdl:output message="rns-ext:GetServerStatusResponse" />
+			<wsdl:fault name="ReadNotPermittedFault" message="rns-ext:ReadNotPermittedFault" />
+		</wsdl:operation>
+ 	</wsdl:portType>
+</wsdl:definitions>

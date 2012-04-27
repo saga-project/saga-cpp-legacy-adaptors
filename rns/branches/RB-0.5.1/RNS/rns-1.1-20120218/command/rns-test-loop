@@ -1,0 +1,40 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+  echo "usage: $0 n_loop n_para" 1>&2
+  exit 1
+fi
+
+N_LOOP=$1
+N_PARA=$2
+
+DIRNAME=`dirname $0`
+RNSTEST=${DIRNAME}/rns-test
+TMPFILE=/tmp/rns-test-loop.tmp
+
+count=1
+while [ $count -le $N_LOOP ]; do
+  echo LOOP $count
+  para=0
+  while [ $para -lt $N_PARA ]; do
+    touch $TMPFILE
+    $RNSTEST > $TMPFILE 2>&1 &
+    pid[$para]=$!
+    mv $TMPFILE ${TMPFILE}${pid[$para]}
+    para=$(($para + 1))
+  done
+  para=0
+  while [ $para -lt $N_PARA ]; do
+    wait ${pid[$para]}
+    if [ $? -ne 0 ]; then
+      echo "Test failed" 1>&2
+      echo ${TMPFILE}${pid[$para]}
+      exit 1
+    fi
+    rm ${TMPFILE}${pid[$para]}
+    para=$(($para + 1))
+  done
+  count=$(($count + 1))
+done
+
+exit 0
