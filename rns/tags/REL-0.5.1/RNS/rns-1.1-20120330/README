@@ -1,0 +1,67 @@
+This is a RNS implementation (server and client).
+
+===========
+Quick Start
+===========
+
+  - Install JDK 6
+  - Install Apache Ant version 1.6.x
+  - Install GT 4.2.x (Full Toolkit or Java WS Core)
+  - Unzip rns-1.1-????????-????.zip
+  - Install Saxon-HE Java
+  - Edit env-rns.sh
+  - Edit .rns-server.conf and .rns-client.conf
+  - Install RNS (./install.sh)
+  - Start RNS server (globus-start-container)
+
+=========
+Documents
+=========
+
+  - README
+    This file.
+
+  - INSTALL
+    How to install this RNS.
+
+  - LICENSE
+    The license for this RNS.
+
+  - RELNOTES
+    Update history.
+
+  - sample.rns-client.conf
+    Sample of .rns-client.conf .
+
+  - sample.rns-server.conf
+    Sample of .rns-server.conf .
+
+  - rnsfs/README
+    How to install and use RNSFS-FUSE.
+
+  - GUIDE.ja (in EUC-JP)
+    How to install and use this RNS in detail.
+
+  - OVERVIEW.ja (in EUC-JP)
+    Overview of the functionality about this RNS.
+
+  - javadoc/index.html (Javadoc)
+    Application Programming Interface reference.
+
+=======================
+About RNS specification
+=======================
+
+  This implementation is based on following specifications.
+
+  - RNS Specification 1.1
+    http://www.gridforum.org/documents/GFD.171.pdf
+
+  - RNS 1.1 OGSA WSRF Basic Profile Rendering 1.0
+    http://www.gridforum.org/documents/GFD.172.pdf
+
+  - WS-Iterator 1.0
+    http://www.gridforum.org/documents/GFD.188.pdf
+
+  - RNS metadata search interface (draft)
+    http://www.ogf.org/pipermail/gfs-wg/2011-January/000202.html

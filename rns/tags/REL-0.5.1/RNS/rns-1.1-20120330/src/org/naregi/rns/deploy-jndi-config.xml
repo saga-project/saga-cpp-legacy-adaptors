@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
+
+	<service name="rns/ResourceNamespaceService">
+		<resource name="home" type="org.naregi.rns.RNSResourceHome">
+			<resourceParams>
+				<parameter>
+					<name>factory</name>
+					<value>org.globus.wsrf.jndi.BeanFactory
+					</value>
+				</parameter>
+				<parameter>
+					<name>resourceClass</name>
+					<value>org.naregi.rns.RNSResource</value>
+				</parameter>
+				<parameter>
+					<name>resourceKeyName</name>
+					<value>{http://naregi.org/rns/2010/10/rns}RNSID
+					</value>
+				</parameter>
+				<parameter>
+					<name>resourceKeyType</name>
+					<value>java.lang.String</value>
+				</parameter>
+			</resourceParams>
+		</resource>
+	</service>
+
+	<service name="rns/ListIteratorService">
+		<resourceLink name="home"
+			target="java:comp/env/services/rns/ResourceNamespaceService/home" />
+	</service>
+
+	<service name="rns/SearchService">
+		<resourceLink name="home"
+			target="java:comp/env/services/rns/ResourceNamespaceService/home" />
+	</service>
+
+	<service name="rns/SearchIteratorService">
+		<resource name="home" type="org.naregi.rns.SearchIteratorResourceHome">
+			<resourceParams>
+				<parameter>
+					<name>factory</name>
+					<value>org.globus.wsrf.jndi.BeanFactory
+					</value>
+				</parameter>
+				<parameter>
+					<name>resourceClass</name>
+					<value>org.naregi.rns.SearchIteratorResource</value>
+				</parameter>
+				<parameter>
+					<name>resourceKeyName</name>
+					<value>{http://naregi.org/rns/2010/10/rns}SearchSession
+					</value>
+				</parameter>
+				<parameter>
+					<name>resourceKeyType</name>
+					<value>java.lang.String</value>
+				</parameter>
+				<parameter>
+					<name>sweeperDelay</name>
+					<value>30000</value>
+				</parameter>
+			</resourceParams>
+		</resource>
+	</service>
+
+	<service name="rns/ExtensionService">
+		<resourceLink name="home"
+			target="java:comp/env/services/rns/ResourceNamespaceService/home" />
+	</service>
+
+</jndiConfig>

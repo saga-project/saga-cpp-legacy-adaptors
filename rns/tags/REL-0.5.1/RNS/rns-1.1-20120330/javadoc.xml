@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<project default="javadoc" name="javadoc.xml for RNS">
+
+<property name="src.dir" value="src" />
+<property name="lib.dir" value="lib" />
+<property name="javadoc.dir" value="javadoc" />
+
+<property environment="env" />
+<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
+
+<target name="javadoc" description="generate Javadoc">
+    <echo message="generate Javadoc"/>
+    <echo message="GLOBUS_LOCATION=${globus.location}" />
+    <delete dir="${javadoc.dir}" />
+    <mkdir dir="${javadoc.dir}" />
+    <javadoc packagenames="*" destdir="${javadoc.dir}"
+     locale="en_US">
+        <packageset dir="${src.dir}" defaultexcludes="yes">
+          <include name="**" />
+        </packageset>
+        <classpath>
+            <fileset dir="${globus.location}/lib">
+                <include name="*.jar" />
+                <include name="common/*.jar" />
+            </fileset>
+            <fileset dir="${lib.dir}">
+                <include name="*.jar"/>
+            </fileset>
+        </classpath>
+    </javadoc>
+</target>
+
+</project>
+

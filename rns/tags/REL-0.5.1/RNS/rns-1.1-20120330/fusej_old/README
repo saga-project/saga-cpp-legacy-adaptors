@@ -1,0 +1,95 @@
+RNSFS-FUSE (RNS Client via FUSE)
+
+Quick Start:
+
+  - Install RNS
+
+  - Install FUSE (with devel package)
+
+  - Install FUSE-J
+
+    http://sourceforge.net/projects/fuse-j
+
+  - Edit build.conf (set FUSE_J_HOME)
+
+  - Run `. env-rns.sh' of RNS
+
+  - Run `make'
+
+  - Mount
+
+    (recommend)
+    set a positive number in rns.client.cacheTimeout of ~/.rns-client.conf
+
+    $ rnsfs.sh /mount/point -f
+    (ctrl-c is prohibited)
+
+  - Create a new directory
+
+    $ mkdir dirname
+
+  - Remove an empty directory
+
+    $ rmdir dirname
+
+  - Create a new junction
+
+    $ cat EPRFILE > filename
+    or
+    $ cat EPRFILE > filename.epr
+
+  - Create a new junction from an URL
+
+    $ echo -n URL > filename.url
+
+  - Print an EPR
+
+    $ cat filename
+    or
+    $ cat filename.epr
+
+    $ cat dirname.epr
+
+  - Print an URL
+
+    $ cat filename.url
+
+    $ cat dirname.url
+
+  - Set a Metadata into an existing entry (directory or junction)
+
+    (recommend)
+    $ rnsfs-setxml XMLFILE filename
+
+    $ cat XMLFILE > filename.xml
+
+    $ cat XMLFILE > dirname.xml
+
+  - Print a Metadata
+
+    (recommend)
+    $ rnsfs-getxml filename
+
+    $ cat filename.xml
+
+    $ cat dirname.xml
+
+  - Copy a junction
+
+    $ ln fromname toname
+
+  - Rename an entry (directory or junction)
+
+    $ mv oldname newname
+
+  - Remove a junction
+
+    $ rm filename
+
+  - Note: About creation or update
+
+    An errno is not returned in creation or update.
+
+  - Unmount
+
+    $ fusermount -u /mount/point
