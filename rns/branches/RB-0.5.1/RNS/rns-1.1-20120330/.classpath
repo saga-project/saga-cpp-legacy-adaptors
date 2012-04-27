@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="rnsfs"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="build/stubs/classes"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="lib" path="C:/Program Files/Sun/JavaDB/lib/derby.jar"/>
+	<classpathentry kind="lib" path="lib/glite-security-util-java.jar"/>
+	<classpathentry kind="lib" path="lib/org.glite.lfc-0.5.jar"/>
+	<classpathentry kind="lib" path="lib/saxon9he.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GLOBUS"/>
+	<classpathentry kind="lib" path="U:/fuse4j.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
