@@ -20,6 +20,7 @@ SAGA_GSISSH                   = @SAGA_GSISSH@
 SAGA_SSH                      = @SAGA_SSH@
 SAGA_SSHFS                    = @SAGA_SSHFS@
 
+SAGA_PACKAGE_NAME             = @SAGA_PACKAGE_NAME@
 SAGA_PACKAGE_VERSION          = @SAGA_PACKAGE_VERSION@
 
 BUILD_ADAPTOR_CONTEXT         = @BUILD_ADAPTOR_CONTEXT@
