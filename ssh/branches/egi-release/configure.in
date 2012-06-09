@@ -126,8 +126,8 @@ echo "                                                                 " >> $OUT
 echo " Using SAGA from       : $SAGA_LOCATION                          " >> $OUT
 echo "       SAGA version    : $SAGA_VERSION                           " >> $OUT
 echo "                                                                 " >> $OUT
-echo " Adaptor Version       : $SAGA_PACKAGE_VERSION                   " >> $OUT
-echo " Adaptor Revision      : $SAGA_PACKAGE_REVISION                  " >> $OUT
+echo " Adaptor Version       : $SAGA_MODULE_VERSION                    " >> $OUT
+echo " Adaptor Revision      : $SAGA_MODULE_REVISION                   " >> $OUT
 echo "                                                                 " >> $OUT
 echo " GSISSH found          : $HAVE_GSISSH 	$SAGA_GSISSH_S           " >> $OUT
 echo " SSH    found          : $HAVE_SSH 	$SAGA_SSH_S                  " >> $OUT
