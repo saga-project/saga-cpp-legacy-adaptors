@@ -113,8 +113,8 @@ echo "                                                                   " >> $O
 echo " Using SAGA from          : $SAGA_LOCATION                         " >> $OUT
 echo "       SAGA version       : $SAGA_VERSION                          " >> $OUT
 echo "                                                                   " >> $OUT
-echo " Adaptor Version          : $SAGA_PACKAGE_VERSION                  " >> $OUT
-echo " Adaptor Revision         : $SAGA_PACKAGE_REVISION                 " >> $OUT
+echo " Adaptor Version          : $SAGA_MODULE_VERSION                   " >> $OUT
+echo " Adaptor Revision         : $SAGA_MODULE_REVISION                  " >> $OUT
 echo "                                                                   " >> $OUT
 echo " X.509 Adaptor Found      : $SAGA_HAVE_ADAPTOR_X509                " >> $OUT
 echo "                                                                   " >> $OUT

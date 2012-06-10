@@ -1830,7 +1830,7 @@ $as_echo "$SAGA_VERSION_MAJOR.$SAGA_VERSION_MINOR.$SAGA_VERSION_SUBMINOR" >&6; }
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga package name and version" >&5
 $as_echo_n "checking saga package name and version... " >&6; }
-  SAGA_MODULE_NAME=UnownModuleName
+  SAGA_MODULE_NAME=UnknownModuleName
   test -f PACKAGE && SAGA_MODULE_NAME=` grep -e '^PACKAGE:'  PACKAGE | sed -e 's/^PACKAGE: *//'`
 
   SAGA_MODULE_VERSION=$SAGA_VERSION
@@ -4304,8 +4304,8 @@ echo "                                                                   " >> $O
 echo " Using SAGA from          : $SAGA_LOCATION                         " >> $OUT
 echo "       SAGA version       : $SAGA_VERSION                          " >> $OUT
 echo "                                                                   " >> $OUT
-echo " Adaptor Version          : $SAGA_PACKAGE_VERSION                  " >> $OUT
-echo " Adaptor Revision         : $SAGA_PACKAGE_REVISION                 " >> $OUT
+echo " Adaptor Version          : $SAGA_MODULE_VERSION                   " >> $OUT
+echo " Adaptor Revision         : $SAGA_MODULE_REVISION                  " >> $OUT
 echo "                                                                   " >> $OUT
 echo " X.509 Adaptor Found      : $SAGA_HAVE_ADAPTOR_X509                " >> $OUT
 echo "                                                                   " >> $OUT
